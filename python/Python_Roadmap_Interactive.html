@@ -1,0 +1,737 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Python Learning Roadmap</title>
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{--bg:#080c14;--card:#141d2e;--border:#1e2d45;--text:#dde4f0;--text-dim:#8892a4;--green:#4ade80;--cyan:#22d3ee;--purple:#a78bfa;--gradient:linear-gradient(135deg,#4ade80,#22d3ee,#a78bfa)}
+body{font-family:'Sora',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;overflow-x:hidden}
+code,pre,.code{font-family:'JetBrains Mono',monospace}
+.header{position:sticky;top:0;z-index:1000;background:rgba(8,12,20,0.95);backdrop-filter:blur(12px);border-bottom:1px solid var(--border);padding:12px 24px}
+.header-inner{max-width:1200px;margin:0 auto;display:flex;align-items:center;justify-content:space-between}
+.logo{font-size:1.4rem;font-weight:700;background:var(--gradient);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.progress-container{flex:1;max-width:300px;margin-left:24px}
+.progress-label{font-size:0.7rem;color:var(--text-dim);margin-bottom:4px;text-align:right}
+.progress-bar{height:6px;background:var(--border);border-radius:3px;overflow:hidden}
+.progress-fill{height:100%;background:var(--gradient);border-radius:3px;transition:width 0.5s ease}
+.page{display:none;padding:40px 24px 80px;max-width:900px;margin:0 auto;animation:fadeIn 0.3s ease}
+.page.active{display:block}
+@keyframes fadeIn{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
+.roadmap{position:relative;padding-left:60px}
+.roadmap::before{content:'';position:absolute;left:28px;top:0;bottom:0;width:2px;background:linear-gradient(to bottom,var(--green),var(--cyan),var(--purple));opacity:0.4}
+.node{position:relative;margin-bottom:24px;cursor:pointer;transition:transform 0.2s ease}
+.node:hover{transform:translateX(4px)}
+.node-number{position:absolute;left:-48px;top:16px;width:32px;height:32px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:0.8rem;border:2px solid;background:var(--bg)}
+.node-card{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:20px 24px;transition:border-color 0.2s,box-shadow 0.2s}
+.node:hover .node-card{border-color:var(--cyan);box-shadow:0 4px 20px rgba(34,211,238,0.1)}
+.node-title{font-size:1.1rem;font-weight:600;margin-bottom:8px}
+.node-chips{display:flex;flex-wrap:wrap;gap:6px}
+.chip{font-size:0.65rem;padding:3px 8px;border-radius:4px;background:rgba(255,255,255,0.05);border:1px solid var(--border);color:var(--text-dim)}
+.node-progress{font-size:0.7rem;color:var(--text-dim);margin-top:8px}
+.back-btn{display:inline-flex;align-items:center;gap:6px;padding:8px 16px;background:var(--card);border:1px solid var(--border);border-radius:8px;color:var(--text);cursor:pointer;font-family:'Sora',sans-serif;font-size:0.85rem;margin-bottom:24px;transition:border-color 0.2s}
+.back-btn:hover{border-color:var(--cyan)}
+.detail-header{margin-bottom:24px}
+.detail-title{font-size:1.8rem;font-weight:700;margin-bottom:8px}
+.detail-subtitle{font-size:0.85rem;color:var(--text-dim)}
+.tabs{display:flex;gap:4px;margin-bottom:24px;background:var(--card);border-radius:10px;padding:4px;border:1px solid var(--border)}
+.tab{flex:1;padding:10px 16px;text-align:center;border-radius:8px;cursor:pointer;font-size:0.85rem;font-weight:500;color:var(--text-dim);transition:all 0.2s}
+.tab.active{background:var(--border);color:var(--text)}
+.tab:hover:not(.active){color:var(--text)}
+.tab-content{display:none;animation:fadeIn 0.3s ease}
+.tab-content.active{display:block}
+.theory-section{margin-bottom:24px;background:var(--card);border:1px solid var(--border);border-radius:10px;padding:20px}
+.theory-title{font-size:1rem;font-weight:600;margin-bottom:12px;color:var(--cyan)}
+.theory-point{font-size:0.85rem;color:var(--text-dim);margin-bottom:8px;padding-left:16px;position:relative;line-height:1.6}
+.theory-point::before{content:'>';position:absolute;left:0;color:var(--green)}
+pre.code-block{background:rgba(0,0,0,0.4);border:1px solid var(--border);border-radius:8px;padding:16px;margin-top:12px;overflow-x:auto;font-size:0.8rem;line-height:1.6}
+.example-card{background:var(--card);border:1px solid var(--border);border-radius:10px;padding:20px;margin-bottom:16px}
+.example-title{font-size:0.9rem;font-weight:600;margin-bottom:8px;color:var(--purple)}
+.example-desc{font-size:0.82rem;color:var(--text-dim);margin-bottom:12px}
+.practice-item{display:flex;align-items:flex-start;gap:12px;padding:12px 16px;background:var(--card);border:1px solid var(--border);border-radius:8px;margin-bottom:8px;transition:border-color 0.2s}
+.practice-item:hover{border-color:var(--cyan)}
+.practice-item input[type="checkbox"]{width:18px;height:18px;margin-top:2px;accent-color:var(--green);cursor:pointer}
+.practice-item.done{opacity:0.6;border-color:var(--green)}
+.practice-text{flex:1;font-size:0.82rem;line-height:1.5}
+.difficulty{font-size:0.65rem;padding:2px 8px;border-radius:4px;font-weight:600;white-space:nowrap}
+.difficulty.easy{background:rgba(74,222,128,0.15);color:#4ade80}
+.difficulty.medium{background:rgba(251,191,36,0.15);color:#fbbf24}
+.difficulty.hard{background:rgba(244,114,182,0.15);color:#f472b6}
+@media(max-width:640px){.roadmap{padding-left:40px}.roadmap::before{left:16px}.node-number{left:-32px;width:26px;height:26px;font-size:0.7rem}.header-inner{flex-wrap:wrap;gap:8px}.progress-container{max-width:100%;margin-left:0}}
+</style>
+</head>
+<body>
+<header class="header">
+<div class="header-inner">
+<div class="logo">Python Roadmap</div>
+<div class="progress-container">
+<div class="progress-label"><span id="progressText">0 / 260</span> completed</div>
+<div class="progress-bar"><div class="progress-fill" id="progressFill" style="width:0%"></div></div>
+</div>
+</div>
+</header>
+<div class="page active" id="roadmapPage">
+<div class="roadmap" id="roadmapContainer"></div>
+</div>
+<div class="page" id="detailPage">
+<button class="back-btn" onclick="showRoadmap()">&#8592; Back to Roadmap</button>
+<div class="detail-header">
+<h1 class="detail-title" id="detailTitle"></h1>
+<p class="detail-subtitle" id="detailSubtitle"></p>
+</div>
+<div class="tabs">
+<div class="tab active" onclick="switchTab('theory')">Theory</div>
+<div class="tab" onclick="switchTab('examples')">Examples</div>
+<div class="tab" onclick="switchTab('practice')">Practice</div>
+</div>
+<div class="tab-content active" id="theoryContent"></div>
+<div class="tab-content" id="examplesContent"></div>
+<div class="tab-content" id="practiceContent"></div>
+</div>
+<script>
+const topics = [
+{id:1,title:"Python Basics",color:"#38bdf8",chips:["Variables","Data Types","I/O","Type Casting","Operators"],
+subtopics:[
+{name:"Variables & Assignment",theory:["Variables store data values; Python has no command for declaring a variable type explicitly.","Assignment uses = operator; variable names must start with a letter or underscore.","Python is dynamically typed - the type is inferred from the assigned value at runtime."],code:"# Variable assignment\nname = \"Alice\"\nage = 25\nis_student = True\npi = 3.14159\n\n# Multiple assignment\nx, y, z = 1, 2, 3\na = b = c = 0"},
+{name:"Data Types (int/float/str/bool)",theory:["int: whole numbers (42, -7); float: decimal numbers (3.14, -0.5).","str: text enclosed in quotes ('hello' or \"hello\"); bool: True or False.","Use type() to check a variable's type at runtime."],code:"# Basic data types\ncount = 42          # int\nprice = 19.99       # float\ngreeting = \"Hello\"  # str\nis_valid = True     # bool\n\nprint(type(count))   # <class 'int'>\nprint(type(price))   # <class 'float'>"},
+{name:"Input/Output",theory:["print() displays output to the console; supports multiple arguments separated by commas.","input() reads user input as a string; always returns str type.","You can customize print separators (sep) and line endings (end)."],code:"# Output\nprint(\"Hello, World!\")\nprint(\"Name:\", name, sep=\" \", end=\"\\n\")\n\n# Input\nuser_name = input(\"Enter your name: \")\nage = int(input(\"Enter your age: \"))\nprint(f\"Hello {user_name}, you are {age} years old\")"},
+{name:"Type Casting",theory:["Convert between types using int(), float(), str(), bool() constructors.","int() truncates decimals; float() adds .0 to integers; str() converts anything to text.","Invalid conversions raise ValueError (e.g., int('hello') fails)."],code:"# Type casting examples\nx = int(\"42\")       # str -> int: 42\ny = float(\"3.14\")   # str -> float: 3.14\nz = str(100)        # int -> str: \"100\"\nw = bool(1)         # int -> bool: True\n\n# Be careful\nnum = int(3.9)      # Truncates to 3 (not rounded)\nval = int(\"10\", 2)  # Binary to int: 2"},
+{name:"Comments",theory:["Single-line comments start with # and extend to end of line.","Multi-line comments use triple quotes (docstrings): triple single or double quotes.","Comments explain why, not what; good code is self-documenting."],code:"# This is a single-line comment\n\n\"\"\"\nThis is a multi-line comment\nor docstring that spans\nmultiple lines.\n\"\"\"\n\ndef greet(name):\n    \"\"\"Return a greeting message.\"\"\"\n    return f\"Hello, {name}!\""},
+{name:"Arithmetic & Logical Operators",theory:["Arithmetic: + - * / // (floor div) % (modulo) ** (power).","Comparison: == != < > <= >= return boolean values.","Logical: and, or, not combine/negate boolean expressions."],code:"# Arithmetic\nprint(10 + 3)   # 13\nprint(10 / 3)   # 3.333...\nprint(10 // 3)  # 3 (floor division)\nprint(10 % 3)   # 1 (remainder)\nprint(2 ** 10)  # 1024 (power)\n\n# Logical\nprint(True and False)  # False\nprint(True or False)   # True\nprint(not True)        # False"}
+],
+examples:[
+{title:"Simple Calculator",desc:"Take two numbers and an operator from user, perform the calculation.",code:"num1 = float(input(\"Enter first number: \"))\nnum2 = float(input(\"Enter second number: \"))\nop = input(\"Enter operator (+,-,*,/): \")\n\nif op == \"+\":\n    result = num1 + num2\nelif op == \"-\":\n    result = num1 - num2\nelif op == \"*\":\n    result = num1 * num2\nelif op == \"/\":\n    result = num1 / num2 if num2 != 0 else \"Error: Division by zero\"\nelse:\n    result = \"Invalid operator\"\n\nprint(f\"Result: {result}\")"},
+{title:"Temperature Converter",desc:"Convert Celsius to Fahrenheit and vice versa.",code:"temp = float(input(\"Enter temperature: \"))\nunit = input(\"Celsius or Fahrenheit? (C/F): \").upper()\n\nif unit == \"C\":\n    converted = (temp * 9/5) + 32\n    print(f\"{temp}°C = {converted}°F\")\nelif unit == \"F\":\n    converted = (temp - 32) * 5/9\n    print(f\"{temp}°F = {converted:.2f}°C\")\nelse:\n    print(\"Invalid unit\")"},
+{title:"Variable Swap",desc:"Swap two variables without using a temporary variable.",code:"a = 10\nb = 20\nprint(f\"Before: a={a}, b={b}\")\n\n# Pythonic swap\na, b = b, a\nprint(f\"After: a={a}, b={b}\")\n\n# Also works with multiple\nx, y, z = 1, 2, 3\nx, y, z = z, x, y\nprint(f\"x={x}, y={y}, z={z}\")"}
+],
+practice:[
+{q:"Create variables for your name, age, height(float), and student status(bool). Print them all.",d:"E"},
+{q:"Write a program that takes a number as input and prints its square and cube.",d:"E"},
+{q:"Convert a temperature from Fahrenheit to Celsius using the formula.",d:"E"},
+{q:"Take two integers as input and print their sum, difference, product, and quotient.",d:"E"},
+{q:"Create a variable with value '123.45', convert to float, then to int. Print each step.",d:"E"},
+{q:"Print your name 50 times using string multiplication operator.",d:"E"},
+{q:"Write a program to calculate the area and perimeter of a rectangle from user input.",d:"E"},
+{q:"Use floor division and modulo to find quotient and remainder of two numbers.",d:"M"},
+{q:"Take a 3-digit number as input and print the sum of its digits.",d:"M"},
+{q:"Calculate compound interest: A = P(1 + r/n)^(nt). Take all values as input.",d:"M"},
+{q:"Write a program that swaps three variables in a circular manner (a->b->c->a).",d:"M"},
+{q:"Convert seconds into hours, minutes, and seconds format.",d:"M"},
+{q:"Take a number and check if it is positive, negative, or zero using logical operators.",d:"M"},
+{q:"Write expressions using all 7 arithmetic operators and print results.",d:"M"},
+{q:"Create a program that calculates BMI from weight(kg) and height(m) inputs.",d:"M"},
+{q:"Demonstrate truthiness: show which values are falsy in Python (0, '', None, [], etc.).",d:"M"},
+{q:"Write a program using bitwise operators (&, |, ^, ~, <<, >>) on two integers.",d:"H"},
+{q:"Implement a program that converts between binary, octal, decimal, and hex representations.",d:"H"},
+{q:"Create a program that evaluates a mathematical expression string (without eval).",d:"H"},
+{q:"Write a program demonstrating operator precedence with at least 5 different operators in one expression.",d:"H"}
+]},
+{id:2,title:"Strings",color:"#34d399",chips:["Slicing","Methods","f-strings","Regex"],
+subtopics:[
+{name:"String Creation & Indexing",theory:["Strings are immutable sequences of characters created with single, double, or triple quotes.","Indexing starts at 0; negative indexing starts from -1 (last character).","Strings support len() to get length and 'in' operator to check membership."],code:"# String creation\ns1 = 'Hello'\ns2 = \"World\"\ns3 = '''Multi\nline string'''\n\n# Indexing\nword = \"Python\"\nprint(word[0])    # 'P'\nprint(word[-1])   # 'n'\nprint(len(word))  # 6\nprint('th' in word)  # True"},
+{name:"Slicing",theory:["Slice syntax: string[start:stop:step] - stop index is exclusive.","Omitting start defaults to 0; omitting stop defaults to end of string.","Negative step reverses the string; step of -1 creates a full reverse."],code:"text = \"Hello, World!\"\n\nprint(text[0:5])     # 'Hello'\nprint(text[7:])      # 'World!'\nprint(text[:5])      # 'Hello'\nprint(text[::2])     # 'Hlo ol!'\nprint(text[::-1])    # '!dlroW ,olleH'\nprint(text[-6:-1])   # 'World'"},
+{name:"String Methods",theory:["upper()/lower()/title()/capitalize() change case without modifying original.","split() breaks string into list; join() combines list into string.","strip()/lstrip()/rstrip() remove whitespace; replace() substitutes substrings."],code:"msg = \"  Hello, World!  \"\n\nprint(msg.strip())          # 'Hello, World!'\nprint(msg.upper())          # '  HELLO, WORLD!  '\nprint(msg.lower())          # '  hello, world!  '\nprint(msg.strip().split(\", \"))  # ['Hello', 'World!']\n\nwords = ['Python', 'is', 'fun']\nprint(' '.join(words))      # 'Python is fun'\nprint(msg.replace('World', 'Python'))"},
+{name:"f-strings & Formatting",theory:["f-strings (f'...') allow embedding expressions inside string literals using {}.","Format specs control width, alignment, precision: {value:.2f}, {value:>10}.","Older methods: .format() and % formatting still work but f-strings are preferred."],code:"name = \"Alice\"\nage = 30\npi = 3.14159\n\n# f-string basics\nprint(f\"Name: {name}, Age: {age}\")\nprint(f\"Pi to 2 decimals: {pi:.2f}\")\nprint(f\"{'Centered':^20}\")\nprint(f\"{'Left':<10}|{'Right':>10}\")\n\n# Expressions in f-strings\nprint(f\"Next year: {age + 1}\")\nprint(f\"Name uppercase: {name.upper()}\")"},
+{name:"Raw Strings",theory:["Raw strings (r'...') treat backslashes as literal characters, not escape sequences.","Useful for regex patterns and Windows file paths.","Cannot end with an odd number of backslashes."],code:"# Normal vs raw string\nprint(\"Hello\\nWorld\")   # Prints on two lines\nprint(r\"Hello\\nWorld\")  # Prints: Hello\\nWorld\n\n# File paths\npath = r\"C:\\Users\\name\\Documents\\file.txt\"\nprint(path)\n\n# Regex patterns\nimport re\npattern = r\"\\d{3}-\\d{4}\"\nresult = re.findall(pattern, \"Call 555-1234\")"},
+{name:"Regular Expressions Intro",theory:["The re module provides regex support: search(), match(), findall(), sub().","Common patterns: \\d (digit), \\w (word char), \\s (whitespace), . (any char).","Quantifiers: * (0+), + (1+), ? (0 or 1), {n} (exactly n), {n,m} (n to m)."],code:"import re\n\ntext = \"Contact: john@email.com or jane@work.org\"\n\n# Find all emails\nemails = re.findall(r'[\\w.]+@[\\w.]+', text)\nprint(emails)  # ['john@email.com', 'jane@work.org']\n\n# Search and match\nif re.search(r'\\d{3}', 'abc123'):\n    print(\"Found 3 digits\")\n\n# Substitute\nresult = re.sub(r'\\d+', 'NUM', 'Order 42 has 3 items')\nprint(result)  # 'Order NUM has NUM items'"}
+],
+examples:[
+{title:"Palindrome Checker",desc:"Check if a string reads the same forwards and backwards.",code:"def is_palindrome(s):\n    cleaned = s.lower().replace(\" \", \"\")\n    return cleaned == cleaned[::-1]\n\nwords = [\"racecar\", \"hello\", \"A man a plan a canal Panama\"]\nfor word in words:\n    result = is_palindrome(word)\n    print(f\"'{word}' -> Palindrome: {result}\")"},
+{title:"Word Frequency Counter",desc:"Count occurrences of each word in a sentence.",code:"sentence = \"the cat sat on the mat the cat smiled\"\nwords = sentence.lower().split()\n\nfreq = {}\nfor word in words:\n    freq[word] = freq.get(word, 0) + 1\n\nfor word, count in sorted(freq.items(), key=lambda x: -x[1]):\n    print(f\"{word:>10}: {'#' * count} ({count})\")"},
+{title:"Email Validator",desc:"Use regex to validate email format.",code:"import re\n\ndef validate_email(email):\n    pattern = r'^[\\w.+-]+@[\\w-]+\\.[a-zA-Z]{2,}$'\n    return bool(re.match(pattern, email))\n\nemails = [\"user@example.com\", \"bad@\", \"test.name+tag@domain.org\"]\nfor email in emails:\n    status = 'Valid' if validate_email(email) else 'Invalid'\n    print(f\"{email:>30} -> {status}\")"}
+],
+practice:[
+{q:"Create a string and print its first character, last character, and length.",d:"E"},
+{q:"Reverse a string using slicing.",d:"E"},
+{q:"Convert a string to uppercase and count the number of vowels in it.",d:"E"},
+{q:"Split a comma-separated string into a list and join it back with ' | '.",d:"E"},
+{q:"Check if a string starts with 'Hello' and ends with '!' using string methods.",d:"E"},
+{q:"Use an f-string to format a float to 3 decimal places inside a sentence.",d:"E"},
+{q:"Remove leading and trailing whitespace from '   hello world   ' and replace spaces with hyphens.",d:"E"},
+{q:"Count how many times the letter 'a' appears in a given string (case insensitive).",d:"M"},
+{q:"Extract a substring from index 5 to 15 and capitalize each word.",d:"M"},
+{q:"Write a function that checks if a string is a valid Python identifier (starts with letter/_, alphanumeric).",d:"M"},
+{q:"Implement a Caesar cipher that shifts each letter by n positions.",d:"M"},
+{q:"Find all words in a string that are longer than 5 characters.",d:"M"},
+{q:"Use regex to find all phone numbers in format (XXX) XXX-XXXX in a text.",d:"M"},
+{q:"Write a function to convert camelCase to snake_case.",d:"M"},
+{q:"Create a program that counts words, sentences, and paragraphs in a text.",d:"H"},
+{q:"Implement a function that finds the longest common prefix among a list of strings.",d:"H"},
+{q:"Use regex to extract all URLs from a block of text.",d:"H"},
+{q:"Write a program that compresses a string using run-length encoding (aabbbcc -> a2b3c2).",d:"H"},
+{q:"Implement a function that checks if two strings are anagrams of each other.",d:"H"},
+{q:"Create a regex pattern that validates a strong password (8+ chars, upper, lower, digit, special).",d:"H"}
+]},
+{id:3,title:"Lists & Tuples",color:"#a78bfa",chips:["Indexing","Slicing","Comprehension","Sorting","Unpacking"],
+subtopics:[
+{name:"List Creation & Indexing",theory:["Lists are ordered, mutable collections created with [] or list() constructor.","Indexing: list[0] gets first element; list[-1] gets last element.","Lists can contain mixed types: [1, 'hello', 3.14, True, [1,2]]."],code:"# List creation\nnumbers = [1, 2, 3, 4, 5]\nmixed = [1, \"hello\", 3.14, True]\nempty = []\nfrom_range = list(range(1, 11))\n\n# Indexing\nprint(numbers[0])    # 1\nprint(numbers[-1])   # 5\nprint(numbers[2])    # 3\nprint(len(numbers))  # 5"},
+{name:"Slicing & Copying",theory:["Slice syntax: list[start:stop:step] creates a new list from the slice.","Shallow copy: list.copy(), list[:], or list(original) create independent copies.","Deep copy needed for nested lists: use copy.deepcopy() from copy module."],code:"nums = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9]\n\nprint(nums[2:6])     # [2, 3, 4, 5]\nprint(nums[::2])     # [0, 2, 4, 6, 8]\nprint(nums[::-1])    # [9, 8, 7, ..., 0]\n\n# Copying\noriginal = [1, 2, [3, 4]]\nshallow = original.copy()\n\nimport copy\ndeep = copy.deepcopy(original)"},
+{name:"List Methods",theory:["append(x) adds to end; insert(i, x) adds at index; extend() adds multiple items.","pop(i) removes and returns item at index; remove(x) removes first occurrence of value.","sort() sorts in-place; sorted() returns new sorted list; reverse() reverses in-place."],code:"fruits = [\"banana\", \"apple\", \"cherry\"]\n\nfruits.append(\"date\")      # Add to end\nfruits.insert(1, \"avocado\") # Insert at index 1\nfruits.remove(\"banana\")    # Remove by value\nlast = fruits.pop()         # Remove & return last\n\nfruits.sort()               # Sort alphabetically\nfruits.reverse()            # Reverse order\nprint(fruits.count(\"apple\")) # Count occurrences\nprint(fruits.index(\"cherry\")) # Find index"},
+{name:"List Comprehension",theory:["Concise way to create lists: [expression for item in iterable if condition].","Can include multiple for loops and conditions for complex transformations.","More Pythonic and often faster than equivalent for loops."],code:"# Basic comprehension\nsquares = [x**2 for x in range(10)]\nprint(squares)  # [0, 1, 4, 9, 16, 25, 36, 49, 64, 81]\n\n# With condition\nevens = [x for x in range(20) if x % 2 == 0]\n\n# Nested comprehension\nmatrix = [[i*j for j in range(1,4)] for i in range(1,4)]\n# [[1,2,3], [2,4,6], [3,6,9]]\n\n# With transformation\nwords = [\"hello\", \"WORLD\", \"Python\"]\nlower = [w.lower() for w in words]"},
+{name:"Tuples & Tuple Unpacking",theory:["Tuples are immutable ordered sequences created with () or just commas.","Unpacking assigns tuple elements to multiple variables simultaneously.","Use * operator to capture remaining elements during unpacking."],code:"# Tuple creation\ncoords = (10, 20)\nsingleton = (42,)  # Note the comma!\nfrom_list = tuple([1, 2, 3])\n\n# Unpacking\nx, y = coords\nprint(f\"x={x}, y={y}\")\n\n# Extended unpacking\nfirst, *middle, last = [1, 2, 3, 4, 5]\nprint(first)   # 1\nprint(middle)  # [2, 3, 4]\nprint(last)    # 5\n\n# Named tuples\nfrom collections import namedtuple\nPoint = namedtuple('Point', ['x', 'y'])\np = Point(3, 4)"},
+{name:"Nested Lists",theory:["Lists can contain other lists, creating 2D or multi-dimensional structures.","Access nested elements with chained indexing: matrix[row][col].","Flatten nested lists with comprehension or itertools.chain."],code:"# 2D list (matrix)\nmatrix = [\n    [1, 2, 3],\n    [4, 5, 6],\n    [7, 8, 9]\n]\n\nprint(matrix[0][1])  # 2 (row 0, col 1)\nprint(matrix[2][2])  # 9 (row 2, col 2)\n\n# Flatten\nflat = [x for row in matrix for x in row]\nprint(flat)  # [1, 2, 3, 4, 5, 6, 7, 8, 9]\n\n# Transpose\ntransposed = [[row[i] for row in matrix] for i in range(3)]"}
+],
+examples:[
+{title:"Sort List of Tuples",desc:"Sort a list of (name, score) tuples by score descending.",code:"students = [\n    (\"Alice\", 85),\n    (\"Bob\", 92),\n    (\"Charlie\", 78),\n    (\"Diana\", 95)\n]\n\n# Sort by score descending\nby_score = sorted(students, key=lambda s: s[1], reverse=True)\nfor name, score in by_score:\n    print(f\"{name:>10}: {score}\")"},
+{title:"Matrix Operations",desc:"Add two matrices using list comprehension.",code:"A = [[1, 2, 3], [4, 5, 6], [7, 8, 9]]\nB = [[9, 8, 7], [6, 5, 4], [3, 2, 1]]\n\n# Matrix addition\nC = [[A[i][j] + B[i][j] for j in range(3)] for i in range(3)]\n\nprint(\"Result:\")\nfor row in C:\n    print(row)\n# [10, 10, 10]\n# [10, 10, 10]\n# [10, 10, 10]"},
+{title:"Remove Duplicates Preserving Order",desc:"Remove duplicates from a list while maintaining original order.",code:"def remove_duplicates(lst):\n    seen = set()\n    result = []\n    for item in lst:\n        if item not in seen:\n            seen.add(item)\n            result.append(item)\n    return result\n\nnums = [3, 1, 4, 1, 5, 9, 2, 6, 5, 3, 5]\nprint(remove_duplicates(nums))  # [3, 1, 4, 5, 9, 2, 6]"}
+],
+practice:[
+{q:"Create a list of 10 numbers and print the first 3, last 3, and every other element.",d:"E"},
+{q:"Append, insert at index 2, and remove an element from a list. Print after each operation.",d:"E"},
+{q:"Create a list comprehension that generates squares of even numbers from 1 to 20.",d:"E"},
+{q:"Create a tuple of 5 elements, unpack them into individual variables, and print each.",d:"E"},
+{q:"Sort a list of strings by their length using sorted() with a key function.",d:"E"},
+{q:"Find the maximum and minimum values in a list without using max()/min().",d:"E"},
+{q:"Write a function that returns the second largest element in a list.",d:"M"},
+{q:"Use list comprehension to flatten a 2D list into a 1D list.",d:"M"},
+{q:"Implement a function that rotates a list by k positions to the right.",d:"M"},
+{q:"Create a list comprehension with multiple conditions (divisible by 3 AND 5, between 1-100).",d:"M"},
+{q:"Write a function that merges two sorted lists into one sorted list.",d:"M"},
+{q:"Implement a function that groups consecutive duplicate elements into sublists.",d:"M"},
+{q:"Use extended unpacking (*) to separate first, last, and middle elements of a list.",d:"M"},
+{q:"Write a program that transposes a matrix (rows become columns).",d:"M"},
+{q:"Implement a function that finds all pairs in a list that sum to a target value.",d:"H"},
+{q:"Create a nested list comprehension that generates a multiplication table (10x10).",d:"H"},
+{q:"Implement a function that performs matrix multiplication on two 2D lists.",d:"H"},
+{q:"Write a function that finds the longest increasing subsequence in a list.",d:"H"},
+{q:"Implement zip() functionality manually without using the built-in zip.",d:"H"},
+{q:"Create a function that chunks a list into sublists of size n with optional padding.",d:"H"}
+]},
+{id:4,title:"Dictionaries & Sets",color:"#fbbf24",chips:["CRUD","Comprehension","Nested","Set Ops"],
+subtopics:[
+{name:"Dict Creation & Access",theory:["Dictionaries store key-value pairs in {} with O(1) average lookup time.","Keys must be immutable (str, int, tuple); values can be any type.","Access values with dict[key] (raises KeyError) or dict.get(key, default)."],code:"# Creation\nstudent = {\"name\": \"Alice\", \"age\": 20, \"grade\": \"A\"}\nempty = {}\nfrom_pairs = dict([(\"a\", 1), (\"b\", 2)])\nfrom_kwargs = dict(x=10, y=20)\n\n# Access\nprint(student[\"name\"])          # 'Alice'\nprint(student.get(\"gpa\", 0.0)) # 0.0 (default)\nprint(\"age\" in student)         # True"},
+{name:"Add/Update/Delete",theory:["Add or update: dict[key] = value; update() merges another dict.","Delete: del dict[key], pop(key) returns value, popitem() removes last pair.","clear() empties the dict; copy() creates a shallow copy."],code:"person = {\"name\": \"Bob\", \"age\": 25}\n\n# Add/Update\nperson[\"email\"] = \"bob@mail.com\"  # Add new\nperson[\"age\"] = 26                # Update\nperson.update({\"city\": \"NYC\", \"age\": 27})\n\n# Delete\ndel person[\"email\"]\nage = person.pop(\"age\")   # Returns 27\nlast = person.popitem()   # Removes last item\n\nperson.clear()  # Empty dict"},
+{name:"Dict Methods (keys/values/items/get)",theory:["keys() returns view of all keys; values() returns view of all values.","items() returns view of (key, value) tuples for iteration.","setdefault(key, default) returns value if key exists, else sets and returns default."],code:"config = {\"host\": \"localhost\", \"port\": 8080, \"debug\": True}\n\n# Views\nprint(list(config.keys()))    # ['host', 'port', 'debug']\nprint(list(config.values()))  # ['localhost', 8080, True]\n\n# Iteration with items()\nfor key, value in config.items():\n    print(f\"{key}: {value}\")\n\n# setdefault\nconfig.setdefault(\"timeout\", 30)  # Adds if missing\nconfig.setdefault(\"port\", 9090)   # Port stays 8080"},
+{name:"Dict Comprehension",theory:["Create dictionaries with {key_expr: val_expr for item in iterable if condition}.","Useful for transforming, filtering, or inverting existing dictionaries.","Can use zip() to combine two lists into a dictionary."],code:"# Basic comprehension\nsquares = {x: x**2 for x in range(1, 6)}\n# {1: 1, 2: 4, 3: 9, 4: 16, 5: 25}\n\n# Filter\noriginal = {\"a\": 1, \"b\": 2, \"c\": 3, \"d\": 4}\nfiltered = {k: v for k, v in original.items() if v > 2}\n\n# From two lists\nkeys = [\"name\", \"age\", \"city\"]\nvalues = [\"Alice\", 30, \"NYC\"]\nperson = dict(zip(keys, values))\n\n# Invert dict\ninverted = {v: k for k, v in original.items()}"},
+{name:"Sets & Set Operations",theory:["Sets are unordered collections of unique elements created with {} or set().","Support mathematical operations: union |, intersection &, difference -, symmetric diff ^.","Sets are mutable; frozenset is the immutable version usable as dict keys."],code:"# Creation\nfruits = {\"apple\", \"banana\", \"cherry\"}\nnumbers = set([1, 2, 2, 3, 3, 3])  # {1, 2, 3}\n\n# Operations\na = {1, 2, 3, 4}\nb = {3, 4, 5, 6}\n\nprint(a | b)   # Union: {1, 2, 3, 4, 5, 6}\nprint(a & b)   # Intersection: {3, 4}\nprint(a - b)   # Difference: {1, 2}\nprint(a ^ b)   # Symmetric diff: {1, 2, 5, 6}\n\n# Methods\nfruits.add(\"date\")\nfruits.discard(\"banana\")  # No error if missing\nprint(a.issubset(b))  # False"},
+{name:"Nested Dictionaries",theory:["Dictionaries can contain other dictionaries as values for hierarchical data.","Access nested values with chained keys: dict[key1][key2][key3].","Use defaultdict from collections for auto-creating nested structures."],code:"# Nested dict\nschool = {\n    \"class_a\": {\n        \"teacher\": \"Smith\",\n        \"students\": [\"Alice\", \"Bob\"]\n    },\n    \"class_b\": {\n        \"teacher\": \"Jones\",\n        \"students\": [\"Charlie\", \"Diana\"]\n    }\n}\n\nprint(school[\"class_a\"][\"teacher\"])  # 'Smith'\n\n# defaultdict for nested\nfrom collections import defaultdict\ntree = lambda: defaultdict(tree)\ndata = tree()\ndata[\"a\"][\"b\"][\"c\"] = \"deep value\""}
+],
+examples:[
+{title:"Word Frequency with Dict",desc:"Count word frequency in a text using dictionary.",code:"text = \"the quick brown fox jumps over the lazy dog the fox\"\nwords = text.split()\n\nfreq = {}\nfor word in words:\n    freq[word] = freq.get(word, 0) + 1\n\n# Sort by frequency\nfor word, count in sorted(freq.items(), key=lambda x: -x[1]):\n    print(f\"{word:>6}: {'*' * count} ({count})\")"},
+{title:"Set Operations for Data Analysis",desc:"Find common and unique elements between datasets.",code:"team_a = {\"Alice\", \"Bob\", \"Charlie\", \"Diana\"}\nteam_b = {\"Bob\", \"Diana\", \"Eve\", \"Frank\"}\n\nprint(f\"Both teams: {team_a & team_b}\")\nprint(f\"Only team A: {team_a - team_b}\")\nprint(f\"Only team B: {team_b - team_a}\")\nprint(f\"All members: {team_a | team_b}\")"},
+{title:"Merge and Group Data",desc:"Group a list of items by category using dict comprehension.",code:"items = [\n    (\"fruit\", \"apple\"), (\"veggie\", \"carrot\"),\n    (\"fruit\", \"banana\"), (\"veggie\", \"pea\"),\n    (\"fruit\", \"cherry\"), (\"grain\", \"rice\")\n]\n\nfrom collections import defaultdict\ngrouped = defaultdict(list)\nfor category, item in items:\n    grouped[category].append(item)\n\nfor cat, items_list in grouped.items():\n    print(f\"{cat}: {', '.join(items_list)}\")"}
+],
+practice:[
+{q:"Create a dictionary with 5 key-value pairs and access each value using its key.",d:"E"},
+{q:"Add a new key-value pair, update an existing one, and delete one from a dictionary.",d:"E"},
+{q:"Iterate over a dictionary and print all keys, values, and key-value pairs separately.",d:"E"},
+{q:"Create a set from a list with duplicates and verify duplicates are removed.",d:"E"},
+{q:"Perform union, intersection, and difference on two sets.",d:"E"},
+{q:"Use dict comprehension to create a dictionary of {number: square} for 1-10.",d:"E"},
+{q:"Write a function that counts character frequency in a string using a dictionary.",d:"M"},
+{q:"Merge two dictionaries and handle overlapping keys by summing values.",d:"M"},
+{q:"Create a nested dictionary representing a student record with name, grades (dict), and courses (list).",d:"M"},
+{q:"Use setdefault() to group words by their first letter.",d:"M"},
+{q:"Find common elements between 3 sets using set intersection.",d:"M"},
+{q:"Invert a dictionary (swap keys and values), handling duplicate values.",d:"M"},
+{q:"Implement a simple cache/memoization using a dictionary.",d:"M"},
+{q:"Write a function that finds the key with the maximum value in a dictionary.",d:"M"},
+{q:"Create a program that uses sets to find unique words in two sentences and words common to both.",d:"H"},
+{q:"Implement a sparse matrix using nested dictionaries.",d:"H"},
+{q:"Write a function that deep-merges two nested dictionaries recursively.",d:"H"},
+{q:"Implement a graph adjacency list using defaultdict and perform BFS.",d:"H"},
+{q:"Create a function that flattens a deeply nested dictionary into dot-notation keys.",d:"H"},
+{q:"Implement an LRU cache using OrderedDict with a fixed capacity.",d:"H"}
+]},
+{id:5,title:"Control Flow",color:"#f472b6",chips:["if/elif/else","Ternary","match-case"],
+subtopics:[
+{name:"if/elif/else",theory:["if tests a condition; elif tests additional conditions; else catches everything else.","Indentation (4 spaces) defines code blocks - no braces needed.","Multiple elif branches are checked in order; first True branch executes."],code:"score = 85\n\nif score >= 90:\n    grade = \"A\"\nelif score >= 80:\n    grade = \"B\"\nelif score >= 70:\n    grade = \"C\"\nelif score >= 60:\n    grade = \"D\"\nelse:\n    grade = \"F\"\n\nprint(f\"Score {score} = Grade {grade}\")"},
+{name:"Comparison & Logical Operators",theory:["Comparison: == != < > <= >= return True or False; 'is' checks identity.","Logical: and (both true), or (either true), not (negate).","Chained comparisons: 1 < x < 10 is valid and checks both conditions."],code:"x = 15\n\n# Chained comparison\nif 10 < x < 20:\n    print(\"x is between 10 and 20\")\n\n# Identity vs equality\na = [1, 2, 3]\nb = [1, 2, 3]\nprint(a == b)   # True (same value)\nprint(a is b)   # False (different objects)\n\n# Short-circuit evaluation\nname = \"\"\nresult = name or \"Anonymous\"  # 'Anonymous'"},
+{name:"Ternary Operator",theory:["Syntax: value_if_true if condition else value_if_false (conditional expression).","Can be nested but readability suffers - keep it simple.","Useful for simple assignments and return statements."],code:"age = 20\n\n# Ternary expression\nstatus = \"adult\" if age >= 18 else \"minor\"\nprint(status)  # 'adult'\n\n# In function return\ndef abs_value(n):\n    return n if n >= 0 else -n\n\n# Nested (avoid in practice)\nresult = \"positive\" if x > 0 else \"zero\" if x == 0 else \"negative\""},
+{name:"match-case (Python 3.10+)",theory:["Structural pattern matching: match value against patterns with case.","Supports literal patterns, capture patterns, wildcard (_), and guards (if).","Can destructure sequences, mappings, and objects in case patterns."],code:"def http_status(code):\n    match code:\n        case 200:\n            return \"OK\"\n        case 301 | 302:\n            return \"Redirect\"\n        case 404:\n            return \"Not Found\"\n        case 500:\n            return \"Server Error\"\n        case _:\n            return \"Unknown\"\n\n# Pattern matching with structure\npoint = (3, 4)\nmatch point:\n    case (0, 0):\n        print(\"Origin\")\n    case (x, 0):\n        print(f\"On x-axis at {x}\")\n    case (0, y):\n        print(f\"On y-axis at {y}\")\n    case (x, y):\n        print(f\"Point at ({x}, {y})\")"},
+{name:"Nested Conditions",theory:["Conditions inside conditions create nested decision trees.","Deeply nested code is hard to read - consider early returns or guard clauses.","Refactor nested ifs using logical operators (and/or) when possible."],code:"def classify_user(age, membership, purchases):\n    if age >= 18:\n        if membership == \"premium\":\n            if purchases > 100:\n                return \"VIP\"\n            else:\n                return \"Premium\"\n        else:\n            return \"Standard\"\n    else:\n        return \"Junior\"\n\n# Better: flat with early returns\ndef classify_user_v2(age, membership, purchases):\n    if age < 18:\n        return \"Junior\"\n    if membership == \"premium\" and purchases > 100:\n        return \"VIP\"\n    if membership == \"premium\":\n        return \"Premium\"\n    return \"Standard\""},
+{name:"Truthiness & Falsy Values",theory:["Falsy: False, None, 0, 0.0, '', [], {}, set() - all evaluate to False in boolean context.","Everything else is truthy including non-empty containers and non-zero numbers.","Use truthiness for cleaner conditionals instead of explicit comparisons."],code:"# Falsy values\nfalsy_values = [False, None, 0, 0.0, \"\", [], {}, set()]\nfor val in falsy_values:\n    print(f\"{str(val):>8} -> {bool(val)}\")  # All False\n\n# Practical usage\nname = \"\"\nif name:  # Instead of: if name != \"\"\n    print(f\"Hello, {name}\")\nelse:\n    print(\"Hello, stranger\")\n\n# Default with 'or'\nitems = []\nresult = items or [\"default\"]  # ['default']"}
+],
+examples:[
+{title:"Grade Calculator with Validation",desc:"Calculate grade with input validation using control flow.",code:"def get_grade(score):\n    if not isinstance(score, (int, float)):\n        return \"Invalid input\"\n    if score < 0 or score > 100:\n        return \"Score out of range\"\n    if score >= 90: return \"A\"\n    elif score >= 80: return \"B\"\n    elif score >= 70: return \"C\"\n    elif score >= 60: return \"D\"\n    else: return \"F\"\n\ntest_scores = [95, 83, 71, 55, -5, 105, \"abc\"]\nfor s in test_scores:\n    print(f\"{str(s):>5} -> {get_grade(s)}\")"},
+{title:"FizzBuzz",desc:"Classic FizzBuzz problem using control flow.",code:"for i in range(1, 31):\n    if i % 15 == 0:\n        print(\"FizzBuzz\")\n    elif i % 3 == 0:\n        print(\"Fizz\")\n    elif i % 5 == 0:\n        print(\"Buzz\")\n    else:\n        print(i)"},
+{title:"Menu System with match-case",desc:"Simple command-line menu using pattern matching.",code:"def process_command(cmd):\n    match cmd.split():\n        case [\"quit\"]:\n            return \"Goodbye!\"\n        case [\"hello\", name]:\n            return f\"Hello, {name}!\"\n        case [\"add\", *numbers]:\n            total = sum(int(n) for n in numbers)\n            return f\"Sum: {total}\"\n        case _:\n            return \"Unknown command\"\n\ncommands = [\"hello Alice\", \"add 1 2 3\", \"quit\", \"xyz\"]\nfor cmd in commands:\n    print(f\"{cmd:>15} -> {process_command(cmd)}\")"}
+],
+practice:[
+{q:"Write an if/elif/else to classify a number as positive, negative, or zero.",d:"E"},
+{q:"Use a ternary operator to assign 'even' or 'odd' based on a number.",d:"E"},
+{q:"Write a program that checks if a year is a leap year.",d:"E"},
+{q:"Create a simple login check: if username AND password match, print 'Welcome'.",d:"E"},
+{q:"Write nested if to check if a number is positive AND even/odd.",d:"E"},
+{q:"Demonstrate truthiness by printing bool() of 10 different values (mix of truthy/falsy).",d:"E"},
+{q:"Write a program using match-case to convert day numbers (1-7) to day names.",d:"M"},
+{q:"Create a number guessing game with 'too high', 'too low', 'correct' feedback.",d:"M"},
+{q:"Implement a simple calculator with match-case for operations.",d:"M"},
+{q:"Write a function that uses guard clauses (early returns) to validate user input.",d:"M"},
+{q:"Create a tax calculator with multiple brackets using if/elif.",d:"M"},
+{q:"Use chained comparisons to check if a value is within multiple ranges.",d:"M"},
+{q:"Write a program that categorizes a triangle by its angles (acute/right/obtuse).",d:"M"},
+{q:"Implement short-circuit evaluation to safely access nested dict keys.",d:"M"},
+{q:"Create a match-case with guard conditions (case x if x > 0).",d:"H"},
+{q:"Write a function that validates a date (year, month, day) with all edge cases.",d:"H"},
+{q:"Implement a state machine using match-case for a simple text parser.",d:"H"},
+{q:"Create a complex scoring system with 5+ criteria and weighted conditions.",d:"H"},
+{q:"Write a pattern matching function that destructures nested data structures.",d:"H"},
+{q:"Implement a rule engine using dictionaries of conditions and match-case.",d:"H"}
+]},
+{id:6,title:"Loops",color:"#22d3ee",chips:["for","while","break/continue","enumerate","zip"],
+subtopics:[
+{name:"for Loop",theory:["for iterates over any iterable: lists, strings, ranges, dicts, files, etc.","range(start, stop, step) generates a sequence of numbers for counting loops.","for loops automatically call iter() and next() on the iterable behind the scenes."],code:"# Iterate over list\nfruits = [\"apple\", \"banana\", \"cherry\"]\nfor fruit in fruits:\n    print(fruit)\n\n# range examples\nfor i in range(5):        # 0, 1, 2, 3, 4\n    print(i)\n\nfor i in range(2, 10, 2): # 2, 4, 6, 8\n    print(i)\n\n# Iterate over string\nfor char in \"Python\":\n    print(char, end=\" \")  # P y t h o n"},
+{name:"while Loop",theory:["while executes as long as its condition is True; check happens before each iteration.","Must ensure the condition eventually becomes False to avoid infinite loops.","Useful when number of iterations is unknown (user input, convergence, etc.)."],code:"# Basic while\ncount = 0\nwhile count < 5:\n    print(f\"Count: {count}\")\n    count += 1\n\n# User input loop\nwhile True:\n    text = input(\"Enter 'quit' to exit: \")\n    if text == \"quit\":\n        break\n    print(f\"You said: {text}\")\n\n# Convergence\nx = 100.0\nwhile x > 1:\n    x = x / 2\n    print(f\"{x:.4f}\")"},
+{name:"break/continue/pass",theory:["break exits the innermost loop immediately; execution continues after the loop.","continue skips the rest of current iteration and moves to the next one.","pass is a no-op placeholder; used when syntax requires a statement but no action needed."],code:"# break - find first even\nnumbers = [1, 3, 5, 4, 7, 8]\nfor n in numbers:\n    if n % 2 == 0:\n        print(f\"First even: {n}\")  # 4\n        break\n\n# continue - skip odds\nfor i in range(10):\n    if i % 2 != 0:\n        continue\n    print(i, end=\" \")  # 0 2 4 6 8\n\n# pass - placeholder\nfor i in range(5):\n    if i == 3:\n        pass  # TODO: handle later\n    print(i)"},
+{name:"enumerate & zip",theory:["enumerate(iterable, start=0) yields (index, value) pairs for indexed iteration.","zip(iter1, iter2, ...) pairs elements from multiple iterables together.","zip stops at shortest; use itertools.zip_longest for padding with fillvalue."],code:"# enumerate\ncolors = [\"red\", \"green\", \"blue\"]\nfor i, color in enumerate(colors, start=1):\n    print(f\"{i}. {color}\")\n\n# zip\nnames = [\"Alice\", \"Bob\", \"Charlie\"]\nscores = [85, 92, 78]\n\nfor name, score in zip(names, scores):\n    print(f\"{name}: {score}\")\n\n# zip to create dict\nresult = dict(zip(names, scores))\nprint(result)  # {'Alice': 85, 'Bob': 92, 'Charlie': 78}"},
+{name:"Nested Loops",theory:["A loop inside another loop; inner loop completes fully for each outer iteration.","Time complexity: O(n*m) for two nested loops of sizes n and m.","Use break in inner loop to skip to next outer iteration; label-break not available."],code:"# Multiplication table\nfor i in range(1, 6):\n    for j in range(1, 6):\n        print(f\"{i*j:4}\", end=\"\")\n    print()  # newline\n\n# Find pair that sums to target\nnums = [2, 7, 11, 15]\ntarget = 9\nfor i in range(len(nums)):\n    for j in range(i+1, len(nums)):\n        if nums[i] + nums[j] == target:\n            print(f\"Pair: {nums[i]}, {nums[j]}\")"},
+{name:"Loop-else Clause",theory:["else block after for/while runs only if loop completed without hitting break.","If break is triggered, else block is skipped entirely.","Useful for search patterns: else means 'not found' when break means 'found'."],code:"# Search with else\ndef find_prime(n):\n    if n < 2:\n        return False\n    for i in range(2, int(n**0.5) + 1):\n        if n % i == 0:\n            print(f\"{n} is not prime (div by {i})\")\n            break\n    else:\n        print(f\"{n} IS prime\")\n        return True\n    return False\n\nfor num in [7, 10, 13, 15, 23]:\n    find_prime(num)"}
+],
+examples:[
+{title:"Pattern Printing",desc:"Print a right triangle pattern of stars.",code:"n = 5\nfor i in range(1, n + 1):\n    print(\"*\" * i)\n# *\n# **\n# ***\n# ****\n# *****\n\n# Diamond pattern\nfor i in range(1, n + 1):\n    print(\" \" * (n - i) + \"*\" * (2*i - 1))\nfor i in range(n - 1, 0, -1):\n    print(\" \" * (n - i) + \"*\" * (2*i - 1))"},
+{title:"Prime Number Sieve",desc:"Find all prime numbers up to n using Sieve of Eratosthenes.",code:"def sieve_of_eratosthenes(limit):\n    is_prime = [True] * (limit + 1)\n    is_prime[0] = is_prime[1] = False\n    \n    for i in range(2, int(limit**0.5) + 1):\n        if is_prime[i]:\n            for j in range(i*i, limit + 1, i):\n                is_prime[j] = False\n    \n    return [i for i, prime in enumerate(is_prime) if prime]\n\nprimes = sieve_of_eratosthenes(50)\nprint(f\"Primes up to 50: {primes}\")"},
+{title:"Collatz Sequence",desc:"Generate the Collatz sequence for a number.",code:"def collatz(n):\n    sequence = [n]\n    while n != 1:\n        if n % 2 == 0:\n            n = n // 2\n        else:\n            n = 3 * n + 1\n        sequence.append(n)\n    return sequence\n\nfor start in [6, 11, 27]:\n    seq = collatz(start)\n    print(f\"{start}: {len(seq)} steps -> {seq[:10]}...\")"}
+],
+practice:[
+{q:"Write a for loop that prints numbers 1 to 20.",d:"E"},
+{q:"Use a while loop to sum numbers until the user enters 0.",d:"E"},
+{q:"Print all even numbers from 1 to 50 using a for loop with continue.",d:"E"},
+{q:"Use enumerate to print each item in a list with its index.",d:"E"},
+{q:"Use zip to combine two lists into pairs and print them.",d:"E"},
+{q:"Write a loop that finds the first number divisible by both 3 and 7 (use break).",d:"E"},
+{q:"Create nested loops to print a 5x5 multiplication table.",d:"M"},
+{q:"Implement a countdown timer from 10 to 0 using a while loop.",d:"M"},
+{q:"Write a loop with else clause to check if a number is prime.",d:"M"},
+{q:"Use enumerate and zip together to iterate over 3 lists simultaneously with indices.",d:"M"},
+{q:"Create a program that prints the Fibonacci sequence up to n terms.",d:"M"},
+{q:"Write nested loops to generate all permutations of 'abc'.",d:"M"},
+{q:"Implement binary search using a while loop.",d:"M"},
+{q:"Create a program that prints a right-aligned triangle of numbers.",d:"M"},
+{q:"Write a program that finds all Armstrong numbers between 1 and 1000.",d:"H"},
+{q:"Implement the bubble sort algorithm using nested loops.",d:"H"},
+{q:"Create a spiral matrix (n x n) using loops.",d:"H"},
+{q:"Write a program using nested loops to solve the N-Queens problem for n=4.",d:"H"},
+{q:"Implement a simple text-based progress bar using a while loop with time.sleep().",d:"H"},
+{q:"Create a program that generates Pascal's triangle for n rows using loops.",d:"H"}
+]},
+{id:7,title:"Functions",color:"#fb923c",chips:["def","args/kwargs","Lambda","Scope","Decorators"],
+subtopics:[
+{name:"Defining Functions (def)",theory:["Functions are defined with def keyword, followed by name, parameters, and colon.","The function body is indented; docstrings describe purpose, params, and return value.","Functions are first-class objects: can be assigned to variables, passed as arguments."],code:"def greet(name):\n    \"\"\"Return a greeting message.\"\"\"\n    return f\"Hello, {name}!\"\n\n# Calling\nmessage = greet(\"Alice\")\nprint(message)  # Hello, Alice!\n\n# Functions as objects\nsay_hello = greet\nprint(say_hello(\"Bob\"))  # Hello, Bob!\n\n# Function with no return gives None\ndef void_func():\n    print(\"Side effect\")\n\nresult = void_func()  # prints, returns None"},
+{name:"Parameters & Arguments (*args/**kwargs)",theory:["Positional args must come first; keyword args can be in any order after.","*args collects extra positional arguments as a tuple.","**kwargs collects extra keyword arguments as a dictionary."],code:"# Default parameters\ndef power(base, exp=2):\n    return base ** exp\n\nprint(power(3))     # 9\nprint(power(2, 10)) # 1024\n\n# *args and **kwargs\ndef flexible(*args, **kwargs):\n    print(f\"Args: {args}\")\n    print(f\"Kwargs: {kwargs}\")\n\nflexible(1, 2, 3, name=\"Alice\", age=30)\n# Args: (1, 2, 3)\n# Kwargs: {'name': 'Alice', 'age': 30}\n\n# Unpacking in calls\nnums = [1, 2, 3]\nprint(*nums)  # 1 2 3"},
+{name:"Return Values",theory:["return sends a value back to the caller; without return, function returns None.","Can return multiple values as a tuple (auto-packed).","Early returns act as guard clauses for cleaner code."],code:"# Multiple return values\ndef divide(a, b):\n    if b == 0:\n        return None, \"Division by zero\"\n    return a / b, \"Success\"\n\nresult, status = divide(10, 3)\nprint(f\"{result:.2f} - {status}\")\n\n# Return different types\ndef find_max(lst):\n    if not lst:\n        return None\n    return max(lst)\n\n# Early return pattern\ndef process(data):\n    if data is None:\n        return []\n    if len(data) == 0:\n        return []\n    return [x * 2 for x in data]"},
+{name:"Lambda Functions",theory:["Lambda creates anonymous single-expression functions: lambda args: expression.","Commonly used with map(), filter(), sorted() as short callback functions.","Limited to one expression; cannot contain statements or multiple lines."],code:"# Basic lambda\nsquare = lambda x: x ** 2\nprint(square(5))  # 25\n\n# With sorted\nstudents = [(\"Alice\", 85), (\"Bob\", 92), (\"Charlie\", 78)]\nby_score = sorted(students, key=lambda s: s[1], reverse=True)\n\n# With map and filter\nnumbers = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]\nevens = list(filter(lambda x: x % 2 == 0, numbers))\ndoubled = list(map(lambda x: x * 2, numbers))\n\nprint(evens)    # [2, 4, 6, 8, 10]\nprint(doubled)  # [2, 4, 6, ..., 20]"},
+{name:"Scope (LEGB Rule)",theory:["LEGB: Local -> Enclosing -> Global -> Built-in scope resolution order.","Variables assigned in a function are local unless declared global or nonlocal.","nonlocal keyword allows modification of enclosing function's variables."],code:"x = \"global\"\n\ndef outer():\n    x = \"enclosing\"\n    \n    def inner():\n        x = \"local\"\n        print(f\"Inner: {x}\")  # local\n    \n    inner()\n    print(f\"Outer: {x}\")  # enclosing\n\nouter()\nprint(f\"Global: {x}\")  # global\n\n# Using nonlocal\ndef counter():\n    count = 0\n    def increment():\n        nonlocal count\n        count += 1\n        return count\n    return increment\n\nc = counter()\nprint(c(), c(), c())  # 1 2 3"},
+{name:"Closures & Decorators",theory:["A closure is a function that captures variables from its enclosing scope.","Decorators are functions that modify other functions using @syntax.","Decorators take a function as input and return a new function (often a wrapper)."],code:"# Closure\ndef multiplier(factor):\n    def multiply(x):\n        return x * factor\n    return multiply\n\ndouble = multiplier(2)\ntriple = multiplier(3)\nprint(double(5))  # 10\nprint(triple(5))  # 15\n\n# Decorator\nimport time\ndef timer(func):\n    def wrapper(*args, **kwargs):\n        start = time.time()\n        result = func(*args, **kwargs)\n        elapsed = time.time() - start\n        print(f\"{func.__name__} took {elapsed:.4f}s\")\n        return result\n    return wrapper\n\n@timer\ndef slow_function():\n    time.sleep(0.1)\n    return \"done\"\n\nslow_function()"}
+],
+examples:[
+{title:"Recursive Factorial & Fibonacci",desc:"Demonstrate recursion with classic examples.",code:"def factorial(n):\n    if n <= 1:\n        return 1\n    return n * factorial(n - 1)\n\ndef fibonacci(n):\n    if n <= 1:\n        return n\n    return fibonacci(n-1) + fibonacci(n-2)\n\nprint(f\"5! = {factorial(5)}\")  # 120\nprint(f\"Fib(10) = {fibonacci(10)}\")  # 55\n\n# With memoization\nfrom functools import lru_cache\n\n@lru_cache(maxsize=None)\ndef fib_memo(n):\n    if n <= 1: return n\n    return fib_memo(n-1) + fib_memo(n-2)\n\nprint(f\"Fib(100) = {fib_memo(100)}\")"},
+{title:"Higher-Order Functions",desc:"Functions that take or return other functions.",code:"def apply_operation(func, data):\n    return [func(x) for x in data]\n\ndef compose(f, g):\n    return lambda x: f(g(x))\n\nnumbers = [1, -2, 3, -4, 5]\n\nsquared = apply_operation(lambda x: x**2, numbers)\nprint(f\"Squared: {squared}\")\n\n# Compose functions\nadd_one = lambda x: x + 1\ndouble = lambda x: x * 2\ndouble_then_add = compose(add_one, double)\nprint(double_then_add(5))  # 11"},
+{title:"Decorator with Arguments",desc:"Create a decorator that accepts parameters.",code:"def repeat(times):\n    def decorator(func):\n        def wrapper(*args, **kwargs):\n            results = []\n            for _ in range(times):\n                results.append(func(*args, **kwargs))\n            return results\n        return wrapper\n    return decorator\n\n@repeat(3)\ndef say_hello(name):\n    return f\"Hello, {name}!\"\n\nresults = say_hello(\"Alice\")\nfor r in results:\n    print(r)"}
+],
+practice:[
+{q:"Write a function that takes a name and returns a greeting string.",d:"E"},
+{q:"Create a function with a default parameter for greeting message.",d:"E"},
+{q:"Write a function that accepts *args and returns their sum.",d:"E"},
+{q:"Create a lambda function that checks if a number is even.",d:"E"},
+{q:"Write a function that returns multiple values (min, max, avg of a list).",d:"E"},
+{q:"Demonstrate global vs local scope with a variable named 'x' in both.",d:"E"},
+{q:"Write a function using **kwargs to format a person's info.",d:"M"},
+{q:"Create a closure that generates an ID sequence (incrementing counter).",d:"M"},
+{q:"Write a recursive function to calculate power(base, exp) without ** operator.",d:"M"},
+{q:"Use map(), filter(), and lambda to process a list of numbers.",d:"M"},
+{q:"Write a decorator that prints function name and arguments before calling it.",d:"M"},
+{q:"Create a function that takes another function as argument and applies it to a list.",d:"M"},
+{q:"Implement a memoization decorator using a dictionary cache.",d:"M"},
+{q:"Write a function with keyword-only arguments (using * separator).",d:"M"},
+{q:"Create a decorator that limits function calls to n times, then raises an error.",d:"H"},
+{q:"Implement curry() that converts f(a, b, c) into f(a)(b)(c).",d:"H"},
+{q:"Write a recursive function to flatten an arbitrarily nested list.",d:"H"},
+{q:"Create a decorator that retries a function up to 3 times on exception.",d:"H"},
+{q:"Implement a simple function pipeline: pipe(f1, f2, f3)(data).",d:"H"},
+{q:"Write a function using nonlocal that implements a running average calculator.",d:"H"}
+]},
+{id:8,title:"OOP (Classes & Objects)",color:"#4ade80",chips:["Class","Inheritance","Polymorphism","Dunder Methods"],
+subtopics:[
+{name:"Class & __init__",theory:["A class is a blueprint for objects; __init__ is the constructor called on instantiation.","self refers to the current instance; it must be the first parameter of instance methods.","Class attributes are shared across all instances; instance attributes are unique per object."],code:"class Dog:\n    species = \"Canis familiaris\"  # Class attribute\n    \n    def __init__(self, name, age):\n        self.name = name    # Instance attribute\n        self.age = age\n    \n    def bark(self):\n        return f\"{self.name} says Woof!\"\n    \n    def info(self):\n        return f\"{self.name} is {self.age} years old\"\n\nrex = Dog(\"Rex\", 5)\nprint(rex.bark())   # Rex says Woof!\nprint(rex.info())   # Rex is 5 years old\nprint(Dog.species)  # Canis familiaris"},
+{name:"self & Instance Variables",theory:["self is a reference to the instance calling the method (like 'this' in other languages).","Instance variables are set in __init__ with self.var = value.","Each object maintains its own copy of instance variables independently."],code:"class BankAccount:\n    def __init__(self, owner, balance=0):\n        self.owner = owner\n        self.balance = balance\n        self.transactions = []\n    \n    def deposit(self, amount):\n        self.balance += amount\n        self.transactions.append(f\"+{amount}\")\n        return self  # Enable chaining\n    \n    def withdraw(self, amount):\n        if amount > self.balance:\n            raise ValueError(\"Insufficient funds\")\n        self.balance -= amount\n        self.transactions.append(f\"-{amount}\")\n        return self\n\nacc = BankAccount(\"Alice\", 1000)\nacc.deposit(500).withdraw(200)\nprint(f\"Balance: {acc.balance}\")  # 1300"},
+{name:"Inheritance (Single/Multiple)",theory:["Inheritance allows a child class to inherit attributes and methods from a parent.","super() calls the parent class methods; useful in __init__ for proper initialization.","Multiple inheritance uses MRO (Method Resolution Order) - C3 linearization."],code:"class Animal:\n    def __init__(self, name):\n        self.name = name\n    def speak(self):\n        return \"...\"\n\nclass Dog(Animal):\n    def speak(self):\n        return f\"{self.name}: Woof!\"\n\nclass Cat(Animal):\n    def speak(self):\n        return f\"{self.name}: Meow!\"\n\n# Multiple inheritance\nclass Pet:\n    def __init__(self, owner):\n        self.owner = owner\n\nclass PetDog(Dog, Pet):\n    def __init__(self, name, owner):\n        Dog.__init__(self, name)\n        Pet.__init__(self, owner)\n\nrex = PetDog(\"Rex\", \"Alice\")\nprint(rex.speak())    # Rex: Woof!\nprint(rex.owner)      # Alice"},
+{name:"Polymorphism & Method Overriding",theory:["Polymorphism: different classes respond to the same method call in different ways.","Method overriding: child class provides its own implementation of a parent method.","Duck typing: if it walks like a duck and quacks like a duck, it's a duck."],code:"class Shape:\n    def area(self):\n        raise NotImplementedError\n    def perimeter(self):\n        raise NotImplementedError\n\nclass Circle(Shape):\n    def __init__(self, radius):\n        self.radius = radius\n    def area(self):\n        return 3.14159 * self.radius ** 2\n    def perimeter(self):\n        return 2 * 3.14159 * self.radius\n\nclass Rectangle(Shape):\n    def __init__(self, w, h):\n        self.w, self.h = w, h\n    def area(self):\n        return self.w * self.h\n    def perimeter(self):\n        return 2 * (self.w + self.h)\n\n# Polymorphism in action\nshapes = [Circle(5), Rectangle(3, 4), Circle(2)]\nfor s in shapes:\n    print(f\"{type(s).__name__}: area={s.area():.2f}\")"},
+{name:"Encapsulation (public/private/_protected)",theory:["Python uses naming conventions: public (name), protected (_name), private (__name).","__name triggers name mangling: becomes _ClassName__name to prevent accidental access.","@property decorator creates getter/setter with attribute-like syntax."],code:"class Employee:\n    def __init__(self, name, salary):\n        self.name = name         # Public\n        self._department = \"\"    # Protected (convention)\n        self.__salary = salary   # Private (name mangled)\n    \n    @property\n    def salary(self):\n        return self.__salary\n    \n    @salary.setter\n    def salary(self, value):\n        if value < 0:\n            raise ValueError(\"Salary cannot be negative\")\n        self.__salary = value\n\nemp = Employee(\"Alice\", 50000)\nprint(emp.salary)        # 50000 (getter)\nemp.salary = 60000       # setter\n# emp.__salary -> AttributeError\n# emp._Employee__salary -> works (name mangling)"},
+{name:"Magic/Dunder Methods",theory:["__str__ for user-friendly string; __repr__ for unambiguous developer representation.","__len__, __getitem__, __setitem__ make objects behave like containers.","__eq__, __lt__, __add__ enable operator overloading for custom classes."],code:"class Vector:\n    def __init__(self, x, y):\n        self.x = x\n        self.y = y\n    \n    def __repr__(self):\n        return f\"Vector({self.x}, {self.y})\"\n    \n    def __str__(self):\n        return f\"({self.x}, {self.y})\"\n    \n    def __add__(self, other):\n        return Vector(self.x + other.x, self.y + other.y)\n    \n    def __len__(self):\n        return int((self.x**2 + self.y**2)**0.5)\n    \n    def __eq__(self, other):\n        return self.x == other.x and self.y == other.y\n\nv1 = Vector(3, 4)\nv2 = Vector(1, 2)\nprint(v1 + v2)    # (4, 6)\nprint(len(v1))    # 5\nprint(repr(v1))   # Vector(3, 4)"},
+{name:"@property & @classmethod & @staticmethod",theory:["@property makes a method accessible like an attribute (getter).","@classmethod receives cls as first argument; can be called on the class itself.","@staticmethod has no access to cls or self; just a regular function in class namespace."],code:"class Temperature:\n    def __init__(self, celsius):\n        self._celsius = celsius\n    \n    @property\n    def fahrenheit(self):\n        return self._celsius * 9/5 + 32\n    \n    @classmethod\n    def from_fahrenheit(cls, f):\n        return cls((f - 32) * 5/9)\n    \n    @staticmethod\n    def is_boiling(temp_c):\n        return temp_c >= 100\n\nt = Temperature(100)\nprint(t.fahrenheit)       # 212.0\n\nt2 = Temperature.from_fahrenheit(72)\nprint(f\"{t2._celsius:.1f}C\")  # 22.2C\n\nprint(Temperature.is_boiling(100))  # True"}
+],
+examples:[
+{title:"Linked List Implementation",desc:"Implement a singly linked list with OOP.",code:"class Node:\n    def __init__(self, data):\n        self.data = data\n        self.next = None\n\nclass LinkedList:\n    def __init__(self):\n        self.head = None\n    \n    def append(self, data):\n        new_node = Node(data)\n        if not self.head:\n            self.head = new_node\n            return\n        current = self.head\n        while current.next:\n            current = current.next\n        current.next = new_node\n    \n    def __str__(self):\n        values = []\n        current = self.head\n        while current:\n            values.append(str(current.data))\n            current = current.next\n        return \" -> \".join(values)\n\nll = LinkedList()\nfor i in [1, 2, 3, 4, 5]:\n    ll.append(i)\nprint(ll)  # 1 -> 2 -> 3 -> 4 -> 5"},
+{title:"Inheritance Hierarchy",desc:"Build a shape hierarchy with abstract-like base class.",code:"class Shape:\n    def area(self): raise NotImplementedError\n    def __str__(self): return f\"{type(self).__name__}(area={self.area():.2f})\"\n\nclass Circle(Shape):\n    def __init__(self, r): self.r = r\n    def area(self): return 3.14159 * self.r**2\n\nclass Square(Shape):\n    def __init__(self, s): self.s = s\n    def area(self): return self.s**2\n\nclass Triangle(Shape):\n    def __init__(self, b, h): self.b, self.h = b, h\n    def area(self): return 0.5 * self.b * self.h\n\nshapes = [Circle(5), Square(4), Triangle(6, 3)]\nfor s in shapes:\n    print(s)"},
+{title:"Design Pattern: Observer",desc:"Implement the Observer pattern using OOP.",code:"class EventEmitter:\n    def __init__(self):\n        self._listeners = {}\n    \n    def on(self, event, callback):\n        self._listeners.setdefault(event, []).append(callback)\n    \n    def emit(self, event, *args):\n        for callback in self._listeners.get(event, []):\n            callback(*args)\n\n# Usage\nemitter = EventEmitter()\nemitter.on(\"data\", lambda d: print(f\"Got: {d}\"))\nemitter.on(\"data\", lambda d: print(f\"Log: {d}\"))\nemitter.on(\"error\", lambda e: print(f\"ERROR: {e}\"))\n\nemitter.emit(\"data\", \"hello\")\nemitter.emit(\"error\", \"something failed\")"}
+],
+practice:[
+{q:"Create a simple class with __init__, one attribute, and one method. Instantiate and use it.",d:"E"},
+{q:"Add a class attribute and demonstrate it's shared across instances.",d:"E"},
+{q:"Create a child class that inherits from a parent and adds a new method.",d:"E"},
+{q:"Implement __str__ and __repr__ for a Book class.",d:"E"},
+{q:"Create a class with a @property getter and setter for validated input.",d:"E"},
+{q:"Use @classmethod to create an alternative constructor (e.g., from_string).",d:"E"},
+{q:"Create a class hierarchy: Vehicle -> Car, Truck with method overriding.",d:"M"},
+{q:"Implement __add__, __sub__, and __mul__ for a Money class with currency.",d:"M"},
+{q:"Create a Stack class with push, pop, peek, is_empty, and __len__.",d:"M"},
+{q:"Implement multiple inheritance with a Diamond problem and understand MRO.",d:"M"},
+{q:"Create an abstract base class using ABC module and implement concrete subclasses.",d:"M"},
+{q:"Implement __getitem__ and __setitem__ to make a class behave like a list.",d:"M"},
+{q:"Create a class that implements the context manager protocol (__enter__/__exit__).",d:"M"},
+{q:"Write a @staticmethod for a utility function and explain when to use it vs @classmethod.",d:"M"},
+{q:"Implement a custom iterator class with __iter__ and __next__.",d:"H"},
+{q:"Create a metaclass that automatically adds logging to all methods.",d:"H"},
+{q:"Implement a descriptor class for type-checking attributes.",d:"H"},
+{q:"Build a complete OOP system: Library with Books, Members, and Borrowing records.",d:"H"},
+{q:"Implement the Singleton pattern using a class with __new__.",d:"H"},
+{q:"Create a mixin class for serialization (to_dict, from_dict, to_json).",d:"H"}
+]},
+{id:9,title:"File Handling",color:"#60a5fa",chips:["open/read/write","with","CSV","JSON"],
+subtopics:[
+{name:"Opening Files (modes: r/w/a/rb)",theory:["open(filename, mode) returns a file object; modes: r(read), w(write), a(append), x(create).","Binary modes: rb, wb, ab for non-text files (images, PDFs, etc.).","Always close files with .close() or use context manager (with) for automatic closing."],code:"# Basic file opening\nf = open(\"example.txt\", \"r\")  # Read mode\ncontent = f.read()\nf.close()\n\n# Modes overview\n# 'r'  - Read (default), error if not exists\n# 'w'  - Write (creates/overwrites)\n# 'a'  - Append (creates if not exists)\n# 'x'  - Create (error if exists)\n# 'rb' - Read binary\n# 'r+' - Read and write"},
+{name:"Reading (read/readline/readlines)",theory:["read() reads entire file as one string; read(n) reads n characters.","readline() reads one line at a time; readlines() returns list of all lines.","Iterating over file object reads line by line (memory efficient for large files)."],code:"# read() - entire content\nwith open(\"data.txt\", \"r\") as f:\n    content = f.read()\n    print(content)\n\n# readline() - one line\nwith open(\"data.txt\", \"r\") as f:\n    first_line = f.readline()\n    second_line = f.readline()\n\n# readlines() - list of lines\nwith open(\"data.txt\", \"r\") as f:\n    lines = f.readlines()\n    print(f\"Total lines: {len(lines)}\")\n\n# Iterate line by line (best for large files)\nwith open(\"data.txt\", \"r\") as f:\n    for line in f:\n        print(line.strip())"},
+{name:"Writing & Appending",theory:["write() writes a string to file; writelines() writes a list of strings.","'w' mode overwrites existing content; 'a' mode adds to the end.","Remember to add newline characters manually when writing."],code:"# Writing (creates/overwrites)\nwith open(\"output.txt\", \"w\") as f:\n    f.write(\"Hello, World!\\n\")\n    f.write(\"Python is great!\\n\")\n\n# Appending\nwith open(\"output.txt\", \"a\") as f:\n    f.write(\"This line is appended.\\n\")\n\n# writelines\nlines = [\"Line 1\\n\", \"Line 2\\n\", \"Line 3\\n\"]\nwith open(\"output.txt\", \"w\") as f:\n    f.writelines(lines)\n\n# Write with print\nwith open(\"output.txt\", \"w\") as f:\n    print(\"Using print to file\", file=f)"},
+{name:"Context Manager (with statement)",theory:["with statement ensures file is properly closed even if an exception occurs.","Implements __enter__ and __exit__ protocol automatically.","Can manage multiple resources in a single with statement."],code:"# Single file\nwith open(\"input.txt\", \"r\") as f:\n    data = f.read()\n# File automatically closed here\n\n# Multiple files\nwith open(\"input.txt\", \"r\") as src, \\\n     open(\"output.txt\", \"w\") as dst:\n    for line in src:\n        dst.write(line.upper())\n\n# Equivalent without with:\nf = open(\"file.txt\", \"r\")\ntry:\n    data = f.read()\nfinally:\n    f.close()"},
+{name:"Working with CSV (csv module)",theory:["csv.reader() reads rows as lists; csv.writer() writes rows from lists.","csv.DictReader() reads rows as dictionaries with headers as keys.","Specify delimiter, quotechar, and other dialect options for different formats."],code:"import csv\n\n# Writing CSV\nwith open(\"data.csv\", \"w\", newline=\"\") as f:\n    writer = csv.writer(f)\n    writer.writerow([\"Name\", \"Age\", \"City\"])\n    writer.writerow([\"Alice\", 30, \"NYC\"])\n    writer.writerow([\"Bob\", 25, \"London\"])\n\n# Reading CSV\nwith open(\"data.csv\", \"r\") as f:\n    reader = csv.reader(f)\n    header = next(reader)\n    for row in reader:\n        print(f\"{row[0]} is {row[1]} from {row[2]}\")\n\n# DictReader/DictWriter\nwith open(\"data.csv\", \"r\") as f:\n    reader = csv.DictReader(f)\n    for row in reader:\n        print(f\"{row['Name']}: {row['Age']}\")"},
+{name:"Working with JSON (json module)",theory:["json.dumps() converts Python object to JSON string; json.loads() parses JSON string.","json.dump() writes JSON to file; json.load() reads JSON from file.","indent parameter for pretty printing; default parameter for custom serialization."],code:"import json\n\n# Python to JSON\ndata = {\n    \"name\": \"Alice\",\n    \"age\": 30,\n    \"hobbies\": [\"reading\", \"coding\"],\n    \"address\": {\"city\": \"NYC\", \"zip\": \"10001\"}\n}\n\n# Write to file\nwith open(\"data.json\", \"w\") as f:\n    json.dump(data, f, indent=2)\n\n# Read from file\nwith open(\"data.json\", \"r\") as f:\n    loaded = json.load(f)\n    print(loaded[\"name\"])  # Alice\n\n# String conversion\njson_str = json.dumps(data, indent=2)\nparsed = json.loads(json_str)"}
+],
+examples:[
+{title:"Log File Analyzer",desc:"Read a log file and count error types.",code:"import os\n\n# Simulate log content\nlog_content = \"\"\"2024-01-15 ERROR: Connection timeout\n2024-01-15 INFO: Server started\n2024-01-15 ERROR: File not found\n2024-01-15 WARNING: Low memory\n2024-01-15 ERROR: Connection timeout\"\"\"\n\n# Write sample log\nwith open(\"app.log\", \"w\") as f:\n    f.write(log_content)\n\n# Analyze\nerror_count = {}\nwith open(\"app.log\", \"r\") as f:\n    for line in f:\n        if \"ERROR\" in line:\n            error_msg = line.split(\"ERROR: \")[1].strip()\n            error_count[error_msg] = error_count.get(error_msg, 0) + 1\n\nfor error, count in error_count.items():\n    print(f\"{error}: {count} occurrences\")"},
+{title:"CSV Data Processor",desc:"Read CSV, process data, and write results.",code:"import csv\n\n# Create sample data\nwith open(\"sales.csv\", \"w\", newline=\"\") as f:\n    writer = csv.writer(f)\n    writer.writerow([\"Product\", \"Quantity\", \"Price\"])\n    writer.writerows([\n        [\"Widget\", 100, 9.99],\n        [\"Gadget\", 50, 24.99],\n        [\"Widget\", 75, 9.99],\n        [\"Gizmo\", 30, 49.99]\n    ])\n\n# Process: calculate totals per product\ntotals = {}\nwith open(\"sales.csv\", \"r\") as f:\n    reader = csv.DictReader(f)\n    for row in reader:\n        product = row[\"Product\"]\n        revenue = int(row[\"Quantity\"]) * float(row[\"Price\"])\n        totals[product] = totals.get(product, 0) + revenue\n\nfor product, total in totals.items():\n    print(f\"{product}: ${total:.2f}\")"},
+{title:"JSON Configuration Manager",desc:"Load, modify, and save JSON configuration.",code:"import json\n\ndefault_config = {\n    \"app_name\": \"MyApp\",\n    \"version\": \"1.0.0\",\n    \"settings\": {\n        \"theme\": \"dark\",\n        \"language\": \"en\",\n        \"auto_save\": True\n    }\n}\n\n# Save config\nwith open(\"config.json\", \"w\") as f:\n    json.dump(default_config, f, indent=2)\n\n# Load and modify\nwith open(\"config.json\", \"r\") as f:\n    config = json.load(f)\n\nconfig[\"settings\"][\"theme\"] = \"light\"\nconfig[\"version\"] = \"1.1.0\"\n\n# Save updated config\nwith open(\"config.json\", \"w\") as f:\n    json.dump(config, f, indent=2)\n\nprint(f\"Updated: {json.dumps(config, indent=2)}\")"}
+],
+practice:[
+{q:"Open a text file, write 3 lines, close it. Then reopen and read all content.",d:"E"},
+{q:"Use 'with' statement to write to a file and read it back.",d:"E"},
+{q:"Read a file line by line and print each line with its line number.",d:"E"},
+{q:"Append text to an existing file without overwriting its content.",d:"E"},
+{q:"Create a CSV file with 5 rows of data using csv.writer.",d:"E"},
+{q:"Read a JSON file and pretty-print its contents.",d:"E"},
+{q:"Write a program that counts words, lines, and characters in a text file.",d:"M"},
+{q:"Copy contents of one file to another, converting all text to uppercase.",d:"M"},
+{q:"Read a CSV file with DictReader and filter rows based on a condition.",d:"M"},
+{q:"Create a program that merges multiple text files into one.",d:"M"},
+{q:"Read a JSON file, add new entries, and write it back.",d:"M"},
+{q:"Implement a simple file-based to-do list (add, remove, display tasks).",d:"M"},
+{q:"Write a program that finds and replaces text in a file.",d:"M"},
+{q:"Create a CSV report from a list of dictionaries with proper headers.",d:"M"},
+{q:"Build a log file rotator that creates new file when size exceeds limit.",d:"H"},
+{q:"Implement a file-based key-value store with get, set, delete operations.",d:"H"},
+{q:"Write a program that reads a large file in chunks (for files too big for memory).",d:"H"},
+{q:"Create a program that monitors a file for changes (simple file watcher).",d:"H"},
+{q:"Implement import/export between CSV and JSON formats with data validation.",d:"H"},
+{q:"Build a simple database using JSON files with CRUD operations and indexing.",d:"H"}
+]},
+{id:10,title:"Exception Handling",color:"#f87171",chips:["try/except","finally","raise","Custom"],
+subtopics:[
+{name:"try/except/else/finally",theory:["try block contains code that might raise an exception; except catches specific errors.","else block runs only if no exception was raised; finally always runs (cleanup).","Multiple except blocks can handle different exception types separately."],code:"# Full structure\ntry:\n    number = int(input(\"Enter a number: \"))\n    result = 100 / number\nexcept ValueError:\n    print(\"Not a valid number!\")\nexcept ZeroDivisionError:\n    print(\"Cannot divide by zero!\")\nelse:\n    print(f\"Result: {result}\")  # Only if no exception\nfinally:\n    print(\"This always runs\")\n\n# Catching multiple in one except\ntry:\n    x = int(\"abc\")\nexcept (ValueError, TypeError) as e:\n    print(f\"Error: {e}\")"},
+{name:"Catching Specific Exceptions",theory:["Always catch specific exceptions rather than bare except (which catches everything).","Exception hierarchy: BaseException -> Exception -> specific errors.","Common: ValueError, TypeError, KeyError, IndexError, FileNotFoundError, AttributeError."],code:"# Specific exception handling\ndef safe_divide(a, b):\n    try:\n        return a / b\n    except ZeroDivisionError:\n        return float('inf')\n    except TypeError:\n        return None\n\n# File handling\ntry:\n    with open(\"missing.txt\", \"r\") as f:\n        data = f.read()\nexcept FileNotFoundError:\n    print(\"File does not exist\")\nexcept PermissionError:\n    print(\"No permission to read file\")\n\n# Dictionary access\ndata = {\"name\": \"Alice\"}\ntry:\n    age = data[\"age\"]\nexcept KeyError:\n    age = \"Unknown\""},
+{name:"raise Statement",theory:["raise creates an exception manually; can raise built-in or custom exceptions.","raise without arguments re-raises the current exception (useful in except blocks).","raise ExceptionType('message') creates and raises an exception with a message."],code:"# Raise exceptions\ndef set_age(age):\n    if not isinstance(age, int):\n        raise TypeError(\"Age must be an integer\")\n    if age < 0 or age > 150:\n        raise ValueError(f\"Age {age} is out of range (0-150)\")\n    return age\n\ntry:\n    set_age(-5)\nexcept ValueError as e:\n    print(f\"Validation error: {e}\")\n\n# Re-raise after logging\ndef process_data(data):\n    try:\n        result = data[\"key\"]\n    except KeyError:\n        print(\"Logging: key not found\")\n        raise  # Re-raise the same exception"},
+{name:"Custom Exceptions (class)",theory:["Custom exceptions inherit from Exception (or more specific built-in exceptions).","Add custom attributes and methods for richer error information.","Convention: exception class names end with 'Error' or 'Exception'."],code:"# Custom exception hierarchy\nclass AppError(Exception):\n    \"\"\"Base exception for our application.\"\"\"\n    pass\n\nclass ValidationError(AppError):\n    def __init__(self, field, message):\n        self.field = field\n        self.message = message\n        super().__init__(f\"{field}: {message}\")\n\nclass NotFoundError(AppError):\n    def __init__(self, resource, id):\n        self.resource = resource\n        self.id = id\n        super().__init__(f\"{resource} with id={id} not found\")\n\n# Usage\ntry:\n    raise ValidationError(\"email\", \"Invalid format\")\nexcept ValidationError as e:\n    print(f\"Field: {e.field}, Message: {e.message}\")"},
+{name:"Exception Chaining",theory:["'raise X from Y' chains exceptions, preserving the original cause.","__cause__ stores the explicitly chained exception; __context__ stores implicit context.","Helps debugging by showing the full chain of what caused the error."],code:"# Explicit chaining with 'from'\ndef connect_database(url):\n    try:\n        # Simulate connection error\n        raise ConnectionError(\"Connection refused\")\n    except ConnectionError as e:\n        raise RuntimeError(\"Failed to initialize app\") from e\n\ntry:\n    connect_database(\"localhost:5432\")\nexcept RuntimeError as e:\n    print(f\"Error: {e}\")\n    print(f\"Caused by: {e.__cause__}\")\n\n# Suppress context with 'from None'\ntry:\n    int(\"abc\")\nexcept ValueError:\n    raise TypeError(\"Expected numeric string\") from None"},
+{name:"Best Practices",theory:["Use specific exceptions; avoid bare except or catching Exception too broadly.","Use context managers (with) for resource cleanup instead of try/finally.","Log exceptions before handling; don't silently swallow errors."],code:"import logging\n\n# Best practice: specific handling + logging\nlogger = logging.getLogger(__name__)\n\ndef fetch_user(user_id):\n    try:\n        # Simulate database query\n        if user_id < 0:\n            raise ValueError(f\"Invalid user_id: {user_id}\")\n        return {\"id\": user_id, \"name\": \"Alice\"}\n    except ValueError as e:\n        logger.error(f\"Validation failed: {e}\")\n        raise\n    except Exception as e:\n        logger.exception(f\"Unexpected error fetching user {user_id}\")\n        raise RuntimeError(\"Database error\") from e\n\n# EAFP vs LBYL\n# EAFP (Easier to Ask Forgiveness) - Pythonic\ntry:\n    value = my_dict[\"key\"]\nexcept KeyError:\n    value = default\n\n# LBYL (Look Before You Leap) - Less Pythonic\n# if \"key\" in my_dict:\n#     value = my_dict[\"key\"]"}
+],
+examples:[
+{title:"Retry Mechanism",desc:"Implement a function that retries on failure.",code:"import time\nimport random\n\ndef retry(max_attempts=3, delay=1):\n    def decorator(func):\n        def wrapper(*args, **kwargs):\n            for attempt in range(1, max_attempts + 1):\n                try:\n                    return func(*args, **kwargs)\n                except Exception as e:\n                    if attempt == max_attempts:\n                        raise\n                    print(f\"Attempt {attempt} failed: {e}. Retrying...\")\n                    time.sleep(delay)\n        return wrapper\n    return decorator\n\n@retry(max_attempts=3, delay=0.5)\ndef unreliable_api():\n    if random.random() < 0.7:\n        raise ConnectionError(\"Server unavailable\")\n    return {\"status\": \"success\"}\n\ntry:\n    result = unreliable_api()\n    print(f\"Success: {result}\")\nexcept ConnectionError:\n    print(\"All attempts failed\")"},
+{title:"Input Validation with Exceptions",desc:"Validate complex input with custom exceptions.",code:"class ValidationError(Exception):\n    def __init__(self, errors):\n        self.errors = errors\n        super().__init__(f\"{len(errors)} validation error(s)\")\n\ndef validate_user(data):\n    errors = []\n    if not data.get(\"name\"):\n        errors.append(\"Name is required\")\n    if not data.get(\"email\") or \"@\" not in data[\"email\"]:\n        errors.append(\"Valid email is required\")\n    age = data.get(\"age\", 0)\n    if not isinstance(age, int) or age < 0 or age > 150:\n        errors.append(\"Age must be 0-150\")\n    if errors:\n        raise ValidationError(errors)\n    return True\n\ntry:\n    validate_user({\"name\": \"\", \"email\": \"bad\", \"age\": -1})\nexcept ValidationError as e:\n    for err in e.errors:\n        print(f\"  - {err}\")"},
+{title:"Context Manager for Error Handling",desc:"Create a context manager that handles and logs errors.",code:"from contextlib import contextmanager\n\n@contextmanager\ndef error_handler(operation_name, reraise=False):\n    print(f\"Starting: {operation_name}\")\n    try:\n        yield\n    except Exception as e:\n        print(f\"Error in {operation_name}: {type(e).__name__}: {e}\")\n        if reraise:\n            raise\n    else:\n        print(f\"Completed: {operation_name}\")\n    finally:\n        print(f\"Cleanup: {operation_name}\")\n\nwith error_handler(\"data processing\"):\n    result = 10 / 0  # ZeroDivisionError caught\n\nwith error_handler(\"calculation\"):\n    result = 42 * 2  # No error\n    print(f\"Result: {result}\")"}
+],
+practice:[
+{q:"Write a try/except that catches a ValueError when converting invalid input to int.",d:"E"},
+{q:"Handle a ZeroDivisionError and print a friendly message.",d:"E"},
+{q:"Use try/except/else/finally all together in one block.",d:"E"},
+{q:"Catch a KeyError when accessing a missing dictionary key.",d:"E"},
+{q:"Use raise to throw a ValueError with a custom message.",d:"E"},
+{q:"Create a simple custom exception class that inherits from Exception.",d:"E"},
+{q:"Write a function that validates email format and raises ValueError if invalid.",d:"M"},
+{q:"Implement exception handling for file operations (FileNotFoundError, PermissionError).",d:"M"},
+{q:"Create a custom exception hierarchy with base and specific error classes.",d:"M"},
+{q:"Write a context manager that suppresses specific exceptions.",d:"M"},
+{q:"Implement a function with exception chaining (raise X from Y).",d:"M"},
+{q:"Write a program that gracefully handles multiple types of errors in sequence.",d:"M"},
+{q:"Create a decorator that catches exceptions and returns a default value.",d:"M"},
+{q:"Implement EAFP pattern for accessing nested dictionary keys safely.",d:"M"},
+{q:"Build a retry decorator that retries on specific exceptions with exponential backoff.",d:"H"},
+{q:"Create a custom exception that captures stack trace and context information.",d:"H"},
+{q:"Implement a circuit breaker pattern using exception handling.",d:"H"},
+{q:"Write an error aggregator that collects multiple errors before raising.",d:"H"},
+{q:"Create an exception handler middleware for a simple request processor.",d:"H"},
+{q:"Implement exception groups (Python 3.11+) for handling concurrent errors.",d:"H"}
+]},
+{id:11,title:"Modules & Packages",color:"#c084fc",chips:["import","pip","venv","__name__"],
+subtopics:[
+{name:"import & from...import",theory:["import module loads entire module; access with module.function() syntax.","from module import func imports specific items directly into namespace.","as keyword creates aliases: import numpy as np for shorter references."],code:"# Different import styles\nimport math\nprint(math.sqrt(16))     # 4.0\nprint(math.pi)           # 3.14159...\n\nfrom math import sqrt, pi\nprint(sqrt(16))          # 4.0 (no prefix needed)\n\nfrom math import factorial as fact\nprint(fact(5))           # 120\n\nimport os.path           # Import submodule\nprint(os.path.exists(\".\"))  # True\n\n# Import all (avoid in production)\n# from math import *"},
+{name:"Standard Library Overview",theory:["os: file/directory operations, environment variables, process management.","sys: system-specific params, argv, stdin/stdout, path manipulation.","collections, itertools, functools: powerful data structure and functional utilities."],code:"import os\nimport sys\nfrom datetime import datetime\nfrom collections import Counter, defaultdict\nfrom pathlib import Path\n\n# os module\nprint(os.getcwd())       # Current directory\nprint(os.listdir(\".\"))   # List files\n\n# sys module\nprint(sys.version)       # Python version\nprint(sys.platform)      # OS platform\n\n# datetime\nnow = datetime.now()\nprint(now.strftime(\"%Y-%m-%d %H:%M:%S\"))\n\n# collections\nwords = \"hello world hello python hello\".split()\nprint(Counter(words))  # Counter({'hello': 3, ...})\n\n# pathlib\np = Path(\".\") / \"subdir\" / \"file.txt\""},
+{name:"pip & Package Management",theory:["pip install package_name installs from PyPI (Python Package Index).","pip freeze > requirements.txt saves installed packages; pip install -r restores them.","Use version pinning for reproducibility: package==1.2.3 or package>=1.0,<2.0."],code:"# Terminal commands (not Python code)\n# pip install requests\n# pip install flask==2.0.1\n# pip install -r requirements.txt\n# pip freeze > requirements.txt\n# pip uninstall package_name\n# pip show package_name\n# pip list\n\n# In Python: check installed packages\nimport pkg_resources\ninstalled = {pkg.key: pkg.version \n             for pkg in pkg_resources.working_set}\nfor name, ver in sorted(installed.items())[:5]:\n    print(f\"{name}: {ver}\")"},
+{name:"Virtual Environments (venv)",theory:["venv creates isolated Python environments with their own packages.","Avoids conflicts between project dependencies and system packages.","Activate with source venv/bin/activate (Linux/Mac) or venv\\Scripts\\activate (Windows)."],code:"# Terminal commands for venv\n# python -m venv myproject_env\n# source myproject_env/bin/activate  (Linux/Mac)\n# myproject_env\\Scripts\\activate     (Windows)\n# deactivate\n\n# In Python: check environment\nimport sys\nimport os\n\nprint(f\"Python: {sys.executable}\")\nprint(f\"Virtual env: {sys.prefix != sys.base_prefix}\")\n\n# Project structure with venv\n# myproject/\n#   venv/\n#   src/\n#     __init__.py\n#     main.py\n#   requirements.txt\n#   setup.py"},
+{name:"__name__ == '__main__'",theory:["__name__ is '__main__' when script is run directly, module name when imported.","Guards execution code from running on import; allows dual use as script and module.","Common pattern for organizing scripts with testable, importable functions."],code:"# mymodule.py\ndef add(a, b):\n    return a + b\n\ndef multiply(a, b):\n    return a * b\n\ndef main():\n    print(f\"2 + 3 = {add(2, 3)}\")\n    print(f\"4 * 5 = {multiply(4, 5)}\")\n\nif __name__ == \"__main__\":\n    # Only runs when script is executed directly\n    # Not when imported as a module\n    main()\n\n# When imported: import mymodule\n# mymodule.add(2, 3) works\n# main() doesn't auto-run"},
+{name:"Creating Your Own Package",theory:["A package is a directory with __init__.py file (can be empty in Python 3.3+).","__init__.py can define package-level imports and __all__ for wildcard imports.","setup.py or pyproject.toml configures package metadata for distribution."],code:"# Package structure:\n# mypackage/\n#   __init__.py\n#   module_a.py\n#   module_b.py\n#   subpackage/\n#     __init__.py\n#     module_c.py\n\n# mypackage/__init__.py\nfrom .module_a import func_a\nfrom .module_b import func_b\n__all__ = [\"func_a\", \"func_b\"]\n\n# mypackage/module_a.py\ndef func_a():\n    return \"Hello from module A\"\n\n# Usage:\n# from mypackage import func_a\n# from mypackage.subpackage import module_c\n\n# pyproject.toml (modern way)\n# [project]\n# name = \"mypackage\"\n# version = \"0.1.0\""}
+],
+examples:[
+{title:"Creating a Utility Module",desc:"Build a reusable utilities module with common functions.",code:"# utils.py\nimport os\nimport json\nfrom datetime import datetime\n\ndef read_json(filepath):\n    with open(filepath, 'r') as f:\n        return json.load(f)\n\ndef write_json(filepath, data, indent=2):\n    with open(filepath, 'w') as f:\n        json.dump(data, f, indent=indent)\n\ndef timestamp():\n    return datetime.now().isoformat()\n\ndef ensure_dir(path):\n    os.makedirs(path, exist_ok=True)\n\nif __name__ == \"__main__\":\n    print(f\"Current time: {timestamp()}\")\n    ensure_dir(\"output\")\n    write_json(\"output/test.json\", {\"test\": True})"},
+{title:"Dynamic Imports",desc:"Import modules dynamically based on configuration.",code:"import importlib\n\ndef load_plugin(plugin_name):\n    try:\n        module = importlib.import_module(f\"plugins.{plugin_name}\")\n        return module\n    except ModuleNotFoundError:\n        print(f\"Plugin '{plugin_name}' not found\")\n        return None\n\n# Simulated plugin system\nplugins = {\"json\": \"json\", \"csv\": \"csv\", \"math\": \"math\"}\n\nfor name, module_name in plugins.items():\n    mod = importlib.import_module(module_name)\n    print(f\"Loaded {name}: {mod.__name__}\")\n    # Access module attributes dynamically\n    attrs = [a for a in dir(mod) if not a.startswith('_')][:3]\n    print(f\"  Functions: {attrs}\")"},
+{title:"Package Version Checker",desc:"Check and compare installed package versions.",code:"import importlib.metadata\nimport sys\n\ndef get_package_info(package_name):\n    try:\n        dist = importlib.metadata.distribution(package_name)\n        return {\n            \"name\": dist.metadata[\"Name\"],\n            \"version\": dist.metadata[\"Version\"],\n            \"summary\": dist.metadata.get(\"Summary\", \"N/A\")\n        }\n    except importlib.metadata.PackageNotFoundError:\n        return None\n\n# Check some packages\npackages = [\"pip\", \"setuptools\"]\nfor pkg in packages:\n    info = get_package_info(pkg)\n    if info:\n        print(f\"{info['name']} v{info['version']}\")\n        print(f\"  {info['summary']}\")\n\nprint(f\"\\nPython version: {sys.version}\")"}
+],
+practice:[
+{q:"Import the math module and use 3 different functions from it.",d:"E"},
+{q:"Use 'from module import function' to import specific items from os and sys.",d:"E"},
+{q:"Create a simple module with 2 functions and import it in another script.",d:"E"},
+{q:"Use the datetime module to get current date, time, and formatted timestamp.",d:"E"},
+{q:"Write a script that uses __name__ == '__main__' guard properly.",d:"E"},
+{q:"Use collections.Counter to count character frequency in a string.",d:"E"},
+{q:"Create a package with __init__.py and two sub-modules, then import from it.",d:"M"},
+{q:"Use importlib to dynamically import a module by name string.",d:"M"},
+{q:"Write a script that reads command-line arguments using sys.argv.",d:"M"},
+{q:"Create a requirements.txt and explain version specifiers (==, >=, ~=).",d:"M"},
+{q:"Use the pathlib module to navigate directories and find all .py files.",d:"M"},
+{q:"Implement a simple plugin system that loads modules from a directory.",d:"M"},
+{q:"Use itertools to generate permutations, combinations, and chain iterables.",d:"M"},
+{q:"Create a module with __all__ defined and demonstrate wildcard import behavior.",d:"M"},
+{q:"Build a CLI tool using argparse with subcommands and options.",d:"H"},
+{q:"Create a distributable package with pyproject.toml and proper structure.",d:"H"},
+{q:"Implement lazy module loading that only imports when first accessed.",d:"H"},
+{q:"Create a module that patches/monkeypatches another module's function.",d:"H"},
+{q:"Build a simple dependency injection container using importlib.",d:"H"},
+{q:"Write a script that audits installed packages for known vulnerabilities (using pip).",d:"H"}
+]},
+{id:12,title:"Iterators & Generators",color:"#2dd4bf",chips:["iter/next","yield","itertools"],
+subtopics:[
+{name:"Iterator Protocol (__iter__/__next__)",theory:["An iterator implements __iter__() returning self and __next__() returning next value.","__next__() raises StopIteration when there are no more items.","iter(object) gets an iterator; next(iterator) gets the next value."],code:"# Using iter() and next()\nnums = [10, 20, 30]\nit = iter(nums)\n\nprint(next(it))  # 10\nprint(next(it))  # 20\nprint(next(it))  # 30\n# next(it) -> StopIteration\n\n# How for loop works internally\nmy_list = [1, 2, 3]\niterator = iter(my_list)\nwhile True:\n    try:\n        item = next(iterator)\n        print(item)\n    except StopIteration:\n        break"},
+{name:"Creating Custom Iterators",theory:["Define a class with __iter__ and __next__ methods for custom iteration logic.","Maintain internal state to track position and determine when to stop.","Custom iterators are useful for infinite sequences, file reading, database cursors."],code:"class Countdown:\n    def __init__(self, start):\n        self.start = start\n    \n    def __iter__(self):\n        self.current = self.start\n        return self\n    \n    def __next__(self):\n        if self.current <= 0:\n            raise StopIteration\n        value = self.current\n        self.current -= 1\n        return value\n\n# Usage\nfor num in Countdown(5):\n    print(num, end=\" \")  # 5 4 3 2 1\n\n# Infinite iterator\nclass InfiniteCounter:\n    def __init__(self, start=0, step=1):\n        self.current = start\n        self.step = step\n    \n    def __iter__(self): return self\n    def __next__(self):\n        val = self.current\n        self.current += self.step\n        return val"},
+{name:"Generators (yield)",theory:["Generator functions use yield instead of return; they produce values lazily one at a time.","State is preserved between yields; execution resumes where it left off.","Memory efficient: values are generated on demand, not stored all at once."],code:"# Generator function\ndef fibonacci():\n    a, b = 0, 1\n    while True:\n        yield a\n        a, b = b, a + b\n\n# Use the generator\nfib = fibonacci()\nfor _ in range(10):\n    print(next(fib), end=\" \")\n# 0 1 1 2 3 5 8 13 21 34\n\n# Generator with condition\ndef even_numbers(limit):\n    n = 0\n    while n < limit:\n        if n % 2 == 0:\n            yield n\n        n += 1\n\nprint(list(even_numbers(20)))"},
+{name:"Generator Expressions",theory:["Generator expressions use () instead of [] for lazy evaluation: (expr for x in iter).","They produce values one at a time instead of creating entire list in memory.","Pass directly to functions like sum(), max(), any() without extra list creation."],code:"# Generator expression (lazy)\ngen = (x**2 for x in range(1000000))  # No memory used yet\nprint(next(gen))  # 0 - computed on demand\nprint(next(gen))  # 1\n\n# Compare memory usage\nimport sys\nlist_comp = [x**2 for x in range(1000)]\ngen_expr = (x**2 for x in range(1000))\nprint(f\"List: {sys.getsizeof(list_comp)} bytes\")  # ~8856\nprint(f\"Gen:  {sys.getsizeof(gen_expr)} bytes\")   # ~112\n\n# Use with functions\ntotal = sum(x**2 for x in range(100))\nhas_even = any(x % 2 == 0 for x in [1, 3, 4, 7])\nmax_len = max(len(w) for w in [\"hello\", \"world\", \"python\"])"},
+{name:"itertools (chain/product/combinations/permutations)",theory:["itertools provides efficient iterators for common patterns and combinations.","chain() joins iterables; product() creates Cartesian product; cycle() loops forever.","combinations() and permutations() generate mathematical selections from iterables."],code:"from itertools import (\n    chain, product, combinations,\n    permutations, count, cycle, islice,\n    groupby, accumulate\n)\n\n# chain - join iterables\nresult = list(chain([1,2], [3,4], [5,6]))\nprint(result)  # [1, 2, 3, 4, 5, 6]\n\n# product - Cartesian product\nfor p in product('AB', '12'):\n    print(p, end=\" \")  # ('A','1') ('A','2') ('B','1') ('B','2')\n\n# combinations & permutations\nprint(list(combinations('ABCD', 2)))  # [('A','B'), ('A','C'), ...]\nprint(list(permutations('ABC', 2)))   # All 2-length arrangements\n\n# islice - slice from iterator\nprint(list(islice(count(10), 5)))  # [10, 11, 12, 13, 14]"},
+{name:"Use Cases & Performance",theory:["Generators excel at processing large files, streams, and infinite sequences.","Pipeline pattern: chain generators to process data without loading all in memory.","yield from delegates iteration to sub-generators for cleaner recursive generators."],code:"# Pipeline pattern\ndef read_lines(filename):\n    with open(filename) as f:\n        for line in f:\n            yield line.strip()\n\ndef filter_nonempty(lines):\n    for line in lines:\n        if line:\n            yield line\n\ndef to_upper(lines):\n    for line in lines:\n        yield line.upper()\n\n# Compose pipeline (memory efficient)\n# pipeline = to_upper(filter_nonempty(read_lines(\"big_file.txt\")))\n\n# yield from\ndef flatten(nested):\n    for item in nested:\n        if isinstance(item, list):\n            yield from flatten(item)\n        else:\n            yield item\n\nnested = [1, [2, 3, [4, 5]], 6, [7, [8, 9]]]\nprint(list(flatten(nested)))  # [1,2,3,4,5,6,7,8,9]"}
+],
+examples:[
+{title:"Infinite Sequence Generator",desc:"Create generators for various infinite sequences.",code:"def primes():\n    \"\"\"Generate infinite prime numbers.\"\"\"\n    yield 2\n    candidate = 3\n    found = [2]\n    while True:\n        is_prime = all(candidate % p != 0 for p in found \n                      if p * p <= candidate)\n        if is_prime:\n            found.append(candidate)\n            yield candidate\n        candidate += 2\n\n# Get first 20 primes\nfrom itertools import islice\nfirst_20 = list(islice(primes(), 20))\nprint(f\"First 20 primes: {first_20}\")"},
+{title:"Data Processing Pipeline",desc:"Build a generator pipeline for processing data.",code:"import csv\nfrom io import StringIO\n\n# Simulate CSV data\ncsv_data = \"\"\"name,age,salary\nAlice,30,70000\nBob,25,55000\nCharlie,35,85000\nDiana,28,62000\"\"\"\n\ndef parse_csv(text):\n    reader = csv.DictReader(StringIO(text))\n    for row in reader:\n        yield row\n\ndef transform(rows):\n    for row in rows:\n        row['age'] = int(row['age'])\n        row['salary'] = int(row['salary'])\n        row['tax'] = row['salary'] * 0.3\n        yield row\n\ndef filter_high_earners(rows, threshold=60000):\n    for row in rows:\n        if row['salary'] > threshold:\n            yield row\n\n# Pipeline\npipeline = filter_high_earners(transform(parse_csv(csv_data)))\nfor person in pipeline:\n    print(f\"{person['name']}: ${person['salary']} (tax: ${person['tax']:.0f})\")"},
+{title:"Custom Range with Generators",desc:"Implement a flexible range generator with float support.",code:"def frange(start, stop=None, step=1.0):\n    \"\"\"Float-compatible range generator.\"\"\"\n    if stop is None:\n        start, stop = 0, start\n    current = start\n    while (step > 0 and current < stop) or \\\n          (step < 0 and current > stop):\n        yield round(current, 10)\n        current += step\n\n# Float range\nprint(list(frange(0, 1, 0.1)))\n# [0, 0.1, 0.2, ..., 0.9]\n\n# Countdown\nprint(list(frange(5, 0, -1)))\n# [5, 4, 3, 2, 1]\n\n# Use in comprehension\nresult = [x**2 for x in frange(0, 3, 0.5)]\nprint(result)"}
+],
+practice:[
+{q:"Create an iterator using iter() and next() on a list, call next 3 times.",d:"E"},
+{q:"Write a simple generator function that yields numbers 1 to 5.",d:"E"},
+{q:"Create a generator expression for squares of 1-10 and iterate over it.",d:"E"},
+{q:"Use itertools.chain to combine three separate lists into one iteration.",d:"E"},
+{q:"Write a generator that yields even numbers indefinitely.",d:"E"},
+{q:"Use itertools.combinations to get all 2-element combos from a list.",d:"E"},
+{q:"Create a custom iterator class that iterates over a string in reverse.",d:"M"},
+{q:"Write a generator that reads a file line by line with line numbers.",d:"M"},
+{q:"Use itertools.product to generate all possible dice roll combinations (2 dice).",d:"M"},
+{q:"Implement a generator pipeline: read -> filter -> transform data.",d:"M"},
+{q:"Write a generator that yields Fibonacci numbers up to a given limit.",d:"M"},
+{q:"Use itertools.groupby to group words by their first letter.",d:"M"},
+{q:"Create a generator that yields sliding window chunks of a list.",d:"M"},
+{q:"Use itertools.accumulate to compute running totals of a list.",d:"M"},
+{q:"Implement a custom iterator for a binary tree (in-order traversal).",d:"H"},
+{q:"Write a generator-based coroutine that accepts values with send().",d:"H"},
+{q:"Create a generator pipeline that processes a large file without loading it all.",d:"H"},
+{q:"Implement itertools.permutations manually using a generator.",d:"H"},
+{q:"Write a generator that yields all unique paths in a nested dictionary.",d:"H"},
+{q:"Build a lazy evaluation system using generators that only computes values when needed.",d:"H"}
+]},
+{id:13,title:"Advanced Python",color:"#e879f9",chips:["Decorators","Context Managers","Threading","Async","Type Hints"],
+subtopics:[
+{name:"Advanced Decorators (with arguments, stacking)",theory:["Decorators with arguments require triple nesting: outer(args) -> decorator(func) -> wrapper(*a).","functools.wraps preserves the original function's name, docstring, and metadata.","Multiple decorators stack bottom-up: last applied is innermost, first is outermost."],code:"import functools\n\ndef rate_limit(max_calls, period):\n    def decorator(func):\n        calls = []\n        @functools.wraps(func)\n        def wrapper(*args, **kwargs):\n            import time\n            now = time.time()\n            calls[:] = [t for t in calls if now - t < period]\n            if len(calls) >= max_calls:\n                raise RuntimeError(\"Rate limit exceeded\")\n            calls.append(now)\n            return func(*args, **kwargs)\n        return wrapper\n    return decorator\n\n# Stacking decorators\ndef log(func):\n    @functools.wraps(func)\n    def wrapper(*args, **kwargs):\n        print(f\"Calling {func.__name__}\")\n        return func(*args, **kwargs)\n    return wrapper\n\n@log\n@rate_limit(max_calls=5, period=60)\ndef api_call(endpoint):\n    return f\"Response from {endpoint}\""},
+{name:"Context Managers (__enter__/__exit__)",theory:["Context managers implement __enter__ (setup) and __exit__ (cleanup) for 'with' statements.","__exit__ receives exception info (type, value, traceback); return True to suppress exceptions.","contextlib.contextmanager decorator creates context managers from generator functions."],code:"# Class-based context manager\nclass Timer:\n    def __enter__(self):\n        import time\n        self.start = time.time()\n        return self\n    \n    def __exit__(self, exc_type, exc_val, exc_tb):\n        import time\n        self.elapsed = time.time() - self.start\n        print(f\"Elapsed: {self.elapsed:.4f}s\")\n        return False  # Don't suppress exceptions\n\nwith Timer() as t:\n    total = sum(range(1000000))\n\n# contextlib approach\nfrom contextlib import contextmanager\n\n@contextmanager\ndef managed_resource(name):\n    print(f\"Acquiring {name}\")\n    try:\n        yield name\n    finally:\n        print(f\"Releasing {name}\")\n\nwith managed_resource(\"database\") as r:\n    print(f\"Using {r}\")"},
+{name:"Multithreading & Multiprocessing",theory:["Threading: concurrent execution sharing memory; limited by GIL for CPU-bound tasks.","Multiprocessing: true parallelism with separate memory; bypasses GIL.","Use threading for I/O-bound tasks (network, file); multiprocessing for CPU-bound."],code:"import threading\nimport time\nfrom concurrent.futures import ThreadPoolExecutor\n\n# Threading\ndef download(url):\n    print(f\"Downloading {url}...\")\n    time.sleep(1)  # Simulate I/O\n    return f\"Data from {url}\"\n\n# ThreadPoolExecutor (preferred)\nurls = [\"url1\", \"url2\", \"url3\", \"url4\"]\nwith ThreadPoolExecutor(max_workers=4) as executor:\n    results = list(executor.map(download, urls))\n    for r in results:\n        print(r)\n\n# Thread with Lock\ncounter = 0\nlock = threading.Lock()\n\ndef increment():\n    global counter\n    for _ in range(100000):\n        with lock:\n            counter += 1"},
+{name:"Async/Await (asyncio basics)",theory:["async def creates a coroutine; await suspends execution until result is ready.","asyncio.run() starts the event loop; asyncio.gather() runs coroutines concurrently.","Ideal for I/O-bound operations: HTTP requests, database queries, file operations."],code:"import asyncio\n\nasync def fetch_data(name, delay):\n    print(f\"Fetching {name}...\")\n    await asyncio.sleep(delay)  # Non-blocking wait\n    return f\"Data from {name}\"\n\nasync def main():\n    # Sequential (slow)\n    # r1 = await fetch_data(\"API1\", 2)\n    # r2 = await fetch_data(\"API2\", 1)\n    \n    # Concurrent (fast)\n    results = await asyncio.gather(\n        fetch_data(\"API1\", 2),\n        fetch_data(\"API2\", 1),\n        fetch_data(\"API3\", 1.5)\n    )\n    for r in results:\n        print(r)\n\n# asyncio.run(main())  # Takes ~2s not 4.5s\n\n# Async iterator\nasync def async_range(n):\n    for i in range(n):\n        await asyncio.sleep(0.1)\n        yield i"},
+{name:"Type Hints & Annotations",theory:["Type hints document expected types: def func(x: int) -> str specifies input/output types.","Generic types from typing: List[int], Dict[str, Any], Optional[str], Union[int, str].","Type hints are not enforced at runtime; use mypy for static type checking."],code:"from typing import (\n    List, Dict, Optional, Union,\n    Tuple, Callable, TypeVar, Generic\n)\n\ndef greet(name: str, times: int = 1) -> str:\n    return (f\"Hello, {name}! \") * times\n\ndef process(items: List[int]) -> Dict[str, int]:\n    return {\"sum\": sum(items), \"count\": len(items)}\n\n# Optional and Union\ndef find_user(user_id: int) -> Optional[Dict[str, str]]:\n    # Returns None if not found\n    return {\"name\": \"Alice\"} if user_id > 0 else None\n\n# Callable type\ndef apply(func: Callable[[int], int], value: int) -> int:\n    return func(value)\n\n# TypeVar for generics\nT = TypeVar('T')\ndef first(items: List[T]) -> Optional[T]:\n    return items[0] if items else None"},
+{name:"Comprehensions & Functional (map/filter/reduce)",theory:["List/dict/set comprehensions provide concise syntax for creating collections.","map(func, iter) applies function to each element; filter(func, iter) selects elements.","functools.reduce(func, iter) accumulates values; useful for folding operations."],code:"from functools import reduce\n\n# All comprehension types\nnums = range(1, 11)\nsquares_list = [x**2 for x in nums]           # List\nsquares_set = {x**2 for x in nums}            # Set\nsquares_dict = {x: x**2 for x in nums}        # Dict\nsquares_gen = (x**2 for x in nums)            # Generator\n\n# map, filter, reduce\nnumbers = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]\n\ndoubled = list(map(lambda x: x * 2, numbers))\nevens = list(filter(lambda x: x % 2 == 0, numbers))\ntotal = reduce(lambda acc, x: acc + x, numbers, 0)\nproduct = reduce(lambda acc, x: acc * x, numbers, 1)\n\nprint(f\"Doubled: {doubled}\")\nprint(f\"Evens: {evens}\")\nprint(f\"Sum: {total}, Product: {product}\")\n\n# Chaining functional operations\nresult = reduce(\n    lambda acc, x: acc + x,\n    filter(lambda x: x > 10,\n        map(lambda x: x**2, range(1, 10))),\n    0\n)  # Sum of squares > 10"}
+],
+examples:[
+{title:"Thread-safe Singleton with Decorator",desc:"Implement a thread-safe singleton pattern using decorators.",code:"import threading\nimport functools\n\ndef singleton(cls):\n    instances = {}\n    lock = threading.Lock()\n    \n    @functools.wraps(cls)\n    def get_instance(*args, **kwargs):\n        if cls not in instances:\n            with lock:\n                if cls not in instances:\n                    instances[cls] = cls(*args, **kwargs)\n        return instances[cls]\n    \n    return get_instance\n\n@singleton\nclass Database:\n    def __init__(self, url):\n        self.url = url\n        print(f\"Connecting to {url}\")\n\ndb1 = Database(\"localhost:5432\")\ndb2 = Database(\"other:5432\")\nprint(f\"Same instance: {db1 is db2}\")  # True"},
+{title:"Async Web Scraper Pattern",desc:"Demonstrate async pattern for concurrent HTTP-like operations.",code:"import asyncio\nfrom typing import List, Dict\n\nasync def fetch_page(url: str, delay: float) -> Dict:\n    \"\"\"Simulate async HTTP request.\"\"\"\n    await asyncio.sleep(delay)\n    return {\"url\": url, \"status\": 200, \"size\": len(url) * 100}\n\nasync def scrape_all(urls: List[str]) -> List[Dict]:\n    tasks = [fetch_page(url, 0.5) for url in urls]\n    results = await asyncio.gather(*tasks)\n    return results\n\nasync def main():\n    urls = [\n        \"https://example.com/page1\",\n        \"https://example.com/page2\",\n        \"https://example.com/page3\",\n    ]\n    results = await scrape_all(urls)\n    for r in results:\n        print(f\"{r['url']}: {r['status']} ({r['size']} bytes)\")\n\n# asyncio.run(main())\nprint(\"Async scraper pattern defined\")"},
+{title:"Type-safe Data Pipeline",desc:"Build a typed data processing pipeline with generics.",code:"from typing import TypeVar, Generic, Callable, List\nfrom dataclasses import dataclass\n\nT = TypeVar('T')\nR = TypeVar('R')\n\nclass Pipeline(Generic[T]):\n    def __init__(self, data: List[T]):\n        self._data = data\n    \n    def filter(self, pred: Callable[[T], bool]) -> 'Pipeline[T]':\n        return Pipeline([x for x in self._data if pred(x)])\n    \n    def map(self, func: Callable[[T], R]) -> 'Pipeline[R]':\n        return Pipeline([func(x) for x in self._data])\n    \n    def reduce(self, func: Callable[[T, T], T], initial: T) -> T:\n        from functools import reduce\n        return reduce(func, self._data, initial)\n    \n    def collect(self) -> List[T]:\n        return self._data\n\n# Usage\nresult = (Pipeline([1, 2, 3, 4, 5, 6, 7, 8, 9, 10])\n    .filter(lambda x: x % 2 == 0)\n    .map(lambda x: x ** 2)\n    .collect())\nprint(f\"Even squares: {result}\")  # [4, 16, 36, 64, 100]"}
+],
+practice:[
+{q:"Write a simple decorator that prints 'Before' and 'After' around a function call.",d:"E"},
+{q:"Create a context manager using 'with' that prints enter and exit messages.",d:"E"},
+{q:"Add type hints to a function that takes a list of strings and returns a dict.",d:"E"},
+{q:"Use map() and filter() with lambda to process a list of numbers.",d:"E"},
+{q:"Write a decorator that uses functools.wraps to preserve function metadata.",d:"E"},
+{q:"Use reduce() to find the product of all numbers in a list.",d:"E"},
+{q:"Create a decorator with arguments that repeats function execution n times.",d:"M"},
+{q:"Implement a context manager class with __enter__ and __exit__ for file handling.",d:"M"},
+{q:"Write a multithreaded program that downloads 5 URLs concurrently.",d:"M"},
+{q:"Create an async function and run 3 coroutines concurrently with gather().",d:"M"},
+{q:"Add comprehensive type hints including Optional, Union, and Callable types.",d:"M"},
+{q:"Implement a decorator that caches results with a TTL (time-to-live).",d:"M"},
+{q:"Use ThreadPoolExecutor to parallelize a CPU-light I/O operation.",d:"M"},
+{q:"Create a generator-based context manager using @contextmanager.",d:"M"},
+{q:"Build an async producer-consumer pattern with asyncio.Queue.",d:"H"},
+{q:"Create a class decorator that adds methods to a class dynamically.",d:"H"},
+{q:"Implement a typed Generic class (like a type-safe container or stack).",d:"H"},
+{q:"Write a deadlock-free solution using threading.Lock for shared resources.",d:"H"},
+{q:"Create an async context manager (async with) for resource management.",d:"H"},
+{q:"Build a complete async pipeline: read -> process -> write with backpressure handling.",d:"H"}
+]}
+];
+
+// State
+let currentTopic = null;
+const STORAGE_KEY = 'python_roadmap_progress';
+
+function getProgress() {
+    try { return JSON.parse(localStorage.getItem(STORAGE_KEY)) || {}; }
+    catch { return {}; }
+}
+function saveProgress(data) {
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
+}
+function getTotalPractice() {
+    return topics.reduce((sum, t) => sum + t.practice.length, 0);
+}
+function getCompletedCount() {
+    const prog = getProgress();
+    return Object.values(prog).filter(v => v).length;
+}
+function updateProgressBar() {
+    const total = getTotalPractice();
+    const done = getCompletedCount();
+    const pct = total > 0 ? (done / total * 100) : 0;
+    document.getElementById('progressFill').style.width = pct + '%';
+    document.getElementById('progressText').textContent = done + ' / ' + total;
+}
+function getTopicProgress(topicId) {
+    const prog = getProgress();
+    const topic = topics.find(t => t.id === topicId);
+    if (!topic) return {done: 0, total: 0};
+    let done = 0;
+    topic.practice.forEach((_, i) => {
+        if (prog[topicId + '_' + i]) done++;
+    });
+    return {done, total: topic.practice.length};
+}
+
+// Python syntax highlighting
+function highlightPython(code) {
+    let html = code
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;');
+    // Comments
+    html = html.replace(/(#.*)/g, '<span class="cm">$1</span>');
+    // Multi-line strings/docstrings
+    html = html.replace(/("""[\s\S]*?"""|'''[\s\S]*?''')/g, '<span class="str">$1</span>');
+    // Strings (double then single)
+    html = html.replace(/(f?"[^"\\]*(?:\\.[^"\\]*)*")/g, '<span class="str">$1</span>');
+    html = html.replace(/(f?'[^'\\]*(?:\\.[^'\\]*)*')/g, '<span class="str">$1</span>');
+    // Numbers
+    html = html.replace(/\b(\d+\.?\d*)\b/g, '<span class="num">$1</span>');
+    // Keywords
+    const keywords = ['def','class','import','from','return','yield','if','elif','else','for','while','break','continue','pass','try','except','finally','raise','with','as','lambda','and','or','not','in','is','True','False','None','async','await','match','case','nonlocal','global','del','assert'];
+    keywords.forEach(kw => {
+        html = html.replace(new RegExp('\\b(' + kw + ')\\b', 'g'), '<span class="kw">$1</span>');
+    });
+    // Built-in functions
+    const builtins = ['print','len','range','type','int','float','str','bool','list','dict','set','tuple','input','open','sum','max','min','abs','enumerate','zip','map','filter','sorted','reversed','any','all','isinstance','super','next','iter','hasattr','getattr','setattr'];
+    builtins.forEach(fn => {
+        html = html.replace(new RegExp('\\b(' + fn + ')\\b(?=\\()', 'g'), '<span class="fn">$1</span>');
+    });
+    return html;
+}
+
+// Render roadmap
+function renderRoadmap() {
+    const container = document.getElementById('roadmapContainer');
+    container.innerHTML = '';
+    topics.forEach(topic => {
+        const prog = getTopicProgress(topic.id);
+        const node = document.createElement('div');
+        node.className = 'node';
+        node.onclick = () => showDetail(topic.id);
+        node.innerHTML = `
+            <div class="node-number" style="border-color:${topic.color};color:${topic.color}">${topic.id}</div>
+            <div class="node-card">
+                <div class="node-title" style="color:${topic.color}">${topic.title}</div>
+                <div class="node-chips">${topic.chips.map(c => '<span class="chip">' + c + '</span>').join('')}</div>
+                <div class="node-progress">${prog.done} / ${prog.total} practice completed</div>
+            </div>
+        `;
+        container.appendChild(node);
+    });
+}
+
+// Show detail page
+function showDetail(topicId) {
+    currentTopic = topics.find(t => t.id === topicId);
+    if (!currentTopic) return;
+    document.getElementById('roadmapPage').classList.remove('active');
+    document.getElementById('detailPage').classList.add('active');
+    document.getElementById('detailTitle').textContent = currentTopic.title;
+    document.getElementById('detailTitle').style.color = currentTopic.color;
+    document.getElementById('detailSubtitle').textContent = currentTopic.subtopics.map(s => s.name).join(' • ');
+    renderTheory();
+    renderExamples();
+    renderPractice();
+    switchTab('theory');
+    window.scrollTo(0, 0);
+}
+
+function showRoadmap() {
+    document.getElementById('detailPage').classList.remove('active');
+    document.getElementById('roadmapPage').classList.add('active');
+    renderRoadmap();
+    updateProgressBar();
+}
+
+function switchTab(tab) {
+    document.querySelectorAll('.tab').forEach((t, i) => {
+        t.classList.toggle('active', ['theory','examples','practice'][i] === tab);
+    });
+    document.querySelectorAll('.tab-content').forEach((tc, i) => {
+        tc.classList.toggle('active', ['theory','examples','practice'][i] === tab);
+    });
+}
+
+function renderTheory() {
+    const container = document.getElementById('theoryContent');
+    container.innerHTML = currentTopic.subtopics.map(sub => `
+        <div class="theory-section">
+            <div class="theory-title">${sub.name}</div>
+            ${sub.theory.map(t => '<p class="theory-point">' + t + '</p>').join('')}
+            <pre class="code-block">${highlightPython(sub.code)}</pre>
+        </div>
+    `).join('');
+}
+
+function renderExamples() {
+    const container = document.getElementById('examplesContent');
+    container.innerHTML = currentTopic.examples.map(ex => `
+        <div class="example-card">
+            <div class="example-title">${ex.title}</div>
+            <p class="example-desc">${ex.desc}</p>
+            <pre class="code-block">${highlightPython(ex.code)}</pre>
+        </div>
+    `).join('');
+}
+
+function renderPractice() {
+    const container = document.getElementById('practiceContent');
+    const prog = getProgress();
+    container.innerHTML = currentTopic.practice.map((p, i) => {
+        const key = currentTopic.id + '_' + i;
+        const checked = prog[key] ? 'checked' : '';
+        const doneClass = prog[key] ? 'done' : '';
+        const diffClass = p.d === 'E' ? 'easy' : p.d === 'M' ? 'medium' : 'hard';
+        const diffLabel = p.d === 'E' ? 'Easy' : p.d === 'M' ? 'Medium' : 'Hard';
+        return `
+            <div class="practice-item ${doneClass}">
+                <input type="checkbox" ${checked} onchange="togglePractice('${key}', this)">
+                <span class="practice-text">${i+1}. ${p.q}</span>
+                <span class="difficulty ${diffClass}">${diffLabel}</span>
+            </div>
+        `;
+    }).join('');
+}
+
+function togglePractice(key, el) {
+    const prog = getProgress();
+    prog[key] = el.checked;
+    saveProgress(prog);
+    updateProgressBar();
+    el.parentElement.classList.toggle('done', el.checked);
+}
+
+// Initialize
+renderRoadmap();
+updateProgressBar();
+</script>
+</body>
+</html>
