@@ -1,0 +1,1042 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DSA Learning Roadmap - Python</title>
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{--bg:#080c14;--card:#141d2e;--border:#1e2d45;--text:#dde4f0;--text-dim:#8892a4;--green:#4ade80;--cyan:#22d3ee;--purple:#a78bfa;--gradient:linear-gradient(135deg,#4ade80,#22d3ee,#a78bfa)}
+body{font-family:'Sora',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;overflow-x:hidden}
+code,pre,.code{font-family:'JetBrains Mono',monospace}
+.header{position:sticky;top:0;z-index:1000;background:rgba(8,12,20,0.95);backdrop-filter:blur(12px);border-bottom:1px solid var(--border);padding:12px 24px}
+.header-inner{max-width:1200px;margin:0 auto;display:flex;align-items:center;justify-content:space-between}
+.logo{font-size:1.4rem;font-weight:700;background:var(--gradient);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.progress-container{flex:1;max-width:300px;margin-left:24px}
+.progress-label{font-size:0.7rem;color:var(--text-dim);margin-bottom:4px;text-align:right}
+.progress-bar{height:6px;background:var(--border);border-radius:3px;overflow:hidden}
+.progress-fill{height:100%;background:var(--gradient);border-radius:3px;transition:width 0.5s ease}
+.page{display:none;padding:40px 24px 80px;max-width:900px;margin:0 auto;animation:fadeIn 0.3s ease}
+.page.active{display:block}
+@keyframes fadeIn{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
+.section-label{font-size:0.75rem;text-transform:uppercase;letter-spacing:2px;color:var(--text-dim);margin:32px 0 16px;padding-left:60px}
+.roadmap{position:relative;padding-left:60px}
+.roadmap::before{content:'';position:absolute;left:28px;top:0;bottom:0;width:2px;background:linear-gradient(to bottom,var(--green),var(--cyan),var(--purple));opacity:0.4}
+.node{position:relative;margin-bottom:24px;cursor:pointer;transition:transform 0.2s ease}
+.node:hover{transform:translateX(4px)}
+.node-number{position:absolute;left:-48px;top:16px;width:32px;height:32px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:0.8rem;border:2px solid;background:var(--bg)}
+.node-card{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:20px 24px;transition:border-color 0.2s,box-shadow 0.2s}
+.node:hover .node-card{border-color:var(--cyan);box-shadow:0 4px 20px rgba(34,211,238,0.1)}
+.node-title{font-size:1.1rem;font-weight:600;margin-bottom:8px}
+.node-chips{display:flex;flex-wrap:wrap;gap:6px}
+.chip{font-size:0.65rem;padding:3px 8px;border-radius:4px;background:rgba(255,255,255,0.05);border:1px solid var(--border);color:var(--text-dim)}
+.node-progress{font-size:0.7rem;color:var(--text-dim);margin-top:8px}
+.back-btn{display:inline-flex;align-items:center;gap:6px;padding:8px 16px;background:var(--card);border:1px solid var(--border);border-radius:8px;color:var(--text);cursor:pointer;font-family:'Sora',sans-serif;font-size:0.85rem;margin-bottom:24px;transition:border-color 0.2s}
+.back-btn:hover{border-color:var(--cyan)}
+.detail-header{margin-bottom:24px}
+.detail-title{font-size:1.8rem;font-weight:700;margin-bottom:8px}
+.detail-subtitle{font-size:0.85rem;color:var(--text-dim)}
+.tabs{display:flex;gap:4px;margin-bottom:24px;background:var(--card);border-radius:10px;padding:4px;border:1px solid var(--border)}
+.tab{flex:1;padding:10px 16px;text-align:center;border-radius:8px;cursor:pointer;font-size:0.85rem;font-weight:500;color:var(--text-dim);transition:all 0.2s}
+.tab.active{background:var(--border);color:var(--text)}
+.tab:hover:not(.active){color:var(--text)}
+.tab-content{display:none;animation:fadeIn 0.3s ease}
+.tab-content.active{display:block}
+.theory-section{margin-bottom:24px;background:var(--card);border:1px solid var(--border);border-radius:10px;padding:20px}
+.theory-title{font-size:1rem;font-weight:600;margin-bottom:12px;color:var(--cyan)}
+.theory-point{font-size:0.85rem;color:var(--text-dim);margin-bottom:8px;padding-left:16px;position:relative;line-height:1.6}
+.theory-point::before{content:'>';position:absolute;left:0;color:var(--green)}
+.complexity-badge{display:inline-block;font-size:0.7rem;padding:2px 8px;border-radius:4px;margin-top:4px;font-family:'JetBrains Mono',monospace}
+.complexity-badge.time{background:rgba(34,211,238,0.15);color:#22d3ee}
+.complexity-badge.space{background:rgba(167,139,250,0.15);color:#a78bfa}
+pre.code-block{background:rgba(0,0,0,0.4);border:1px solid var(--border);border-radius:8px;padding:16px;margin-top:12px;overflow-x:auto;font-size:0.78rem;line-height:1.6}
+.example-card{background:var(--card);border:1px solid var(--border);border-radius:10px;padding:20px;margin-bottom:16px}
+.example-title{font-size:0.9rem;font-weight:600;margin-bottom:8px;color:var(--purple)}
+.example-desc{font-size:0.82rem;color:var(--text-dim);margin-bottom:12px;line-height:1.5}
+.approach-box{background:rgba(74,222,128,0.05);border:1px solid rgba(74,222,128,0.2);border-radius:6px;padding:10px 12px;margin-bottom:12px}
+.approach-label{font-size:0.7rem;color:var(--green);font-weight:600;margin-bottom:4px;text-transform:uppercase}
+.approach-text{font-size:0.8rem;color:var(--text-dim);line-height:1.5}
+.practice-item{display:flex;align-items:flex-start;gap:12px;padding:12px 16px;background:var(--card);border:1px solid var(--border);border-radius:8px;margin-bottom:8px;transition:border-color 0.2s}
+.practice-item:hover{border-color:var(--cyan)}
+.practice-item input[type="checkbox"]{width:18px;height:18px;margin-top:2px;accent-color:var(--green);cursor:pointer;flex-shrink:0}
+.practice-item.done{opacity:0.6;border-color:var(--green)}
+.practice-text{flex:1;font-size:0.82rem;line-height:1.5}
+.practice-approach{font-size:0.72rem;color:var(--text-dim);font-style:italic;margin-top:4px}
+.difficulty{font-size:0.65rem;padding:2px 8px;border-radius:4px;font-weight:600;white-space:nowrap}
+.difficulty.easy{background:rgba(74,222,128,0.15);color:#4ade80}
+.difficulty.medium{background:rgba(251,191,36,0.15);color:#fbbf24}
+.difficulty.hard{background:rgba(244,114,182,0.15);color:#f472b6}
+.kw{color:#c084fc}.fn{color:#22d3ee}.st{color:#4ade80}.cm{color:#6b7280}.nu{color:#fbbf24}.op{color:#f472b6}
+.difficulty-header{font-size:0.85rem;font-weight:600;margin:16px 0 8px;padding:6px 12px;border-radius:6px}
+.difficulty-header.easy-h{background:rgba(74,222,128,0.08);color:#4ade80;border-left:3px solid #4ade80}
+.difficulty-header.medium-h{background:rgba(251,191,36,0.08);color:#fbbf24;border-left:3px solid #fbbf24}
+.difficulty-header.hard-h{background:rgba(244,114,182,0.08);color:#f472b6;border-left:3px solid #f472b6}
+@media(max-width:640px){.roadmap{padding-left:40px}.roadmap::before{left:16px}.node-number{left:-32px;width:26px;height:26px;font-size:0.7rem}.header-inner{flex-wrap:wrap;gap:8px}.progress-container{max-width:100%;margin-left:0}.section-label{padding-left:40px}}
+</style>
+</head>
+<body>
+<header class="header">
+<div class="header-inner">
+<div class="logo">DSA Roadmap</div>
+<div class="progress-container">
+<div class="progress-label"><span id="progressText">0 / 400</span> completed</div>
+<div class="progress-bar"><div class="progress-fill" id="progressFill" style="width:0%"></div></div>
+</div>
+</div>
+</header>
+<div class="page active" id="roadmapPage">
+<div class="roadmap" id="roadmapContainer"></div>
+</div>
+<div class="page" id="detailPage">
+<button class="back-btn" onclick="showRoadmap()">&#8592; Back to Roadmap</button>
+<div class="detail-header">
+<h1 class="detail-title" id="detailTitle"></h1>
+<p class="detail-subtitle" id="detailSubtitle"></p>
+</div>
+<div class="tabs">
+<div class="tab active" onclick="switchTab('theory')">Theory</div>
+<div class="tab" onclick="switchTab('examples')">Examples</div>
+<div class="tab" onclick="switchTab('practice')">Practice</div>
+</div>
+<div class="tab-content active" id="theoryContent"></div>
+<div class="tab-content" id="examplesContent"></div>
+<div class="tab-content" id="practiceContent"></div>
+</div>
+<script>
+const STORAGE_KEY='dsa_roadmap_progress';
+function loadProgress(){try{return JSON.parse(localStorage.getItem(STORAGE_KEY))||{}}catch(e){return{}}}
+function saveProgress(p){localStorage.setItem(STORAGE_KEY,JSON.stringify(p))}
+
+const topics=[
+{id:1,title:"Arrays & Hashing",color:"#38bdf8",section:"Data Structures",chips:["Array Ops","Hash Maps","Frequency","Two Sum"],
+subtopics:[
+{name:"Array Basics & Operations",theory:["Arrays store elements in contiguous memory; Python lists are dynamic arrays.","Access by index is O(1); appending is amortized O(1); inserting/deleting at arbitrary position is O(n).","Slicing creates a new list in O(k) where k is slice size."],tc:"O(1) access, O(n) search/insert",sc:"O(n)",code:"# Array operations\narr = [1, 2, 3, 4, 5]\narr.append(6)        # O(1) amortized\narr.insert(0, 0)     # O(n) - shifts elements\narr.pop()            # O(1) - remove last\narr.pop(0)           # O(n) - shifts elements\nval = arr[2]         # O(1) - direct access\nprint(3 in arr)      # O(n) - linear search"},
+{name:"Hash Maps (dict)",theory:["Python dict uses hash table internally; average O(1) lookup, insert, delete.","Keys must be hashable (immutable types like str, int, tuple).","Worst case O(n) due to hash collisions, but rare with good hash functions."],tc:"O(1) avg lookup/insert/delete",sc:"O(n)",code:"# Hash Map operations\nhash_map = {}\nhash_map['apple'] = 5      # O(1) insert\nhash_map['banana'] = 3\nprint(hash_map.get('apple'))  # O(1) lookup\nprint('cherry' in hash_map)   # O(1) membership\ndel hash_map['banana']        # O(1) delete\n\n# Two Sum using hash map\ndef two_sum(nums, target):\n    seen = {}\n    for i, num in enumerate(nums):\n        comp = target - num\n        if comp in seen:\n            return [seen[comp], i]\n        seen[num] = i\n    return []"},
+{name:"Frequency Counting",theory:["Count occurrences using dict or collections.Counter.","Counter is a dict subclass; most_common(k) returns k most frequent elements.","Useful for anagrams, duplicates, and majority element problems."],tc:"O(n) to build frequency map",sc:"O(k) where k = unique elements",code:"from collections import Counter\n\nnums = [1, 2, 2, 3, 3, 3]\nfreq = Counter(nums)  # Counter({3: 3, 2: 2, 1: 1})\nprint(freq.most_common(2))  # [(3, 3), (2, 2)]\n\n# Manual frequency count\ndef count_freq(arr):\n    freq = {}\n    for x in arr:\n        freq[x] = freq.get(x, 0) + 1\n    return freq"},
+{name:"Prefix Sum Array",theory:["Prefix sum allows O(1) range sum queries after O(n) preprocessing.","prefix[i] = sum of arr[0..i-1]; range sum(l,r) = prefix[r+1] - prefix[l].","Useful for subarray sum problems and 2D matrix queries."],tc:"O(n) build, O(1) per query",sc:"O(n)",code:"# Prefix Sum\ndef build_prefix(arr):\n    prefix = [0] * (len(arr) + 1)\n    for i in range(len(arr)):\n        prefix[i+1] = prefix[i] + arr[i]\n    return prefix\n\ndef range_sum(prefix, l, r):\n    return prefix[r+1] - prefix[l]\n\narr = [2, 4, 1, 3, 5]\nprefix = build_prefix(arr)\nprint(range_sum(prefix, 1, 3))  # 4+1+3 = 8"},
+{name:"Kadane's Algorithm (Max Subarray)",theory:["Finds maximum sum contiguous subarray in O(n) time.","Track current_max (max ending here) and global_max (overall best).","Reset current_max to current element when it becomes negative."],tc:"O(n)",sc:"O(1)",code:"def max_subarray(nums):\n    current_max = global_max = nums[0]\n    for num in nums[1:]:\n        current_max = max(num, current_max + num)\n        global_max = max(global_max, current_max)\n    return global_max\n\nprint(max_subarray([-2,1,-3,4,-1,2,1,-5,4]))  # 6"}
+],
+examples:[
+{title:"Two Sum Problem",desc:"Given an array of integers and a target, return indices of two numbers that add up to target.",approach:"Use a hash map to store each number's index. For each element, check if (target - current) exists in the map. Single pass O(n).",tc:"O(n)",sc:"O(n)",code:"def two_sum(nums, target):\n    seen = {}\n    for i, num in enumerate(nums):\n        complement = target - num\n        if complement in seen:\n            return [seen[complement], i]\n        seen[num] = i\n    return []\n\nprint(two_sum([2, 7, 11, 15], 9))  # [0, 1]"},
+{title:"Group Anagrams",desc:"Given a list of strings, group anagrams together.",approach:"Sort each word to create a canonical key. Words with same sorted key are anagrams. Use a dict with sorted string as key and list of anagrams as value.",tc:"O(n * k log k) where k = max word length",sc:"O(n * k)",code:"from collections import defaultdict\n\ndef group_anagrams(strs):\n    groups = defaultdict(list)\n    for s in strs:\n        key = ''.join(sorted(s))\n        groups[key].append(s)\n    return list(groups.values())\n\nprint(group_anagrams(['eat','tea','tan','ate','nat','bat']))"},
+{title:"Maximum Subarray Sum",desc:"Find the contiguous subarray with the largest sum.",approach:"Use Kadane's algorithm: maintain running sum, reset when it drops below current element. Track the global maximum throughout the iteration.",tc:"O(n)",sc:"O(1)",code:"def max_subarray(nums):\n    curr = best = nums[0]\n    for num in nums[1:]:\n        curr = max(num, curr + num)\n        best = max(best, curr)\n    return best\n\nprint(max_subarray([-2,1,-3,4,-1,2,1,-5,4]))  # 6"}
+],
+practice:[
+{q:"Find the duplicate number in an array of n+1 integers (range 1 to n).",d:"E",approach:"Hash Set or Floyd's cycle detection"},
+{q:"Check if two strings are anagrams of each other.",d:"E",approach:"Frequency counting with Counter"},
+{q:"Find the single number in an array where every other appears twice.",d:"E",approach:"XOR all elements"},
+{q:"Return indices of two numbers that add up to target (Two Sum).",d:"E",approach:"Hash map one-pass"},
+{q:"Remove duplicates from a sorted array in-place.",d:"E",approach:"Two pointers"},
+{q:"Find the majority element (appears > n/2 times).",d:"E",approach:"Boyer-Moore Voting or hash map"},
+{q:"Move all zeroes to end of array maintaining relative order.",d:"E",approach:"Two pointers - swap non-zero forward"},
+{q:"Find top K frequent elements in an array.",d:"M",approach:"Hash map + heap or bucket sort"},
+{q:"Product of Array Except Self without division.",d:"M",approach:"Prefix and suffix product arrays"},
+{q:"Longest consecutive sequence in unsorted array.",d:"M",approach:"Hash set - check sequence starts"},
+{q:"Subarray sum equals K (count subarrays).",d:"M",approach:"Prefix sum + hash map"},
+{q:"Group anagrams from a list of strings.",d:"M",approach:"Sorted string as hash key"},
+{q:"Valid Sudoku - check if board state is valid.",d:"M",approach:"Hash sets for rows, cols, boxes"},
+{q:"Encode and Decode strings (design problem).",d:"M",approach:"Length prefix encoding"},
+{q:"Find all pairs with given difference K.",d:"M",approach:"Hash set lookup for num+k"},
+{q:"Minimum window substring containing all characters.",d:"H",approach:"Sliding window + frequency map"},
+{q:"First missing positive integer in O(n) time O(1) space.",d:"H",approach:"Index as hash - place nums at correct index"},
+{q:"Longest substring without repeating characters.",d:"H",approach:"Sliding window with hash set"},
+{q:"4Sum - find all quadruplets summing to target.",d:"H",approach:"Sort + two pointers + two loops"},
+{q:"Count of Range Sum (count subarrays with sum in [lower, upper]).",d:"H",approach:"Merge sort on prefix sums"}
+]},
+
+{id:2,title:"Linked Lists",color:"#34d399",section:"Data Structures",chips:["Singly","Doubly","Circular","Reverse","Cycle"],
+subtopics:[
+{name:"Singly Linked List",theory:["Each node contains data and a pointer to the next node.","Insert at head is O(1); insert at tail is O(n) without tail pointer, O(1) with.","Search requires traversal: O(n). No random access like arrays."],tc:"O(1) insert head, O(n) search",sc:"O(n)",code:"class ListNode:\n    def __init__(self, val=0, next=None):\n        self.val = val\n        self.next = next\n\nclass LinkedList:\n    def __init__(self):\n        self.head = None\n    \n    def insert_head(self, val):\n        self.head = ListNode(val, self.head)\n    \n    def search(self, val):\n        curr = self.head\n        while curr:\n            if curr.val == val:\n                return True\n            curr = curr.next\n        return False"},
+{name:"Doubly Linked List",theory:["Each node has prev and next pointers, enabling bidirectional traversal.","Insertion and deletion at both ends are O(1) with head/tail pointers.","Used in LRU cache, browser history, and deque implementations."],tc:"O(1) insert/delete at ends, O(n) search",sc:"O(n)",code:"class DNode:\n    def __init__(self, val=0):\n        self.val = val\n        self.prev = None\n        self.next = None\n\nclass DoublyLinkedList:\n    def __init__(self):\n        self.head = DNode(0)  # dummy head\n        self.tail = DNode(0)  # dummy tail\n        self.head.next = self.tail\n        self.tail.prev = self.head\n    \n    def insert_end(self, val):\n        node = DNode(val)\n        node.prev = self.tail.prev\n        node.next = self.tail\n        self.tail.prev.next = node\n        self.tail.prev = node"},
+{name:"Circular Linked List",theory:["Last node points back to the head, forming a circle.","Useful for round-robin scheduling and circular buffers.","Traversal must check for revisiting the start node to avoid infinite loop."],tc:"O(n) traversal",sc:"O(n)",code:"class CircularLL:\n    def __init__(self):\n        self.head = None\n    \n    def insert(self, val):\n        new_node = ListNode(val)\n        if not self.head:\n            self.head = new_node\n            new_node.next = self.head\n        else:\n            curr = self.head\n            while curr.next != self.head:\n                curr = curr.next\n            curr.next = new_node\n            new_node.next = self.head\n    \n    def display(self):\n        if not self.head:\n            return\n        curr = self.head\n        while True:\n            print(curr.val, end=' ')\n            curr = curr.next\n            if curr == self.head:\n                break"},
+{name:"Reverse a Linked List",theory:["Iterative: use three pointers (prev, curr, next) to reverse links one by one.","Recursive: reverse rest of list, then fix the current node's pointer.","Both approaches are O(n) time; iterative is O(1) space, recursive O(n) stack space."],tc:"O(n)",sc:"O(1) iterative, O(n) recursive",code:"def reverse_list(head):\n    prev = None\n    curr = head\n    while curr:\n        next_node = curr.next\n        curr.next = prev\n        prev = curr\n        curr = next_node\n    return prev\n\n# Recursive approach\ndef reverse_recursive(head):\n    if not head or not head.next:\n        return head\n    new_head = reverse_recursive(head.next)\n    head.next.next = head\n    head.next = None\n    return new_head"},
+{name:"Detect Cycle (Floyd's Algorithm)",theory:["Use slow (1 step) and fast (2 steps) pointers; if they meet, cycle exists.","To find cycle start: reset one pointer to head, move both at 1 step until they meet.","O(n) time and O(1) space - no extra data structures needed."],tc:"O(n)",sc:"O(1)",code:"def has_cycle(head):\n    slow = fast = head\n    while fast and fast.next:\n        slow = slow.next\n        fast = fast.next.next\n        if slow == fast:\n            return True\n    return False\n\ndef find_cycle_start(head):\n    slow = fast = head\n    while fast and fast.next:\n        slow = slow.next\n        fast = fast.next.next\n        if slow == fast:\n            slow = head\n            while slow != fast:\n                slow = slow.next\n                fast = fast.next\n            return slow\n    return None"},
+{name:"Merge Two Sorted Lists",theory:["Compare heads of both lists; attach smaller node to result.","Continue until one list is exhausted, then attach remaining.","Commonly used as building block in merge sort for linked lists."],tc:"O(n + m)",sc:"O(1)",code:"def merge_two_lists(l1, l2):\n    dummy = ListNode(0)\n    curr = dummy\n    while l1 and l2:\n        if l1.val <= l2.val:\n            curr.next = l1\n            l1 = l1.next\n        else:\n            curr.next = l2\n            l2 = l2.next\n        curr = curr.next\n    curr.next = l1 or l2\n    return dummy.next"}
+],
+examples:[
+{title:"Reverse a Linked List",desc:"Given the head of a singly linked list, reverse the list and return the new head.",approach:"Use three pointers: prev (starts null), curr (starts at head), and next_node. In each iteration, save next, point curr.next to prev, advance prev and curr.",tc:"O(n)",sc:"O(1)",code:"def reverse_list(head):\n    prev = None\n    curr = head\n    while curr:\n        next_node = curr.next\n        curr.next = prev\n        prev = curr\n        curr = next_node\n    return prev"},
+{title:"Detect Cycle in Linked List",desc:"Given head, determine if the linked list has a cycle.",approach:"Floyd's tortoise and hare: slow moves 1 step, fast moves 2 steps. If they ever meet, there's a cycle. If fast reaches None, no cycle exists.",tc:"O(n)",sc:"O(1)",code:"def has_cycle(head):\n    slow = fast = head\n    while fast and fast.next:\n        slow = slow.next\n        fast = fast.next.next\n        if slow == fast:\n            return True\n    return False"},
+{title:"Find Middle of Linked List",desc:"Given a non-empty linked list, return the middle node.",approach:"Use slow/fast pointers. When fast reaches the end, slow is at the middle. For even-length lists, this gives the second middle node.",tc:"O(n)",sc:"O(1)",code:"def find_middle(head):\n    slow = fast = head\n    while fast and fast.next:\n        slow = slow.next\n        fast = fast.next.next\n    return slow"}
+],
+practice:[
+{q:"Reverse a singly linked list iteratively.",d:"E",approach:"Three pointers: prev, curr, next"},
+{q:"Find the middle node of a linked list.",d:"E",approach:"Slow and fast pointers"},
+{q:"Delete a node (given only access to that node, not head).",d:"E",approach:"Copy next node's value and skip it"},
+{q:"Merge two sorted linked lists into one sorted list.",d:"E",approach:"Dummy head + compare and attach"},
+{q:"Remove duplicates from a sorted linked list.",d:"E",approach:"Skip nodes with same value as current"},
+{q:"Check if a linked list is a palindrome.",d:"E",approach:"Find middle, reverse second half, compare"},
+{q:"Detect if a linked list has a cycle.",d:"E",approach:"Floyd's slow and fast pointers"},
+{q:"Remove the Nth node from end of list.",d:"M",approach:"Two pointers with N gap"},
+{q:"Add two numbers represented as linked lists.",d:"M",approach:"Traverse both with carry"},
+{q:"Find the intersection node of two linked lists.",d:"M",approach:"Two pointers - switch heads at end"},
+{q:"Swap nodes in pairs.",d:"M",approach:"Recursive or iterative pointer manipulation"},
+{q:"Sort a linked list using merge sort.",d:"M",approach:"Find middle + merge sort recursively"},
+{q:"Reorder list: L0→Ln→L1→Ln-1→...",d:"M",approach:"Find middle, reverse second half, merge alternately"},
+{q:"Copy a linked list with random pointers.",d:"M",approach:"Hash map or interleaving nodes"},
+{q:"Rotate a linked list to the right by k places.",d:"M",approach:"Find length, connect tail to head, break at new position"},
+{q:"Reverse nodes in k-group.",d:"H",approach:"Reverse k nodes at a time, connect groups"},
+{q:"Merge K sorted linked lists.",d:"H",approach:"Min-heap of k list heads"},
+{q:"LRU Cache implementation using doubly linked list + hash map.",d:"H",approach:"DLL for order + dict for O(1) access"},
+{q:"Flatten a multilevel doubly linked list.",d:"H",approach:"DFS/stack to process child lists"},
+{q:"Find the starting node of cycle in linked list.",d:"H",approach:"Floyd's algorithm phase 2"}
+]},
+
+{id:3,title:"Stacks",color:"#a78bfa",section:"Data Structures",chips:["Push/Pop","Valid Parentheses","Min Stack","Monotonic"],
+subtopics:[
+{name:"Stack Implementation (list/deque)",theory:["Stack follows LIFO (Last In, First Out) principle.","Python list works as stack: append() for push, pop() for pop - both O(1).","collections.deque is more efficient for large stacks (no reallocation)."],tc:"O(1) push/pop",sc:"O(n)",code:"# Stack using list\nstack = []\nstack.append(1)  # push\nstack.append(2)\nstack.append(3)\ntop = stack[-1]  # peek: 3\nstack.pop()      # pop: 3\n\n# Stack using deque\nfrom collections import deque\nstack = deque()\nstack.append(1)\nstack.append(2)\nstack.pop()  # 2"},
+{name:"Valid Parentheses Problem",theory:["Use stack to match opening brackets with corresponding closing brackets.","Push opening brackets; for closing brackets, check if top matches.","If stack is empty at end, all brackets are balanced."],tc:"O(n)",sc:"O(n)",code:"def is_valid(s):\n    stack = []\n    mapping = {')': '(', '}': '{', ']': '['}\n    for char in s:\n        if char in mapping:\n            if not stack or stack[-1] != mapping[char]:\n                return False\n            stack.pop()\n        else:\n            stack.append(char)\n    return len(stack) == 0\n\nprint(is_valid('({[]})'))  # True\nprint(is_valid('([)]'))    # False"},
+{name:"Min Stack (O(1) getMin)",theory:["Maintain auxiliary stack that tracks minimum at each level.","When pushing, also push min(val, current_min) to min_stack.","getMin() simply peeks at the min_stack top - O(1)."],tc:"O(1) push/pop/getMin",sc:"O(n)",code:"class MinStack:\n    def __init__(self):\n        self.stack = []\n        self.min_stack = []\n    \n    def push(self, val):\n        self.stack.append(val)\n        min_val = min(val, self.min_stack[-1] if self.min_stack else val)\n        self.min_stack.append(min_val)\n    \n    def pop(self):\n        self.stack.pop()\n        self.min_stack.pop()\n    \n    def top(self):\n        return self.stack[-1]\n    \n    def getMin(self):\n        return self.min_stack[-1]"},
+{name:"Next Greater Element (Monotonic Stack)",theory:["Monotonic stack maintains elements in increasing/decreasing order.","Process from right to left; pop smaller elements; top is next greater.","Solves NGE, stock span, largest rectangle problems in O(n)."],tc:"O(n)",sc:"O(n)",code:"def next_greater_element(nums):\n    n = len(nums)\n    result = [-1] * n\n    stack = []  # stores indices\n    for i in range(n - 1, -1, -1):\n        while stack and stack[-1] <= nums[i]:\n            stack.pop()\n        if stack:\n            result[i] = stack[-1]\n        stack.append(nums[i])\n    return result\n\nprint(next_greater_element([4, 5, 2, 25]))  # [5, 25, 25, -1]"},
+{name:"Evaluate Postfix Expression",theory:["In postfix (Reverse Polish), operators come after operands.","Scan left to right: push numbers; on operator, pop two operands and compute.","No parentheses needed; evaluation is unambiguous."],tc:"O(n)",sc:"O(n)",code:"def eval_postfix(tokens):\n    stack = []\n    ops = {'+': lambda a,b: a+b, '-': lambda a,b: a-b,\n           '*': lambda a,b: a*b, '/': lambda a,b: int(a/b)}\n    for token in tokens:\n        if token in ops:\n            b, a = stack.pop(), stack.pop()\n            stack.append(ops[token](a, b))\n        else:\n            stack.append(int(token))\n    return stack[0]\n\nprint(eval_postfix(['2','1','+','3','*']))  # 9"},
+{name:"Stack using Queues",theory:["Implement stack using two queues (or one queue with rotation).","Push: enqueue to q2, move all from q1 to q2, swap q1 and q2.","Alternative: push to queue, then rotate n-1 elements to back."],tc:"O(n) push or O(n) pop depending on approach",sc:"O(n)",code:"from collections import deque\n\nclass StackUsingQueue:\n    def __init__(self):\n        self.q = deque()\n    \n    def push(self, x):\n        self.q.append(x)\n        # Rotate all previous elements to back\n        for _ in range(len(self.q) - 1):\n            self.q.append(self.q.popleft())\n    \n    def pop(self):\n        return self.q.popleft()\n    \n    def top(self):\n        return self.q[0]\n    \n    def empty(self):\n        return len(self.q) == 0"}
+],
+examples:[
+{title:"Valid Parentheses",desc:"Given a string containing just '(', ')', '{', '}', '[' and ']', determine if the input string is valid.",approach:"Use a stack: push opening brackets. For each closing bracket, check if the stack top matches. At end, stack should be empty for valid input.",tc:"O(n)",sc:"O(n)",code:"def is_valid(s):\n    stack = []\n    pairs = {')':'(', '}':'{', ']':'['}\n    for c in s:\n        if c in pairs:\n            if not stack or stack[-1] != pairs[c]:\n                return False\n            stack.pop()\n        else:\n            stack.append(c)\n    return not stack\n\nprint(is_valid('{[()]}'))  # True"},
+{title:"Daily Temperatures",desc:"Given daily temperatures, return how many days you must wait for a warmer temperature.",approach:"Use monotonic decreasing stack storing indices. When current temp is higher than stack top's temp, pop and calculate the difference in days.",tc:"O(n)",sc:"O(n)",code:"def daily_temperatures(temps):\n    n = len(temps)\n    result = [0] * n\n    stack = []  # stack of indices\n    for i in range(n):\n        while stack and temps[i] > temps[stack[-1]]:\n            j = stack.pop()\n            result[j] = i - j\n        stack.append(i)\n    return result\n\nprint(daily_temperatures([73,74,75,71,69,72,76,73]))"},
+{title:"Implement Min Stack",desc:"Design a stack that supports push, pop, top, and getMin in O(1) time.",approach:"Use two stacks: main stack for values and auxiliary stack that keeps track of the running minimum. Both push/pop simultaneously.",tc:"O(1) all operations",sc:"O(n)",code:"class MinStack:\n    def __init__(self):\n        self.stack = []\n        self.min_stack = []\n    \n    def push(self, val):\n        self.stack.append(val)\n        v = min(val, self.min_stack[-1] if self.min_stack else val)\n        self.min_stack.append(v)\n    \n    def pop(self):\n        self.stack.pop()\n        self.min_stack.pop()\n    \n    def top(self): return self.stack[-1]\n    def getMin(self): return self.min_stack[-1]"}
+],
+practice:[
+{q:"Implement a stack using a list with push, pop, peek, isEmpty.",d:"E",approach:"Use list append/pop"},
+{q:"Reverse a string using a stack.",d:"E",approach:"Push all chars, pop to build reversed"},
+{q:"Check if parentheses are balanced (single type).",d:"E",approach:"Counter or stack"},
+{q:"Implement two stacks in one array.",d:"E",approach:"One grows from start, other from end"},
+{q:"Sort a stack using only another stack.",d:"E",approach:"Temp stack with insertion sort logic"},
+{q:"Evaluate a postfix expression.",d:"E",approach:"Stack - push numbers, compute on operator"},
+{q:"Check for balanced brackets with multiple types (){}[].",d:"E",approach:"Stack with mapping dict"},
+{q:"Design Min Stack with O(1) getMin.",d:"M",approach:"Auxiliary min stack"},
+{q:"Next Greater Element for each element in array.",d:"M",approach:"Monotonic decreasing stack"},
+{q:"Daily Temperatures - days until warmer.",d:"M",approach:"Monotonic stack of indices"},
+{q:"Implement a browser back/forward using two stacks.",d:"M",approach:"Back stack and forward stack"},
+{q:"Decode string like '3[a2[c]]' → 'accaccacc'.",d:"M",approach:"Stack to handle nested encodings"},
+{q:"Remove all adjacent duplicates in string II (k consecutive).",d:"M",approach:"Stack of (char, count) pairs"},
+{q:"Asteroid collision - determine final state.",d:"M",approach:"Stack simulating collisions"},
+{q:"Online stock span problem.",d:"M",approach:"Monotonic decreasing stack of prices"},
+{q:"Largest rectangle in histogram.",d:"H",approach:"Monotonic increasing stack"},
+{q:"Trapping rain water using stack approach.",d:"H",approach:"Monotonic stack tracking boundaries"},
+{q:"Maximum frequency stack (FreqStack).",d:"H",approach:"Map of frequency to stack"},
+{q:"Longest valid parentheses substring.",d:"H",approach:"Stack storing indices of unmatched"},
+{q:"Basic Calculator (handle +, -, parentheses).",d:"H",approach:"Stack for nested expressions"}
+]},
+
+{id:4,title:"Queues",color:"#fbbf24",section:"Data Structures",chips:["Queue","Deque","Priority Queue","BFS"],
+subtopics:[
+{name:"Queue Implementation (deque)",theory:["Queue follows FIFO (First In, First Out) principle.","collections.deque provides O(1) append (enqueue) and popleft (dequeue).","Using list for queue is inefficient: pop(0) is O(n) due to shifting."],tc:"O(1) enqueue/dequeue",sc:"O(n)",code:"from collections import deque\n\nqueue = deque()\nqueue.append(1)      # enqueue\nqueue.append(2)\nqueue.append(3)\nfront = queue[0]     # peek: 1\nqueue.popleft()      # dequeue: 1\nprint(len(queue))    # 2"},
+{name:"Circular Queue",theory:["Fixed-size queue that wraps around using modulo arithmetic.","front and rear pointers track positions; (rear+1)%size moves circularly.","Efficiently reuses space without shifting elements."],tc:"O(1) enqueue/dequeue",sc:"O(n)",code:"class CircularQueue:\n    def __init__(self, k):\n        self.q = [None] * k\n        self.size = k\n        self.front = self.rear = -1\n    \n    def enqueue(self, val):\n        if (self.rear + 1) % self.size == self.front:\n            return False  # Full\n        if self.front == -1:\n            self.front = 0\n        self.rear = (self.rear + 1) % self.size\n        self.q[self.rear] = val\n        return True\n    \n    def dequeue(self):\n        if self.front == -1:\n            return None  # Empty\n        val = self.q[self.front]\n        if self.front == self.rear:\n            self.front = self.rear = -1\n        else:\n            self.front = (self.front + 1) % self.size\n        return val"},
+{name:"Priority Queue (heapq)",theory:["Priority queue serves elements by priority, not insertion order.","Python heapq provides min-heap: smallest element is always at top.","heappush and heappop are O(log n); heapify is O(n)."],tc:"O(log n) push/pop, O(1) peek",sc:"O(n)",code:"import heapq\n\n# Min Heap\nheap = []\nheapq.heappush(heap, 3)\nheapq.heappush(heap, 1)\nheapq.heappush(heap, 2)\nprint(heap[0])        # peek min: 1\nprint(heapq.heappop(heap))  # pop min: 1\n\n# Max Heap (negate values)\nmax_heap = []\nheapq.heappush(max_heap, -5)\nheapq.heappush(max_heap, -3)\nprint(-heapq.heappop(max_heap))  # 5\n\n# Heapify a list\narr = [5, 3, 8, 1, 2]\nheapq.heapify(arr)  # O(n)"},
+{name:"Deque Operations",theory:["Deque (double-ended queue) allows O(1) operations at both ends.","appendleft/popleft for front; append/pop for back.","Used in sliding window maximum, BFS, and palindrome checking."],tc:"O(1) operations at both ends",sc:"O(n)",code:"from collections import deque\n\ndq = deque()\ndq.append(1)       # add right\ndq.append(2)\ndq.appendleft(0)   # add left\nprint(dq)          # deque([0, 1, 2])\ndq.pop()           # remove right: 2\ndq.popleft()       # remove left: 0\ndq.rotate(1)       # rotate right by 1"},
+{name:"BFS using Queue",theory:["BFS explores graph level by level using a queue.","Enqueue start node, then repeatedly dequeue and enqueue unvisited neighbors.","Guarantees shortest path in unweighted graphs."],tc:"O(V + E)",sc:"O(V)",code:"from collections import deque\n\ndef bfs(graph, start):\n    visited = set([start])\n    queue = deque([start])\n    order = []\n    while queue:\n        node = queue.popleft()\n        order.append(node)\n        for neighbor in graph[node]:\n            if neighbor not in visited:\n                visited.add(neighbor)\n                queue.append(neighbor)\n    return order\n\ngraph = {0:[1,2], 1:[0,3], 2:[0,3], 3:[1,2]}\nprint(bfs(graph, 0))  # [0, 1, 2, 3]"},
+{name:"Sliding Window Maximum (Monotonic Deque)",theory:["Find maximum in every window of size k using a decreasing deque.","Deque stores indices; front is always the current window max.","Remove elements out of window from front; remove smaller from back."],tc:"O(n)",sc:"O(k)",code:"from collections import deque\n\ndef max_sliding_window(nums, k):\n    dq = deque()  # stores indices\n    result = []\n    for i in range(len(nums)):\n        # Remove indices out of window\n        while dq and dq[0] < i - k + 1:\n            dq.popleft()\n        # Remove smaller elements from back\n        while dq and nums[dq[-1]] < nums[i]:\n            dq.pop()\n        dq.append(i)\n        if i >= k - 1:\n            result.append(nums[dq[0]])\n    return result\n\nprint(max_sliding_window([1,3,-1,-3,5,3,6,7], 3))"}
+],
+examples:[
+{title:"Implement Queue using Stacks",desc:"Implement a FIFO queue using only two stacks.",approach:"Use two stacks: input stack for push, output stack for pop. When output is empty, transfer all from input to output (reversing order). Amortized O(1) per operation.",tc:"O(1) amortized",sc:"O(n)",code:"class MyQueue:\n    def __init__(self):\n        self.in_stack = []\n        self.out_stack = []\n    \n    def push(self, x):\n        self.in_stack.append(x)\n    \n    def pop(self):\n        self._transfer()\n        return self.out_stack.pop()\n    \n    def peek(self):\n        self._transfer()\n        return self.out_stack[-1]\n    \n    def _transfer(self):\n        if not self.out_stack:\n            while self.in_stack:\n                self.out_stack.append(self.in_stack.pop())"},
+{title:"Sliding Window Maximum",desc:"Given array and window size k, return max element in each window position.",approach:"Use monotonic decreasing deque storing indices. Front always has the index of max in current window. Remove out-of-range indices from front, smaller elements from back.",tc:"O(n)",sc:"O(k)",code:"from collections import deque\n\ndef max_sliding_window(nums, k):\n    dq = deque()\n    result = []\n    for i in range(len(nums)):\n        while dq and dq[0] < i - k + 1:\n            dq.popleft()\n        while dq and nums[dq[-1]] < nums[i]:\n            dq.pop()\n        dq.append(i)\n        if i >= k - 1:\n            result.append(nums[dq[0]])\n    return result"},
+{title:"Rotten Oranges (Multi-source BFS)",desc:"In a grid, rotten oranges spread to adjacent fresh oranges each minute. Find minimum time to rot all.",approach:"Start BFS from all initially rotten oranges simultaneously (multi-source). Each level of BFS represents one minute. Count remaining fresh oranges at end.",tc:"O(m*n)",sc:"O(m*n)",code:"from collections import deque\n\ndef oranges_rotting(grid):\n    rows, cols = len(grid), len(grid[0])\n    queue = deque()\n    fresh = 0\n    for r in range(rows):\n        for c in range(cols):\n            if grid[r][c] == 2:\n                queue.append((r, c, 0))\n            elif grid[r][c] == 1:\n                fresh += 1\n    time = 0\n    for dr, dc in [(0,1),(0,-1),(1,0),(-1,0)]:\n        pass  # defined in loop\n    while queue:\n        r, c, t = queue.popleft()\n        time = max(time, t)\n        for dr, dc in [(0,1),(0,-1),(1,0),(-1,0)]:\n            nr, nc = r+dr, c+dc\n            if 0<=nr<rows and 0<=nc<cols and grid[nr][nc]==1:\n                grid[nr][nc] = 2\n                fresh -= 1\n                queue.append((nr, nc, t+1))\n    return time if fresh == 0 else -1"}
+],
+practice:[
+{q:"Implement a queue using a list (enqueue, dequeue, peek).",d:"E",approach:"Use deque for O(1) operations"},
+{q:"Reverse the first k elements of a queue.",d:"E",approach:"Use stack for first k, then re-enqueue"},
+{q:"Generate binary numbers from 1 to N using a queue.",d:"E",approach:"BFS-style: start '1', append '0' and '1'"},
+{q:"Implement a circular queue with fixed size.",d:"E",approach:"Array with front/rear pointers and modulo"},
+{q:"Implement queue using two stacks.",d:"E",approach:"Input stack + output stack with lazy transfer"},
+{q:"Check if queue can be sorted into another queue using a stack.",d:"E",approach:"Simulate with stack as intermediate"},
+{q:"Find the first non-repeating character in a stream.",d:"E",approach:"Queue + frequency map"},
+{q:"Design a hit counter (hits in last 5 minutes).",d:"M",approach:"Queue of timestamps, remove old entries"},
+{q:"Sliding window maximum of size k.",d:"M",approach:"Monotonic decreasing deque"},
+{q:"Rotten oranges - minimum time to rot all (grid BFS).",d:"M",approach:"Multi-source BFS from all rotten"},
+{q:"Number of islands using BFS.",d:"M",approach:"BFS from each unvisited land cell"},
+{q:"Task scheduler with cooldown period.",d:"M",approach:"Priority queue + cooldown queue"},
+{q:"Shortest path in binary maze.",d:"M",approach:"BFS from source to destination"},
+{q:"Design a moving average from data stream.",d:"M",approach:"Queue maintaining window of size k"},
+{q:"Walls and Gates - fill distance to nearest gate.",d:"M",approach:"Multi-source BFS from all gates"},
+{q:"Shortest transformation sequence (Word Ladder).",d:"H",approach:"BFS with single char changes"},
+{q:"Design Snake Game using deque.",d:"H",approach:"Deque for snake body positions"},
+{q:"Sliding window median.",d:"H",approach:"Two heaps or sorted list"},
+{q:"Maximum of all subarrays of every size from 1 to n.",d:"H",approach:"Nested sliding window approach"},
+{q:"Shortest path visiting all nodes (BFS + bitmask).",d:"H",approach:"BFS with state = (node, visited_mask)"}
+]},
+
+{id:5,title:"Trees",color:"#f472b6",section:"Data Structures",chips:["Binary Tree","BST","Traversals","Height","LCA"],
+subtopics:[
+{name:"Binary Tree Basics",theory:["Each node has at most two children (left and right).","Full binary tree: every node has 0 or 2 children; Complete: all levels filled except possibly last.","n nodes → height ranges from log(n) (balanced) to n-1 (skewed)."],tc:"O(n) traversal",sc:"O(h) where h = height",code:"class TreeNode:\n    def __init__(self, val=0, left=None, right=None):\n        self.val = val\n        self.left = left\n        self.right = right\n\n# Build a simple tree\nroot = TreeNode(1)\nroot.left = TreeNode(2)\nroot.right = TreeNode(3)\nroot.left.left = TreeNode(4)\nroot.left.right = TreeNode(5)"},
+{name:"BST Operations",theory:["BST property: left subtree values < node < right subtree values.","Search, insert, delete are O(log n) average, O(n) worst (skewed).","Inorder traversal of BST gives sorted sequence."],tc:"O(log n) avg search/insert, O(n) worst",sc:"O(h)",code:"def search_bst(root, target):\n    if not root or root.val == target:\n        return root\n    if target < root.val:\n        return search_bst(root.left, target)\n    return search_bst(root.right, target)\n\ndef insert_bst(root, val):\n    if not root:\n        return TreeNode(val)\n    if val < root.val:\n        root.left = insert_bst(root.left, val)\n    else:\n        root.right = insert_bst(root.right, val)\n    return root"},
+{name:"Traversals (Inorder/Preorder/Postorder)",theory:["Inorder (Left-Root-Right): gives sorted order for BST.","Preorder (Root-Left-Right): used for serialization and copying trees.","Postorder (Left-Right-Root): used for deletion and expression evaluation."],tc:"O(n)",sc:"O(h) recursive stack",code:"def inorder(root):\n    if not root: return []\n    return inorder(root.left) + [root.val] + inorder(root.right)\n\ndef preorder(root):\n    if not root: return []\n    return [root.val] + preorder(root.left) + preorder(root.right)\n\ndef postorder(root):\n    if not root: return []\n    return postorder(root.left) + postorder(root.right) + [root.val]\n\n# Iterative Inorder using stack\ndef inorder_iterative(root):\n    result, stack = [], []\n    curr = root\n    while curr or stack:\n        while curr:\n            stack.append(curr)\n            curr = curr.left\n        curr = stack.pop()\n        result.append(curr.val)\n        curr = curr.right\n    return result"},
+{name:"Level Order Traversal (BFS)",theory:["Visit nodes level by level using a queue.","Process all nodes at current level before moving to next.","Useful for finding width, rightmost view, and zigzag traversal."],tc:"O(n)",sc:"O(w) where w = max width",code:"from collections import deque\n\ndef level_order(root):\n    if not root: return []\n    result = []\n    queue = deque([root])\n    while queue:\n        level = []\n        for _ in range(len(queue)):\n            node = queue.popleft()\n            level.append(node.val)\n            if node.left: queue.append(node.left)\n            if node.right: queue.append(node.right)\n        result.append(level)\n    return result"},
+{name:"Height & Depth Calculation",theory:["Height of node: longest path from node to any leaf (bottom-up).","Depth of node: number of edges from root to that node (top-down).","Height of tree = height of root node; empty tree has height -1 or 0 (convention)."],tc:"O(n)",sc:"O(h)",code:"def height(root):\n    if not root:\n        return 0\n    return 1 + max(height(root.left), height(root.right))\n\ndef max_depth(root):\n    if not root:\n        return 0\n    return 1 + max(max_depth(root.left), max_depth(root.right))\n\ndef diameter(root):\n    result = [0]\n    def dfs(node):\n        if not node: return 0\n        left = dfs(node.left)\n        right = dfs(node.right)\n        result[0] = max(result[0], left + right)\n        return 1 + max(left, right)\n    dfs(root)\n    return result[0]"},
+{name:"Lowest Common Ancestor (LCA)",theory:["LCA is the deepest node that is ancestor of both given nodes.","If one node is in left subtree and other in right, current node is LCA.","For BST: if both values < node go left; both > node go right; else current is LCA."],tc:"O(n) general tree, O(h) BST",sc:"O(h)",code:"def lca(root, p, q):\n    if not root or root == p or root == q:\n        return root\n    left = lca(root.left, p, q)\n    right = lca(root.right, p, q)\n    if left and right:\n        return root\n    return left or right\n\n# LCA for BST (optimized)\ndef lca_bst(root, p, q):\n    while root:\n        if p.val < root.val and q.val < root.val:\n            root = root.left\n        elif p.val > root.val and q.val > root.val:\n            root = root.right\n        else:\n            return root"},
+{name:"Balanced Binary Tree Check",theory:["A tree is balanced if height difference of left and right subtrees <= 1 for every node.","Check recursively: compute height and balance status simultaneously.","AVL trees maintain this property with rotations after insertions/deletions."],tc:"O(n)",sc:"O(h)",code:"def is_balanced(root):\n    def check(node):\n        if not node:\n            return 0\n        left = check(node.left)\n        right = check(node.right)\n        if left == -1 or right == -1 or abs(left - right) > 1:\n            return -1\n        return 1 + max(left, right)\n    return check(root) != -1"}
+],
+examples:[
+{title:"Maximum Depth of Binary Tree",desc:"Find the maximum depth (number of nodes on longest path from root to leaf).",approach:"Recursively compute depth of left and right subtrees. The max depth is 1 + max(left_depth, right_depth). Base case: null node returns 0.",tc:"O(n)",sc:"O(h)",code:"def max_depth(root):\n    if not root:\n        return 0\n    return 1 + max(max_depth(root.left), max_depth(root.right))"},
+{title:"Validate Binary Search Tree",desc:"Determine if a binary tree is a valid BST.",approach:"Pass valid range (min, max) to each node. Root starts with (-inf, inf). Left child range is (min, parent.val), right is (parent.val, max). Any violation means invalid.",tc:"O(n)",sc:"O(h)",code:"def is_valid_bst(root, lo=float('-inf'), hi=float('inf')):\n    if not root:\n        return True\n    if root.val <= lo or root.val >= hi:\n        return False\n    return (is_valid_bst(root.left, lo, root.val) and\n            is_valid_bst(root.right, root.val, hi))"},
+{title:"Lowest Common Ancestor",desc:"Find LCA of two nodes p and q in a binary tree.",approach:"If current node is p or q, return it. Recurse left and right. If both return non-null, current node is LCA. Otherwise return the non-null child result.",tc:"O(n)",sc:"O(h)",code:"def lowest_common_ancestor(root, p, q):\n    if not root or root == p or root == q:\n        return root\n    left = lowest_common_ancestor(root.left, p, q)\n    right = lowest_common_ancestor(root.right, p, q)\n    if left and right:\n        return root\n    return left or right"}
+],
+practice:[
+{q:"Find the maximum depth of a binary tree.",d:"E",approach:"Recursive DFS returning 1 + max(left, right)"},
+{q:"Check if two trees are identical (same structure and values).",d:"E",approach:"Recursive comparison of root, left, right"},
+{q:"Invert a binary tree (mirror).",d:"E",approach:"Swap left and right children recursively"},
+{q:"Check if tree is symmetric (mirror of itself).",d:"E",approach:"Compare left subtree with mirror of right"},
+{q:"Find path sum: root-to-leaf path equals target.",d:"E",approach:"DFS subtracting node value from target"},
+{q:"Count leaf nodes in a binary tree.",d:"E",approach:"DFS counting nodes with no children"},
+{q:"Level order traversal of binary tree.",d:"E",approach:"BFS with queue, process level by level"},
+{q:"Validate if a binary tree is a valid BST.",d:"M",approach:"Recursive with (min, max) range check"},
+{q:"Find diameter of binary tree (longest path between any two nodes).",d:"M",approach:"DFS tracking left_height + right_height"},
+{q:"Construct binary tree from preorder and inorder traversal.",d:"M",approach:"Root from preorder, split using inorder position"},
+{q:"Zigzag level order traversal.",d:"M",approach:"BFS alternating left-to-right and right-to-left"},
+{q:"Find right side view of binary tree.",d:"M",approach:"BFS taking last element of each level"},
+{q:"Lowest Common Ancestor in binary tree.",d:"M",approach:"Recursive LCA with left/right search"},
+{q:"Kth smallest element in BST.",d:"M",approach:"Inorder traversal stopping at kth element"},
+{q:"Flatten binary tree to linked list (preorder).",d:"M",approach:"Morris traversal or reverse postorder"},
+{q:"Serialize and deserialize a binary tree.",d:"H",approach:"Preorder with null markers, deque for deserialize"},
+{q:"Binary tree maximum path sum (any path).",d:"H",approach:"DFS returning max gain, tracking global max"},
+{q:"Vertical order traversal of binary tree.",d:"H",approach:"BFS with column index, sort by col then row"},
+{q:"Count complete tree nodes in O(log^2 n).",d:"H",approach:"Binary search on last level using height comparison"},
+{q:"Recover BST with two swapped nodes.",d:"H",approach:"Inorder traversal finding two violations"}
+]},
+
+{id:6,title:"Heaps",color:"#22d3ee",section:"Data Structures",chips:["Min/Max Heap","heapq","Kth Largest","Top K"],
+subtopics:[
+{name:"Min Heap & Max Heap",theory:["Min heap: parent <= children; root is minimum element.","Max heap: parent >= children; root is maximum element.","Complete binary tree stored in array: children of i at 2i+1 and 2i+2."],tc:"O(log n) insert, O(1) peek, O(log n) extract",sc:"O(n)",code:"import heapq\n\n# Min Heap (default in Python)\nmin_heap = []\nheapq.heappush(min_heap, 5)\nheapq.heappush(min_heap, 2)\nheapq.heappush(min_heap, 8)\nprint(min_heap[0])  # Peek min: 2\nheapq.heappop(min_heap)  # Extract min: 2\n\n# Max Heap (negate values)\nmax_heap = []\nheapq.heappush(max_heap, -5)\nheapq.heappush(max_heap, -2)\nheapq.heappush(max_heap, -8)\nprint(-max_heap[0])  # Peek max: 8"},
+{name:"heapq Module in Python",theory:["heapq provides functions for min-heap operations on regular lists.","heapify() converts list to heap in O(n); heappush/heappop are O(log n).","nlargest(k, iterable) and nsmallest(k, iterable) for quick top-k queries."],tc:"O(n) heapify, O(log n) push/pop",sc:"O(n)",code:"import heapq\n\n# Heapify existing list\narr = [5, 3, 8, 1, 2, 7]\nheapq.heapify(arr)  # O(n) - arr is now a valid min-heap\n\n# Push and pop combined (more efficient)\nheapq.heappushpop(arr, 4)  # Push 4, then pop smallest\nheapq.heapreplace(arr, 6)  # Pop smallest, then push 6\n\n# Top K elements\nnums = [3, 1, 4, 1, 5, 9, 2, 6]\nprint(heapq.nlargest(3, nums))   # [9, 6, 5]\nprint(heapq.nsmallest(3, nums))  # [1, 1, 2]"},
+{name:"Kth Largest Element",theory:["Maintain min-heap of size k; root is the kth largest.","Push elements; if heap size > k, pop (removes smallest, keeps k largest).","Final root is kth largest. Alternative: QuickSelect for O(n) average."],tc:"O(n log k)",sc:"O(k)",code:"import heapq\n\ndef find_kth_largest(nums, k):\n    # Min heap of size k\n    heap = []\n    for num in nums:\n        heapq.heappush(heap, num)\n        if len(heap) > k:\n            heapq.heappop(heap)\n    return heap[0]  # Root is kth largest\n\nprint(find_kth_largest([3,2,1,5,6,4], 2))  # 5\n\n# Alternative: using nlargest\nimport heapq\ndef kth_largest_alt(nums, k):\n    return heapq.nlargest(k, nums)[-1]"},
+{name:"Top K Frequent Elements",theory:["Count frequency, then find k elements with highest frequency.","Heap approach: maintain min-heap of size k on frequency.","Bucket sort approach: O(n) using frequency as index."],tc:"O(n log k) heap, O(n) bucket sort",sc:"O(n)",code:"import heapq\nfrom collections import Counter\n\ndef top_k_frequent(nums, k):\n    count = Counter(nums)\n    # Use min-heap of size k\n    return heapq.nlargest(k, count.keys(), key=count.get)\n\n# Bucket sort approach - O(n)\ndef top_k_frequent_bucket(nums, k):\n    count = Counter(nums)\n    buckets = [[] for _ in range(len(nums) + 1)]\n    for num, freq in count.items():\n        buckets[freq].append(num)\n    result = []\n    for i in range(len(buckets)-1, -1, -1):\n        for num in buckets[i]:\n            result.append(num)\n            if len(result) == k:\n                return result\n    return result"},
+{name:"Merge K Sorted Lists",theory:["Use min-heap to always pick the smallest head among k lists.","Push first element of each list; pop min, push its next element.","Heap size is always at most k, making each operation O(log k)."],tc:"O(n log k) where n = total elements",sc:"O(k)",code:"import heapq\n\ndef merge_k_lists(lists):\n    heap = []\n    for i, lst in enumerate(lists):\n        if lst:\n            heapq.heappush(heap, (lst[0], i, 0))\n    \n    result = []\n    while heap:\n        val, list_idx, elem_idx = heapq.heappop(heap)\n        result.append(val)\n        if elem_idx + 1 < len(lists[list_idx]):\n            next_val = lists[list_idx][elem_idx + 1]\n            heapq.heappush(heap, (next_val, list_idx, elem_idx + 1))\n    return result\n\nprint(merge_k_lists([[1,4,5],[1,3,4],[2,6]]))  # [1,1,2,3,4,4,5,6]"},
+{name:"Heap Sort",theory:["Build max-heap, then repeatedly extract max and place at end.","In-place sorting with O(n log n) time guaranteed (no worst case like quicksort).","Not stable; cache-unfriendly compared to quicksort in practice."],tc:"O(n log n)",sc:"O(1) in-place",code:"def heap_sort(arr):\n    def heapify(arr, n, i):\n        largest = i\n        left, right = 2*i+1, 2*i+2\n        if left < n and arr[left] > arr[largest]:\n            largest = left\n        if right < n and arr[right] > arr[largest]:\n            largest = right\n        if largest != i:\n            arr[i], arr[largest] = arr[largest], arr[i]\n            heapify(arr, n, largest)\n    \n    n = len(arr)\n    # Build max heap\n    for i in range(n//2 - 1, -1, -1):\n        heapify(arr, n, i)\n    # Extract elements\n    for i in range(n-1, 0, -1):\n        arr[0], arr[i] = arr[i], arr[0]\n        heapify(arr, i, 0)\n    return arr\n\nprint(heap_sort([12, 11, 13, 5, 6, 7]))"}
+],
+examples:[
+{title:"Kth Largest Element in Array",desc:"Find the kth largest element in an unsorted array.",approach:"Maintain a min-heap of size k. After processing all elements, the heap root is the kth largest. This avoids sorting the entire array.",tc:"O(n log k)",sc:"O(k)",code:"import heapq\n\ndef find_kth_largest(nums, k):\n    heap = nums[:k]\n    heapq.heapify(heap)\n    for num in nums[k:]:\n        if num > heap[0]:\n            heapq.heapreplace(heap, num)\n    return heap[0]\n\nprint(find_kth_largest([3,2,3,1,2,4,5,5,6], 4))  # 4"},
+{title:"Top K Frequent Elements",desc:"Given integer array, return the k most frequent elements.",approach:"Count frequencies with Counter. Use a min-heap of size k keyed by frequency. Elements remaining in heap are the top k frequent ones.",tc:"O(n log k)",sc:"O(n)",code:"from collections import Counter\nimport heapq\n\ndef top_k_frequent(nums, k):\n    count = Counter(nums)\n    return heapq.nlargest(k, count.keys(), key=count.get)\n\nprint(top_k_frequent([1,1,1,2,2,3], 2))  # [1, 2]"},
+{title:"Find Median from Data Stream",desc:"Design a data structure that supports addNum and findMedian operations.",approach:"Use two heaps: max-heap for lower half, min-heap for upper half. Balance sizes so they differ by at most 1. Median is from the larger heap or average of both tops.",tc:"O(log n) add, O(1) find median",sc:"O(n)",code:"import heapq\n\nclass MedianFinder:\n    def __init__(self):\n        self.lo = []  # max-heap (negated)\n        self.hi = []  # min-heap\n    \n    def addNum(self, num):\n        heapq.heappush(self.lo, -num)\n        heapq.heappush(self.hi, -heapq.heappop(self.lo))\n        if len(self.hi) > len(self.lo):\n            heapq.heappush(self.lo, -heapq.heappop(self.hi))\n    \n    def findMedian(self):\n        if len(self.lo) > len(self.hi):\n            return -self.lo[0]\n        return (-self.lo[0] + self.hi[0]) / 2"}
+],
+practice:[
+{q:"Find kth smallest element in an array.",d:"E",approach:"Max-heap of size k or min-heap all + pop k times"},
+{q:"Sort an almost sorted array (each element at most k positions away).",d:"E",approach:"Min-heap of size k+1"},
+{q:"Find the last stone weight (simulate stone smashing).",d:"E",approach:"Max-heap, repeatedly pop two largest"},
+{q:"Check if array is a valid min-heap.",d:"E",approach:"Verify parent <= children for all nodes"},
+{q:"Merge two sorted arrays using a heap.",d:"E",approach:"Min-heap with (value, array_index, elem_index)"},
+{q:"Find K closest points to origin.",d:"E",approach:"Max-heap of size k on distance"},
+{q:"Kth largest element in a stream.",d:"E",approach:"Min-heap of size k, insert and maintain"},
+{q:"Top K frequent elements.",d:"M",approach:"Counter + min-heap of size k by frequency"},
+{q:"Sort characters by frequency.",d:"M",approach:"Counter + max-heap"},
+{q:"Task scheduler with cooldown (minimum intervals).",d:"M",approach:"Max-heap + cooldown queue"},
+{q:"Find K pairs with smallest sums from two sorted arrays.",d:"M",approach:"Min-heap of (sum, i, j), expand neighbors"},
+{q:"Reorganize string so no two adjacent are same.",d:"M",approach:"Max-heap by frequency, alternate placement"},
+{q:"Ugly Number II (nth number with factors 2,3,5 only).",d:"M",approach:"Min-heap generating candidates"},
+{q:"Furthest building you can reach (ladders and bricks).",d:"M",approach:"Min-heap tracking where ladders are used"},
+{q:"Minimum cost to connect sticks.",d:"M",approach:"Min-heap, always merge two smallest"},
+{q:"Find median from data stream.",d:"H",approach:"Two heaps: max-heap lower, min-heap upper"},
+{q:"Merge K sorted linked lists.",d:"H",approach:"Min-heap of k list heads"},
+{q:"Smallest range covering elements from K lists.",d:"H",approach:"Min-heap + track max, minimize range"},
+{q:"IPO - maximize capital (k projects from profits/capital).",d:"H",approach:"Min-heap by capital + max-heap by profit"},
+{q:"Trapping rain water II (3D).",d:"H",approach:"Min-heap BFS from borders inward"}
+]},
+
+{id:7,title:"Graphs",color:"#fb923c",section:"Data Structures",chips:["BFS","DFS","Cycle Detection","Topological Sort","Dijkstra"],
+subtopics:[
+{name:"Graph Representation (Adjacency List/Matrix)",theory:["Adjacency list: dict mapping node → list of neighbors; space O(V+E).","Adjacency matrix: 2D array; space O(V²); O(1) edge lookup but memory heavy.","List is preferred for sparse graphs; matrix for dense or when checking edge existence."],tc:"List: O(V+E) space, Matrix: O(V²) space",sc:"Depends on representation",code:"# Adjacency List\ngraph = {\n    'A': ['B', 'C'],\n    'B': ['A', 'D'],\n    'C': ['A', 'D'],\n    'D': ['B', 'C']\n}\n\n# Using defaultdict\nfrom collections import defaultdict\ng = defaultdict(list)\nedges = [(0,1),(0,2),(1,3),(2,3)]\nfor u, v in edges:\n    g[u].append(v)\n    g[v].append(u)  # undirected\n\n# Adjacency Matrix\nn = 4\nmatrix = [[0]*n for _ in range(n)]\nmatrix[0][1] = matrix[1][0] = 1  # edge 0-1"},
+{name:"BFS (Breadth-First Search)",theory:["Explores all nodes at current depth before moving to next depth.","Uses queue; guarantees shortest path in unweighted graphs.","Time O(V+E); marks nodes visited before enqueuing to avoid revisits."],tc:"O(V + E)",sc:"O(V)",code:"from collections import deque\n\ndef bfs(graph, start):\n    visited = set([start])\n    queue = deque([start])\n    order = []\n    while queue:\n        node = queue.popleft()\n        order.append(node)\n        for neighbor in graph[node]:\n            if neighbor not in visited:\n                visited.add(neighbor)\n                queue.append(neighbor)\n    return order\n\n# BFS shortest path\ndef shortest_path(graph, start, end):\n    queue = deque([(start, [start])])\n    visited = set([start])\n    while queue:\n        node, path = queue.popleft()\n        if node == end:\n            return path\n        for nb in graph[node]:\n            if nb not in visited:\n                visited.add(nb)\n                queue.append((nb, path + [nb]))\n    return None"},
+{name:"DFS (Depth-First Search)",theory:["Explores as deep as possible before backtracking.","Uses recursion (call stack) or explicit stack.","Used for: connected components, cycle detection, topological sort, path finding."],tc:"O(V + E)",sc:"O(V)",code:"# Recursive DFS\ndef dfs(graph, node, visited=None):\n    if visited is None:\n        visited = set()\n    visited.add(node)\n    result = [node]\n    for neighbor in graph[node]:\n        if neighbor not in visited:\n            result.extend(dfs(graph, neighbor, visited))\n    return result\n\n# Iterative DFS\ndef dfs_iterative(graph, start):\n    visited = set()\n    stack = [start]\n    order = []\n    while stack:\n        node = stack.pop()\n        if node not in visited:\n            visited.add(node)\n            order.append(node)\n            for nb in graph[node]:\n                if nb not in visited:\n                    stack.append(nb)\n    return order"},
+{name:"Connected Components",theory:["A connected component is a maximal set of nodes where every pair has a path.","Find all components: iterate nodes, run DFS/BFS from each unvisited node.","Number of components = number of times DFS/BFS is initiated."],tc:"O(V + E)",sc:"O(V)",code:"def count_components(n, edges):\n    graph = defaultdict(list)\n    for u, v in edges:\n        graph[u].append(v)\n        graph[v].append(u)\n    \n    visited = set()\n    count = 0\n    \n    def dfs(node):\n        visited.add(node)\n        for nb in graph[node]:\n            if nb not in visited:\n                dfs(nb)\n    \n    for i in range(n):\n        if i not in visited:\n            dfs(i)\n            count += 1\n    return count"},
+{name:"Cycle Detection (Directed & Undirected)",theory:["Undirected: DFS detects back edge to visited node (not parent) → cycle.","Directed: use coloring (white/gray/black); back edge to gray node → cycle.","Can also use Union-Find for undirected cycle detection."],tc:"O(V + E)",sc:"O(V)",code:"# Undirected cycle detection\ndef has_cycle_undirected(graph, n):\n    visited = set()\n    def dfs(node, parent):\n        visited.add(node)\n        for nb in graph[node]:\n            if nb not in visited:\n                if dfs(nb, node):\n                    return True\n            elif nb != parent:\n                return True\n        return False\n    for i in range(n):\n        if i not in visited:\n            if dfs(i, -1):\n                return True\n    return False\n\n# Directed cycle detection\ndef has_cycle_directed(graph, n):\n    WHITE, GRAY, BLACK = 0, 1, 2\n    color = [WHITE] * n\n    def dfs(node):\n        color[node] = GRAY\n        for nb in graph[node]:\n            if color[nb] == GRAY:\n                return True\n            if color[nb] == WHITE and dfs(nb):\n                return True\n        color[node] = BLACK\n        return False\n    return any(color[i]==WHITE and dfs(i) for i in range(n))"},
+{name:"Topological Sort (Kahn's Algorithm)",theory:["Linear ordering of DAG nodes where u comes before v for every edge u→v.","Kahn's: start with 0 in-degree nodes, remove them and reduce neighbors' in-degree.","Also solvable with DFS (reverse postorder). Only exists for DAGs."],tc:"O(V + E)",sc:"O(V)",code:"from collections import deque\n\ndef topological_sort(n, edges):\n    graph = defaultdict(list)\n    in_degree = [0] * n\n    for u, v in edges:\n        graph[u].append(v)\n        in_degree[v] += 1\n    \n    queue = deque([i for i in range(n) if in_degree[i] == 0])\n    order = []\n    while queue:\n        node = queue.popleft()\n        order.append(node)\n        for nb in graph[node]:\n            in_degree[nb] -= 1\n            if in_degree[nb] == 0:\n                queue.append(nb)\n    return order if len(order) == n else []  # empty if cycle"},
+{name:"Shortest Path (Dijkstra)",theory:["Dijkstra finds shortest path from source to all nodes in weighted graph (non-negative weights).","Uses priority queue (min-heap); greedily picks closest unfinalized node.","Does NOT work with negative weights; use Bellman-Ford for that."],tc:"O((V + E) log V)",sc:"O(V)",code:"import heapq\n\ndef dijkstra(graph, start):\n    dist = {node: float('inf') for node in graph}\n    dist[start] = 0\n    heap = [(0, start)]\n    \n    while heap:\n        d, u = heapq.heappop(heap)\n        if d > dist[u]:\n            continue\n        for v, weight in graph[u]:\n            if dist[u] + weight < dist[v]:\n                dist[v] = dist[u] + weight\n                heapq.heappush(heap, (dist[v], v))\n    return dist\n\n# Example\ngraph = {\n    'A': [('B',1),('C',4)],\n    'B': [('C',2),('D',5)],\n    'C': [('D',1)],\n    'D': []\n}\nprint(dijkstra(graph, 'A'))"}
+],
+examples:[
+{title:"Number of Islands",desc:"Given a 2D grid of '1's (land) and '0's (water), count the number of islands.",approach:"Iterate through grid. For each unvisited '1', run DFS/BFS to mark all connected land cells as visited. Each initiation of DFS counts as one island.",tc:"O(m * n)",sc:"O(m * n)",code:"def num_islands(grid):\n    if not grid: return 0\n    rows, cols = len(grid), len(grid[0])\n    count = 0\n    \n    def dfs(r, c):\n        if r<0 or r>=rows or c<0 or c>=cols or grid[r][c]!='1':\n            return\n        grid[r][c] = '0'  # mark visited\n        dfs(r+1,c); dfs(r-1,c); dfs(r,c+1); dfs(r,c-1)\n    \n    for r in range(rows):\n        for c in range(cols):\n            if grid[r][c] == '1':\n                dfs(r, c)\n                count += 1\n    return count"},
+{title:"Course Schedule (Cycle Detection)",desc:"Given n courses and prerequisites, determine if you can finish all courses (detect cycle in directed graph).",approach:"Build directed graph. Use topological sort (Kahn's algorithm). If the sorted order includes all nodes, no cycle exists (can finish). Otherwise, there's a circular dependency.",tc:"O(V + E)",sc:"O(V + E)",code:"from collections import deque, defaultdict\n\ndef can_finish(n, prerequisites):\n    graph = defaultdict(list)\n    in_degree = [0] * n\n    for course, prereq in prerequisites:\n        graph[prereq].append(course)\n        in_degree[course] += 1\n    \n    queue = deque([i for i in range(n) if in_degree[i]==0])\n    count = 0\n    while queue:\n        node = queue.popleft()\n        count += 1\n        for nb in graph[node]:\n            in_degree[nb] -= 1\n            if in_degree[nb] == 0:\n                queue.append(nb)\n    return count == n"},
+{title:"Dijkstra's Shortest Path",desc:"Find shortest distances from source to all nodes in a weighted graph.",approach:"Use min-heap priority queue. Start from source with distance 0. Greedily explore nearest unfinalized node, relaxing edges to update distances of neighbors.",tc:"O((V + E) log V)",sc:"O(V)",code:"import heapq\n\ndef dijkstra(graph, src, n):\n    dist = [float('inf')] * n\n    dist[src] = 0\n    heap = [(0, src)]\n    while heap:\n        d, u = heapq.heappop(heap)\n        if d > dist[u]: continue\n        for v, w in graph[u]:\n            if dist[u] + w < dist[v]:\n                dist[v] = dist[u] + w\n                heapq.heappush(heap, (dist[v], v))\n    return dist"}
+],
+practice:[
+{q:"Implement BFS traversal of a graph.",d:"E",approach:"Queue + visited set"},
+{q:"Implement DFS traversal (recursive and iterative).",d:"E",approach:"Recursion or explicit stack"},
+{q:"Count connected components in undirected graph.",d:"E",approach:"DFS/BFS from each unvisited node"},
+{q:"Detect if an undirected graph has a cycle.",d:"E",approach:"DFS checking back edge to non-parent"},
+{q:"Find if path exists between two nodes.",d:"E",approach:"BFS or DFS from source"},
+{q:"Clone a graph (deep copy).",d:"E",approach:"BFS/DFS with hash map old→new"},
+{q:"Check if graph is bipartite (2-colorable).",d:"E",approach:"BFS/DFS with 2-coloring"},
+{q:"Number of islands in a grid.",d:"M",approach:"DFS/BFS marking visited cells"},
+{q:"Course schedule - can finish all courses? (cycle detection).",d:"M",approach:"Topological sort / Kahn's algorithm"},
+{q:"Course schedule II - return valid order.",d:"M",approach:"Topological sort returning the order"},
+{q:"Shortest path in unweighted graph.",d:"M",approach:"BFS from source"},
+{q:"Pacific Atlantic water flow.",d:"M",approach:"DFS/BFS from both oceans, find intersection"},
+{q:"Surrounded regions - capture O's not on border.",d:"M",approach:"DFS from border O's to mark safe"},
+{q:"Minimum height trees (find centroids).",d:"M",approach:"Topological peel leaves layer by layer"},
+{q:"Network delay time (Dijkstra).",d:"M",approach:"Dijkstra from source, return max dist"},
+{q:"Word Ladder - shortest transformation sequence.",d:"H",approach:"BFS with single-char changes"},
+{q:"Alien dictionary - derive letter ordering.",d:"H",approach:"Build graph from word pairs + topological sort"},
+{q:"Cheapest flights within K stops.",d:"H",approach:"Modified Dijkstra/BFS with stop limit"},
+{q:"Strongly connected components (Kosaraju/Tarjan).",d:"H",approach:"Two-pass DFS or Tarjan's algorithm"},
+{q:"Critical connections in a network (bridges).",d:"H",approach:"Tarjan's bridge-finding with DFS timestamps"}
+]},
+
+{id:8,title:"Tries & Advanced DS",color:"#4ade80",section:"Data Structures",chips:["Trie","Union-Find","Segment Tree"],
+subtopics:[
+{name:"Trie (Prefix Tree)",theory:["Tree where each node represents a character; paths from root form words.","Each node has up to 26 children (for lowercase letters) and an is_end flag.","Enables O(m) insert and search where m is word length."],tc:"O(m) insert/search where m = word length",sc:"O(n * m) for n words",code:"class TrieNode:\n    def __init__(self):\n        self.children = {}\n        self.is_end = False\n\nclass Trie:\n    def __init__(self):\n        self.root = TrieNode()\n    \n    def insert(self, word):\n        node = self.root\n        for ch in word:\n            if ch not in node.children:\n                node.children[ch] = TrieNode()\n            node = node.children[ch]\n        node.is_end = True\n    \n    def search(self, word):\n        node = self.root\n        for ch in word:\n            if ch not in node.children:\n                return False\n            node = node.children[ch]\n        return node.is_end\n    \n    def starts_with(self, prefix):\n        node = self.root\n        for ch in prefix:\n            if ch not in node.children:\n                return False\n            node = node.children[ch]\n        return True"},
+{name:"Insert/Search/StartsWith",theory:["Insert traverses/creates nodes for each character, marks last as end.","Search traverses nodes; returns True only if path exists AND is_end is True.","StartsWith (prefix search) just checks if path exists (no is_end check)."],tc:"O(m) per operation",sc:"O(1) per operation (nodes already exist)",code:"# Using the Trie class above\ntrie = Trie()\ntrie.insert('apple')\ntrie.insert('app')\ntrie.insert('application')\n\nprint(trie.search('app'))       # True\nprint(trie.search('ap'))        # False (not a complete word)\nprint(trie.starts_with('ap'))   # True (prefix exists)\nprint(trie.starts_with('b'))    # False\n\n# Count words with prefix\ndef count_prefix(trie, prefix):\n    node = trie.root\n    for ch in prefix:\n        if ch not in node.children:\n            return 0\n        node = node.children[ch]\n    # DFS to count all words under this node\n    count = [0]\n    def dfs(n):\n        if n.is_end: count[0] += 1\n        for child in n.children.values():\n            dfs(child)\n    dfs(node)\n    return count[0]"},
+{name:"Disjoint Set (Union-Find)",theory:["Tracks elements partitioned into non-overlapping sets.","Union: merge two sets; Find: determine which set an element belongs to.","With path compression + union by rank: nearly O(1) per operation (O(alpha(n)))."],tc:"O(alpha(n)) ≈ O(1) amortized per operation",sc:"O(n)",code:"class UnionFind:\n    def __init__(self, n):\n        self.parent = list(range(n))\n        self.rank = [0] * n\n        self.components = n\n    \n    def find(self, x):\n        if self.parent[x] != x:\n            self.parent[x] = self.find(self.parent[x])  # path compression\n        return self.parent[x]\n    \n    def union(self, x, y):\n        px, py = self.find(x), self.find(y)\n        if px == py:\n            return False\n        # Union by rank\n        if self.rank[px] < self.rank[py]:\n            px, py = py, px\n        self.parent[py] = px\n        if self.rank[px] == self.rank[py]:\n            self.rank[px] += 1\n        self.components -= 1\n        return True\n    \n    def connected(self, x, y):\n        return self.find(x) == self.find(y)"},
+{name:"Path Compression & Union by Rank",theory:["Path compression: during find, point every node directly to root.","Union by rank: attach smaller tree under root of larger tree.","Together they achieve inverse Ackermann time complexity, practically O(1)."],tc:"O(alpha(n)) per operation",sc:"O(n)",code:"# Path compression flattens the tree\n# Before: 1 -> 2 -> 3 -> 4 (root)\n# After find(1): 1 -> 4, 2 -> 4, 3 -> 4\n\n# Example: Count connected components\ndef count_components_uf(n, edges):\n    uf = UnionFind(n)\n    for u, v in edges:\n        uf.union(u, v)\n    return uf.components\n\n# Example: Detect cycle in undirected graph\ndef has_cycle_uf(n, edges):\n    uf = UnionFind(n)\n    for u, v in edges:\n        if uf.connected(u, v):\n            return True  # Already connected = back edge = cycle\n        uf.union(u, v)\n    return False"},
+{name:"Segment Tree Basics",theory:["Binary tree for range queries (sum, min, max) with point/range updates.","Build in O(n); query and update in O(log n).","Each node represents a segment (range) of the array; leaves are individual elements."],tc:"O(log n) query/update, O(n) build",sc:"O(n)",code:"class SegmentTree:\n    def __init__(self, nums):\n        self.n = len(nums)\n        self.tree = [0] * (4 * self.n)\n        self._build(nums, 1, 0, self.n - 1)\n    \n    def _build(self, nums, node, start, end):\n        if start == end:\n            self.tree[node] = nums[start]\n            return\n        mid = (start + end) // 2\n        self._build(nums, 2*node, start, mid)\n        self._build(nums, 2*node+1, mid+1, end)\n        self.tree[node] = self.tree[2*node] + self.tree[2*node+1]\n    \n    def update(self, idx, val, node=1, start=0, end=None):\n        if end is None: end = self.n - 1\n        if start == end:\n            self.tree[node] = val\n            return\n        mid = (start + end) // 2\n        if idx <= mid:\n            self.update(idx, val, 2*node, start, mid)\n        else:\n            self.update(idx, val, 2*node+1, mid+1, end)\n        self.tree[node] = self.tree[2*node] + self.tree[2*node+1]\n    \n    def query(self, l, r, node=1, start=0, end=None):\n        if end is None: end = self.n - 1\n        if r < start or end < l:\n            return 0\n        if l <= start and end <= r:\n            return self.tree[node]\n        mid = (start + end) // 2\n        return (self.query(l, r, 2*node, start, mid) +\n                self.query(l, r, 2*node+1, mid+1, end))"}
+],
+examples:[
+{title:"Implement Trie (Prefix Tree)",desc:"Implement a trie with insert, search, and startsWith methods.",approach:"Use a TrieNode class with children dict and is_end flag. Insert creates nodes along the path. Search follows path and checks is_end. StartsWith just checks path existence.",tc:"O(m) per operation",sc:"O(total characters inserted)",code:"class TrieNode:\n    def __init__(self):\n        self.children = {}\n        self.is_end = False\n\nclass Trie:\n    def __init__(self):\n        self.root = TrieNode()\n    \n    def insert(self, word):\n        node = self.root\n        for c in word:\n            if c not in node.children:\n                node.children[c] = TrieNode()\n            node = node.children[c]\n        node.is_end = True\n    \n    def search(self, word):\n        node = self._find(word)\n        return node is not None and node.is_end\n    \n    def startsWith(self, prefix):\n        return self._find(prefix) is not None\n    \n    def _find(self, s):\n        node = self.root\n        for c in s:\n            if c not in node.children: return None\n            node = node.children[c]\n        return node"},
+{title:"Number of Connected Components (Union-Find)",desc:"Given n nodes and list of edges, find number of connected components.",approach:"Initialize Union-Find with n components. For each edge, union the two nodes. If they're already connected, skip. Final component count is the answer.",tc:"O(E * alpha(n)) ≈ O(E)",sc:"O(n)",code:"class UnionFind:\n    def __init__(self, n):\n        self.parent = list(range(n))\n        self.rank = [0] * n\n        self.count = n\n    def find(self, x):\n        if self.parent[x] != x:\n            self.parent[x] = self.find(self.parent[x])\n        return self.parent[x]\n    def union(self, x, y):\n        px, py = self.find(x), self.find(y)\n        if px == py: return\n        if self.rank[px]<self.rank[py]: px,py=py,px\n        self.parent[py] = px\n        if self.rank[px]==self.rank[py]: self.rank[px]+=1\n        self.count -= 1\n\ndef count_components(n, edges):\n    uf = UnionFind(n)\n    for u, v in edges:\n        uf.union(u, v)\n    return uf.count"},
+{title:"Range Sum Query with Updates (Segment Tree)",desc:"Design a structure supporting update(index, val) and sumRange(left, right).",approach:"Build segment tree where each node stores sum of its range. Update propagates from leaf to root in O(log n). Query combines relevant segments in O(log n).",tc:"O(log n) per operation",sc:"O(n)",code:"class NumArray:\n    def __init__(self, nums):\n        self.n = len(nums)\n        self.tree = [0] * (2 * self.n)\n        # Build - put values in leaves\n        for i in range(self.n):\n            self.tree[self.n + i] = nums[i]\n        for i in range(self.n - 1, 0, -1):\n            self.tree[i] = self.tree[2*i] + self.tree[2*i+1]\n    \n    def update(self, i, val):\n        i += self.n\n        self.tree[i] = val\n        while i > 1:\n            i //= 2\n            self.tree[i] = self.tree[2*i] + self.tree[2*i+1]\n    \n    def sum_range(self, l, r):\n        res = 0\n        l += self.n; r += self.n + 1\n        while l < r:\n            if l & 1: res += self.tree[l]; l += 1\n            if r & 1: r -= 1; res += self.tree[r]\n            l >>= 1; r >>= 1\n        return res"}
+],
+practice:[
+{q:"Implement a Trie with insert, search, startsWith.",d:"E",approach:"TrieNode with children dict and is_end flag"},
+{q:"Search for a word in Trie.",d:"E",approach:"Follow path, check is_end at end"},
+{q:"Count words in Trie with given prefix.",d:"E",approach:"Navigate to prefix node, DFS count"},
+{q:"Implement Union-Find with path compression.",d:"E",approach:"Parent array + recursive find with compression"},
+{q:"Find number of connected components using Union-Find.",d:"E",approach:"Union all edges, count distinct roots"},
+{q:"Check if adding an edge creates a cycle (undirected).",d:"E",approach:"Union-Find: if already connected, cycle exists"},
+{q:"Implement basic segment tree for range sum.",d:"E",approach:"Build tree, query and update in O(log n)"},
+{q:"Word search II - find all words from board using Trie.",d:"M",approach:"Trie of words + DFS on board"},
+{q:"Design Add and Search Words (with '.' wildcard).",d:"M",approach:"Trie + DFS for wildcard matching"},
+{q:"Longest word in dictionary (all prefixes exist).",d:"M",approach:"Trie insert all, BFS/DFS for longest valid"},
+{q:"Replace words (shortest root in sentence).",d:"M",approach:"Trie of roots, match each word's shortest prefix"},
+{q:"Accounts merge using Union-Find.",d:"M",approach:"Union emails belonging to same account"},
+{q:"Redundant connection (find extra edge in tree).",d:"M",approach:"Union-Find: edge causing cycle is redundant"},
+{q:"Range sum query - mutable array.",d:"M",approach:"Segment tree or BIT (Fenwick tree)"},
+{q:"Number of provinces (connected components in matrix).",d:"M",approach:"Union-Find or DFS on adjacency matrix"},
+{q:"Word Squares using Trie.",d:"H",approach:"Trie prefix lookup + backtracking"},
+{q:"Stream of characters (match suffix in stream).",d:"H",approach:"Reverse Trie or suffix-based approach"},
+{q:"Count of smaller numbers after self.",d:"H",approach:"Segment tree or merge sort"},
+{q:"Falling squares (segment tree with lazy propagation).",d:"H",approach:"Coordinate compression + segment tree"},
+{q:"Swim in rising water (Union-Find + sort).",d:"H",approach:"Sort cells by height, union neighbors"}
+]},
+
+{id:9,title:"Sorting Algorithms",color:"#60a5fa",section:"Algorithms",chips:["Bubble","Selection","Merge","Quick","Counting"],
+subtopics:[
+{name:"Bubble Sort",theory:["Repeatedly swap adjacent elements if they're in wrong order.","After each pass, the largest unsorted element bubbles to its correct position.","Best case O(n) when array is already sorted (with optimization flag)."],tc:"O(n²) avg/worst, O(n) best",sc:"O(1)",code:"def bubble_sort(arr):\n    n = len(arr)\n    for i in range(n):\n        swapped = False\n        for j in range(n - 1 - i):\n            if arr[j] > arr[j+1]:\n                arr[j], arr[j+1] = arr[j+1], arr[j]\n                swapped = True\n        if not swapped:\n            break  # Already sorted\n    return arr\n\nprint(bubble_sort([64, 34, 25, 12, 22, 11, 90]))"},
+{name:"Selection Sort",theory:["Find minimum element in unsorted portion, swap it to front of unsorted section.","Makes at most n-1 swaps; useful when write operations are expensive.","Always O(n²) regardless of input order (no best case optimization)."],tc:"O(n²)",sc:"O(1)",code:"def selection_sort(arr):\n    n = len(arr)\n    for i in range(n):\n        min_idx = i\n        for j in range(i+1, n):\n            if arr[j] < arr[min_idx]:\n                min_idx = j\n        arr[i], arr[min_idx] = arr[min_idx], arr[i]\n    return arr\n\nprint(selection_sort([64, 25, 12, 22, 11]))"},
+{name:"Insertion Sort",theory:["Build sorted array one element at a time, inserting each into correct position.","Efficient for small arrays and nearly sorted data (O(n) best case).","Stable sort; used as base case in hybrid sorts like Timsort."],tc:"O(n²) avg/worst, O(n) best",sc:"O(1)",code:"def insertion_sort(arr):\n    for i in range(1, len(arr)):\n        key = arr[i]\n        j = i - 1\n        while j >= 0 and arr[j] > key:\n            arr[j+1] = arr[j]\n            j -= 1\n        arr[j+1] = key\n    return arr\n\nprint(insertion_sort([12, 11, 13, 5, 6]))"},
+{name:"Merge Sort",theory:["Divide array in half recursively, then merge sorted halves.","Guaranteed O(n log n) in all cases; stable sort.","Requires O(n) extra space for merging; good for linked lists (no extra space needed)."],tc:"O(n log n)",sc:"O(n)",code:"def merge_sort(arr):\n    if len(arr) <= 1:\n        return arr\n    mid = len(arr) // 2\n    left = merge_sort(arr[:mid])\n    right = merge_sort(arr[mid:])\n    return merge(left, right)\n\ndef merge(left, right):\n    result = []\n    i = j = 0\n    while i < len(left) and j < len(right):\n        if left[i] <= right[j]:\n            result.append(left[i])\n            i += 1\n        else:\n            result.append(right[j])\n            j += 1\n    result.extend(left[i:])\n    result.extend(right[j:])\n    return result\n\nprint(merge_sort([38, 27, 43, 3, 9, 82, 10]))"},
+{name:"Quick Sort",theory:["Choose pivot, partition array so left < pivot < right, recurse on both halves.","Average O(n log n); worst O(n²) with poor pivot selection (already sorted + first pivot).","In-place (O(log n) stack space); fastest in practice for random data."],tc:"O(n log n) avg, O(n²) worst",sc:"O(log n) stack space",code:"def quick_sort(arr):\n    if len(arr) <= 1:\n        return arr\n    pivot = arr[len(arr)//2]\n    left = [x for x in arr if x < pivot]\n    middle = [x for x in arr if x == pivot]\n    right = [x for x in arr if x > pivot]\n    return quick_sort(left) + middle + quick_sort(right)\n\n# In-place partition (Lomuto scheme)\ndef partition(arr, low, high):\n    pivot = arr[high]\n    i = low - 1\n    for j in range(low, high):\n        if arr[j] < pivot:\n            i += 1\n            arr[i], arr[j] = arr[j], arr[i]\n    arr[i+1], arr[high] = arr[high], arr[i+1]\n    return i + 1"},
+{name:"Counting Sort",theory:["Non-comparison sort; counts occurrences and places elements by count.","Only works for integers in a known range [0, k]; O(n+k) time.","Stable when implemented correctly; used as subroutine in Radix Sort."],tc:"O(n + k) where k = range",sc:"O(k)",code:"def counting_sort(arr):\n    if not arr:\n        return arr\n    max_val = max(arr)\n    count = [0] * (max_val + 1)\n    for num in arr:\n        count[num] += 1\n    \n    result = []\n    for i in range(len(count)):\n        result.extend([i] * count[i])\n    return result\n\nprint(counting_sort([4, 2, 2, 8, 3, 3, 1]))"},
+{name:"Comparison & When to Use Each",theory:["Small arrays (n<20): Insertion sort (low overhead, good cache behavior).","General purpose: Merge sort (stable, guaranteed O(n log n)) or Quick sort (fast in practice).","Known integer range: Counting/Radix sort for O(n) linear time."],tc:"Varies by algorithm",sc:"Varies by algorithm",code:"# Python's built-in sort uses Timsort\n# Timsort: hybrid of merge sort + insertion sort\n# Time: O(n log n) worst, O(n) best\n# Space: O(n)\n# Stable: Yes\n\narr = [5, 2, 8, 1, 9, 3]\narr.sort()              # In-place, returns None\nsorted_arr = sorted(arr) # Returns new list\n\n# Custom sort\nstudents = [('Alice', 85), ('Bob', 92), ('Charlie', 85)]\nstudents.sort(key=lambda x: (-x[1], x[0]))  # By grade desc, name asc"}
+],
+examples:[
+{title:"Sort an Array (Merge Sort Implementation)",desc:"Sort an integer array in ascending order using merge sort.",approach:"Recursively divide array into halves until single elements. Merge sorted halves by comparing elements from both and building a sorted result array.",tc:"O(n log n)",sc:"O(n)",code:"def sort_array(nums):\n    if len(nums) <= 1:\n        return nums\n    mid = len(nums) // 2\n    left = sort_array(nums[:mid])\n    right = sort_array(nums[mid:])\n    return merge(left, right)\n\ndef merge(a, b):\n    result = []\n    i = j = 0\n    while i < len(a) and j < len(b):\n        if a[i] <= b[j]:\n            result.append(a[i]); i += 1\n        else:\n            result.append(b[j]); j += 1\n    return result + a[i:] + b[j:]"},
+{title:"Sort Colors (Dutch National Flag)",desc:"Sort array containing only 0, 1, 2 in one pass without sort function.",approach:"Three-pointer approach: low (boundary for 0s), mid (current), high (boundary for 2s). Swap 0s to low, 2s to high, skip 1s. Single pass O(n).",tc:"O(n)",sc:"O(1)",code:"def sort_colors(nums):\n    low, mid, high = 0, 0, len(nums) - 1\n    while mid <= high:\n        if nums[mid] == 0:\n            nums[low], nums[mid] = nums[mid], nums[low]\n            low += 1\n            mid += 1\n        elif nums[mid] == 1:\n            mid += 1\n        else:\n            nums[mid], nums[high] = nums[high], nums[mid]\n            high -= 1\n    return nums"},
+{title:"Kth Largest Element (QuickSelect)",desc:"Find kth largest element without fully sorting the array.",approach:"Use QuickSelect (partition-based). Partition around a pivot; if pivot is at index n-k, found it. Otherwise recurse on the appropriate half. Average O(n).",tc:"O(n) avg, O(n²) worst",sc:"O(1)",code:"import random\n\ndef find_kth_largest(nums, k):\n    k = len(nums) - k  # Convert to kth smallest\n    \n    def quickselect(l, r):\n        pivot_idx = random.randint(l, r)\n        nums[pivot_idx], nums[r] = nums[r], nums[pivot_idx]\n        pivot = nums[r]\n        p = l\n        for i in range(l, r):\n            if nums[i] <= pivot:\n                nums[p], nums[i] = nums[i], nums[p]\n                p += 1\n        nums[p], nums[r] = nums[r], nums[p]\n        if p == k: return nums[p]\n        elif p < k: return quickselect(p+1, r)\n        else: return quickselect(l, p-1)\n    \n    return quickselect(0, len(nums)-1)"}
+],
+practice:[
+{q:"Implement bubble sort and count the number of swaps.",d:"E",approach:"Standard bubble sort with counter"},
+{q:"Implement selection sort on an array.",d:"E",approach:"Find min in unsorted part, swap to front"},
+{q:"Implement insertion sort on an array.",d:"E",approach:"Insert each element into sorted prefix"},
+{q:"Merge two sorted arrays into one sorted array.",d:"E",approach:"Two pointers merging"},
+{q:"Implement counting sort for array of integers 0-9.",d:"E",approach:"Count array + reconstruct"},
+{q:"Sort an array of 0s, 1s, and 2s (Dutch flag).",d:"E",approach:"Three-pointer partition"},
+{q:"Check if array is sorted.",d:"E",approach:"Linear scan comparing adjacent elements"},
+{q:"Implement merge sort recursively.",d:"M",approach:"Divide, sort halves, merge"},
+{q:"Implement quick sort with random pivot.",d:"M",approach:"Random pivot + Lomuto partition"},
+{q:"Find kth largest element in array.",d:"M",approach:"QuickSelect or min-heap of size k"},
+{q:"Sort characters by frequency in a string.",d:"M",approach:"Counter + sort by frequency"},
+{q:"Sort array by parity (evens before odds).",d:"M",approach:"Two pointers or partition"},
+{q:"Merge intervals after sorting by start time.",d:"M",approach:"Sort + linear merge"},
+{q:"Find minimum number of swaps to sort array.",d:"M",approach:"Graph cycle detection on permutation"},
+{q:"Wiggle sort: nums[0] <= nums[1] >= nums[2] <= ...",d:"M",approach:"Sort + interleave or swap adjacent"},
+{q:"Count inversions in array using merge sort.",d:"H",approach:"Modified merge sort counting cross-inversions"},
+{q:"Sort linked list in O(n log n).",d:"H",approach:"Merge sort on linked list (find middle + merge)"},
+{q:"Maximum gap between successive elements after sorting.",d:"H",approach:"Bucket/Pigeonhole sort approach"},
+{q:"Median of two sorted arrays.",d:"H",approach:"Binary search on partition point"},
+{q:"Pancake sort (reverse prefixes only).",d:"H",approach:"Find max, flip to top, flip to position"}
+]},
+
+{id:10,title:"Searching Algorithms",color:"#f87171",section:"Algorithms",chips:["Linear","Binary Search","Rotated Array"],
+subtopics:[
+{name:"Linear Search",theory:["Sequentially check each element until found or end reached.","Works on unsorted data; no preprocessing needed.","Time O(n); best O(1) if element is first; worst O(n) if last or not present."],tc:"O(n)",sc:"O(1)",code:"def linear_search(arr, target):\n    for i in range(len(arr)):\n        if arr[i] == target:\n            return i\n    return -1\n\nprint(linear_search([5, 3, 8, 1, 9], 8))  # 2\nprint(linear_search([5, 3, 8, 1, 9], 7))  # -1"},
+{name:"Binary Search",theory:["Requires sorted array; repeatedly halve search space by comparing with middle.","Each step eliminates half the elements: O(log n) time.","Variants: lower_bound, upper_bound, bisect_left, bisect_right in Python."],tc:"O(log n)",sc:"O(1) iterative, O(log n) recursive",code:"def binary_search(arr, target):\n    lo, hi = 0, len(arr) - 1\n    while lo <= hi:\n        mid = (lo + hi) // 2\n        if arr[mid] == target:\n            return mid\n        elif arr[mid] < target:\n            lo = mid + 1\n        else:\n            hi = mid - 1\n    return -1\n\n# Using bisect module\nimport bisect\narr = [1, 3, 5, 7, 9]\nidx = bisect.bisect_left(arr, 5)  # 2 (leftmost position)\nprint(idx)"},
+{name:"Binary Search on Answer",theory:["When answer is monotonic (if X works, X+1 also works), binary search on result space.","Define search range [lo, hi] for possible answers; binary search for optimal.","Used for: minimum capacity, maximum minimum distance, split array problems."],tc:"O(log(range) * verification cost)",sc:"O(1)",code:"# Example: Minimum capacity to ship packages in D days\ndef ship_within_days(weights, days):\n    def can_ship(capacity):\n        d, curr = 1, 0\n        for w in weights:\n            if curr + w > capacity:\n                d += 1\n                curr = 0\n            curr += w\n        return d <= days\n    \n    lo, hi = max(weights), sum(weights)\n    while lo < hi:\n        mid = (lo + hi) // 2\n        if can_ship(mid):\n            hi = mid\n        else:\n            lo = mid + 1\n    return lo"},
+{name:"Search in Rotated Sorted Array",theory:["Array sorted then rotated at some pivot; one half is always sorted.","Determine which half is sorted, check if target is in that range.","Adjust lo/hi accordingly; handles duplicates with additional check."],tc:"O(log n)",sc:"O(1)",code:"def search_rotated(nums, target):\n    lo, hi = 0, len(nums) - 1\n    while lo <= hi:\n        mid = (lo + hi) // 2\n        if nums[mid] == target:\n            return mid\n        # Left half is sorted\n        if nums[lo] <= nums[mid]:\n            if nums[lo] <= target < nums[mid]:\n                hi = mid - 1\n            else:\n                lo = mid + 1\n        # Right half is sorted\n        else:\n            if nums[mid] < target <= nums[hi]:\n                lo = mid + 1\n            else:\n                hi = mid - 1\n    return -1\n\nprint(search_rotated([4,5,6,7,0,1,2], 0))  # 4"},
+{name:"First & Last Occurrence",theory:["Binary search variant to find first (leftmost) or last (rightmost) occurrence.","For first: when found, continue searching left (hi = mid - 1).","For last: when found, continue searching right (lo = mid + 1)."],tc:"O(log n)",sc:"O(1)",code:"def first_occurrence(arr, target):\n    lo, hi = 0, len(arr) - 1\n    result = -1\n    while lo <= hi:\n        mid = (lo + hi) // 2\n        if arr[mid] == target:\n            result = mid\n            hi = mid - 1  # Keep searching left\n        elif arr[mid] < target:\n            lo = mid + 1\n        else:\n            hi = mid - 1\n    return result\n\ndef last_occurrence(arr, target):\n    lo, hi = 0, len(arr) - 1\n    result = -1\n    while lo <= hi:\n        mid = (lo + hi) // 2\n        if arr[mid] == target:\n            result = mid\n            lo = mid + 1  # Keep searching right\n        elif arr[mid] < target:\n            lo = mid + 1\n        else:\n            hi = mid - 1\n    return result"},
+{name:"Peak Element",theory:["A peak element is greater than its neighbors; array may have multiple peaks.","Binary search: compare mid with mid+1; move toward the larger neighbor.","Guaranteed to find a peak because edges are considered -infinity."],tc:"O(log n)",sc:"O(1)",code:"def find_peak_element(nums):\n    lo, hi = 0, len(nums) - 1\n    while lo < hi:\n        mid = (lo + hi) // 2\n        if nums[mid] > nums[mid + 1]:\n            hi = mid  # Peak is at mid or left\n        else:\n            lo = mid + 1  # Peak is to the right\n    return lo\n\nprint(find_peak_element([1, 2, 3, 1]))  # 2\nprint(find_peak_element([1, 2, 1, 3, 5, 6, 4]))  # 5"}
+],
+examples:[
+{title:"Binary Search on Sorted Array",desc:"Search for target in sorted array, return index or -1.",approach:"Standard binary search: compare middle element with target. If equal, found. If target is larger, search right half. If smaller, search left half.",tc:"O(log n)",sc:"O(1)",code:"def binary_search(nums, target):\n    lo, hi = 0, len(nums) - 1\n    while lo <= hi:\n        mid = (lo + hi) // 2\n        if nums[mid] == target:\n            return mid\n        elif nums[mid] < target:\n            lo = mid + 1\n        else:\n            hi = mid - 1\n    return -1"},
+{title:"Search in Rotated Sorted Array",desc:"Search target in array that was sorted then rotated.",approach:"Binary search with twist: identify which half is sorted (compare nums[lo] with nums[mid]). Check if target falls in the sorted half's range to decide direction.",tc:"O(log n)",sc:"O(1)",code:"def search(nums, target):\n    lo, hi = 0, len(nums) - 1\n    while lo <= hi:\n        mid = (lo + hi) // 2\n        if nums[mid] == target:\n            return mid\n        if nums[lo] <= nums[mid]:  # Left sorted\n            if nums[lo] <= target < nums[mid]:\n                hi = mid - 1\n            else:\n                lo = mid + 1\n        else:  # Right sorted\n            if nums[mid] < target <= nums[hi]:\n                lo = mid + 1\n            else:\n                hi = mid - 1\n    return -1"},
+{title:"Find Minimum in Rotated Sorted Array",desc:"Find the minimum element in a rotated sorted array.",approach:"Binary search comparing mid with rightmost element. If mid > right, minimum is in right half. Otherwise minimum is in left half (including mid). Converge to minimum.",tc:"O(log n)",sc:"O(1)",code:"def find_min(nums):\n    lo, hi = 0, len(nums) - 1\n    while lo < hi:\n        mid = (lo + hi) // 2\n        if nums[mid] > nums[hi]:\n            lo = mid + 1\n        else:\n            hi = mid\n    return nums[lo]"}
+],
+practice:[
+{q:"Implement binary search iteratively.",d:"E",approach:"lo/hi pointers, compare mid"},
+{q:"Find first and last position of target in sorted array.",d:"E",approach:"Two binary searches: leftmost and rightmost"},
+{q:"Search insert position (where target would be inserted).",d:"E",approach:"Binary search for lower bound"},
+{q:"Count occurrences of target in sorted array.",d:"E",approach:"last_occurrence - first_occurrence + 1"},
+{q:"Find square root of number (integer part).",d:"E",approach:"Binary search on answer [0, n]"},
+{q:"Check if a number is a perfect square.",d:"E",approach:"Binary search for exact sqrt"},
+{q:"Find peak element in array.",d:"E",approach:"Binary search comparing mid with mid+1"},
+{q:"Search in rotated sorted array.",d:"M",approach:"Binary search with sorted-half identification"},
+{q:"Find minimum in rotated sorted array.",d:"M",approach:"Binary search comparing mid with right"},
+{q:"Search a 2D sorted matrix (rows and columns sorted).",d:"M",approach:"Start top-right corner, move left/down"},
+{q:"Find kth missing positive number.",d:"M",approach:"Binary search on count of missing before each index"},
+{q:"Single element in sorted array (every other appears twice).",d:"M",approach:"Binary search on pair indices"},
+{q:"Capacity to ship packages within D days.",d:"M",approach:"Binary search on answer + greedy verification"},
+{q:"Koko eating bananas - minimum speed.",d:"M",approach:"Binary search on speed + simulate"},
+{q:"Find the smallest divisor given threshold.",d:"M",approach:"Binary search on divisor value"},
+{q:"Median of two sorted arrays.",d:"H",approach:"Binary search on partition of smaller array"},
+{q:"Split array largest sum (minimize maximum subarray sum).",d:"H",approach:"Binary search on answer + greedy split"},
+{q:"Find in mountain array (bitonic).",d:"H",approach:"Find peak + binary search both halves"},
+{q:"Aggressive cows - maximum minimum distance.",d:"H",approach:"Binary search on distance + greedy placement"},
+{q:"Nth magical number (divisible by A or B).",d:"H",approach:"Binary search + inclusion-exclusion count"}
+]},
+
+
+{id:11,title:"Recursion & Backtracking",color:"#c084fc",section:"Algorithms",chips:["Base Case","Subsets","Permutations","N-Queens"],
+subtopics:[
+{name:"Recursion Basics (Base Case + Recursive Case)",theory:["Recursion solves a problem by solving smaller instances of the same problem.","Every recursive function needs a base case (termination) and recursive case (reduction).","Each recursive call adds a frame to the call stack; too many → StackOverflow."],tc:"Depends on problem",sc:"O(recursion depth) for call stack",code:"# Factorial - classic recursion\ndef factorial(n):\n    if n <= 1:  # Base case\n        return 1\n    return n * factorial(n - 1)  # Recursive case\n\n# Fibonacci (naive recursive - exponential)\ndef fib(n):\n    if n <= 1:\n        return n\n    return fib(n-1) + fib(n-2)\n\n# Power function\ndef power(base, exp):\n    if exp == 0: return 1\n    if exp % 2 == 0:\n        half = power(base, exp // 2)\n        return half * half\n    return base * power(base, exp - 1)"},
+{name:"Call Stack & Stack Overflow",theory:["Each function call creates a stack frame storing local variables and return address.","Deep recursion (>1000 in Python by default) causes RecursionError.","Tail recursion optimization is NOT available in Python; use iteration for deep recursion."],tc:"O(n) for n recursive calls",sc:"O(n) stack frames",code:"import sys\nsys.setrecursionlimit(10000)  # Increase limit if needed\n\n# Converting recursion to iteration\n# Recursive sum\ndef sum_recursive(n):\n    if n == 0: return 0\n    return n + sum_recursive(n-1)\n\n# Iterative equivalent\ndef sum_iterative(n):\n    total = 0\n    for i in range(1, n+1):\n        total += i\n    return total\n\n# Using stack to simulate recursion\ndef dfs_iterative(graph, start):\n    stack = [start]\n    visited = set()\n    while stack:\n        node = stack.pop()\n        if node in visited: continue\n        visited.add(node)\n        for nb in graph[node]:\n            stack.append(nb)"},
+{name:"Subsets Generation",theory:["Generate all possible subsets (power set) of a given set.","Two approaches: include/exclude current element (decision tree) or iterative.","Total subsets = 2^n; each element is either included or not."],tc:"O(2^n)",sc:"O(n) recursion depth",code:"def subsets(nums):\n    result = []\n    def backtrack(start, current):\n        result.append(current[:])\n        for i in range(start, len(nums)):\n            current.append(nums[i])\n            backtrack(i + 1, current)\n            current.pop()  # Backtrack\n    backtrack(0, [])\n    return result\n\nprint(subsets([1,2,3]))\n# [[], [1], [1,2], [1,2,3], [1,3], [2], [2,3], [3]]"},
+{name:"Permutations",theory:["Generate all possible orderings of elements; n elements → n! permutations.","Swap each element to the current position, recurse on remaining.","For duplicates: sort first and skip if same element was used at this position."],tc:"O(n!)",sc:"O(n)",code:"def permutations(nums):\n    result = []\n    def backtrack(start):\n        if start == len(nums):\n            result.append(nums[:])\n            return\n        for i in range(start, len(nums)):\n            nums[start], nums[i] = nums[i], nums[start]\n            backtrack(start + 1)\n            nums[start], nums[i] = nums[i], nums[start]\n    backtrack(0)\n    return result\n\n# Alternative with used array\ndef permute(nums):\n    result = []\n    def bt(path, used):\n        if len(path) == len(nums):\n            result.append(path[:])\n            return\n        for i in range(len(nums)):\n            if used[i]: continue\n            used[i] = True\n            path.append(nums[i])\n            bt(path, used)\n            path.pop()\n            used[i] = False\n    bt([], [False]*len(nums))\n    return result"},
+{name:"N-Queens Problem",theory:["Place N queens on N×N board so no two queens attack each other.","Backtracking: place queen row by row, checking column and diagonal conflicts.","Use sets to track occupied columns and diagonals for O(1) conflict check."],tc:"O(n!)",sc:"O(n²)",code:"def solve_n_queens(n):\n    result = []\n    cols = set()\n    pos_diag = set()  # row + col\n    neg_diag = set()  # row - col\n    board = [['.']*n for _ in range(n)]\n    \n    def backtrack(row):\n        if row == n:\n            result.append([''.join(r) for r in board])\n            return\n        for col in range(n):\n            if col in cols or (row+col) in pos_diag or (row-col) in neg_diag:\n                continue\n            cols.add(col)\n            pos_diag.add(row+col)\n            neg_diag.add(row-col)\n            board[row][col] = 'Q'\n            backtrack(row + 1)\n            cols.remove(col)\n            pos_diag.remove(row+col)\n            neg_diag.remove(row-col)\n            board[row][col] = '.'\n    \n    backtrack(0)\n    return result"},
+{name:"Sudoku Solver",theory:["Fill 9×9 grid so each row, column, and 3×3 box contains digits 1-9.","Backtracking: find empty cell, try digits 1-9, check validity, recurse.","Prune invalid choices early using sets for rows, columns, and boxes."],tc:"O(9^(empty cells)) worst case",sc:"O(81)",code:"def solve_sudoku(board):\n    def is_valid(r, c, num):\n        for i in range(9):\n            if board[r][i] == num: return False\n            if board[i][c] == num: return False\n            box_r, box_c = 3*(r//3) + i//3, 3*(c//3) + i%3\n            if board[box_r][box_c] == num: return False\n        return True\n    \n    def solve():\n        for r in range(9):\n            for c in range(9):\n                if board[r][c] == '.':\n                    for num in '123456789':\n                        if is_valid(r, c, num):\n                            board[r][c] = num\n                            if solve():\n                                return True\n                            board[r][c] = '.'\n                    return False\n        return True\n    \n    solve()"},
+{name:"Rat in a Maze",theory:["Find path from top-left to bottom-right in a maze (1=open, 0=blocked).","Backtracking: try all directions (down, right, up, left), mark visited.","If dead end reached, backtrack by unmarking and trying next direction."],tc:"O(4^(n²)) worst case",sc:"O(n²)",code:"def rat_in_maze(maze):\n    n = len(maze)\n    path = [[0]*n for _ in range(n)]\n    \n    def solve(r, c):\n        if r == n-1 and c == n-1:\n            path[r][c] = 1\n            return True\n        if 0 <= r < n and 0 <= c < n and maze[r][c] == 1 and path[r][c] == 0:\n            path[r][c] = 1\n            if solve(r+1, c): return True  # Down\n            if solve(r, c+1): return True  # Right\n            if solve(r-1, c): return True  # Up\n            if solve(r, c-1): return True  # Left\n            path[r][c] = 0  # Backtrack\n        return False\n    \n    if solve(0, 0):\n        return path\n    return None"}
+],
+examples:[
+{title:"Generate All Subsets",desc:"Given a set of distinct integers, return all possible subsets (power set).",approach:"Use backtracking with include/exclude pattern. At each index, make a choice to include or exclude the element. When we reach end of array, add current subset to result.",tc:"O(2^n * n)",sc:"O(n)",code:"def subsets(nums):\n    result = []\n    def backtrack(i, current):\n        if i == len(nums):\n            result.append(current[:])\n            return\n        # Include nums[i]\n        current.append(nums[i])\n        backtrack(i+1, current)\n        current.pop()\n        # Exclude nums[i]\n        backtrack(i+1, current)\n    backtrack(0, [])\n    return result\n\nprint(subsets([1,2,3]))"},
+{title:"N-Queens Problem",desc:"Place n queens on an n×n chessboard such that no two queens threaten each other.",approach:"Place queens row by row. For each row, try each column. Use sets to track occupied columns and both diagonals (row+col and row-col) for O(1) validation.",tc:"O(n!)",sc:"O(n²)",code:"def solve_n_queens(n):\n    solutions = []\n    def backtrack(row, cols, diag1, diag2, board):\n        if row == n:\n            solutions.append([''.join(r) for r in board])\n            return\n        for col in range(n):\n            if col in cols or row+col in diag1 or row-col in diag2:\n                continue\n            board[row][col] = 'Q'\n            backtrack(row+1, cols|{col}, diag1|{row+col}, diag2|{row-col}, board)\n            board[row][col] = '.'\n    backtrack(0, set(), set(), set(), [['.']*n for _ in range(n)])\n    return solutions"},
+{title:"Word Search in Grid",desc:"Given a 2D board and a word, find if the word exists by moving adjacent cells.",approach:"DFS from each cell matching first character. Mark visited cells to avoid reuse. Backtrack by restoring cell value after exploring all directions. Prune if char doesn't match.",tc:"O(m*n*4^L) L=word length",sc:"O(L)",code:"def exist(board, word):\n    rows, cols = len(board), len(board[0])\n    def dfs(r, c, idx):\n        if idx == len(word): return True\n        if r<0 or r>=rows or c<0 or c>=cols or board[r][c]!=word[idx]:\n            return False\n        temp = board[r][c]\n        board[r][c] = '#'  # Mark visited\n        found = (dfs(r+1,c,idx+1) or dfs(r-1,c,idx+1) or\n                 dfs(r,c+1,idx+1) or dfs(r,c-1,idx+1))\n        board[r][c] = temp  # Backtrack\n        return found\n    for r in range(rows):\n        for c in range(cols):\n            if dfs(r, c, 0): return True\n    return False"}
+],
+practice:[
+{q:"Print all subsequences of a string.",d:"E",approach:"Include/exclude each character recursively"},
+{q:"Generate all subsets of a set.",d:"E",approach:"Backtracking with start index"},
+{q:"Calculate power(x, n) using recursion.",d:"E",approach:"Divide exponent by 2 (fast power)"},
+{q:"Print numbers 1 to N without loops.",d:"E",approach:"Recursion with base case at N"},
+{q:"Sum of digits of a number recursively.",d:"E",approach:"n%10 + sum(n//10)"},
+{q:"Tower of Hanoi for n disks.",d:"E",approach:"Move n-1 to aux, move nth, move n-1 to target"},
+{q:"Check if string is palindrome recursively.",d:"E",approach:"Compare first and last, recurse on middle"},
+{q:"Generate all permutations of array.",d:"M",approach:"Swap current with each remaining, recurse"},
+{q:"Generate all valid combinations of n pairs of parentheses.",d:"M",approach:"Backtrack with open/close counts"},
+{q:"Combination Sum (pick numbers summing to target, reuse allowed).",d:"M",approach:"Backtrack with start index, subtract from target"},
+{q:"Letter combinations of a phone number.",d:"M",approach:"Backtrack through digit-to-letter mapping"},
+{q:"Word search in 2D grid.",d:"M",approach:"DFS from each cell, mark visited, backtrack"},
+{q:"Palindrome partitioning - find all palindrome splits.",d:"M",approach:"Backtrack trying each prefix that's a palindrome"},
+{q:"Combination Sum II (no duplicates, each used once).",d:"M",approach:"Sort + skip duplicates at same level"},
+{q:"Restore IP addresses from digit string.",d:"M",approach:"Backtrack with 4 segments, validate each"},
+{q:"N-Queens: find all valid placements.",d:"H",approach:"Row-by-row backtracking with diagonal sets"},
+{q:"Sudoku solver.",d:"H",approach:"Try 1-9 in empty cells, validate, backtrack"},
+{q:"Word Break II - all possible sentences.",d:"H",approach:"Backtrack + memoization with word dict"},
+{q:"Expression add operators (+,-,*) to reach target.",d:"H",approach:"Backtrack with prev operand for multiply"},
+{q:"Unique paths III (visit every empty cell exactly once).",d:"H",approach:"DFS backtracking counting empty cells"}
+]},
+
+
+{id:12,title:"Dynamic Programming",color:"#2dd4bf",section:"Algorithms",chips:["Memoization","Tabulation","Knapsack","LCS","LIS"],
+subtopics:[
+{name:"Memoization (Top-Down)",theory:["Solve recursively but cache results of subproblems to avoid recomputation.","Use dictionary or @lru_cache decorator in Python for automatic memoization.","Start from original problem, break down, cache results as you go."],tc:"Depends on number of unique subproblems",sc:"O(subproblems) for cache",code:"from functools import lru_cache\n\n# Fibonacci with memoization\n@lru_cache(maxsize=None)\ndef fib(n):\n    if n <= 1:\n        return n\n    return fib(n-1) + fib(n-2)\n\n# Manual memoization\ndef fib_memo(n, memo={}):\n    if n in memo:\n        return memo[n]\n    if n <= 1:\n        return n\n    memo[n] = fib_memo(n-1, memo) + fib_memo(n-2, memo)\n    return memo[n]"},
+{name:"Tabulation (Bottom-Up)",theory:["Build solution iteratively from smallest subproblems up to original problem.","Use array/table to store results; fill in order of dependencies.","Often more space-efficient (can optimize to use only previous row/values)."],tc:"Depends on table size",sc:"O(table size), often optimizable",code:"# Fibonacci - tabulation\ndef fib_tab(n):\n    if n <= 1: return n\n    dp = [0] * (n + 1)\n    dp[1] = 1\n    for i in range(2, n + 1):\n        dp[i] = dp[i-1] + dp[i-2]\n    return dp[n]\n\n# Space-optimized\ndef fib_opt(n):\n    if n <= 1: return n\n    a, b = 0, 1\n    for _ in range(2, n + 1):\n        a, b = b, a + b\n    return b"},
+{name:"Fibonacci & Climbing Stairs",theory:["Climbing stairs: n steps, can climb 1 or 2 at a time. Ways = fib(n+1).","dp[i] = dp[i-1] + dp[i-2] (from step i-1 taking 1, or step i-2 taking 2).","Classic example showing overlapping subproblems and optimal substructure."],tc:"O(n)",sc:"O(1) with space optimization",code:"def climb_stairs(n):\n    if n <= 2:\n        return n\n    a, b = 1, 2\n    for _ in range(3, n + 1):\n        a, b = b, a + b\n    return b\n\n# Generalized: can take 1,2,...,k steps\ndef climb_k_stairs(n, k):\n    dp = [0] * (n + 1)\n    dp[0] = 1\n    for i in range(1, n + 1):\n        for j in range(1, min(k, i) + 1):\n            dp[i] += dp[i - j]\n    return dp[n]"},
+{name:"0/1 Knapsack",theory:["Given items with weight and value, maximize value within capacity W.","dp[i][w] = max value using first i items with capacity w.","Choice: include item i (if weight allows) or exclude it."],tc:"O(n * W)",sc:"O(n * W), optimizable to O(W)",code:"def knapsack(weights, values, W):\n    n = len(weights)\n    dp = [[0]*(W+1) for _ in range(n+1)]\n    for i in range(1, n+1):\n        for w in range(W+1):\n            dp[i][w] = dp[i-1][w]  # Don't take item i\n            if weights[i-1] <= w:\n                dp[i][w] = max(dp[i][w],\n                    dp[i-1][w-weights[i-1]] + values[i-1])\n    return dp[n][W]\n\n# Space-optimized (1D)\ndef knapsack_opt(weights, values, W):\n    dp = [0] * (W + 1)\n    for i in range(len(weights)):\n        for w in range(W, weights[i]-1, -1):  # Reverse!\n            dp[w] = max(dp[w], dp[w-weights[i]] + values[i])\n    return dp[W]"},
+{name:"Longest Common Subsequence (LCS)",theory:["Find longest subsequence common to both strings (not necessarily contiguous).","If chars match: dp[i][j] = 1 + dp[i-1][j-1]. Else: max(dp[i-1][j], dp[i][j-1]).","Can reconstruct the actual LCS by backtracking through the dp table."],tc:"O(m * n)",sc:"O(m * n), optimizable to O(min(m,n))",code:"def lcs(text1, text2):\n    m, n = len(text1), len(text2)\n    dp = [[0]*(n+1) for _ in range(m+1)]\n    for i in range(1, m+1):\n        for j in range(1, n+1):\n            if text1[i-1] == text2[j-1]:\n                dp[i][j] = 1 + dp[i-1][j-1]\n            else:\n                dp[i][j] = max(dp[i-1][j], dp[i][j-1])\n    return dp[m][n]\n\nprint(lcs('abcde', 'ace'))  # 3 ('ace')"},
+{name:"Longest Increasing Subsequence (LIS)",theory:["Find longest subsequence where elements are strictly increasing.","O(n²) DP: dp[i] = length of LIS ending at index i.","O(n log n) using patience sorting: maintain tails array with binary search."],tc:"O(n log n) optimal, O(n²) basic",sc:"O(n)",code:"# O(n^2) approach\ndef lis_n2(nums):\n    n = len(nums)\n    dp = [1] * n\n    for i in range(1, n):\n        for j in range(i):\n            if nums[j] < nums[i]:\n                dp[i] = max(dp[i], dp[j] + 1)\n    return max(dp)\n\n# O(n log n) with binary search\nimport bisect\ndef lis_nlogn(nums):\n    tails = []\n    for num in nums:\n        pos = bisect.bisect_left(tails, num)\n        if pos == len(tails):\n            tails.append(num)\n        else:\n            tails[pos] = num\n    return len(tails)\n\nprint(lis_nlogn([10,9,2,5,3,7,101,18]))  # 4"},
+{name:"Coin Change Problem",theory:["Find minimum coins to make amount (unlimited supply of each denomination).","dp[i] = minimum coins needed for amount i.","For each coin, dp[i] = min(dp[i], dp[i-coin] + 1) if i-coin >= 0."],tc:"O(amount * n) where n = number of coins",sc:"O(amount)",code:"def coin_change(coins, amount):\n    dp = [float('inf')] * (amount + 1)\n    dp[0] = 0\n    for i in range(1, amount + 1):\n        for coin in coins:\n            if coin <= i:\n                dp[i] = min(dp[i], dp[i - coin] + 1)\n    return dp[amount] if dp[amount] != float('inf') else -1\n\nprint(coin_change([1, 5, 10, 25], 30))  # 2 (25+5)"},
+{name:"Grid Paths (Unique Paths)",theory:["Count paths from top-left to bottom-right, moving only right or down.","dp[i][j] = dp[i-1][j] + dp[i][j-1] (paths from above + paths from left).","With obstacles: dp[i][j] = 0 if obstacle at (i,j)."],tc:"O(m * n)",sc:"O(n) with space optimization",code:"def unique_paths(m, n):\n    dp = [1] * n\n    for i in range(1, m):\n        for j in range(1, n):\n            dp[j] += dp[j-1]\n    return dp[-1]\n\n# With obstacles\ndef unique_paths_with_obstacles(grid):\n    m, n = len(grid), len(grid[0])\n    dp = [0] * n\n    dp[0] = 1\n    for i in range(m):\n        for j in range(n):\n            if grid[i][j] == 1:\n                dp[j] = 0\n            elif j > 0:\n                dp[j] += dp[j-1]\n    return dp[-1]"}
+],
+examples:[
+{title:"Coin Change - Minimum Coins",desc:"Given coins of different denominations and an amount, find fewest coins to make that amount.",approach:"Build dp array where dp[i] = min coins for amount i. For each amount, try each coin and take minimum. dp[0]=0, rest initialized to infinity.",tc:"O(amount * coins)",sc:"O(amount)",code:"def coin_change(coins, amount):\n    dp = [float('inf')] * (amount + 1)\n    dp[0] = 0\n    for i in range(1, amount + 1):\n        for coin in coins:\n            if coin <= i and dp[i-coin] + 1 < dp[i]:\n                dp[i] = dp[i-coin] + 1\n    return dp[amount] if dp[amount] != float('inf') else -1"},
+{title:"Longest Increasing Subsequence",desc:"Find the length of the longest strictly increasing subsequence.",approach:"Use patience sorting: maintain array of smallest tail elements for each length. Binary search for position to insert each number. Length of tails array is answer.",tc:"O(n log n)",sc:"O(n)",code:"import bisect\n\ndef length_of_lis(nums):\n    tails = []\n    for num in nums:\n        pos = bisect.bisect_left(tails, num)\n        if pos == len(tails):\n            tails.append(num)\n        else:\n            tails[pos] = num\n    return len(tails)\n\nprint(length_of_lis([10,9,2,5,3,7,101,18]))  # 4"},
+{title:"0/1 Knapsack Problem",desc:"Given weights and values of items, find maximum value that fits in capacity W.",approach:"2D DP where dp[i][w] = max value using first i items with capacity w. For each item, choose max of taking it (if weight allows) or skipping it.",tc:"O(n * W)",sc:"O(W) optimized",code:"def knapsack(weights, values, W):\n    n = len(weights)\n    dp = [0] * (W + 1)\n    for i in range(n):\n        for w in range(W, weights[i]-1, -1):\n            dp[w] = max(dp[w], dp[w-weights[i]] + values[i])\n    return dp[W]\n\nprint(knapsack([2,3,4,5], [3,4,5,6], 8))  # 10"}
+],
+practice:[
+{q:"Fibonacci number using DP (memoization or tabulation).",d:"E",approach:"Memoization with cache or bottom-up array"},
+{q:"Climbing stairs: count ways to reach nth step (1 or 2 steps).",d:"E",approach:"dp[i] = dp[i-1] + dp[i-2]"},
+{q:"Minimum cost climbing stairs.",d:"E",approach:"dp[i] = cost[i] + min(dp[i-1], dp[i-2])"},
+{q:"House robber: max money without robbing adjacent houses.",d:"E",approach:"dp[i] = max(dp[i-1], dp[i-2] + nums[i])"},
+{q:"Maximum subarray sum (Kadane's).",d:"E",approach:"dp[i] = max(nums[i], dp[i-1] + nums[i])"},
+{q:"Count unique paths in m×n grid (right/down only).",d:"E",approach:"dp[i][j] = dp[i-1][j] + dp[i][j-1]"},
+{q:"Pascal's triangle - generate first n rows.",d:"E",approach:"Each element = sum of two above"},
+{q:"Coin change: minimum coins to make amount.",d:"M",approach:"dp[i] = min(dp[i-coin]+1) for each coin"},
+{q:"Longest Common Subsequence of two strings.",d:"M",approach:"2D DP matching chars or max of skip"},
+{q:"Longest Increasing Subsequence length.",d:"M",approach:"Binary search on tails array O(n log n)"},
+{q:"0/1 Knapsack: maximize value within weight limit.",d:"M",approach:"2D DP or 1D reverse iteration"},
+{q:"Word break: can string be segmented into dictionary words?",d:"M",approach:"dp[i] = can s[:i] be broken into words"},
+{q:"Decode ways: count decodings of digit string to letters.",d:"M",approach:"dp[i] depends on one-digit and two-digit options"},
+{q:"Partition equal subset sum.",d:"M",approach:"0/1 knapsack with target = sum/2"},
+{q:"Minimum path sum in grid.",d:"M",approach:"dp[i][j] = grid[i][j] + min(top, left)"},
+{q:"Edit distance between two strings.",d:"H",approach:"2D DP with insert/delete/replace costs"},
+{q:"Longest palindromic subsequence.",d:"H",approach:"LCS of string with its reverse or gap DP"},
+{q:"Burst balloons for maximum coins.",d:"H",approach:"Interval DP: dp[l][r] = max coins in range"},
+{q:"Regular expression matching.",d:"H",approach:"2D DP handling '.' and '*' patterns"},
+{q:"Distinct subsequences: count of s subsequences equaling t.",d:"H",approach:"dp[i][j] = ways to form t[:j] from s[:i]"}
+]},
+
+
+{id:13,title:"Greedy Algorithms",color:"#e879f9",section:"Algorithms",chips:["Activity Selection","Knapsack","Job Scheduling"],
+subtopics:[
+{name:"Greedy Choice Property",theory:["Greedy makes locally optimal choice at each step hoping for global optimum.","Works when: optimal substructure + greedy choice property hold.","No backtracking; once a choice is made, it's final. Faster than DP when applicable."],tc:"Varies by problem",sc:"Varies by problem",code:"# Greedy works for: coin change with standard denominations\n# (won't work for arbitrary coin sets)\ndef greedy_coin_change(coins, amount):\n    coins.sort(reverse=True)\n    result = []\n    for coin in coins:\n        while amount >= coin:\n            result.append(coin)\n            amount -= coin\n    return result if amount == 0 else None\n\nprint(greedy_coin_change([25, 10, 5, 1], 67))  # [25, 25, 10, 5, 1, 1]"},
+{name:"Activity Selection",theory:["Select maximum number of non-overlapping activities (each has start and end time).","Greedy: sort by end time, always pick earliest-finishing compatible activity.","Proof: earliest end time leaves most room for future activities."],tc:"O(n log n)",sc:"O(1)",code:"def activity_selection(activities):\n    # activities = [(start, end), ...]\n    activities.sort(key=lambda x: x[1])  # Sort by end time\n    selected = [activities[0]]\n    last_end = activities[0][1]\n    \n    for i in range(1, len(activities)):\n        if activities[i][0] >= last_end:\n            selected.append(activities[i])\n            last_end = activities[i][1]\n    return selected\n\nactivities = [(1,4),(3,5),(0,6),(5,7),(3,9),(5,9),(6,10),(8,11),(8,12),(2,14),(12,16)]\nprint(activity_selection(activities))"},
+{name:"Fractional Knapsack",theory:["Unlike 0/1, items can be broken into fractions; take fraction for best value/weight ratio.","Sort items by value/weight ratio in descending order.","Greedily take items until capacity is full; last item may be fractional."],tc:"O(n log n)",sc:"O(1)",code:"def fractional_knapsack(items, capacity):\n    # items = [(value, weight), ...]\n    # Sort by value/weight ratio descending\n    items.sort(key=lambda x: x[0]/x[1], reverse=True)\n    total_value = 0\n    \n    for value, weight in items:\n        if capacity >= weight:\n            total_value += value\n            capacity -= weight\n        else:\n            total_value += value * (capacity / weight)\n            break\n    return total_value\n\nitems = [(60,10), (100,20), (120,30)]\nprint(fractional_knapsack(items, 50))  # 240"},
+{name:"Job Scheduling (Maximize Profit)",theory:["Jobs have deadlines and profits; maximize profit completing jobs before deadlines.","Sort by profit descending; assign each job to latest available slot before deadline.","Each job takes 1 unit of time; use slot array to track availability."],tc:"O(n log n)",sc:"O(max_deadline)",code:"def job_scheduling(jobs):\n    # jobs = [(id, deadline, profit), ...]\n    jobs.sort(key=lambda x: x[2], reverse=True)  # Sort by profit desc\n    max_deadline = max(j[1] for j in jobs)\n    slots = [-1] * (max_deadline + 1)\n    total_profit = 0\n    scheduled = []\n    \n    for job_id, deadline, profit in jobs:\n        # Find latest available slot <= deadline\n        for t in range(deadline, 0, -1):\n            if slots[t] == -1:\n                slots[t] = job_id\n                total_profit += profit\n                scheduled.append(job_id)\n                break\n    return total_profit, scheduled"},
+{name:"Huffman Coding",theory:["Build optimal prefix-free binary code based on character frequencies.","Greedy: repeatedly merge two nodes with smallest frequencies.","Result is a binary tree; code for each char = path from root (0=left, 1=right)."],tc:"O(n log n)",sc:"O(n)",code:"import heapq\n\ndef huffman_coding(freq):\n    # freq = {'a': 5, 'b': 9, 'c': 12, ...}\n    heap = [[f, [ch, '']] for ch, f in freq.items()]\n    heapq.heapify(heap)\n    \n    while len(heap) > 1:\n        lo = heapq.heappop(heap)\n        hi = heapq.heappop(heap)\n        for pair in lo[1:]:\n            pair[1] = '0' + pair[1]\n        for pair in hi[1:]:\n            pair[1] = '1' + pair[1]\n        heapq.heappush(heap, [lo[0]+hi[0]] + lo[1:] + hi[1:])\n    \n    return sorted(heapq.heappop(heap)[1:], key=lambda p: (len(p[1]),p))\n\nfreq = {'a':5, 'b':9, 'c':12, 'd':13, 'e':16, 'f':45}\nprint(huffman_coding(freq))"},
+{name:"Minimum Platforms Problem",theory:["Find minimum platforms needed so no train waits at a station.","Sort arrivals and departures separately; use two pointers to track overlaps.","Max simultaneous trains at any point = answer."],tc:"O(n log n)",sc:"O(1)",code:"def min_platforms(arrivals, departures):\n    arrivals.sort()\n    departures.sort()\n    n = len(arrivals)\n    platforms = 0\n    max_platforms = 0\n    i = j = 0\n    \n    while i < n and j < n:\n        if arrivals[i] <= departures[j]:\n            platforms += 1\n            max_platforms = max(max_platforms, platforms)\n            i += 1\n        else:\n            platforms -= 1\n            j += 1\n    return max_platforms\n\narr = [900, 940, 950, 1100, 1500, 1800]\ndep = [910, 1200, 1120, 1130, 1900, 2000]\nprint(min_platforms(arr, dep))  # 3"}
+],
+examples:[
+{title:"Activity Selection Problem",desc:"Given n activities with start and end times, select maximum non-overlapping activities.",approach:"Sort activities by end time. Greedily pick the first activity, then always pick the next activity whose start time >= last selected end time.",tc:"O(n log n)",sc:"O(1)",code:"def max_activities(activities):\n    activities.sort(key=lambda x: x[1])\n    count = 1\n    last_end = activities[0][1]\n    for i in range(1, len(activities)):\n        if activities[i][0] >= last_end:\n            count += 1\n            last_end = activities[i][1]\n    return count"},
+{title:"Jump Game - Can Reach End",desc:"Given array where nums[i] = max jump length from position i, determine if you can reach the last index.",approach:"Greedy: track the farthest reachable index. Iterate through array; if current index > farthest, stuck. Update farthest at each step. If farthest >= last index, reachable.",tc:"O(n)",sc:"O(1)",code:"def can_jump(nums):\n    farthest = 0\n    for i in range(len(nums)):\n        if i > farthest:\n            return False\n        farthest = max(farthest, i + nums[i])\n    return True\n\nprint(can_jump([2,3,1,1,4]))  # True\nprint(can_jump([3,2,1,0,4]))  # False"},
+{title:"Minimum Platforms at Railway Station",desc:"Find minimum platforms needed so no train has to wait.",approach:"Sort arrival and departure arrays independently. Use two pointers: if next event is arrival, add platform; if departure, remove. Track maximum platforms needed at any time.",tc:"O(n log n)",sc:"O(1)",code:"def min_platforms(arrivals, departures):\n    arrivals.sort()\n    departures.sort()\n    i = j = platforms = max_plat = 0\n    n = len(arrivals)\n    while i < n:\n        if arrivals[i] <= departures[j]:\n            platforms += 1\n            max_plat = max(max_plat, platforms)\n            i += 1\n        else:\n            platforms -= 1\n            j += 1\n    return max_plat"}
+],
+practice:[
+{q:"Assign cookies to children (maximize content children).",d:"E",approach:"Sort both, greedily assign smallest sufficient cookie"},
+{q:"Best time to buy and sell stock (one transaction).",d:"E",approach:"Track min price and max profit"},
+{q:"Lemonade change (can you provide change for each customer?).",d:"E",approach:"Greedily use larger bills first for change"},
+{q:"Maximum number of meetings in one room.",d:"E",approach:"Sort by end time, pick non-overlapping"},
+{q:"Minimum number of coins for amount (standard denominations).",d:"E",approach:"Greedy: use largest coins first"},
+{q:"Is subsequence (check if s is subsequence of t).",d:"E",approach:"Two pointers greedy matching"},
+{q:"Remove duplicates to make string with smallest lexicographic order.",d:"E",approach:"Greedy with stack and last occurrence"},
+{q:"Jump Game - can you reach the last index?",d:"M",approach:"Track farthest reachable index"},
+{q:"Jump Game II - minimum jumps to reach end.",d:"M",approach:"Greedy BFS-style: expand current range"},
+{q:"Gas station circuit - find starting point.",d:"M",approach:"Track deficit; start where surplus begins"},
+{q:"Minimum platforms for trains at station.",d:"M",approach:"Sort arrivals/departures, two pointers"},
+{q:"Non-overlapping intervals (minimum removals).",d:"M",approach:"Sort by end, count overlaps to remove"},
+{q:"Partition labels - split string into parts.",d:"M",approach:"Track last occurrence, extend partition"},
+{q:"Boats to save people (pair heaviest with lightest).",d:"M",approach:"Sort + two pointers"},
+{q:"Task scheduler (minimum intervals with cooldown).",d:"M",approach:"Greedy: fill most frequent first"},
+{q:"Candy distribution (each child ≥ 1, higher rating gets more).",d:"H",approach:"Two passes: left-to-right and right-to-left"},
+{q:"Minimum number of arrows to burst balloons.",d:"H",approach:"Sort by end, shoot at overlap ends"},
+{q:"Job scheduling maximizing profit with deadlines.",d:"H",approach:"Sort by profit, assign latest slots"},
+{q:"IPO - maximize capital with limited projects.",d:"H",approach:"Sort by capital, max-heap by profit"},
+{q:"Minimum cost to cut a stick.",d:"H",approach:"Greedy or interval DP"}
+]},
+
+
+{id:14,title:"Two Pointers",color:"#facc15",section:"Problem-Solving Patterns",chips:["Pair Sum","Remove Duplicates","3Sum","Container"],
+subtopics:[
+{name:"Two Pointer Technique Explained",theory:["Use two pointers moving toward each other or in same direction to solve problems in O(n).","Typically requires sorted array or specific structure.","Reduces brute force O(n²) to O(n) by eliminating unnecessary comparisons."],tc:"O(n) typically",sc:"O(1)",code:"# Two pointers pattern - pair with target sum in sorted array\ndef pair_sum(arr, target):\n    left, right = 0, len(arr) - 1\n    while left < right:\n        curr_sum = arr[left] + arr[right]\n        if curr_sum == target:\n            return [left, right]\n        elif curr_sum < target:\n            left += 1\n        else:\n            right -= 1\n    return []"},
+{name:"Pair with Target Sum",theory:["In sorted array, find two elements summing to target.","Left pointer starts at beginning, right at end; adjust based on current sum.","If sum too small, move left forward; if too large, move right backward."],tc:"O(n)",sc:"O(1)",code:"def two_sum_sorted(numbers, target):\n    l, r = 0, len(numbers) - 1\n    while l < r:\n        s = numbers[l] + numbers[r]\n        if s == target:\n            return [l+1, r+1]  # 1-indexed\n        elif s < target:\n            l += 1\n        else:\n            r -= 1\n    return []"},
+{name:"Remove Duplicates from Sorted Array",theory:["Use slow pointer for position to place next unique element.","Fast pointer scans ahead; when new unique found, copy to slow position.","Returns new length; array is modified in-place."],tc:"O(n)",sc:"O(1)",code:"def remove_duplicates(nums):\n    if not nums: return 0\n    slow = 0\n    for fast in range(1, len(nums)):\n        if nums[fast] != nums[slow]:\n            slow += 1\n            nums[slow] = nums[fast]\n    return slow + 1\n\narr = [1,1,2,2,3,4,4]\nprint(remove_duplicates(arr))  # 4, arr[:4] = [1,2,3,4]"},
+{name:"Container With Most Water",theory:["Find two lines that form container holding most water.","Start with widest container (both ends); move pointer with shorter line inward.","Greedy: moving shorter line might find taller one; moving taller can't increase area."],tc:"O(n)",sc:"O(1)",code:"def max_area(height):\n    l, r = 0, len(height) - 1\n    max_water = 0\n    while l < r:\n        area = min(height[l], height[r]) * (r - l)\n        max_water = max(max_water, area)\n        if height[l] < height[r]:\n            l += 1\n        else:\n            r -= 1\n    return max_water\n\nprint(max_area([1,8,6,2,5,4,8,3,7]))  # 49"},
+{name:"3Sum Problem",theory:["Find all unique triplets summing to zero.","Sort array; fix one element, use two pointers on remaining to find pairs.","Skip duplicates to avoid duplicate triplets in result."],tc:"O(n²)",sc:"O(1) extra (excluding output)",code:"def three_sum(nums):\n    nums.sort()\n    result = []\n    for i in range(len(nums) - 2):\n        if i > 0 and nums[i] == nums[i-1]:\n            continue  # Skip duplicates\n        l, r = i + 1, len(nums) - 1\n        while l < r:\n            s = nums[i] + nums[l] + nums[r]\n            if s == 0:\n                result.append([nums[i], nums[l], nums[r]])\n                while l < r and nums[l] == nums[l+1]: l += 1\n                while l < r and nums[r] == nums[r-1]: r -= 1\n                l += 1; r -= 1\n            elif s < 0:\n                l += 1\n            else:\n                r -= 1\n    return result"},
+{name:"Trapping Rain Water",theory:["Water trapped above bar = min(max_left, max_right) - bar_height.","Two pointer approach: maintain left_max and right_max, process shorter side.","Alternative: precompute prefix max from left and right."],tc:"O(n)",sc:"O(1) two pointers, O(n) prefix approach",code:"def trap(height):\n    l, r = 0, len(height) - 1\n    left_max = right_max = 0\n    water = 0\n    while l < r:\n        if height[l] < height[r]:\n            if height[l] >= left_max:\n                left_max = height[l]\n            else:\n                water += left_max - height[l]\n            l += 1\n        else:\n            if height[r] >= right_max:\n                right_max = height[r]\n            else:\n                water += right_max - height[r]\n            r -= 1\n    return water\n\nprint(trap([0,1,0,2,1,0,1,3,2,1,2,1]))  # 6"}
+],
+examples:[
+{title:"Container With Most Water",desc:"Find two lines forming the container that holds the most water.",approach:"Start pointers at both ends (maximum width). Calculate area with shorter line. Move the shorter line's pointer inward since it's the bottleneck. Track maximum area seen.",tc:"O(n)",sc:"O(1)",code:"def max_area(height):\n    l, r = 0, len(height) - 1\n    best = 0\n    while l < r:\n        best = max(best, min(height[l], height[r]) * (r - l))\n        if height[l] < height[r]:\n            l += 1\n        else:\n            r -= 1\n    return best"},
+{title:"3Sum - Find All Triplets Summing to Zero",desc:"Given integer array, find all unique triplets that sum to zero.",approach:"Sort array. For each element as first, use two pointers on remaining portion to find pairs summing to negative of first. Skip duplicates at all three positions.",tc:"O(n²)",sc:"O(1)",code:"def three_sum(nums):\n    nums.sort()\n    res = []\n    for i in range(len(nums)-2):\n        if i > 0 and nums[i]==nums[i-1]: continue\n        l, r = i+1, len(nums)-1\n        while l < r:\n            s = nums[i]+nums[l]+nums[r]\n            if s == 0:\n                res.append([nums[i],nums[l],nums[r]])\n                while l<r and nums[l]==nums[l+1]: l+=1\n                while l<r and nums[r]==nums[r-1]: r-=1\n                l+=1; r-=1\n            elif s<0: l+=1\n            else: r-=1\n    return res"},
+{title:"Trapping Rain Water",desc:"Given elevation map, compute how much rain water can be trapped.",approach:"Two pointers from both ends with left_max and right_max tracking. Process the side with smaller max: water above current = max - height. Move that pointer inward.",tc:"O(n)",sc:"O(1)",code:"def trap(height):\n    l, r = 0, len(height)-1\n    lmax = rmax = ans = 0\n    while l < r:\n        if height[l] < height[r]:\n            if height[l] >= lmax: lmax = height[l]\n            else: ans += lmax - height[l]\n            l += 1\n        else:\n            if height[r] >= rmax: rmax = height[r]\n            else: ans += rmax - height[r]\n            r -= 1\n    return ans"}
+],
+practice:[
+{q:"Two sum in sorted array (return indices).",d:"E",approach:"Two pointers from both ends"},
+{q:"Remove duplicates from sorted array in-place.",d:"E",approach:"Slow/fast pointer, copy unique forward"},
+{q:"Reverse a string in-place using two pointers.",d:"E",approach:"Swap left and right, move inward"},
+{q:"Check if string is palindrome (ignoring non-alphanumeric).",d:"E",approach:"Two pointers skipping invalid chars"},
+{q:"Move zeroes to end maintaining relative order.",d:"E",approach:"Slow pointer for non-zero placement"},
+{q:"Squares of sorted array (return sorted squares).",d:"E",approach:"Two pointers from ends, fill result from back"},
+{q:"Merge sorted arrays in-place (nums1 has space).",d:"E",approach:"Three pointers filling from the back"},
+{q:"Container with most water.",d:"M",approach:"Two pointers, move shorter line inward"},
+{q:"3Sum: find all triplets summing to zero.",d:"M",approach:"Sort + fix one + two pointers for pair"},
+{q:"3Sum closest to target.",d:"M",approach:"Sort + fix one + two pointers tracking closest"},
+{q:"4Sum: find all quadruplets summing to target.",d:"M",approach:"Two loops + two pointers"},
+{q:"Sort colors (Dutch National Flag).",d:"M",approach:"Three pointers: low, mid, high"},
+{q:"Remove nth node from end of list.",d:"M",approach:"Two pointers with n-gap"},
+{q:"Boats to save people.",d:"M",approach:"Sort + two pointers pairing heaviest/lightest"},
+{q:"Partition array according to pivot.",d:"M",approach:"Two pointers separating < and > pivot"},
+{q:"Trapping rain water.",d:"H",approach:"Two pointers with left_max, right_max"},
+{q:"Minimum window substring.",d:"H",approach:"Two pointers (sliding window) with freq map"},
+{q:"Shortest unsorted continuous subarray.",d:"H",approach:"Two pointers finding bounds of disorder"},
+{q:"Number of subsequences summing <= target.",d:"H",approach:"Sort + two pointers + power of 2"},
+{q:"Maximum erasure value (unique subarray sum).",d:"H",approach:"Two pointers / sliding window with set"}
+]},
+
+{id:15,title:"Sliding Window",color:"#38bdf8",section:"Problem-Solving Patterns",chips:["Fixed Window","Variable Window","Min Window"],
+subtopics:[
+{name:"Fixed Size Window",theory:["Window of exactly size k slides across array; compute aggregate (sum, max, etc.).","Initialize window with first k elements; slide by adding right and removing left.","One pass O(n); each element enters and leaves window exactly once."],tc:"O(n)",sc:"O(1) for sum, O(k) for tracking elements",code:"# Maximum sum subarray of size k\ndef max_sum_k(arr, k):\n    window_sum = sum(arr[:k])\n    max_sum = window_sum\n    for i in range(k, len(arr)):\n        window_sum += arr[i] - arr[i-k]\n        max_sum = max(max_sum, window_sum)\n    return max_sum\n\nprint(max_sum_k([2, 1, 5, 1, 3, 2], 3))  # 9"},
+{name:"Variable Size Window",theory:["Window expands (right pointer) until condition violated, then shrinks (left pointer).","Track window state (sum, frequency map, count) to check condition efficiently.","Used when looking for longest/shortest subarray satisfying a condition."],tc:"O(n)",sc:"O(k) for auxiliary data structures",code:"# Longest subarray with sum <= target\ndef longest_subarray_sum(arr, target):\n    left = 0\n    curr_sum = 0\n    max_len = 0\n    for right in range(len(arr)):\n        curr_sum += arr[right]\n        while curr_sum > target:\n            curr_sum -= arr[left]\n            left += 1\n        max_len = max(max_len, right - left + 1)\n    return max_len"},
+{name:"Maximum Sum Subarray of Size K",theory:["Find the contiguous subarray of size k with maximum sum.","Compute initial window sum, then slide: add new element, subtract outgoing.","Classic fixed-window pattern; one pass solution."],tc:"O(n)",sc:"O(1)",code:"def max_sum_subarray(arr, k):\n    n = len(arr)\n    if n < k:\n        return -1\n    window_sum = sum(arr[:k])\n    best = window_sum\n    for i in range(k, n):\n        window_sum += arr[i] - arr[i-k]\n        best = max(best, window_sum)\n    return best"},
+{name:"Longest Substring Without Repeating Characters",theory:["Find longest substring with all unique characters.","Expand right pointer; if char seen, move left past its last occurrence.","Use hash map to track last index of each character."],tc:"O(n)",sc:"O(min(n, charset))",code:"def length_of_longest_substring(s):\n    char_index = {}\n    left = max_len = 0\n    for right in range(len(s)):\n        if s[right] in char_index and char_index[s[right]] >= left:\n            left = char_index[s[right]] + 1\n        char_index[s[right]] = right\n        max_len = max(max_len, right - left + 1)\n    return max_len\n\nprint(length_of_longest_substring('abcabcbb'))  # 3"},
+{name:"Minimum Window Substring",theory:["Find shortest substring of s containing all characters of t.","Expand window until all chars covered; shrink from left to minimize.","Track required and current character frequencies; update when window valid."],tc:"O(n)",sc:"O(charset)",code:"from collections import Counter\n\ndef min_window(s, t):\n    need = Counter(t)\n    missing = len(t)\n    left = 0\n    best = (0, float('inf'))\n    \n    for right, ch in enumerate(s):\n        if need[ch] > 0:\n            missing -= 1\n        need[ch] -= 1\n        \n        while missing == 0:  # Window contains all chars\n            if right - left < best[1] - best[0]:\n                best = (left, right)\n            need[s[left]] += 1\n            if need[s[left]] > 0:\n                missing += 1\n            left += 1\n    \n    return '' if best[1] == float('inf') else s[best[0]:best[1]+1]\n\nprint(min_window('ADOBECODEBANC', 'ABC'))  # 'BANC'"},
+{name:"Fruits Into Baskets / At Most K Distinct",theory:["Longest subarray with at most K distinct elements.","Use hash map tracking element frequencies in current window.","When distinct count > K, shrink from left until count <= K."],tc:"O(n)",sc:"O(k)",code:"def longest_k_distinct(arr, k):\n    freq = {}\n    left = max_len = 0\n    for right in range(len(arr)):\n        freq[arr[right]] = freq.get(arr[right], 0) + 1\n        while len(freq) > k:\n            freq[arr[left]] -= 1\n            if freq[arr[left]] == 0:\n                del freq[arr[left]]\n            left += 1\n        max_len = max(max_len, right - left + 1)\n    return max_len\n\n# Fruits into baskets = longest with at most 2 distinct\nprint(longest_k_distinct([1,2,1,2,3], 2))  # 4"}
+],
+examples:[
+{title:"Longest Substring Without Repeating Characters",desc:"Find length of longest substring with all unique characters.",approach:"Sliding window with hash map tracking last seen index of each character. When duplicate found, move left pointer past the previous occurrence. Track maximum window size.",tc:"O(n)",sc:"O(charset)",code:"def length_of_longest_substring(s):\n    seen = {}\n    left = result = 0\n    for right, ch in enumerate(s):\n        if ch in seen and seen[ch] >= left:\n            left = seen[ch] + 1\n        seen[ch] = right\n        result = max(result, right - left + 1)\n    return result"},
+{title:"Minimum Window Substring",desc:"Find smallest substring of s containing all characters of t.",approach:"Expand right until window has all needed chars (track with counter). Then shrink left to find minimum valid window. Update answer whenever window is valid and smaller.",tc:"O(n)",sc:"O(charset)",code:"from collections import Counter\ndef min_window(s, t):\n    need = Counter(t)\n    missing = len(t)\n    l = start = end = 0\n    for r, ch in enumerate(s):\n        if need[ch] > 0: missing -= 1\n        need[ch] -= 1\n        if missing == 0:\n            while need[s[l]] < 0:\n                need[s[l]] += 1\n                l += 1\n            if not end or r-l < end-start:\n                start, end = l, r+1\n            need[s[l]] += 1\n            missing += 1\n            l += 1\n    return s[start:end]"},
+{title:"Maximum Average Subarray of Size K",desc:"Find contiguous subarray of length k with maximum average.",approach:"Classic fixed-size sliding window. Compute sum of first k elements. Slide window by adding right element and subtracting left element. Track maximum sum, divide by k at end.",tc:"O(n)",sc:"O(1)",code:"def find_max_average(nums, k):\n    window_sum = sum(nums[:k])\n    max_sum = window_sum\n    for i in range(k, len(nums)):\n        window_sum += nums[i] - nums[i-k]\n        max_sum = max(max_sum, window_sum)\n    return max_sum / k"}
+],
+practice:[
+{q:"Maximum sum subarray of size k.",d:"E",approach:"Fixed sliding window of size k"},
+{q:"Find all averages of subarrays of size k.",d:"E",approach:"Fixed window, divide sum by k"},
+{q:"Longest substring with at most 2 distinct characters.",d:"E",approach:"Variable window with freq map"},
+{q:"Check if string contains permutation of another.",d:"E",approach:"Fixed window of size t, compare freq"},
+{q:"Maximum number of vowels in substring of size k.",d:"E",approach:"Fixed window counting vowels"},
+{q:"Minimum size subarray with sum >= target.",d:"E",approach:"Variable window shrinking when sum >= target"},
+{q:"Count subarrays with product less than k.",d:"E",approach:"Variable window shrinking when product >= k"},
+{q:"Longest substring without repeating characters.",d:"M",approach:"Variable window with char index map"},
+{q:"Minimum window substring containing all chars of t.",d:"M",approach:"Variable window with need/have counters"},
+{q:"Longest repeating character replacement (at most k changes).",d:"M",approach:"Window - track max freq char, shrink when others > k"},
+{q:"Find all anagrams of pattern in string.",d:"M",approach:"Fixed window comparing frequency maps"},
+{q:"Fruits into baskets (at most 2 types).",d:"M",approach:"Variable window with at most 2 distinct"},
+{q:"Grumpy bookstore owner (maximize satisfied in k window).",d:"M",approach:"Fixed window on grumpy minutes"},
+{q:"Maximum points from cards (take k cards from ends).",d:"M",approach:"Minimum sum window of size n-k"},
+{q:"Subarrays with K different integers.",d:"M",approach:"atMost(k) - atMost(k-1)"},
+{q:"Sliding window maximum (max in each window of k).",d:"H",approach:"Monotonic decreasing deque"},
+{q:"Minimum window subsequence.",d:"H",approach:"Two pointers forward and backward pass"},
+{q:"Substring with concatenation of all words.",d:"H",approach:"Fixed window of total_words_length, word freq"},
+{q:"Longest substring with at most k distinct (large input).",d:"H",approach:"Variable window with hash map"},
+{q:"Count subarrays where max is in range [L, R].",d:"H",approach:"atMost(R) - atMost(L-1) sliding window"}
+]},
+
+{id:16,title:"Fast & Slow Pointers",color:"#34d399",section:"Problem-Solving Patterns",chips:["Cycle Detection","Middle Node","Happy Number"],
+subtopics:[
+{name:"Floyd's Cycle Detection",theory:["Slow pointer moves 1 step, fast moves 2 steps; they meet inside cycle if one exists.","If no cycle, fast pointer reaches null.","Meeting doesn't give cycle start; need phase 2 for that."],tc:"O(n)",sc:"O(1)",code:"def has_cycle(head):\n    slow = fast = head\n    while fast and fast.next:\n        slow = slow.next\n        fast = fast.next.next\n        if slow == fast:\n            return True\n    return False"},
+{name:"Find Middle of Linked List",theory:["Slow moves 1 step, fast moves 2 steps; when fast reaches end, slow is at middle.","For even-length list, this gives the second middle node.","Useful as building block for merge sort on linked lists."],tc:"O(n)",sc:"O(1)",code:"def find_middle(head):\n    slow = fast = head\n    while fast and fast.next:\n        slow = slow.next\n        fast = fast.next.next\n    return slow  # Middle node"},
+{name:"Happy Number Problem",theory:["A number is happy if repeatedly summing squares of digits eventually reaches 1.","If not happy, the sequence enters a cycle (never reaches 1).","Use Floyd's cycle detection on the digit-square-sum sequence."],tc:"O(log n) per step",sc:"O(1)",code:"def is_happy(n):\n    def get_next(num):\n        total = 0\n        while num > 0:\n            num, digit = divmod(num, 10)\n            total += digit ** 2\n        return total\n    \n    slow = n\n    fast = get_next(n)\n    while fast != 1 and slow != fast:\n        slow = get_next(slow)\n        fast = get_next(get_next(fast))\n    return fast == 1\n\nprint(is_happy(19))  # True\nprint(is_happy(2))   # False"},
+{name:"Cycle Start Node Detection",theory:["After slow and fast meet (phase 1), reset one pointer to head.","Move both at same speed (1 step); they meet at cycle start (phase 2).","Mathematical proof: distance from head to cycle start = distance from meeting point to cycle start."],tc:"O(n)",sc:"O(1)",code:"def detect_cycle_start(head):\n    slow = fast = head\n    # Phase 1: detect cycle\n    while fast and fast.next:\n        slow = slow.next\n        fast = fast.next.next\n        if slow == fast:\n            break\n    else:\n        return None  # No cycle\n    \n    # Phase 2: find start\n    slow = head\n    while slow != fast:\n        slow = slow.next\n        fast = fast.next\n    return slow  # Cycle start node"},
+{name:"Palindrome Linked List",theory:["Use fast/slow to find middle, reverse second half, compare with first half.","After comparison, optionally restore the list by re-reversing second half.","Achieves O(n) time and O(1) space (no extra list needed)."],tc:"O(n)",sc:"O(1)",code:"def is_palindrome(head):\n    # Find middle\n    slow = fast = head\n    while fast and fast.next:\n        slow = slow.next\n        fast = fast.next.next\n    \n    # Reverse second half\n    prev = None\n    while slow:\n        nxt = slow.next\n        slow.next = prev\n        prev = slow\n        slow = nxt\n    \n    # Compare halves\n    left, right = head, prev\n    while right:\n        if left.val != right.val:\n            return False\n        left = left.next\n        right = right.next\n    return True"}
+],
+examples:[
+{title:"Linked List Cycle Detection",desc:"Determine if a linked list has a cycle in it.",approach:"Use Floyd's algorithm: slow moves 1 step, fast moves 2 steps. If they ever point to the same node, there's a cycle. If fast reaches null, no cycle.",tc:"O(n)",sc:"O(1)",code:"def has_cycle(head):\n    slow = fast = head\n    while fast and fast.next:\n        slow = slow.next\n        fast = fast.next.next\n        if slow == fast:\n            return True\n    return False"},
+{title:"Happy Number",desc:"Determine if a number is 'happy' (digit square sum sequence reaches 1).",approach:"Compute digit-square-sum as next number in sequence. Use slow/fast runners on this sequence. If fast reaches 1, number is happy. If slow equals fast before that, it's not.",tc:"O(log n)",sc:"O(1)",code:"def is_happy(n):\n    def next_num(num):\n        s = 0\n        while num:\n            num, d = divmod(num, 10)\n            s += d * d\n        return s\n    slow, fast = n, next_num(n)\n    while fast != 1 and slow != fast:\n        slow = next_num(slow)\n        fast = next_num(next_num(fast))\n    return fast == 1"},
+{title:"Find Duplicate Number (Floyd's on Array)",desc:"Given array of n+1 integers in range [1,n], find the duplicate without modifying array.",approach:"Treat array as linked list where arr[i] points to arr[arr[i]]. Since there's a duplicate, there's a cycle. Use Floyd's to find cycle entrance = duplicate number.",tc:"O(n)",sc:"O(1)",code:"def find_duplicate(nums):\n    # Phase 1: Find intersection\n    slow = fast = nums[0]\n    while True:\n        slow = nums[slow]\n        fast = nums[nums[fast]]\n        if slow == fast:\n            break\n    # Phase 2: Find entrance\n    slow = nums[0]\n    while slow != fast:\n        slow = nums[slow]\n        fast = nums[fast]\n    return slow"}
+],
+practice:[
+{q:"Detect cycle in a linked list.",d:"E",approach:"Floyd's slow and fast pointers"},
+{q:"Find middle of linked list.",d:"E",approach:"Slow/fast pointers until fast reaches end"},
+{q:"Check if number is happy.",d:"E",approach:"Floyd's on digit-square-sum sequence"},
+{q:"Remove nth node from end of list.",d:"E",approach:"Fast moves n ahead, then both move together"},
+{q:"Check if linked list is palindrome.",d:"E",approach:"Find middle, reverse second half, compare"},
+{q:"Find length of cycle in linked list.",d:"E",approach:"After meeting point, count steps until meet again"},
+{q:"Intersection of two linked lists.",d:"E",approach:"Both traverse; switch heads at end"},
+{q:"Find duplicate number in array [1,n].",d:"M",approach:"Floyd's treating array as linked list"},
+{q:"Find start of cycle in linked list.",d:"M",approach:"Floyd's phase 2: reset one to head"},
+{q:"Reorder linked list (L0→Ln→L1→Ln-1→...).",d:"M",approach:"Find middle, reverse second half, merge"},
+{q:"Circular array loop detection.",d:"M",approach:"Floyd's on each starting index"},
+{q:"Sort linked list in O(n log n).",d:"M",approach:"Find middle (fast/slow) + merge sort"},
+{q:"Add two numbers (linked list representation).",d:"M",approach:"Traverse both with carry, build result"},
+{q:"Odd-even linked list (group odd/even indices).",d:"M",approach:"Two pointers for odd and even chains"},
+{q:"Split linked list into two halves.",d:"M",approach:"Fast/slow, cut at slow.next"},
+{q:"Flatten a multilevel linked list.",d:"H",approach:"DFS/iteration with child handling"},
+{q:"Copy list with random pointer.",d:"H",approach:"Interleave copies, then separate"},
+{q:"Linked list in binary tree (check if path exists).",d:"H",approach:"DFS on tree, match with list pointers"},
+{q:"Reverse nodes in k-group.",d:"H",approach:"Find middle pattern + reverse each group"},
+{q:"Maximum twin sum of linked list.",d:"H",approach:"Find middle, reverse second half, pair sums"}
+]},
+
+
+{id:17,title:"Merge Intervals",color:"#a78bfa",section:"Problem-Solving Patterns",chips:["Merge Overlapping","Insert Interval","Meeting Rooms"],
+subtopics:[
+{name:"Merge Overlapping Intervals",theory:["Sort intervals by start time; merge when current start <= previous end.","Maintain result list; compare each interval with last merged interval.","If overlap, extend end to max(prev_end, curr_end); else add new interval."],tc:"O(n log n)",sc:"O(n)",code:"def merge_intervals(intervals):\n    intervals.sort(key=lambda x: x[0])\n    merged = [intervals[0]]\n    for start, end in intervals[1:]:\n        if start <= merged[-1][1]:\n            merged[-1][1] = max(merged[-1][1], end)\n        else:\n            merged.append([start, end])\n    return merged\n\nprint(merge_intervals([[1,3],[2,6],[8,10],[15,18]]))\n# [[1,6],[8,10],[15,18]]"},
+{name:"Insert Interval",theory:["Insert new interval into sorted non-overlapping list and merge if needed.","Three phases: add all before new, merge overlapping with new, add all after.","No need to sort since input is already sorted."],tc:"O(n)",sc:"O(n)",code:"def insert_interval(intervals, new):\n    result = []\n    i = 0\n    n = len(intervals)\n    # Add all before new interval\n    while i < n and intervals[i][1] < new[0]:\n        result.append(intervals[i])\n        i += 1\n    # Merge overlapping\n    while i < n and intervals[i][0] <= new[1]:\n        new[0] = min(new[0], intervals[i][0])\n        new[1] = max(new[1], intervals[i][1])\n        i += 1\n    result.append(new)\n    # Add all after\n    while i < n:\n        result.append(intervals[i])\n        i += 1\n    return result"},
+{name:"Meeting Rooms (Can Attend All)",theory:["Check if a person can attend all meetings (no overlaps).","Sort by start time; if any meeting starts before previous ends, conflict.","Simply check adjacent intervals after sorting."],tc:"O(n log n)",sc:"O(1)",code:"def can_attend_all(intervals):\n    intervals.sort(key=lambda x: x[0])\n    for i in range(1, len(intervals)):\n        if intervals[i][0] < intervals[i-1][1]:\n            return False\n    return True\n\nprint(can_attend_all([[0,30],[5,10],[15,20]]))  # False\nprint(can_attend_all([[7,10],[2,4]]))  # True"},
+{name:"Meeting Rooms II (Min Rooms Needed)",theory:["Find minimum meeting rooms needed (maximum overlap at any point).","Use min-heap of end times; if new meeting starts after earliest end, reuse room.","Alternative: sort start/end separately, sweep line with counters."],tc:"O(n log n)",sc:"O(n)",code:"import heapq\n\ndef min_meeting_rooms(intervals):\n    intervals.sort(key=lambda x: x[0])\n    heap = []  # end times of active meetings\n    for start, end in intervals:\n        if heap and heap[0] <= start:\n            heapq.heapreplace(heap, end)\n        else:\n            heapq.heappush(heap, end)\n    return len(heap)\n\nprint(min_meeting_rooms([[0,30],[5,10],[15,20]]))  # 2\n\n# Alternative: sweep line\ndef min_rooms_sweep(intervals):\n    events = []\n    for s, e in intervals:\n        events.append((s, 1))   # start\n        events.append((e, -1))  # end\n    events.sort()\n    rooms = max_rooms = 0\n    for _, typ in events:\n        rooms += typ\n        max_rooms = max(max_rooms, rooms)\n    return max_rooms"},
+{name:"Minimum Platforms",theory:["Same as meeting rooms II but for trains at a station.","Sort arrivals and departures separately; use two pointers.","When arrival <= departure, need new platform; else free one up."],tc:"O(n log n)",sc:"O(1)",code:"def min_platforms(arrivals, departures):\n    arrivals.sort()\n    departures.sort()\n    i = j = platforms = max_plat = 0\n    n = len(arrivals)\n    while i < n:\n        if arrivals[i] <= departures[j]:\n            platforms += 1\n            max_plat = max(max_plat, platforms)\n            i += 1\n        else:\n            platforms -= 1\n            j += 1\n    return max_plat"}
+],
+examples:[
+{title:"Merge Overlapping Intervals",desc:"Given a collection of intervals, merge all overlapping intervals.",approach:"Sort intervals by start time. Iterate and merge: if current interval overlaps with last in result (start <= prev_end), extend the end. Otherwise, add as new interval.",tc:"O(n log n)",sc:"O(n)",code:"def merge(intervals):\n    intervals.sort()\n    result = [intervals[0]]\n    for s, e in intervals[1:]:\n        if s <= result[-1][1]:\n            result[-1][1] = max(result[-1][1], e)\n        else:\n            result.append([s, e])\n    return result"},
+{title:"Meeting Rooms II - Minimum Rooms",desc:"Find minimum number of conference rooms required for all meetings.",approach:"Use min-heap to track end times of ongoing meetings. For each new meeting, if it starts after the earliest ending meeting, reuse that room (pop and push new end). Otherwise allocate new room.",tc:"O(n log n)",sc:"O(n)",code:"import heapq\ndef min_rooms(intervals):\n    intervals.sort()\n    rooms = []\n    for s, e in intervals:\n        if rooms and rooms[0] <= s:\n            heapq.heapreplace(rooms, e)\n        else:\n            heapq.heappush(rooms, e)\n    return len(rooms)"},
+{title:"Insert and Merge Interval",desc:"Insert a new interval into a sorted list of non-overlapping intervals and merge.",approach:"Three phases: add all intervals ending before new one starts, merge all overlapping with new interval (extend boundaries), add remaining intervals after.",tc:"O(n)",sc:"O(n)",code:"def insert(intervals, new):\n    res = []\n    i = 0\n    while i < len(intervals) and intervals[i][1] < new[0]:\n        res.append(intervals[i]); i += 1\n    while i < len(intervals) and intervals[i][0] <= new[1]:\n        new = [min(new[0],intervals[i][0]), max(new[1],intervals[i][1])]\n        i += 1\n    res.append(new)\n    res.extend(intervals[i:])\n    return res"}
+],
+practice:[
+{q:"Merge overlapping intervals.",d:"E",approach:"Sort by start, merge adjacent overlaps"},
+{q:"Check if person can attend all meetings (no overlap).",d:"E",approach:"Sort and check consecutive pairs"},
+{q:"Find the interval that contains a given point.",d:"E",approach:"Linear scan or binary search on sorted intervals"},
+{q:"Remove covered intervals.",d:"E",approach:"Sort by start asc, end desc; skip covered"},
+{q:"Count number of overlapping intervals at each point.",d:"E",approach:"Sweep line with events"},
+{q:"Insert interval into sorted non-overlapping list.",d:"E",approach:"Three-phase: before, merge, after"},
+{q:"Find intersection of two interval lists.",d:"E",approach:"Two pointers on sorted lists"},
+{q:"Minimum number of meeting rooms.",d:"M",approach:"Min-heap of end times or sweep line"},
+{q:"Non-overlapping intervals (min removals).",d:"M",approach:"Sort by end, greedily keep non-overlapping"},
+{q:"Minimum number of arrows to burst balloons.",d:"M",approach:"Sort by end, arrow at earliest end of overlap"},
+{q:"Employee free time across all schedules.",d:"M",approach:"Merge all intervals, find gaps"},
+{q:"My calendar I (no double booking).",d:"M",approach:"Sorted list + binary search for conflicts"},
+{q:"Minimum platforms for trains.",d:"M",approach:"Sort arrivals/departures, two pointers"},
+{q:"Interval list intersections.",d:"M",approach:"Two pointers advancing smaller-end interval"},
+{q:"Car pooling (can accommodate all trips).",d:"M",approach:"Sweep line with passenger changes"},
+{q:"My calendar II (allow at most double booking).",d:"H",approach:"Two lists: bookings and overlaps"},
+{q:"Divide intervals into minimum groups.",d:"H",approach:"Sort + priority queue for group ends"},
+{q:"Data stream as disjoint intervals.",d:"H",approach:"Sorted container + merge on insert"},
+{q:"Maximum CPU load (max overlapping task weight).",d:"H",approach:"Sweep line with weights"},
+{q:"Skyline problem.",d:"H",approach:"Sweep line with max-heap of heights"}
+]},
+
+{id:18,title:"Binary Search Patterns",color:"#fb923c",section:"Problem-Solving Patterns",chips:["Search Space","Capacity","Koko","Median"],
+subtopics:[
+{name:"Binary Search on Answer Space",theory:["When answer lies in a range and feasibility is monotonic, binary search on the answer itself.","Define: can we achieve answer X? If yes for X, also yes for X+1 (or vice versa).","Search space is [min_possible, max_possible]; verify with helper function."],tc:"O(log(range) * check_cost)",sc:"O(1)",code:"# General template for binary search on answer\ndef binary_search_answer(lo, hi, is_feasible):\n    while lo < hi:\n        mid = (lo + hi) // 2\n        if is_feasible(mid):\n            hi = mid  # Search for smaller feasible answer\n        else:\n            lo = mid + 1\n    return lo"},
+{name:"Capacity To Ship Packages",theory:["Find minimum ship capacity to ship all packages within D days.","Search space: [max(weights), sum(weights)]; verify by simulating loading.","If capacity works for D days, any larger capacity also works (monotonic)."],tc:"O(n * log(sum - max))",sc:"O(1)",code:"def ship_within_days(weights, days):\n    def can_ship(cap):\n        d, load = 1, 0\n        for w in weights:\n            if load + w > cap:\n                d += 1\n                load = 0\n            load += w\n        return d <= days\n    \n    lo, hi = max(weights), sum(weights)\n    while lo < hi:\n        mid = (lo + hi) // 2\n        if can_ship(mid):\n            hi = mid\n        else:\n            lo = mid + 1\n    return lo\n\nprint(ship_within_days([1,2,3,4,5,6,7,8,9,10], 5))  # 15"},
+{name:"Koko Eating Bananas",theory:["Find minimum eating speed to finish all piles within h hours.","Each pile takes ceil(pile/speed) hours; total hours must be <= h.","Search space: [1, max(piles)]; verify by computing total hours."],tc:"O(n * log(max))",sc:"O(1)",code:"import math\n\ndef min_eating_speed(piles, h):\n    def hours_needed(speed):\n        return sum(math.ceil(p / speed) for p in piles)\n    \n    lo, hi = 1, max(piles)\n    while lo < hi:\n        mid = (lo + hi) // 2\n        if hours_needed(mid) <= h:\n            hi = mid\n        else:\n            lo = mid + 1\n    return lo\n\nprint(min_eating_speed([3,6,7,11], 8))  # 4"},
+{name:"Aggressive Cows / Magnetic Balls",theory:["Place k cows in n stalls to maximize minimum distance between any two cows.","Binary search on answer (minimum distance); verify by greedily placing cows.","Feasible if we can place all k cows with at least 'mid' gap between consecutive."],tc:"O(n * log(max_pos - min_pos))",sc:"O(1)",code:"def aggressive_cows(stalls, k):\n    stalls.sort()\n    \n    def can_place(min_dist):\n        count = 1\n        last = stalls[0]\n        for i in range(1, len(stalls)):\n            if stalls[i] - last >= min_dist:\n                count += 1\n                last = stalls[i]\n                if count >= k:\n                    return True\n        return False\n    \n    lo, hi = 1, stalls[-1] - stalls[0]\n    while lo < hi:\n        mid = (lo + hi + 1) // 2  # Upper binary search\n        if can_place(mid):\n            lo = mid\n        else:\n            hi = mid - 1\n    return lo"},
+{name:"Median of Two Sorted Arrays",theory:["Find median of two sorted arrays in O(log(min(m,n))) time.","Binary search on partition of smaller array; find correct split that divides combined.","Valid partition: max(left) <= min(right) for both arrays."],tc:"O(log(min(m, n)))",sc:"O(1)",code:"def find_median(nums1, nums2):\n    if len(nums1) > len(nums2):\n        nums1, nums2 = nums2, nums1\n    m, n = len(nums1), len(nums2)\n    lo, hi = 0, m\n    \n    while lo <= hi:\n        i = (lo + hi) // 2  # Partition in nums1\n        j = (m + n + 1) // 2 - i  # Partition in nums2\n        \n        left1 = nums1[i-1] if i > 0 else float('-inf')\n        right1 = nums1[i] if i < m else float('inf')\n        left2 = nums2[j-1] if j > 0 else float('-inf')\n        right2 = nums2[j] if j < n else float('inf')\n        \n        if left1 <= right2 and left2 <= right1:\n            if (m + n) % 2 == 0:\n                return (max(left1, left2) + min(right1, right2)) / 2\n            return max(left1, left2)\n        elif left1 > right2:\n            hi = i - 1\n        else:\n            lo = i + 1"}
+],
+examples:[
+{title:"Koko Eating Bananas",desc:"Find minimum speed k such that Koko can eat all banana piles within h hours.",approach:"Binary search on speed from 1 to max(piles). For each speed, calculate total hours (sum of ceil(pile/speed)). Find minimum speed where hours <= h.",tc:"O(n * log(max))",sc:"O(1)",code:"import math\ndef min_eating_speed(piles, h):\n    lo, hi = 1, max(piles)\n    while lo < hi:\n        mid = (lo + hi) // 2\n        if sum(math.ceil(p/mid) for p in piles) <= h:\n            hi = mid\n        else:\n            lo = mid + 1\n    return lo"},
+{title:"Split Array Largest Sum",desc:"Split array into m subarrays minimizing the largest subarray sum.",approach:"Binary search on answer (largest sum). Range is [max(nums), sum(nums)]. Verify by greedily splitting: start new subarray when adding next element exceeds mid.",tc:"O(n * log(sum - max))",sc:"O(1)",code:"def split_array(nums, m):\n    def can_split(max_sum):\n        count, curr = 1, 0\n        for num in nums:\n            if curr + num > max_sum:\n                count += 1\n                curr = 0\n            curr += num\n        return count <= m\n    lo, hi = max(nums), sum(nums)\n    while lo < hi:\n        mid = (lo + hi) // 2\n        if can_split(mid): hi = mid\n        else: lo = mid + 1\n    return lo"},
+{title:"Median of Two Sorted Arrays",desc:"Find median of two sorted arrays in O(log(min(m,n))) time.",approach:"Binary search on partition of smaller array. Find i in nums1 such that combined left half has (m+n+1)//2 elements. Validate: maxLeft <= minRight on both sides.",tc:"O(log(min(m,n)))",sc:"O(1)",code:"def find_median(a, b):\n    if len(a) > len(b): a, b = b, a\n    m, n = len(a), len(b)\n    lo, hi = 0, m\n    while lo <= hi:\n        i = (lo+hi)//2\n        j = (m+n+1)//2 - i\n        l1 = a[i-1] if i else float('-inf')\n        r1 = a[i] if i<m else float('inf')\n        l2 = b[j-1] if j else float('-inf')\n        r2 = b[j] if j<n else float('inf')\n        if l1<=r2 and l2<=r1:\n            if (m+n)%2: return max(l1,l2)\n            return (max(l1,l2)+min(r1,r2))/2\n        elif l1>r2: hi=i-1\n        else: lo=i+1"}
+],
+practice:[
+{q:"Find square root using binary search.",d:"E",approach:"Binary search on [0, n] for x*x <= n"},
+{q:"Find first bad version (API call).",d:"E",approach:"Binary search on version numbers"},
+{q:"Guess number higher or lower.",d:"E",approach:"Binary search on range [1, n]"},
+{q:"Valid perfect square without sqrt function.",d:"E",approach:"Binary search for exact x where x*x == n"},
+{q:"Arranging coins (complete rows from n coins).",d:"E",approach:"Binary search for k where k*(k+1)/2 <= n"},
+{q:"Find smallest letter greater than target.",d:"E",approach:"Binary search for upper bound"},
+{q:"Peak index in mountain array.",d:"E",approach:"Binary search comparing mid with mid+1"},
+{q:"Capacity to ship packages within D days.",d:"M",approach:"Binary search on capacity + greedy verify"},
+{q:"Koko eating bananas - minimum speed.",d:"M",approach:"Binary search on speed + sum(ceil) check"},
+{q:"Split array largest sum (minimize maximum).",d:"M",approach:"Binary search on sum + greedy split"},
+{q:"Magnetic force between two balls (max min distance).",d:"M",approach:"Binary search on distance + greedy place"},
+{q:"Find minimum in rotated sorted array.",d:"M",approach:"Binary search comparing mid with right"},
+{q:"Search in rotated sorted array II (with duplicates).",d:"M",approach:"Binary search with lo++ when ambiguous"},
+{q:"Find peak element.",d:"M",approach:"Binary search comparing mid with neighbors"},
+{q:"Minimum speed to arrive on time.",d:"M",approach:"Binary search on speed + simulate travel"},
+{q:"Median of two sorted arrays.",d:"H",approach:"Binary search on partition of smaller array"},
+{q:"Find K-th smallest pair distance.",d:"H",approach:"Binary search on distance + count pairs <= mid"},
+{q:"Nth digit in infinite sequence.",d:"H",approach:"Binary search / math on digit ranges"},
+{q:"Minimize max distance to gas station.",d:"H",approach:"Binary search on distance + count splits"},
+{q:"Russian doll envelopes (2D LIS).",d:"H",approach:"Sort + binary search LIS on heights"}
+]},
+
+
+{id:19,title:"BFS/DFS Patterns",color:"#f472b6",section:"Problem-Solving Patterns",chips:["Level Order","Islands","Shortest Path","Word Ladder"],
+subtopics:[
+{name:"BFS for Shortest Path (Unweighted Graph)",theory:["BFS guarantees shortest path in unweighted graphs (fewest edges).","Level-by-level exploration; first time a node is reached is via shortest path.","Track distance array or parent array to reconstruct path."],tc:"O(V + E)",sc:"O(V)",code:"from collections import deque\n\ndef shortest_path_bfs(graph, start, end):\n    queue = deque([(start, 0)])\n    visited = {start}\n    while queue:\n        node, dist = queue.popleft()\n        if node == end:\n            return dist\n        for nb in graph[node]:\n            if nb not in visited:\n                visited.add(nb)\n                queue.append((nb, dist + 1))\n    return -1  # Not reachable"},
+{name:"DFS for Connected Components",theory:["Run DFS from each unvisited node; each DFS call explores one component.","Mark all reachable nodes as visited; count number of DFS initiations.","Works for both adjacency list and grid-based problems."],tc:"O(V + E)",sc:"O(V)",code:"def count_components(n, adj):\n    visited = [False] * n\n    count = 0\n    \n    def dfs(node):\n        visited[node] = True\n        for nb in adj[node]:\n            if not visited[nb]:\n                dfs(nb)\n    \n    for i in range(n):\n        if not visited[i]:\n            dfs(i)\n            count += 1\n    return count"},
+{name:"Number of Islands",theory:["Grid DFS/BFS: treat each '1' cell as a graph node connected to adjacent '1' cells.","For each unvisited '1', run DFS/BFS to mark entire island as visited.","Each initiation = one island; total initiations = number of islands."],tc:"O(m * n)",sc:"O(m * n) worst case for recursion/queue",code:"def num_islands(grid):\n    if not grid: return 0\n    rows, cols = len(grid), len(grid[0])\n    count = 0\n    \n    def dfs(r, c):\n        if r<0 or r>=rows or c<0 or c>=cols or grid[r][c]!='1':\n            return\n        grid[r][c] = '0'\n        dfs(r+1,c); dfs(r-1,c); dfs(r,c+1); dfs(r,c-1)\n    \n    for r in range(rows):\n        for c in range(cols):\n            if grid[r][c] == '1':\n                dfs(r, c)\n                count += 1\n    return count"},
+{name:"Word Ladder (BFS Shortest Transformation)",theory:["Transform word into target changing one letter at a time, all intermediates must be in dictionary.","BFS: each level = one transformation. Generate all single-char variations at each step.","First time target is reached = shortest path (minimum transformations)."],tc:"O(26 * L * n) where L=word length, n=dict size",sc:"O(n)",code:"from collections import deque\n\ndef ladder_length(begin, end, word_list):\n    word_set = set(word_list)\n    if end not in word_set:\n        return 0\n    queue = deque([(begin, 1)])\n    visited = {begin}\n    \n    while queue:\n        word, steps = queue.popleft()\n        for i in range(len(word)):\n            for c in 'abcdefghijklmnopqrstuvwxyz':\n                next_word = word[:i] + c + word[i+1:]\n                if next_word == end:\n                    return steps + 1\n                if next_word in word_set and next_word not in visited:\n                    visited.add(next_word)\n                    queue.append((next_word, steps + 1))\n    return 0"},
+{name:"Clone Graph",theory:["Deep copy a graph: create new node for each original, clone all edges.","BFS/DFS with hash map: original_node → cloned_node.","Process each node exactly once; clone neighbors as encountered."],tc:"O(V + E)",sc:"O(V)",code:"class Node:\n    def __init__(self, val=0, neighbors=None):\n        self.val = val\n        self.neighbors = neighbors if neighbors else []\n\ndef clone_graph(node):\n    if not node:\n        return None\n    cloned = {node: Node(node.val)}\n    queue = deque([node])\n    while queue:\n        curr = queue.popleft()\n        for nb in curr.neighbors:\n            if nb not in cloned:\n                cloned[nb] = Node(nb.val)\n                queue.append(nb)\n            cloned[curr].neighbors.append(cloned[nb])\n    return cloned[node]"},
+{name:"Rotten Oranges (Multi-source BFS)",theory:["Multiple starting points (all rotten oranges) enqueued simultaneously.","Each BFS level = 1 minute; oranges rot their fresh neighbors each minute.","After BFS, check if any fresh orange remains (return -1 if so)."],tc:"O(m * n)",sc:"O(m * n)",code:"from collections import deque\n\ndef oranges_rotting(grid):\n    rows, cols = len(grid), len(grid[0])\n    queue = deque()\n    fresh = 0\n    for r in range(rows):\n        for c in range(cols):\n            if grid[r][c] == 2:\n                queue.append((r, c))\n            elif grid[r][c] == 1:\n                fresh += 1\n    if fresh == 0: return 0\n    minutes = 0\n    dirs = [(0,1),(0,-1),(1,0),(-1,0)]\n    while queue:\n        for _ in range(len(queue)):\n            r, c = queue.popleft()\n            for dr, dc in dirs:\n                nr, nc = r+dr, c+dc\n                if 0<=nr<rows and 0<=nc<cols and grid[nr][nc]==1:\n                    grid[nr][nc] = 2\n                    fresh -= 1\n                    queue.append((nr, nc))\n        minutes += 1\n    return minutes - 1 if fresh == 0 else -1"}
+],
+examples:[
+{title:"Number of Islands",desc:"Count the number of islands in a 2D grid ('1'=land, '0'=water).",approach:"Iterate through grid. For each unvisited '1', increment count and run DFS/BFS to mark all connected '1' cells as visited (sink the island).",tc:"O(m * n)",sc:"O(m * n)",code:"def num_islands(grid):\n    count = 0\n    rows, cols = len(grid), len(grid[0])\n    def dfs(r, c):\n        if r<0 or r>=rows or c<0 or c>=cols or grid[r][c]!='1': return\n        grid[r][c] = '0'\n        dfs(r+1,c); dfs(r-1,c); dfs(r,c+1); dfs(r,c-1)\n    for r in range(rows):\n        for c in range(cols):\n            if grid[r][c] == '1':\n                dfs(r, c)\n                count += 1\n    return count"},
+{title:"Word Ladder - Shortest Transformation",desc:"Find length of shortest transformation sequence from beginWord to endWord.",approach:"BFS where each level represents one transformation. For each word, try changing each position to every letter a-z. If result is in dictionary and unvisited, add to queue.",tc:"O(26 * L * n)",sc:"O(n)",code:"from collections import deque\ndef ladder_length(begin, end, words):\n    word_set = set(words)\n    if end not in word_set: return 0\n    q = deque([(begin, 1)])\n    visited = {begin}\n    while q:\n        word, steps = q.popleft()\n        for i in range(len(word)):\n            for c in 'abcdefghijklmnopqrstuvwxyz':\n                nw = word[:i]+c+word[i+1:]\n                if nw == end: return steps+1\n                if nw in word_set and nw not in visited:\n                    visited.add(nw)\n                    q.append((nw, steps+1))\n    return 0"},
+{title:"Rotten Oranges",desc:"Find minimum minutes until all oranges are rotten, or -1 if impossible.",approach:"Multi-source BFS starting from all initially rotten oranges simultaneously. Each BFS level = one minute of spreading. After BFS, check if any fresh oranges remain.",tc:"O(m * n)",sc:"O(m * n)",code:"from collections import deque\ndef oranges_rotting(grid):\n    R, C = len(grid), len(grid[0])\n    q = deque()\n    fresh = 0\n    for r in range(R):\n        for c in range(C):\n            if grid[r][c]==2: q.append((r,c))\n            elif grid[r][c]==1: fresh+=1\n    if not fresh: return 0\n    mins = 0\n    while q:\n        for _ in range(len(q)):\n            r,c = q.popleft()\n            for dr,dc in [(0,1),(0,-1),(1,0),(-1,0)]:\n                nr,nc = r+dr,c+dc\n                if 0<=nr<R and 0<=nc<C and grid[nr][nc]==1:\n                    grid[nr][nc]=2; fresh-=1; q.append((nr,nc))\n        mins+=1\n    return mins-1 if not fresh else -1"}
+],
+practice:[
+{q:"Number of islands (grid DFS/BFS).",d:"E",approach:"DFS/BFS from each unvisited '1' cell"},
+{q:"Flood fill an image (change color of connected region).",d:"E",approach:"DFS/BFS from starting pixel"},
+{q:"Maximum area of island.",d:"E",approach:"DFS counting cells in each island"},
+{q:"Find if path exists in graph.",d:"E",approach:"BFS/DFS from source to destination"},
+{q:"All paths from source to target in DAG.",d:"E",approach:"DFS backtracking collecting paths"},
+{q:"Binary tree level order traversal.",d:"E",approach:"BFS with queue processing level by level"},
+{q:"Symmetric tree check.",d:"E",approach:"BFS/DFS comparing mirror nodes"},
+{q:"Rotten oranges - minimum time to rot all.",d:"M",approach:"Multi-source BFS from all rotten oranges"},
+{q:"Shortest path in binary matrix.",d:"M",approach:"BFS from (0,0) to (n-1,n-1)"},
+{q:"Word Ladder - minimum transformations.",d:"M",approach:"BFS with single char changes"},
+{q:"Clone a graph (deep copy).",d:"M",approach:"BFS/DFS with hash map old→new"},
+{q:"Course schedule order (topological sort).",d:"M",approach:"BFS (Kahn's) or DFS topological"},
+{q:"Surrounded regions - capture O's.",d:"M",approach:"DFS/BFS from border O's"},
+{q:"Pacific Atlantic water flow.",d:"M",approach:"BFS/DFS from each ocean boundary"},
+{q:"Walls and gates (nearest gate distance).",d:"M",approach:"Multi-source BFS from all gates"},
+{q:"Word Ladder II - all shortest paths.",d:"H",approach:"BFS for distance + DFS backtrack for paths"},
+{q:"Shortest path with alternating colors.",d:"H",approach:"BFS with state (node, last_color)"},
+{q:"Bus routes - minimum buses to destination.",d:"H",approach:"BFS on route graph, not stop graph"},
+{q:"Minimum moves for knight on infinite board.",d:"H",approach:"BFS with symmetry optimization"},
+{q:"Alien dictionary (derive order from words).",d:"H",approach:"Build DAG + topological sort BFS"}
+]},
+
+{id:20,title:"Bit Manipulation",color:"#22d3ee",section:"Problem-Solving Patterns",chips:["AND/OR/XOR","Single Number","Power of 2","Subsets"],
+subtopics:[
+{name:"Bitwise Operators (AND/OR/XOR/NOT/SHIFT)",theory:["AND (&): both bits 1 → 1. OR (|): either bit 1 → 1. XOR (^): different bits → 1.","Left shift (<<): multiply by 2. Right shift (>>): divide by 2.","NOT (~): flips all bits; ~n = -(n+1) in Python."],tc:"O(1) per operation",sc:"O(1)",code:"# Bitwise operations\na, b = 5, 3  # 101, 011\nprint(a & b)   # AND: 001 = 1\nprint(a | b)   # OR:  111 = 7\nprint(a ^ b)   # XOR: 110 = 6\nprint(~a)      # NOT: -6 (two's complement)\nprint(a << 1)  # Left shift: 1010 = 10\nprint(a >> 1)  # Right shift: 10 = 2\n\n# Useful tricks\nn = 12  # 1100\nprint(n & 1)       # Check if odd (last bit)\nprint(n & (n-1))   # Remove lowest set bit: 1000 = 8\nprint(n | (n+1))   # Set lowest unset bit"},
+{name:"Single Number (XOR trick)",theory:["XOR properties: a^a=0, a^0=a, XOR is commutative and associative.","If every element appears twice except one, XOR all elements → single number remains.","Extends to 'single number appearing once while others appear thrice' with bit counting."],tc:"O(n)",sc:"O(1)",code:"def single_number(nums):\n    result = 0\n    for num in nums:\n        result ^= num\n    return result\n\nprint(single_number([4, 1, 2, 1, 2]))  # 4\n\n# Two single numbers (all others appear twice)\ndef single_number_iii(nums):\n    xor_all = 0\n    for n in nums:\n        xor_all ^= n\n    # Find rightmost set bit (differentiator)\n    diff_bit = xor_all & (-xor_all)\n    a = b = 0\n    for n in nums:\n        if n & diff_bit:\n            a ^= n\n        else:\n            b ^= n\n    return [a, b]"},
+{name:"Check Power of 2",theory:["Power of 2 has exactly one set bit: 1, 10, 100, 1000 in binary.","n & (n-1) removes lowest set bit; if result is 0, only one bit was set.","Must also check n > 0 (0 is not a power of 2)."],tc:"O(1)",sc:"O(1)",code:"def is_power_of_two(n):\n    return n > 0 and (n & (n - 1)) == 0\n\nprint(is_power_of_two(16))  # True (10000)\nprint(is_power_of_two(18))  # False (10010)\n\n# Check power of 4\ndef is_power_of_four(n):\n    # Power of 2 AND bit is at even position\n    return n > 0 and (n & (n-1)) == 0 and (n & 0x55555555) != 0"},
+{name:"Count Set Bits",theory:["Count number of 1-bits (Hamming weight) in binary representation.","Brian Kernighan's trick: n & (n-1) removes lowest set bit; count iterations.","Alternative: lookup table or built-in bin(n).count('1')."],tc:"O(number of set bits)",sc:"O(1)",code:"def count_bits(n):\n    count = 0\n    while n:\n        n &= (n - 1)  # Remove lowest set bit\n        count += 1\n    return count\n\nprint(count_bits(13))  # 1101 → 3\n\n# Count bits for all numbers 0 to n\ndef count_bits_array(n):\n    dp = [0] * (n + 1)\n    for i in range(1, n + 1):\n        dp[i] = dp[i >> 1] + (i & 1)\n    return dp\n\nprint(count_bits_array(5))  # [0,1,1,2,1,2]"},
+{name:"Subsets using Bitmask",theory:["For n elements, iterate from 0 to 2^n - 1; each number's bits represent a subset.","Bit i is 1 → include element i in subset.","Efficient for small n (≤ 20); avoids recursion overhead."],tc:"O(2^n * n)",sc:"O(2^n * n) for output",code:"def subsets_bitmask(nums):\n    n = len(nums)\n    result = []\n    for mask in range(1 << n):  # 0 to 2^n - 1\n        subset = []\n        for i in range(n):\n            if mask & (1 << i):  # Check if bit i is set\n                subset.append(nums[i])\n        result.append(subset)\n    return result\n\nprint(subsets_bitmask([1,2,3]))"},
+{name:"XOR Properties & Applications",theory:["a^a=0, a^0=a, XOR is commutative (order doesn't matter) and associative.","XOR of range [0,n]: pattern repeats every 4 (n, 1, n+1, 0).","Used in: finding missing number, swap without temp, finding duplicates."],tc:"O(1) for properties, O(n) for array operations",sc:"O(1)",code:"# Find missing number in [0, n]\ndef missing_number(nums):\n    n = len(nums)\n    xor = 0\n    for i in range(n + 1):\n        xor ^= i\n    for num in nums:\n        xor ^= num\n    return xor\n\nprint(missing_number([3, 0, 1]))  # 2\n\n# Swap without temp variable\ndef swap(a, b):\n    a ^= b\n    b ^= a\n    a ^= b\n    return a, b\n\n# XOR of range [0, n]\ndef xor_range(n):\n    mod = n % 4\n    if mod == 0: return n\n    if mod == 1: return 1\n    if mod == 2: return n + 1\n    return 0"}
+],
+examples:[
+{title:"Single Number",desc:"Find the element that appears only once when all others appear twice.",approach:"XOR all elements together. Since a^a=0 and a^0=a, all pairs cancel out leaving only the single unique element. One pass, constant space.",tc:"O(n)",sc:"O(1)",code:"def single_number(nums):\n    result = 0\n    for num in nums:\n        result ^= num\n    return result\n\nprint(single_number([2,2,1]))  # 1"},
+{title:"Number of 1 Bits (Hamming Weight)",desc:"Count the number of set bits in an integer's binary representation.",approach:"Use Brian Kernighan's algorithm: n & (n-1) clears the lowest set bit. Count how many times we can do this before n becomes 0. Each iteration removes exactly one set bit.",tc:"O(set bits)",sc:"O(1)",code:"def hamming_weight(n):\n    count = 0\n    while n:\n        n &= n - 1\n        count += 1\n    return count\n\nprint(hamming_weight(11))  # 1011 → 3"},
+{title:"Missing Number",desc:"Given array containing n distinct numbers from range [0, n], find the missing one.",approach:"XOR all indices [0..n] with all elements. Pairs cancel out (a^a=0), leaving only the missing number. Alternative: sum formula n*(n+1)/2 - sum(nums).",tc:"O(n)",sc:"O(1)",code:"def missing_number(nums):\n    xor = len(nums)\n    for i, num in enumerate(nums):\n        xor ^= i ^ num\n    return xor\n\nprint(missing_number([3, 0, 1]))  # 2"}
+],
+practice:[
+{q:"Find the single number (all others appear twice).",d:"E",approach:"XOR all elements"},
+{q:"Check if a number is power of 2.",d:"E",approach:"n & (n-1) == 0 and n > 0"},
+{q:"Count number of set bits (1s) in a number.",d:"E",approach:"Brian Kernighan's: n &= n-1, count"},
+{q:"Find missing number in range [0, n].",d:"E",approach:"XOR all indices with all elements"},
+{q:"Reverse bits of a 32-bit integer.",d:"E",approach:"Iterate 32 bits, build result with shifts"},
+{q:"Add two numbers without + operator.",d:"E",approach:"XOR for sum, AND<<1 for carry, repeat"},
+{q:"Check if ith bit is set.",d:"E",approach:"n & (1 << i) != 0"},
+{q:"Single Number II (others appear 3 times).",d:"M",approach:"Count bits mod 3 for each position"},
+{q:"Single Number III (two unique numbers).",d:"M",approach:"XOR all, split by differentiating bit"},
+{q:"Counting bits for all numbers 0 to n.",d:"M",approach:"dp[i] = dp[i>>1] + (i&1)"},
+{q:"Generate all subsets using bitmask.",d:"M",approach:"Iterate 0 to 2^n, check each bit"},
+{q:"Maximum XOR of two numbers in array.",d:"M",approach:"Trie or bit-by-bit greedy with prefix set"},
+{q:"Total hamming distance between all pairs.",d:"M",approach:"Count 1s and 0s at each bit position"},
+{q:"Bitwise AND of numbers range [m, n].",d:"M",approach:"Find common prefix of m and n"},
+{q:"Decode XORed array.",d:"M",approach:"a[i] = encoded[i-1] ^ a[i-1]"},
+{q:"Maximum AND of any pair in array.",d:"H",approach:"Greedily set bits from MSB to LSB"},
+{q:"Find XOR of all subsets' ORs.",d:"H",approach:"Math: each bit appears in 2^(n-1) subsets"},
+{q:"Minimum flips to make a OR b equal c.",d:"H",approach:"Check each bit position independently"},
+{q:"Concatenation of consecutive binary numbers mod 10^9+7.",d:"H",approach:"Shift and OR with bit length tracking"},
+{q:"Maximum XOR with element from array (offline queries).",d:"H",approach:"Trie + sort queries by limit"}
+]}
+];
+
+
+// Section labels
+const sections = {
+    'Data Structures': [1,8],
+    'Algorithms': [9,13],
+    'Problem-Solving Patterns': [14,20]
+};
+
+function getProgress(){return loadProgress();}
+
+function getTotalChecked(){
+    const p=getProgress();
+    let count=0;
+    for(let k in p){count+=Object.keys(p[k]).filter(x=>p[k][x]).length;}
+    return count;
+}
+
+function getTotalPractice(){
+    return topics.reduce((s,t)=>s+t.practice.length,0);
+}
+
+function updateProgressBar(){
+    const done=getTotalChecked();
+    const total=getTotalPractice();
+    document.getElementById('progressText').textContent=done+' / '+total;
+    document.getElementById('progressFill').style.width=(total?((done/total)*100):0)+'%';
+}
+
+function getTopicProgress(topicId){
+    const p=getProgress();
+    const key='topic_'+topicId;
+    if(!p[key])return 0;
+    return Object.keys(p[key]).filter(x=>p[key][x]).length;
+}
+
+function renderRoadmap(){
+    const container=document.getElementById('roadmapContainer');
+    let html='';
+    let lastSection='';
+    topics.forEach(t=>{
+        if(t.section!==lastSection){
+            lastSection=t.section;
+            html+=`<div class="section-label">${t.section}</div>`;
+        }
+        const done=getTopicProgress(t.id);
+        const total=t.practice.length;
+        html+=`<div class="node" onclick="showDetail(${t.id})">
+            <div class="node-number" style="border-color:${t.color};color:${t.color}">${t.id}</div>
+            <div class="node-card">
+                <div class="node-title" style="color:${t.color}">${t.title}</div>
+                <div class="node-chips">${t.chips.map(c=>`<span class="chip">${c}</span>`).join('')}</div>
+                <div class="node-progress">${done}/${total} practice completed</div>
+            </div>
+        </div>`;
+    });
+    container.innerHTML=html;
+}
+
+function showRoadmap(){
+    document.getElementById('roadmapPage').classList.add('active');
+    document.getElementById('detailPage').classList.remove('active');
+    renderRoadmap();
+    updateProgressBar();
+}
+
+function showDetail(id){
+    const topic=topics.find(t=>t.id===id);
+    if(!topic)return;
+    document.getElementById('roadmapPage').classList.remove('active');
+    document.getElementById('detailPage').classList.add('active');
+    document.getElementById('detailTitle').textContent=topic.title;
+    document.getElementById('detailTitle').style.color=topic.color;
+    document.getElementById('detailSubtitle').textContent=topic.chips.join(' • ');
+    renderTheory(topic);
+    renderExamples(topic);
+    renderPractice(topic);
+    switchTab('theory');
+}
+
+function switchTab(name){
+    document.querySelectorAll('.tab').forEach((t,i)=>{
+        t.classList.toggle('active',['theory','examples','practice'][i]===name);
+    });
+    document.querySelectorAll('.tab-content').forEach((c,i)=>{
+        c.classList.toggle('active',['theory','examples','practice'][i]===name);
+    });
+}
+
+function highlightPython(code){
+    const keywords=['def','class','return','if','else','elif','for','while','in','not','and','or','is','None','True','False','import','from','as','with','try','except','finally','raise','yield','lambda','pass','break','continue','global','nonlocal','assert','del'];
+    const builtins=['print','len','range','enumerate','zip','map','filter','sorted','reversed','sum','min','max','abs','int','str','float','list','dict','set','tuple','type','isinstance','hasattr','getattr','setattr','super','property','staticmethod','classmethod','any','all','next','iter','open','input','format','round','divmod','pow','hash','id','hex','bin','oct','ord','chr'];
+    let h=code.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+    h=h.replace(/(#.*)/g,'<span class="cm">$1</span>');
+    h=h.replace(/(&quot;.*?&quot;|&#39;.*?&#39;|".*?"|'.*?'|"""[\s\S]*?"""|'''[\s\S]*?''')/g,'<span class="st">$1</span>');
+    h=h.replace(/(f".*?"|f'.*?')/g,'<span class="st">$1</span>');
+    const kwRe=new RegExp('\\b('+keywords.join('|')+')\\b','g');
+    h=h.replace(kwRe,'<span class="kw">$1</span>');
+    const fnRe=new RegExp('\\b('+builtins.join('|')+')\\b','g');
+    h=h.replace(fnRe,'<span class="fn">$1</span>');
+    h=h.replace(/\b(\d+\.?\d*)\b/g,'<span class="nu">$1</span>');
+    return h;
+}
+
+function renderTheory(topic){
+    let html='';
+    topic.subtopics.forEach(st=>{
+        html+=`<div class="theory-section">
+            <div class="theory-title">${st.name}</div>`;
+        st.theory.forEach(p=>{
+            html+=`<div class="theory-point">${p}</div>`;
+        });
+        if(st.tc)html+=`<span class="complexity-badge time">Time: ${st.tc}</span> `;
+        if(st.sc)html+=`<span class="complexity-badge space">Space: ${st.sc}</span>`;
+        html+=`<pre class="code-block"><code>${highlightPython(st.code)}</code></pre></div>`;
+    });
+    document.getElementById('theoryContent').innerHTML=html;
+}
+
+function renderExamples(topic){
+    let html='';
+    topic.examples.forEach(ex=>{
+        html+=`<div class="example-card">
+            <div class="example-title">${ex.title}</div>
+            <div class="example-desc">${ex.desc}</div>
+            <div class="approach-box">
+                <div class="approach-label">Approach</div>
+                <div class="approach-text">${ex.approach}</div>
+            </div>`;
+        if(ex.tc)html+=`<span class="complexity-badge time">Time: ${ex.tc}</span> `;
+        if(ex.sc)html+=`<span class="complexity-badge space">Space: ${ex.sc}</span>`;
+        html+=`<pre class="code-block"><code>${highlightPython(ex.code)}</code></pre></div>`;
+    });
+    document.getElementById('examplesContent').innerHTML=html;
+}
+
+function renderPractice(topic){
+    const p=getProgress();
+    const key='topic_'+topic.id;
+    if(!p[key])p[key]={};
+    const easy=topic.practice.filter(x=>x.d==='E');
+    const medium=topic.practice.filter(x=>x.d==='M');
+    const hard=topic.practice.filter(x=>x.d==='H');
+    let html='';
+    html+=`<div class="difficulty-header easy-h">Easy (${easy.length})</div>`;
+    easy.forEach((pr,i)=>{html+=practiceItem(pr,key,'E',i,p);});
+    html+=`<div class="difficulty-header medium-h">Medium (${medium.length})</div>`;
+    medium.forEach((pr,i)=>{html+=practiceItem(pr,key,'M',i,p);});
+    html+=`<div class="difficulty-header hard-h">Hard (${hard.length})</div>`;
+    hard.forEach((pr,i)=>{html+=practiceItem(pr,key,'H',i,p);});
+    document.getElementById('practiceContent').innerHTML=html;
+}
+
+function practiceItem(pr,key,diff,i,p){
+    const id=diff+'_'+i;
+    const checked=p[key]&&p[key][id];
+    const diffClass=diff==='E'?'easy':diff==='M'?'medium':'hard';
+    const diffLabel=diff==='E'?'Easy':diff==='M'?'Medium':'Hard';
+    return `<div class="practice-item ${checked?'done':''}">
+        <input type="checkbox" ${checked?'checked':''} onchange="togglePractice('${key}','${id}',this.checked)">
+        <div class="practice-text">${pr.q}
+            <div class="practice-approach">Pattern: ${pr.approach}</div>
+        </div>
+        <span class="difficulty ${diffClass}">${diffLabel}</span>
+    </div>`;
+}
+
+function togglePractice(key,id,checked){
+    const p=getProgress();
+    if(!p[key])p[key]={};
+    p[key][id]=checked;
+    if(!checked)delete p[key][id];
+    saveProgress(p);
+    updateProgressBar();
+    const item=event.target.closest('.practice-item');
+    if(item)item.classList.toggle('done',checked);
+}
+
+// Initialize
+renderRoadmap();
+updateProgressBar();
+</script>
+</body>
+</html>
