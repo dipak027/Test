@@ -1,0 +1,869 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Learning Progress Dashboard</title>
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{--bg:#080c14;--card:#141d2e;--border:#1e2d45;--text:#dde4f0;--text-dim:#8892a4;--green:#4ade80;--cyan:#22d3ee;--purple:#a78bfa;--yellow:#fbbf24;--pink:#f472b6;--gradient:linear-gradient(135deg,#4ade80,#22d3ee,#a78bfa);--glass:rgba(20,29,46,0.7)}
+body{font-family:'Sora',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;overflow-x:hidden;line-height:1.6}
+code,.mono{font-family:'JetBrains Mono',monospace}
+.dashboard{max-width:1200px;margin:0 auto;padding:24px 20px 80px}
+
+/* Header */
+.header{text-align:center;margin-bottom:48px;padding:40px 20px;position:relative}
+.header::after{content:'';position:absolute;bottom:0;left:50%;transform:translateX(-50%);width:200px;height:2px;background:var(--gradient);border-radius:1px}
+.header h1{font-size:2.4rem;font-weight:700;background:var(--gradient);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;margin-bottom:12px}
+.header .subtitle{color:var(--text-dim);font-size:0.95rem}
+.header .subtitle span{color:var(--cyan);font-weight:600}
+
+/* Stats Grid */
+.stats-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:20px;margin-bottom:48px}
+.stat-card{background:var(--glass);backdrop-filter:blur(12px);border:1px solid var(--border);border-radius:16px;padding:24px;text-align:center;position:relative;overflow:hidden;transition:transform 0.3s,border-color 0.3s,box-shadow 0.3s}
+.stat-card:hover{transform:translateY(-4px);border-color:var(--cyan);box-shadow:0 8px 32px rgba(34,211,238,0.15)}
+.stat-card::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:var(--gradient);opacity:0.8}
+.stat-card .stat-icon{font-size:1.8rem;margin-bottom:8px}
+.stat-card .stat-value{font-size:2.2rem;font-weight:700;font-family:'JetBrains Mono',monospace;background:var(--gradient);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.stat-card .stat-label{font-size:0.8rem;color:var(--text-dim);margin-top:4px;text-transform:uppercase;letter-spacing:1px}
+
+/* Donut Chart */
+.donut-container{position:relative;width:80px;height:80px;margin:0 auto 8px}
+.donut-svg{transform:rotate(-90deg)}
+.donut-track{fill:none;stroke:var(--border);stroke-width:8}
+.donut-fill{fill:none;stroke:url(#donutGradient);stroke-width:8;stroke-linecap:round;transition:stroke-dashoffset 1s ease}
+.donut-text{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);font-size:0.85rem;font-weight:700;font-family:'JetBrains Mono',monospace}
+
+/* Streak Animation */
+@keyframes pulse{0%,100%{transform:scale(1)}50%{transform:scale(1.05)}}
+.streak-active{animation:pulse 2s ease-in-out infinite}
+
+/* Section Titles */
+.section-title{font-size:1.4rem;font-weight:700;margin:48px 0 24px;padding-left:16px;border-left:3px solid var(--cyan);color:var(--text)}
+
+/* Roadmap Cards */
+.roadmap-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(320px,1fr));gap:24px;margin-bottom:48px}
+.roadmap-card{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:28px;transition:transform 0.3s,border-color 0.3s,box-shadow 0.3s}
+.roadmap-card:hover{transform:translateY(-2px);border-color:var(--cyan);box-shadow:0 8px 32px rgba(34,211,238,0.1)}
+.roadmap-card .rc-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:16px}
+.roadmap-card .rc-title{font-size:1.2rem;font-weight:600}
+.roadmap-card .rc-count{font-size:0.85rem;font-family:'JetBrains Mono',monospace;color:var(--cyan)}
+.progress-bar-container{background:var(--border);border-radius:6px;height:10px;overflow:hidden;margin:12px 0}
+.progress-bar-fill{height:100%;border-radius:6px;background:var(--gradient);transition:width 1s ease}
+.roadmap-card .rc-details{font-size:0.78rem;color:var(--text-dim);display:flex;justify-content:space-between}
+
+/* Topic Breakdown */
+.topic-section{margin-bottom:24px}
+.topic-header{display:flex;align-items:center;justify-content:space-between;padding:14px 20px;background:var(--card);border:1px solid var(--border);border-radius:10px;cursor:pointer;transition:border-color 0.2s}
+.topic-header:hover{border-color:var(--cyan)}
+.topic-header .th-left{display:flex;align-items:center;gap:12px}
+.topic-header .th-name{font-size:0.9rem;font-weight:500}
+.topic-header .th-count{font-size:0.75rem;font-family:'JetBrains Mono',monospace;color:var(--text-dim)}
+.topic-header .th-arrow{transition:transform 0.3s;color:var(--text-dim)}
+.topic-header.open .th-arrow{transform:rotate(180deg)}
+.topic-body{display:none;padding:12px 20px;border:1px solid var(--border);border-top:none;border-radius:0 0 10px 10px;background:rgba(20,29,46,0.5)}
+.topic-body.open{display:block}
+.mini-bar{height:6px;background:var(--border);border-radius:3px;overflow:hidden;margin:6px 0}
+.mini-bar-fill{height:100%;border-radius:3px;transition:width 0.5s}
+.difficulty-row{display:flex;gap:16px;margin-top:8px;font-size:0.72rem}
+.diff-badge{padding:2px 8px;border-radius:4px;font-weight:600}
+.diff-badge.easy{background:rgba(74,222,128,0.15);color:#4ade80}
+.diff-badge.medium{background:rgba(251,191,36,0.15);color:#fbbf24}
+.diff-badge.hard{background:rgba(244,114,182,0.15);color:#f472b6}
+
+/* Heatmap */
+.heatmap-container{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:24px;margin-bottom:48px;overflow-x:auto}
+.heatmap-grid{display:grid;grid-template-columns:repeat(13,1fr);gap:3px;max-width:100%}
+.heatmap-cell{width:100%;aspect-ratio:1;border-radius:3px;background:var(--border);transition:transform 0.2s}
+.heatmap-cell:hover{transform:scale(1.4);z-index:10}
+.heatmap-cell.l1{background:rgba(74,222,128,0.25)}
+.heatmap-cell.l2{background:rgba(74,222,128,0.45)}
+.heatmap-cell.l3{background:rgba(74,222,128,0.65)}
+.heatmap-cell.l4{background:rgba(74,222,128,0.9)}
+.heatmap-legend{display:flex;align-items:center;gap:6px;margin-top:12px;font-size:0.7rem;color:var(--text-dim);justify-content:flex-end}
+.heatmap-legend .hl-cell{width:14px;height:14px;border-radius:2px}
+.heatmap-months{display:flex;gap:3px;margin-bottom:6px;font-size:0.65rem;color:var(--text-dim)}
+
+/* Difficulty Donut (CSS-only pie) */
+.pie-container{display:flex;align-items:center;justify-content:center;gap:40px;padding:24px;background:var(--card);border:1px solid var(--border);border-radius:16px;margin-bottom:48px;flex-wrap:wrap}
+.pie-chart{position:relative;width:160px;height:160px;border-radius:50%}
+.pie-legend{display:flex;flex-direction:column;gap:12px}
+.pie-legend-item{display:flex;align-items:center;gap:10px;font-size:0.85rem}
+.pie-legend-dot{width:12px;height:12px;border-radius:50%}
+
+/* Achievements */
+.achievements-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(140px,1fr));gap:16px;margin-bottom:48px}
+.badge{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:20px 12px;text-align:center;transition:transform 0.3s,box-shadow 0.3s}
+.badge:hover{transform:translateY(-2px)}
+.badge.unlocked{border-color:var(--green);box-shadow:0 4px 20px rgba(74,222,128,0.15)}
+.badge.unlocked .badge-icon{filter:none}
+.badge .badge-icon{font-size:2rem;margin-bottom:8px;filter:grayscale(1) opacity(0.4);transition:filter 0.3s}
+.badge .badge-name{font-size:0.72rem;font-weight:600;color:var(--text-dim)}
+.badge.unlocked .badge-name{color:var(--text)}
+@keyframes badgeUnlock{0%{transform:scale(1)}50%{transform:scale(1.2)}100%{transform:scale(1)}}
+.badge.unlocked .badge-icon{animation:badgeUnlock 0.6s ease}
+
+/* Activity Feed */
+.activity-feed{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:24px;margin-bottom:48px}
+.activity-item{display:flex;align-items:center;gap:12px;padding:10px 0;border-bottom:1px solid rgba(30,45,69,0.5)}
+.activity-item:last-child{border-bottom:none}
+.activity-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0}
+.activity-dot.sql{background:var(--cyan)}
+.activity-dot.python{background:var(--green)}
+.activity-dot.dsa{background:var(--purple)}
+.activity-text{font-size:0.82rem;flex:1}
+.activity-time{font-size:0.7rem;color:var(--text-dim);font-family:'JetBrains Mono',monospace}
+
+/* Quick Links */
+.quick-links{display:flex;gap:12px;flex-wrap:wrap;margin-bottom:48px}
+.quick-link{padding:12px 24px;background:var(--card);border:1px solid var(--border);border-radius:10px;color:var(--text);text-decoration:none;font-size:0.85rem;font-weight:500;transition:all 0.3s;cursor:pointer}
+.quick-link:hover{border-color:var(--cyan);background:rgba(34,211,238,0.05);transform:translateY(-2px)}
+
+/* Footer */
+.footer{display:flex;gap:12px;flex-wrap:wrap;padding-top:24px;border-top:1px solid var(--border)}
+.footer-btn{padding:10px 20px;border:1px solid var(--border);border-radius:8px;background:var(--card);color:var(--text);font-family:'Sora',sans-serif;font-size:0.82rem;cursor:pointer;transition:all 0.2s}
+.footer-btn:hover{border-color:var(--cyan)}
+.footer-btn.danger{border-color:rgba(244,114,182,0.3)}
+.footer-btn.danger:hover{border-color:var(--pink);background:rgba(244,114,182,0.1)}
+
+/* Animated Counters */
+@keyframes fadeUp{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}
+.animate-in{animation:fadeUp 0.6s ease forwards;opacity:0}
+.animate-in:nth-child(1){animation-delay:0.1s}
+.animate-in:nth-child(2){animation-delay:0.2s}
+.animate-in:nth-child(3){animation-delay:0.3s}
+.animate-in:nth-child(4){animation-delay:0.4s}
+
+/* Responsive */
+@media(max-width:768px){
+.header h1{font-size:1.6rem}
+.stats-grid{grid-template-columns:repeat(2,1fr)}
+.roadmap-grid{grid-template-columns:1fr}
+.pie-container{flex-direction:column}
+.achievements-grid{grid-template-columns:repeat(3,1fr)}
+.heatmap-grid{grid-template-columns:repeat(7,1fr)}
+}
+@media(max-width:480px){
+.stats-grid{grid-template-columns:1fr}
+.achievements-grid{grid-template-columns:repeat(2,1fr)}
+}
+
+/* Tooltip */
+.tooltip{position:relative}
+.tooltip::after{content:attr(data-tip);position:absolute;bottom:calc(100% + 8px);left:50%;transform:translateX(-50%);background:#1a2744;color:var(--text);padding:4px 10px;border-radius:6px;font-size:0.7rem;white-space:nowrap;opacity:0;pointer-events:none;transition:opacity 0.2s}
+.tooltip:hover::after{opacity:1}
+
+/* Modal */
+.modal-overlay{position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,0.7);display:none;align-items:center;justify-content:center;z-index:9999;backdrop-filter:blur(4px)}
+.modal-overlay.active{display:flex}
+.modal{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:32px;max-width:400px;width:90%;text-align:center}
+.modal h3{margin-bottom:16px;font-size:1.1rem}
+.modal p{color:var(--text-dim);font-size:0.85rem;margin-bottom:24px}
+.modal-btns{display:flex;gap:12px;justify-content:center}
+.modal-btns button{padding:10px 24px;border-radius:8px;border:1px solid var(--border);font-family:'Sora',sans-serif;font-size:0.85rem;cursor:pointer;transition:all 0.2s}
+.modal-btns .confirm{background:rgba(244,114,182,0.2);border-color:var(--pink);color:var(--pink)}
+.modal-btns .cancel{background:var(--card);color:var(--text)}
+</style>
+</head>
+<body>
+<div class="dashboard">
+<header class="header">
+<h1>Learning Progress Dashboard</h1>
+<p class="subtitle">Tracking <span id="headerTotal">960</span> problems across 3 roadmaps</p>
+</header>
+
+
+<!-- SVG Gradient Definition -->
+<svg width="0" height="0" style="position:absolute">
+<defs>
+<linearGradient id="donutGradient" x1="0%" y1="0%" x2="100%" y2="0%">
+<stop offset="0%" style="stop-color:#4ade80"/>
+<stop offset="50%" style="stop-color:#22d3ee"/>
+<stop offset="100%" style="stop-color:#a78bfa"/>
+</linearGradient>
+</defs>
+</svg>
+
+<!-- Stats Cards -->
+<div class="stats-grid">
+<div class="stat-card animate-in">
+<div class="stat-icon">&#128202;</div>
+<div class="stat-value" id="totalSolved">0</div>
+<div class="stat-label">Problems Solved</div>
+</div>
+<div class="stat-card animate-in">
+<div class="donut-container">
+<svg class="donut-svg" width="80" height="80" viewBox="0 0 80 80">
+<circle class="donut-track" cx="40" cy="40" r="34"/>
+<circle class="donut-fill" id="donutCircle" cx="40" cy="40" r="34" stroke-dasharray="213.6" stroke-dashoffset="213.6"/>
+</svg>
+<div class="donut-text" id="donutText">0%</div>
+</div>
+<div class="stat-label">Completion</div>
+</div>
+<div class="stat-card animate-in">
+<div class="stat-icon streak-active" id="streakIcon">&#128293;</div>
+<div class="stat-value" id="currentStreak">0</div>
+<div class="stat-label">Day Streak</div>
+</div>
+<div class="stat-card animate-in">
+<div class="stat-icon">&#127942;</div>
+<div class="stat-value" id="bestStreak">0</div>
+<div class="stat-label">Best Streak</div>
+</div>
+</div>
+
+<!-- Roadmap Progress Section -->
+<h2 class="section-title">Roadmap Progress</h2>
+<div class="roadmap-grid">
+<div class="roadmap-card">
+<div class="rc-header">
+<div class="rc-title">&#128451; SQL Roadmap</div>
+<div class="rc-count" id="sqlCount">0 / 300</div>
+</div>
+<div class="progress-bar-container">
+<div class="progress-bar-fill" id="sqlBar" style="width:0%"></div>
+</div>
+<div class="rc-details">
+<span id="sqlPct">0% complete</span>
+<span id="sqlTopics">15 topics</span>
+</div>
+</div>
+<div class="roadmap-card">
+<div class="rc-header">
+<div class="rc-title">&#128013; Python Roadmap</div>
+<div class="rc-count" id="pythonCount">0 / 260</div>
+</div>
+<div class="progress-bar-container">
+<div class="progress-bar-fill" id="pythonBar" style="width:0%"></div>
+</div>
+<div class="rc-details">
+<span id="pythonPct">0% complete</span>
+<span id="pythonTopics">13 topics</span>
+</div>
+</div>
+<div class="roadmap-card">
+<div class="rc-header">
+<div class="rc-title">&#9881; DSA Roadmap</div>
+<div class="rc-count" id="dsaCount">0 / 400</div>
+</div>
+<div class="progress-bar-container">
+<div class="progress-bar-fill" id="dsaBar" style="width:0%"></div>
+</div>
+<div class="rc-details">
+<span id="dsaPct">0% complete</span>
+<span id="dsaTopics">20 topics</span>
+</div>
+</div>
+</div>
+
+<!-- Topic Breakdown -->
+<h2 class="section-title">Topic Breakdown</h2>
+<div id="topicBreakdown"></div>
+
+<!-- Activity Heatmap -->
+<h2 class="section-title">Activity Heatmap (Last 91 Days)</h2>
+<div class="heatmap-container">
+<div id="heatmapMonths" class="heatmap-months"></div>
+<div id="heatmapGrid" class="heatmap-grid"></div>
+<div class="heatmap-legend">
+<span>Less</span>
+<div class="hl-cell" style="background:var(--border)"></div>
+<div class="hl-cell" style="background:rgba(74,222,128,0.25)"></div>
+<div class="hl-cell" style="background:rgba(74,222,128,0.45)"></div>
+<div class="hl-cell" style="background:rgba(74,222,128,0.65)"></div>
+<div class="hl-cell" style="background:rgba(74,222,128,0.9)"></div>
+<span>More</span>
+</div>
+</div>
+
+<!-- Difficulty Distribution -->
+<h2 class="section-title">Difficulty Distribution</h2>
+<div class="pie-container">
+<div class="pie-chart" id="pieChart"></div>
+<div class="pie-legend" id="pieLegend"></div>
+</div>
+
+<!-- Achievements -->
+<h2 class="section-title">Achievements</h2>
+<div class="achievements-grid" id="achievementsGrid"></div>
+
+<!-- Recent Activity -->
+<h2 class="section-title">Recent Activity</h2>
+<div class="activity-feed" id="activityFeed">
+<div style="text-align:center;color:var(--text-dim);padding:20px;font-size:0.85rem">No recent activity yet. Start solving problems!</div>
+</div>
+
+<!-- Quick Links -->
+<h2 class="section-title">Quick Links</h2>
+<div class="quick-links">
+<a class="quick-link" href="../SQL_Roadmap_Interactive.html">&#128451; SQL Roadmap</a>
+<a class="quick-link" href="Python_Roadmap_Interactive.html">&#128013; Python Roadmap</a>
+<a class="quick-link" href="DSA_Roadmap_Interactive.html">&#9881; DSA Roadmap</a>
+</div>
+
+<!-- Footer -->
+<div class="footer">
+<button class="footer-btn danger" onclick="showResetModal()">&#128465; Reset All Progress</button>
+<button class="footer-btn" onclick="exportProgress()">&#128229; Export as JSON</button>
+<button class="footer-btn" onclick="document.getElementById('importInput').click()">&#128228; Import JSON</button>
+<input type="file" id="importInput" accept=".json" style="display:none" onchange="importProgress(event)">
+</div>
+</div>
+
+<!-- Reset Modal -->
+<div class="modal-overlay" id="resetModal">
+<div class="modal">
+<h3>&#9888; Reset All Progress?</h3>
+<p>This will permanently delete all your progress data across all roadmaps. This action cannot be undone.</p>
+<div class="modal-btns">
+<button class="confirm" onclick="confirmReset()">Yes, Reset Everything</button>
+<button class="cancel" onclick="hideResetModal()">Cancel</button>
+</div>
+</div>
+</div>
+
+
+<script>
+// ============ CONSTANTS & CONFIG ============
+const SQL_TOTAL = 300;
+const PYTHON_TOTAL = 260;
+const DSA_TOTAL = 400;
+const GRAND_TOTAL = SQL_TOTAL + PYTHON_TOTAL + DSA_TOTAL;
+
+const SQL_TOPICS = [
+  {id:1,name:"SQL Basics",total:20},
+  {id:2,name:"Filtering & Conditions",total:20},
+  {id:3,name:"JOINs",total:20},
+  {id:4,name:"Aggregation & Grouping",total:20},
+  {id:5,name:"Subqueries",total:20},
+  {id:6,name:"CTEs",total:20},
+  {id:7,name:"Window Functions",total:20},
+  {id:8,name:"String Functions",total:20},
+  {id:9,name:"Date & Time",total:20},
+  {id:10,name:"Set Operations",total:20},
+  {id:11,name:"Data Modification",total:20},
+  {id:12,name:"Table Design & DDL",total:20},
+  {id:13,name:"Indexes & Performance",total:20},
+  {id:14,name:"Transactions & Locking",total:20},
+  {id:15,name:"Advanced SQL",total:20}
+];
+
+const PYTHON_TOPICS = [
+  {id:1,name:"Python Basics",total:20},
+  {id:2,name:"Strings",total:20},
+  {id:3,name:"Lists & Tuples",total:20},
+  {id:4,name:"Dictionaries & Sets",total:20},
+  {id:5,name:"Control Flow",total:20},
+  {id:6,name:"Functions",total:20},
+  {id:7,name:"OOP",total:20},
+  {id:8,name:"File Handling",total:20},
+  {id:9,name:"Error Handling",total:20},
+  {id:10,name:"Modules & Packages",total:20},
+  {id:11,name:"Iterators & Generators",total:20},
+  {id:12,name:"Decorators",total:20},
+  {id:13,name:"Advanced Python",total:20}
+];
+
+const DSA_TOPICS = [
+  {id:1,name:"Arrays & Hashing",total:20},
+  {id:2,name:"Linked Lists",total:20},
+  {id:3,name:"Stacks",total:20},
+  {id:4,name:"Queues",total:20},
+  {id:5,name:"Trees",total:20},
+  {id:6,name:"Binary Search Trees",total:20},
+  {id:7,name:"Heaps",total:20},
+  {id:8,name:"Graphs",total:20},
+  {id:9,name:"Recursion",total:20},
+  {id:10,name:"Sorting",total:20},
+  {id:11,name:"Binary Search",total:20},
+  {id:12,name:"Two Pointers",total:20},
+  {id:13,name:"Sliding Window",total:20},
+  {id:14,name:"Greedy",total:20},
+  {id:15,name:"Dynamic Programming",total:20},
+  {id:16,name:"Backtracking",total:20},
+  {id:17,name:"Trie",total:20},
+  {id:18,name:"Bit Manipulation",total:20},
+  {id:19,name:"Math & Geometry",total:20},
+  {id:20,name:"Intervals",total:20}
+];
+
+const ACHIEVEMENTS = [
+  {id:'first_step',name:'First Step',icon:'&#127947;',desc:'Solved first problem',check:s=>s.total>=1},
+  {id:'streak_10',name:'10 Streak',icon:'&#128293;',desc:'10 day streak',check:s=>s.bestStreak>=10},
+  {id:'century',name:'Century',icon:'&#128175;',desc:'100 problems solved',check:s=>s.total>=100},
+  {id:'half_way_sql',name:'Half Way',icon:'&#127919;',desc:'50% any roadmap',check:s=>(s.sql/SQL_TOTAL>=0.5||s.python/PYTHON_TOTAL>=0.5||s.dsa/DSA_TOTAL>=0.5)},
+  {id:'sql_master',name:'SQL Master',icon:'&#128451;',desc:'Complete SQL roadmap',check:s=>s.sql>=SQL_TOTAL},
+  {id:'pythonista',name:'Pythonista',icon:'&#128013;',desc:'Complete Python roadmap',check:s=>s.python>=PYTHON_TOTAL},
+  {id:'dsa_warrior',name:'DSA Warrior',icon:'&#9876;',desc:'Complete DSA roadmap',check:s=>s.dsa>=DSA_TOTAL},
+  {id:'speed_demon',name:'Speed Demon',icon:'&#9889;',desc:'10 problems in one day',check:s=>s.maxDaily>=10}
+];
+
+// ============ LOCALSTORAGE HELPERS ============
+function getJSON(key, fallback) {
+  try { return JSON.parse(localStorage.getItem(key)) || fallback; }
+  catch { return fallback; }
+}
+function setJSON(key, val) {
+  localStorage.setItem(key, JSON.stringify(val));
+}
+
+// ============ READ PROGRESS FROM ROADMAPS ============
+function getSQLSolved() {
+  const data = getJSON('sql_roadmap_progress', {});
+  return Object.keys(data).filter(k => data[k]).length;
+}
+
+function getSQLTopicProgress() {
+  const data = getJSON('sql_roadmap_progress', {});
+  return SQL_TOPICS.map(t => {
+    let done = 0;
+    for (let i = 0; i < t.total; i++) {
+      if (data[t.id + '_' + i]) done++;
+    }
+    return { ...t, done };
+  });
+}
+
+function getPythonSolved() {
+  const data = getJSON('python_roadmap_progress', {});
+  return Object.keys(data).filter(k => data[k]).length;
+}
+
+function getPythonTopicProgress() {
+  const data = getJSON('python_roadmap_progress', {});
+  return PYTHON_TOPICS.map(t => {
+    let done = 0;
+    for (let i = 0; i < t.total; i++) {
+      if (data[t.id + '_' + i]) done++;
+    }
+    return { ...t, done };
+  });
+}
+
+function getDSASolved() {
+  const data = getJSON('dsa_roadmap_progress', {});
+  let count = 0;
+  Object.values(data).forEach(topicData => {
+    if (typeof topicData === 'object' && topicData !== null) {
+      count += Object.keys(topicData).filter(k => topicData[k]).length;
+    }
+  });
+  return count;
+}
+
+function getDSATopicProgress() {
+  const data = getJSON('dsa_roadmap_progress', {});
+  return DSA_TOPICS.map(t => {
+    const key = 'topic_' + t.id;
+    const topicData = data[key] || {};
+    const done = Object.keys(topicData).filter(k => topicData[k]).length;
+    return { ...t, done };
+  });
+}
+
+function getDifficultyBreakdown() {
+  let easy = 0, medium = 0, hard = 0;
+  // SQL - all stored as topicId_index, we approximate difficulty distribution
+  const sqlData = getJSON('sql_roadmap_progress', {});
+  const sqlCount = Object.keys(sqlData).filter(k => sqlData[k]).length;
+  // Approximate: 30% easy, 45% medium, 25% hard for SQL
+  easy += Math.round(sqlCount * 0.3);
+  medium += Math.round(sqlCount * 0.45);
+  hard += sqlCount - Math.round(sqlCount * 0.3) - Math.round(sqlCount * 0.45);
+
+  // Python - same key format
+  const pyData = getJSON('python_roadmap_progress', {});
+  const pyCount = Object.keys(pyData).filter(k => pyData[k]).length;
+  easy += Math.round(pyCount * 0.35);
+  medium += Math.round(pyCount * 0.4);
+  hard += pyCount - Math.round(pyCount * 0.35) - Math.round(pyCount * 0.4);
+
+  // DSA - keys are like E_0, M_3, H_5
+  const dsaData = getJSON('dsa_roadmap_progress', {});
+  Object.values(dsaData).forEach(topicData => {
+    if (typeof topicData === 'object' && topicData !== null) {
+      Object.keys(topicData).forEach(k => {
+        if (topicData[k]) {
+          if (k.startsWith('E')) easy++;
+          else if (k.startsWith('M')) medium++;
+          else if (k.startsWith('H')) hard++;
+        }
+      });
+    }
+  });
+  return { easy, medium, hard };
+}
+
+// ============ STREAK MANAGEMENT ============
+function getStreak() {
+  return getJSON('learning_streak', { current: 0, best: 0, last_date: null });
+}
+
+function updateStreak() {
+  const streak = getStreak();
+  const today = new Date().toISOString().split('T')[0];
+  const activity = getJSON('learning_activity_log', {});
+  
+  if (streak.last_date === today) return streak;
+  
+  if (activity[today] && activity[today] > 0) {
+    const yesterday = new Date(Date.now() - 86400000).toISOString().split('T')[0];
+    if (streak.last_date === yesterday) {
+      streak.current += 1;
+    } else if (streak.last_date !== today) {
+      streak.current = 1;
+    }
+    streak.last_date = today;
+    streak.best = Math.max(streak.best, streak.current);
+    setJSON('learning_streak', streak);
+  }
+  return streak;
+}
+
+function recalculateStreak() {
+  const activity = getJSON('learning_activity_log', {});
+  const dates = Object.keys(activity).filter(d => activity[d] > 0).sort();
+  
+  if (dates.length === 0) {
+    setJSON('learning_streak', { current: 0, best: 0, last_date: null });
+    return { current: 0, best: 0, last_date: null };
+  }
+  
+  let best = 1, current = 1;
+  const today = new Date().toISOString().split('T')[0];
+  
+  for (let i = 1; i < dates.length; i++) {
+    const prev = new Date(dates[i-1]);
+    const curr = new Date(dates[i]);
+    const diff = (curr - prev) / 86400000;
+    if (diff === 1) {
+      current++;
+      best = Math.max(best, current);
+    } else {
+      current = 1;
+    }
+  }
+  best = Math.max(best, current);
+  
+  // Check if streak is still active (last activity today or yesterday)
+  const lastDate = dates[dates.length - 1];
+  const yesterday = new Date(Date.now() - 86400000).toISOString().split('T')[0];
+  if (lastDate !== today && lastDate !== yesterday) {
+    current = 0;
+  }
+  
+  const result = { current, best, last_date: lastDate };
+  setJSON('learning_streak', result);
+  return result;
+}
+
+// ============ ACTIVITY LOG ============
+function getActivityLog() {
+  return getJSON('learning_activity_log', {});
+}
+
+function getMaxDaily() {
+  const log = getActivityLog();
+  return Math.max(0, ...Object.values(log));
+}
+
+// ============ RECENT ACTIVITY ============
+function getRecentActivity() {
+  return getJSON('learning_recent_activity', []);
+}
+
+
+// ============ RENDER FUNCTIONS ============
+function animateCounter(el, target, duration = 1000) {
+  const start = 0;
+  const startTime = performance.now();
+  function update(currentTime) {
+    const elapsed = currentTime - startTime;
+    const progress = Math.min(elapsed / duration, 1);
+    const eased = 1 - Math.pow(1 - progress, 3);
+    const current = Math.round(start + (target - start) * eased);
+    el.textContent = current;
+    if (progress < 1) requestAnimationFrame(update);
+  }
+  requestAnimationFrame(update);
+}
+
+function renderStats() {
+  const sqlSolved = getSQLSolved();
+  const pythonSolved = getPythonSolved();
+  const dsaSolved = getDSASolved();
+  const totalSolved = sqlSolved + pythonSolved + dsaSolved;
+  const pct = GRAND_TOTAL > 0 ? Math.round((totalSolved / GRAND_TOTAL) * 100) : 0;
+  const streak = recalculateStreak();
+
+  // Animate counters
+  animateCounter(document.getElementById('totalSolved'), totalSolved);
+  animateCounter(document.getElementById('currentStreak'), streak.current);
+  animateCounter(document.getElementById('bestStreak'), streak.best);
+
+  // Donut chart
+  const circumference = 213.6;
+  const offset = circumference - (pct / 100) * circumference;
+  document.getElementById('donutCircle').style.strokeDashoffset = offset;
+  document.getElementById('donutText').textContent = pct + '%';
+
+  // Streak icon animation
+  if (streak.current > 0) {
+    document.getElementById('streakIcon').classList.add('streak-active');
+  }
+
+  // Header total
+  document.getElementById('headerTotal').textContent = GRAND_TOTAL;
+
+  // Roadmap cards
+  document.getElementById('sqlCount').textContent = sqlSolved + ' / ' + SQL_TOTAL;
+  document.getElementById('sqlBar').style.width = (sqlSolved/SQL_TOTAL*100) + '%';
+  document.getElementById('sqlPct').textContent = Math.round(sqlSolved/SQL_TOTAL*100) + '% complete';
+
+  document.getElementById('pythonCount').textContent = pythonSolved + ' / ' + PYTHON_TOTAL;
+  document.getElementById('pythonBar').style.width = (pythonSolved/PYTHON_TOTAL*100) + '%';
+  document.getElementById('pythonPct').textContent = Math.round(pythonSolved/PYTHON_TOTAL*100) + '% complete';
+
+  document.getElementById('dsaCount').textContent = dsaSolved + ' / ' + DSA_TOTAL;
+  document.getElementById('dsaBar').style.width = (dsaSolved/DSA_TOTAL*100) + '%';
+  document.getElementById('dsaPct').textContent = Math.round(dsaSolved/DSA_TOTAL*100) + '% complete';
+}
+
+function renderTopicBreakdown() {
+  const container = document.getElementById('topicBreakdown');
+  let html = '';
+
+  const sections = [
+    { name: 'SQL Topics', topics: getSQLTopicProgress(), color: 'var(--cyan)' },
+    { name: 'Python Topics', topics: getPythonTopicProgress(), color: 'var(--green)' },
+    { name: 'DSA Topics', topics: getDSATopicProgress(), color: 'var(--purple)' }
+  ];
+
+  sections.forEach((section, si) => {
+    html += `<div style="margin-bottom:24px"><h3 style="font-size:0.9rem;color:${section.color};margin-bottom:12px;font-weight:600">${section.name}</h3>`;
+    section.topics.forEach((topic, ti) => {
+      const pct = topic.total > 0 ? Math.round(topic.done / topic.total * 100) : 0;
+      const uid = 'topic_' + si + '_' + ti;
+      html += `
+        <div class="topic-section">
+          <div class="topic-header" onclick="toggleTopic('${uid}')">
+            <div class="th-left">
+              <span class="th-name">${topic.name}</span>
+              <span class="th-count">${topic.done}/${topic.total}</span>
+            </div>
+            <span class="th-arrow" id="arrow_${uid}">&#9660;</span>
+          </div>
+          <div class="topic-body" id="body_${uid}">
+            <div class="mini-bar"><div class="mini-bar-fill" style="width:${pct}%;background:${section.color}"></div></div>
+            <div style="font-size:0.75rem;color:var(--text-dim);margin-top:4px">${pct}% completed</div>
+          </div>
+        </div>`;
+    });
+    html += '</div>';
+  });
+
+  container.innerHTML = html;
+}
+
+function toggleTopic(uid) {
+  const body = document.getElementById('body_' + uid);
+  const arrow = document.getElementById('arrow_' + uid);
+  const header = arrow.closest('.topic-header');
+  body.classList.toggle('open');
+  header.classList.toggle('open');
+}
+
+function renderHeatmap() {
+  const grid = document.getElementById('heatmapGrid');
+  const activity = getActivityLog();
+  const cells = [];
+  const today = new Date();
+  
+  for (let i = 90; i >= 0; i--) {
+    const date = new Date(today);
+    date.setDate(date.getDate() - i);
+    const key = date.toISOString().split('T')[0];
+    const count = activity[key] || 0;
+    let level = '';
+    if (count >= 8) level = 'l4';
+    else if (count >= 5) level = 'l3';
+    else if (count >= 3) level = 'l2';
+    else if (count >= 1) level = 'l1';
+    
+    const dayNames = ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
+    const tipText = key + ': ' + count + ' problem' + (count!==1?'s':'');
+    cells.push(`<div class="heatmap-cell tooltip ${level}" data-tip="${tipText}"></div>`);
+  }
+  grid.innerHTML = cells.join('');
+}
+
+function renderPieChart() {
+  const { easy, medium, hard } = getDifficultyBreakdown();
+  const total = easy + medium + hard;
+  const pieEl = document.getElementById('pieChart');
+  const legendEl = document.getElementById('pieLegend');
+
+  if (total === 0) {
+    pieEl.innerHTML = '<div style="width:160px;height:160px;border-radius:50%;background:var(--border);display:flex;align-items:center;justify-content:center;font-size:0.8rem;color:var(--text-dim)">No data</div>';
+    legendEl.innerHTML = '';
+    return;
+  }
+
+  const easyPct = (easy / total) * 100;
+  const medPct = (medium / total) * 100;
+  const hardPct = (hard / total) * 100;
+
+  pieEl.style.background = `conic-gradient(
+    #4ade80 0% ${easyPct}%,
+    #fbbf24 ${easyPct}% ${easyPct + medPct}%,
+    #f472b6 ${easyPct + medPct}% 100%
+  )`;
+  pieEl.style.borderRadius = '50%';
+  pieEl.innerHTML = '<div style="position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:90px;height:90px;border-radius:50%;background:var(--card)"></div>';
+
+  legendEl.innerHTML = `
+    <div class="pie-legend-item"><div class="pie-legend-dot" style="background:#4ade80"></div><span>Easy: ${easy} (${Math.round(easyPct)}%)</span></div>
+    <div class="pie-legend-item"><div class="pie-legend-dot" style="background:#fbbf24"></div><span>Medium: ${medium} (${Math.round(medPct)}%)</span></div>
+    <div class="pie-legend-item"><div class="pie-legend-dot" style="background:#f472b6"></div><span>Hard: ${hard} (${Math.round(hardPct)}%)</span></div>
+    <div class="pie-legend-item" style="margin-top:8px;font-weight:600"><span>Total: ${total}</span></div>
+  `;
+}
+
+function renderAchievements() {
+  const grid = document.getElementById('achievementsGrid');
+  const stats = {
+    total: getSQLSolved() + getPythonSolved() + getDSASolved(),
+    sql: getSQLSolved(),
+    python: getPythonSolved(),
+    dsa: getDSASolved(),
+    bestStreak: recalculateStreak().best,
+    maxDaily: getMaxDaily()
+  };
+
+  grid.innerHTML = ACHIEVEMENTS.map(badge => {
+    const unlocked = badge.check(stats);
+    return `
+      <div class="badge ${unlocked ? 'unlocked' : ''}">
+        <div class="badge-icon">${badge.icon}</div>
+        <div class="badge-name">${badge.name}</div>
+      </div>`;
+  }).join('');
+}
+
+function renderRecentActivity() {
+  const feed = document.getElementById('activityFeed');
+  const activities = getRecentActivity();
+  
+  if (activities.length === 0) {
+    feed.innerHTML = '<div style="text-align:center;color:var(--text-dim);padding:20px;font-size:0.85rem">No recent activity yet. Start solving problems!</div>';
+    return;
+  }
+
+  const items = activities.slice(-10).reverse();
+  feed.innerHTML = items.map(item => {
+    const roadmap = item.roadmap || 'unknown';
+    const dotClass = roadmap.toLowerCase().includes('sql') ? 'sql' : roadmap.toLowerCase().includes('python') ? 'python' : 'dsa';
+    const timeAgo = getTimeAgo(item.timestamp);
+    return `
+      <div class="activity-item">
+        <div class="activity-dot ${dotClass}"></div>
+        <div class="activity-text">${item.topic || roadmap} - ${item.problem || 'Problem solved'}</div>
+        <div class="activity-time">${timeAgo}</div>
+      </div>`;
+  }).join('');
+}
+
+function getTimeAgo(timestamp) {
+  if (!timestamp) return '';
+  const diff = Date.now() - new Date(timestamp).getTime();
+  const mins = Math.floor(diff / 60000);
+  if (mins < 1) return 'just now';
+  if (mins < 60) return mins + 'm ago';
+  const hrs = Math.floor(mins / 60);
+  if (hrs < 24) return hrs + 'h ago';
+  const days = Math.floor(hrs / 24);
+  if (days < 7) return days + 'd ago';
+  return new Date(timestamp).toLocaleDateString();
+}
+
+// ============ FOOTER ACTIONS ============
+function showResetModal() {
+  document.getElementById('resetModal').classList.add('active');
+}
+function hideResetModal() {
+  document.getElementById('resetModal').classList.remove('active');
+}
+
+function confirmReset() {
+  localStorage.removeItem('sql_roadmap_progress');
+  localStorage.removeItem('python_roadmap_progress');
+  localStorage.removeItem('dsa_roadmap_progress');
+  localStorage.removeItem('learning_activity_log');
+  localStorage.removeItem('learning_streak');
+  localStorage.removeItem('learning_recent_activity');
+  hideResetModal();
+  renderAll();
+}
+
+function exportProgress() {
+  const data = {
+    sql_roadmap_progress: getJSON('sql_roadmap_progress', {}),
+    python_roadmap_progress: getJSON('python_roadmap_progress', {}),
+    dsa_roadmap_progress: getJSON('dsa_roadmap_progress', {}),
+    learning_activity_log: getJSON('learning_activity_log', {}),
+    learning_streak: getJSON('learning_streak', {}),
+    learning_recent_activity: getJSON('learning_recent_activity', []),
+    exported_at: new Date().toISOString()
+  };
+  const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = 'learning_progress_' + new Date().toISOString().split('T')[0] + '.json';
+  a.click();
+  URL.revokeObjectURL(url);
+}
+
+function importProgress(event) {
+  const file = event.target.files[0];
+  if (!file) return;
+  const reader = new FileReader();
+  reader.onload = function(e) {
+    try {
+      const data = JSON.parse(e.target.result);
+      if (data.sql_roadmap_progress) setJSON('sql_roadmap_progress', data.sql_roadmap_progress);
+      if (data.python_roadmap_progress) setJSON('python_roadmap_progress', data.python_roadmap_progress);
+      if (data.dsa_roadmap_progress) setJSON('dsa_roadmap_progress', data.dsa_roadmap_progress);
+      if (data.learning_activity_log) setJSON('learning_activity_log', data.learning_activity_log);
+      if (data.learning_streak) setJSON('learning_streak', data.learning_streak);
+      if (data.learning_recent_activity) setJSON('learning_recent_activity', data.learning_recent_activity);
+      renderAll();
+      alert('Progress imported successfully!');
+    } catch (err) {
+      alert('Error importing file: ' + err.message);
+    }
+  };
+  reader.readAsText(file);
+  event.target.value = '';
+}
+
+// ============ INIT ============
+function renderAll() {
+  renderStats();
+  renderTopicBreakdown();
+  renderHeatmap();
+  renderPieChart();
+  renderAchievements();
+  renderRecentActivity();
+}
+
+// Run on page load
+document.addEventListener('DOMContentLoaded', renderAll);
+
+// Also listen for storage changes from other tabs
+window.addEventListener('storage', renderAll);
+</script>
+</body>
+</html>
