@@ -2307,20 +2307,21 @@ function renderSolutions() {
     const container = document.getElementById('solutionsContent');
     if (!currentTopic) return;
     const sols = solutionData[currentTopic.id] || [];
-    container.innerHTML = currentTopic.practice.map((p, i) => {
-        const sol = sols[i] || 'Solution coming soon...';
-        return `
-        <div class="solution-item">
-            <div class="solution-header" onclick="toggleSolution(${i})">
-                <span class="solution-num">#${i+1}</span>
-                <span class="solution-q">${p.q}</span>
-                <button class="solution-toggle" id="btn_${i}">Show Solution</button>
-            </div>
-            <div class="solution-body" id="sol_${i}">
-                <pre class="code-block"><code>${highlightPython(sol)}</code></pre>
-            </div>
-        </div>`;
-    }).join('');
+    var html = '';
+    currentTopic.practice.forEach(function(p, i) {
+        var sol = sols[i] || 'Solution coming soon...';
+        var highlighted = highlightPython(sol);
+        html += '<div class="solution-item">' +
+            '<div class="solution-header" onclick="toggleSolution(' + i + ')">' +
+            '<span class="solution-num">#' + (i+1) + '</span>' +
+            '<span class="solution-q">' + p.q + '</span>' +
+            '<button class="solution-toggle" id="btn_' + i + '">Show Solution</button>' +
+            '</div>' +
+            '<div class="solution-body" id="sol_' + i + '">' +
+            '<pre class="code-block"><code>' + highlighted + '</code></pre>' +
+            '</div></div>';
+    });
+    container.innerHTML = html;
 }
 
 function toggleSolution(i) {
