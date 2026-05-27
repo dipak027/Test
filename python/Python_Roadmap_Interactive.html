@@ -60,6 +60,20 @@ pre.code-block{background:rgba(0,0,0,0.4);border:1px solid var(--border);border-
 .difficulty.medium{background:rgba(251,191,36,0.15);color:#fbbf24}
 .difficulty.hard{background:rgba(244,114,182,0.15);color:#f472b6}
 @media(max-width:640px){.roadmap{padding-left:40px}.roadmap::before{left:16px}.node-number{left:-32px;width:26px;height:26px;font-size:0.7rem}.header-inner{flex-wrap:wrap;gap:8px}.progress-container{max-width:100%;margin-left:0}}
+.solution-item{background:var(--card);border:1px solid var(--border);border-radius:10px;margin-bottom:12px;overflow:hidden}
+.solution-header{padding:12px 16px;display:flex;align-items:center;justify-content:space-between;cursor:pointer}
+.solution-header:hover{background:rgba(34,211,238,0.05)}
+.solution-num{font-size:0.75rem;color:var(--text-dim);font-family:'JetBrains Mono',monospace;margin-right:10px}
+.solution-q{font-size:0.82rem;flex:1}
+.solution-toggle{padding:4px 12px;border-radius:6px;border:1px solid var(--border);background:var(--card);color:var(--cyan);font-size:0.72rem;cursor:pointer;font-family:'Sora',sans-serif;transition:all 0.2s}
+.solution-toggle:hover{background:rgba(34,211,238,0.1);border-color:var(--cyan)}
+.solution-body{display:none;padding:0 16px 16px;border-top:1px solid var(--border)}
+.solution-body.open{display:block}
+.solution-approach{font-size:0.78rem;color:var(--text-dim);margin-bottom:8px;padding:8px 12px;background:rgba(74,222,128,0.05);border-left:3px solid var(--green);border-radius:0 4px 4px 0}
+.solution-complexity{display:flex;gap:8px;margin-bottom:8px}
+.solution-complexity span{font-size:0.7rem;padding:2px 8px;border-radius:4px;font-family:'JetBrains Mono',monospace}
+.solution-complexity .tc{background:rgba(34,211,238,0.15);color:#22d3ee}
+.solution-complexity .sc{background:rgba(167,139,250,0.15);color:#a78bfa}
 </style>
 </head>
 <body>
@@ -85,10 +99,12 @@ pre.code-block{background:rgba(0,0,0,0.4);border:1px solid var(--border);border-
 <div class="tab active" onclick="switchTab('theory')">Theory</div>
 <div class="tab" onclick="switchTab('examples')">Examples</div>
 <div class="tab" onclick="switchTab('practice')">Practice</div>
+<div class="tab" onclick="switchTab('solutions')">Solutions</div>
 </div>
 <div class="tab-content active" id="theoryContent"></div>
 <div class="tab-content" id="examplesContent"></div>
 <div class="tab-content" id="practiceContent"></div>
+<div class="tab-content" id="solutionsContent"></div>
 </div>
 <script>
 const topics = [
@@ -673,11 +689,12 @@ function showRoadmap() {
 
 function switchTab(tab) {
     document.querySelectorAll('.tab').forEach((t, i) => {
-        t.classList.toggle('active', ['theory','examples','practice'][i] === tab);
+        t.classList.toggle('active', ['theory','examples','practice','solutions'][i] === tab);
     });
     document.querySelectorAll('.tab-content').forEach((tc, i) => {
-        tc.classList.toggle('active', ['theory','examples','practice'][i] === tab);
+        tc.classList.toggle('active', ['theory','examples','practice','solutions'][i] === tab);
     });
+    if (tab === 'solutions') renderSolutions();
 }
 
 function renderTheory() {
@@ -727,6 +744,1590 @@ function togglePractice(key, el) {
     saveProgress(prog);
     updateProgressBar();
     el.parentElement.classList.toggle('done', el.checked);
+}
+
+const solutionData = {
+1:[
+`name = "Alice"
+age = 25
+height = 5.7
+is_student = True
+print(f"Name: {name}, Age: {age}, Height: {height}, Student: {is_student}")`,
+`num = int(input("Enter a number: "))
+print(f"Square: {num**2}")
+print(f"Cube: {num**3}")`,
+`f = float(input("Enter Fahrenheit: "))
+celsius = (f - 32) * 5/9
+print(f"{f}F = {celsius:.2f}C")`,
+`a = int(input("First: "))
+b = int(input("Second: "))
+print(f"Sum:{a+b}, Diff:{a-b}, Product:{a*b}, Quotient:{a/b}")`,
+`val = "123.45"
+f = float(val)
+i = int(f)
+print(f"String: {val}, Float: {f}, Int: {i}")`,
+`name = "Alice"
+print(name * 50)`,
+`l = float(input("Length: "))
+w = float(input("Width: "))
+print(f"Area: {l*w}, Perimeter: {2*(l+w)}")`,
+`a = int(input("Enter a: "))
+b = int(input("Enter b: "))
+print(f"Quotient: {a//b}, Remainder: {a%b}")`,
+`n = int(input("Enter 3-digit number: "))
+print(f"Sum of digits: {n//100 + (n//10)%10 + n%10}")`,
+`P = float(input("Principal: "))
+r = float(input("Rate: "))
+n = int(input("Compounds/year: "))
+t = int(input("Years: "))
+A = P * (1 + r/n)**(n*t)
+print(f"Amount: {A:.2f}")`,
+`a, b, c = 1, 2, 3
+a, b, c = b, c, a
+print(f"a={a}, b={b}, c={c}")`,
+`seconds = int(input("Enter seconds: "))
+h = seconds // 3600
+m = (seconds % 3600) // 60
+s = seconds % 60
+print(f"{h}h {m}m {s}s")`,
+`n = float(input("Enter number: "))
+result = "positive" if n > 0 else "zero" if n == 0 else "negative"
+print(result)`,
+`a, b = 10, 3
+print(f"+ {a+b}, - {a-b}, * {a*b}, / {a/b:.2f}, // {a//b}, % {a%b}, ** {a**b}")`,
+`w = float(input("Weight(kg): "))
+h = float(input("Height(m): "))
+bmi = w / h**2
+print(f"BMI: {bmi:.1f}")`,
+`falsy = [0, 0.0, "", [], {}, set(), None, False, (), 0j]
+for v in falsy:
+    print(f"{str(v):>10} -> {bool(v)}")`,
+`a, b = 12, 7
+print(f"& {a&b}, | {a|b}, ^ {a^b}, ~ {~a}, << {a<<1}, >> {a>>1}")`,
+`n = int(input("Decimal: "))
+print(f"Bin: {bin(n)}, Oct: {oct(n)}, Hex: {hex(n)}")`,
+`import operator
+ops = {"+": operator.add, "-": operator.sub, "*": operator.mul, "/": operator.truediv}
+a, op, b = 10, "+", 5
+print(f"{a} {op} {b} = {ops[op](a,b)}")`,
+`result = 2 + 3 * 4 ** 2 // 5 - 1 % 3
+print(f"2 + 3 * 4 ** 2 // 5 - 1 % 3 = {result}")`
+],
+2:[
+`s = "Hello Python"
+print(f"First: {s[0]}, Last: {s[-1]}, Length: {len(s)}")`,
+`s = "Hello Python"
+print(s[::-1])`,
+`s = "Hello World"
+vowels = sum(1 for c in s.upper() if c in "AEIOU")
+print(f"{s.upper()} has {vowels} vowels")`,
+`s = "apple,banana,cherry,date"
+lst = s.split(",")
+print(" | ".join(lst))`,
+`s = "Hello World!"
+print(f"Starts Hello: {s.startswith('Hello')}, Ends !: {s.endswith('!')}")`,
+`pi = 3.14159265
+print(f"Pi to 3 decimals: {pi:.3f}")`,
+`s = "   hello world   "
+print(s.strip().replace(" ", "-"))`,
+`s = "Abracadabra"
+count = s.lower().count("a")
+print(f"Count of a: {count}")`,
+`s = "Hello Beautiful World"
+print(s[5:15].title())`,
+`def is_valid_id(s):
+    return s.isidentifier()
+print(is_valid_id("my_var"), is_valid_id("2nd"))`,
+`def caesar(text, shift):
+    result = ""
+    for c in text:
+        if c.isalpha():
+            base = ord("A") if c.isupper() else ord("a")
+            result += chr((ord(c) - base + shift) % 26 + base)
+        else:
+            result += c
+    return result
+print(caesar("Hello", 3))`,
+`words = "the quick brown fox jumps over the lazy dog".split()
+long_words = [w for w in words if len(w) > 5]
+print(long_words)`,
+`import re
+text = "Call (123) 456-7890 or (987) 654-3210"
+phones = re.findall(r"\\(\\d{3}\\) \\d{3}-\\d{4}", text)
+print(phones)`,
+`import re
+def camel_to_snake(s):
+    return re.sub(r"(?<!^)(?=[A-Z])", "_", s).lower()
+print(camel_to_snake("myVariableName"))`,
+`text = "Hello world. How are you? Fine."
+words = len(text.split())
+sents = text.count(".") + text.count("!") + text.count("?")
+print(f"Words: {words}, Sentences: {sents}")`,
+`def longest_prefix(strs):
+    if not strs: return ""
+    prefix = strs[0]
+    for s in strs[1:]:
+        while not s.startswith(prefix):
+            prefix = prefix[:-1]
+    return prefix
+print(longest_prefix(["flower","flow","flight"]))`,
+`import re
+text = "Visit https://google.com or http://example.org/path"
+urls = re.findall(r"https?://[\\w./\\-]+", text)
+print(urls)`,
+`def rle(s):
+    result, i = "", 0
+    while i < len(s):
+        count = 1
+        while i + count < len(s) and s[i+count] == s[i]:
+            count += 1
+        result += s[i] + str(count)
+        i += count
+    return result
+print(rle("aabbbcccc"))`,
+`def is_anagram(a, b):
+    return sorted(a.lower()) == sorted(b.lower())
+print(is_anagram("listen", "silent"))`,
+`import re
+def strong_password(p):
+    return bool(re.match(r"^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[!@#$%^&*]).{8,}$", p))
+print(strong_password("Abc123!@"))`
+],
+3:[
+`nums = list(range(1, 11))
+print(f"First 3: {nums[:3]}, Last 3: {nums[-3:]}, Every other: {nums[::2]}")`,
+`lst = [1, 2, 3]
+lst.append(4); print(lst)
+lst.insert(2, 99); print(lst)
+lst.remove(99); print(lst)`,
+`squares = [x**2 for x in range(1, 21) if x % 2 == 0]
+print(squares)`,
+`t = (10, 20, 30, 40, 50)
+a, b, c, d, e = t
+print(a, b, c, d, e)`,
+`words = ["banana", "apple", "cherry", "date"]
+print(sorted(words, key=len))`,
+`nums = [3, 1, 4, 1, 5, 9, 2]
+mn = mx = nums[0]
+for n in nums:
+    if n < mn: mn = n
+    if n > mx: mx = n
+print(f"Min: {mn}, Max: {mx}")`,
+`def second_largest(lst):
+    unique = list(set(lst))
+    unique.sort()
+    return unique[-2] if len(unique) >= 2 else None
+print(second_largest([5, 3, 8, 1, 8, 7]))`,
+`matrix = [[1,2,3],[4,5,6],[7,8,9]]
+flat = [x for row in matrix for x in row]
+print(flat)`,
+`def rotate(lst, k):
+    k = k % len(lst)
+    return lst[-k:] + lst[:-k]
+print(rotate([1,2,3,4,5], 2))`,
+`result = [x for x in range(1, 101) if x % 3 == 0 and x % 5 == 0]
+print(result)`,
+`def merge_sorted(a, b):
+    result, i, j = [], 0, 0
+    while i < len(a) and j < len(b):
+        if a[i] <= b[j]: result.append(a[i]); i += 1
+        else: result.append(b[j]); j += 1
+    return result + a[i:] + b[j:]
+print(merge_sorted([1,3,5], [2,4,6]))`,
+`def group_consecutive(lst):
+    if not lst: return []
+    result, group = [], [lst[0]]
+    for i in range(1, len(lst)):
+        if lst[i] == lst[i-1]: group.append(lst[i])
+        else: result.append(group); group = [lst[i]]
+    result.append(group)
+    return result
+print(group_consecutive([1,1,2,3,3,3,4]))`,
+`first, *middle, last = [1, 2, 3, 4, 5, 6, 7]
+print(f"First: {first}, Middle: {middle}, Last: {last}")`,
+`matrix = [[1,2,3],[4,5,6],[7,8,9]]
+transposed = [[row[i] for row in matrix] for i in range(len(matrix[0]))]
+print(transposed)`,
+`def find_pairs(lst, target):
+    seen = set()
+    pairs = []
+    for n in lst:
+        comp = target - n
+        if comp in seen: pairs.append((comp, n))
+        seen.add(n)
+    return pairs
+print(find_pairs([1,2,3,4,5,6], 7))`,
+`table = [[i*j for j in range(1,11)] for i in range(1,11)]
+for row in table:
+    print(row)`,
+`def mat_mul(A, B):
+    n, m, p = len(A), len(A[0]), len(B[0])
+    C = [[0]*p for _ in range(n)]
+    for i in range(n):
+        for j in range(p):
+            for k in range(m):
+                C[i][j] += A[i][k] * B[k][j]
+    return C
+print(mat_mul([[1,2],[3,4]], [[5,6],[7,8]]))`,
+`def lis(arr):
+    from bisect import bisect_left
+    dp = []
+    for x in arr:
+        pos = bisect_left(dp, x)
+        if pos == len(dp): dp.append(x)
+        else: dp[pos] = x
+    return len(dp)
+print(lis([10, 9, 2, 5, 3, 7, 101, 18]))`,
+`def my_zip(*iterables):
+    iters = [iter(it) for it in iterables]
+    while True:
+        try: yield tuple(next(it) for it in iters)
+        except StopIteration: return
+print(list(my_zip([1,2,3], ["a","b","c"])))`,
+`def chunk(lst, n, pad=None):
+    chunks = [lst[i:i+n] for i in range(0, len(lst), n)]
+    if pad is not None and chunks and len(chunks[-1]) < n:
+        chunks[-1].extend([pad] * (n - len(chunks[-1])))
+    return chunks
+print(chunk([1,2,3,4,5,6,7], 3, 0))`
+],
+4:[
+`d = {"name":"Alice","age":25,"city":"NYC","job":"Dev","lang":"Python"}
+for k in d: print(f"{k}: {d[k]}")`,
+`d = {"a":1,"b":2,"c":3}
+d["d"] = 4; print(d)
+d["a"] = 10; print(d)
+del d["b"]; print(d)`,
+`d = {"x":1,"y":2,"z":3}
+print("Keys:", list(d.keys()))
+print("Values:", list(d.values()))
+for k,v in d.items(): print(f"{k}={v}")`,
+`lst = [1,2,2,3,3,3,4]
+s = set(lst)
+print(f"List: {lst}, Set: {s}")`,
+`a = {1,2,3,4}
+b = {3,4,5,6}
+print(f"Union: {a|b}, Inter: {a&b}, Diff: {a-b}")`,
+`squares = {x: x**2 for x in range(1, 11)}
+print(squares)`,
+`def char_freq(s):
+    freq = {}
+    for c in s:
+        freq[c] = freq.get(c, 0) + 1
+    return freq
+print(char_freq("hello world"))`,
+`def merge_dicts(d1, d2):
+    result = d1.copy()
+    for k, v in d2.items():
+        result[k] = result.get(k, 0) + v
+    return result
+print(merge_dicts({"a":1,"b":2}, {"b":3,"c":4}))`,
+`student = {"name":"Alice","grades":{"math":90,"sci":85},"courses":["Python","DSA"]}
+print(student["grades"]["math"])`,
+`words = ["apple","banana","avocado","blueberry","cherry"]
+grouped = {}
+for w in words:
+    grouped.setdefault(w[0], []).append(w)
+print(grouped)`,
+`a = {1,2,3,4}
+b = {2,3,4,5}
+c = {3,4,5,6}
+print(a & b & c)`,
+`def invert(d):
+    inv = {}
+    for k, v in d.items():
+        inv.setdefault(v, []).append(k)
+    return inv
+print(invert({"a":1,"b":2,"c":1}))`,
+`cache = {}
+def fib(n):
+    if n in cache: return cache[n]
+    if n <= 1: return n
+    cache[n] = fib(n-1) + fib(n-2)
+    return cache[n]
+print(fib(30))`,
+`def max_key(d):
+    return max(d, key=d.get)
+print(max_key({"a":5,"b":12,"c":3}))`,
+`s1 = "the quick brown fox"
+s2 = "the lazy brown dog"
+w1, w2 = set(s1.split()), set(s2.split())
+print(f"Unique to s1: {w1-w2}, Common: {w1&w2}")`,
+`def sparse_matrix():
+    m = {}
+    m[(0,0)] = 5
+    m[(1,2)] = 3
+    m[(3,1)] = 7
+    return m
+print(sparse_matrix())`,
+`def deep_merge(d1, d2):
+    result = d1.copy()
+    for k, v in d2.items():
+        if k in result and isinstance(result[k], dict) and isinstance(v, dict):
+            result[k] = deep_merge(result[k], v)
+        else:
+            result[k] = v
+    return result
+print(deep_merge({"a":{"x":1}}, {"a":{"y":2},"b":3}))`,
+`from collections import defaultdict, deque
+def bfs(graph, start):
+    visited, queue = set(), deque([start])
+    visited.add(start)
+    result = []
+    while queue:
+        node = queue.popleft()
+        result.append(node)
+        for nb in graph[node]:
+            if nb not in visited:
+                visited.add(nb)
+                queue.append(nb)
+    return result
+g = defaultdict(list, {1:[2,3],2:[4],3:[4,5],4:[],5:[]})
+print(bfs(g, 1))`,
+`def flatten_dict(d, parent="", sep="."):
+    items = {}
+    for k, v in d.items():
+        key = f"{parent}{sep}{k}" if parent else k
+        if isinstance(v, dict):
+            items.update(flatten_dict(v, key, sep))
+        else:
+            items[key] = v
+    return items
+print(flatten_dict({"a":{"b":1,"c":{"d":2}},"e":3}))`,
+`from collections import OrderedDict
+class LRU:
+    def __init__(self, cap):
+        self.cap = cap
+        self.cache = OrderedDict()
+    def get(self, k):
+        if k in self.cache:
+            self.cache.move_to_end(k)
+            return self.cache[k]
+        return -1
+    def put(self, k, v):
+        if k in self.cache: self.cache.move_to_end(k)
+        self.cache[k] = v
+        if len(self.cache) > self.cap:
+            self.cache.popitem(last=False)
+lru = LRU(2)
+lru.put(1,"a"); lru.put(2,"b")
+print(lru.get(1))`
+],
+5:[
+`n = int(input("Number: "))
+if n > 0: print("positive")
+elif n < 0: print("negative")
+else: print("zero")`,
+`n = 7
+result = "even" if n % 2 == 0 else "odd"
+print(result)`,
+`y = int(input("Year: "))
+is_leap = (y%4==0 and y%100!=0) or y%400==0
+print(f"{y} is{" " if is_leap else " not "}a leap year")`,
+`user, pwd = "admin", "secret"
+u = input("User: ")
+p = input("Pass: ")
+if u == user and p == pwd:
+    print("Welcome")
+else:
+    print("Access Denied")`,
+`n = int(input("Number: "))
+if n > 0:
+    print(f"{n} is positive and {"even" if n%2==0 else "odd"}")
+else:
+    print(f"{n} is not positive")`,
+`vals = [0, 1, "", "hi", [], [1], None, True, {}, {1:2}]
+for v in vals:
+    print(f"{str(v):>8} -> {bool(v)}")`,
+`day = int(input("Day (1-7): "))
+days = {1:"Mon",2:"Tue",3:"Wed",4:"Thu",5:"Fri",6:"Sat",7:"Sun"}
+print(days.get(day, "Invalid"))`,
+`import random
+target = random.randint(1, 100)
+while True:
+    guess = int(input("Guess: "))
+    if guess < target: print("Too low")
+    elif guess > target: print("Too high")
+    else: print("Correct!"); break`,
+`def calc(a, op, b):
+    ops = {"+":a+b, "-":a-b, "*":a*b, "/":a/b if b else "Error"}
+    return ops.get(op, "Invalid")
+print(calc(10, "+", 5))`,
+`def validate(age, name):
+    if not name: return "Name required"
+    if not isinstance(age, int): return "Age must be int"
+    if age < 0 or age > 150: return "Invalid age"
+    return f"Valid: {name}, {age}"
+print(validate(25, "Alice"))`,
+`income = 75000
+if income <= 10000: tax = 0
+elif income <= 40000: tax = (income-10000)*0.1
+elif income <= 80000: tax = 3000 + (income-40000)*0.2
+else: tax = 11000 + (income-80000)*0.3
+print(f"Tax on {income}: {tax}")`,
+`x = 15
+if 1 <= x <= 10: print("1-10")
+elif 11 <= x <= 20: print("11-20")
+elif 21 <= x <= 50: print("21-50")
+else: print("50+")`,
+`a, b, c = 60, 70, 50
+if a+b+c != 180: print("Invalid")
+elif a==90 or b==90 or c==90: print("Right")
+elif a<90 and b<90 and c<90: print("Acute")
+else: print("Obtuse")`,
+`data = {"user": {"address": {"city": "NYC"}}}
+city = data.get("user", {}).get("address", {}).get("city", "Unknown")
+print(city)`,
+`x = 42
+if x < 0: print("negative")
+elif x == 0: print("zero")
+elif x % 2 == 0: print(f"{x} is even positive")
+else: print(f"{x} is odd positive")`,
+`def valid_date(y, m, d):
+    if m < 1 or m > 12: return False
+    days = [31,28,31,30,31,30,31,31,30,31,30,31]
+    if (y%4==0 and y%100!=0) or y%400==0: days[1] = 29
+    return 1 <= d <= days[m-1]
+print(valid_date(2024, 2, 29))`,
+`def parse(text):
+    tokens, current = [], ""
+    for ch in text:
+        if ch.isalpha():
+            current += ch
+        else:
+            if current: tokens.append(current)
+            current = ""
+    if current: tokens.append(current)
+    return tokens
+print(parse("hello world 123 foo"))`,
+`def score(gpa, exp, skills, cert, ref):
+    s = gpa*20 + exp*10 + skills*5 + cert*15 + ref*10
+    if s >= 90: return "Excellent"
+    elif s >= 70: return "Good"
+    elif s >= 50: return "Average"
+    return "Below"
+print(score(3.5, 3, 4, 2, 3))`,
+`point = (3, 0)
+x, y = point
+if x == 0 and y == 0: print("Origin")
+elif y == 0: print(f"X-axis at {x}")
+elif x == 0: print(f"Y-axis at {y}")
+elif x == y: print(f"Diagonal at {x}")
+else: print(f"Point ({x},{y})")`,
+`rules = {"age": lambda x: x>=18, "score": lambda x: x>=70, "active": lambda x: x==True}
+data = {"age": 20, "score": 85, "active": True}
+result = all(rules[k](data[k]) for k in rules)
+print(f"All rules pass: {result}")`
+],
+6:[
+`for i in range(1, 21):
+    print(i)`,
+`total = 0
+while True:
+    n = int(input("Number (0 to stop): "))
+    if n == 0: break
+    total += n
+print(f"Sum: {total}")`,
+`for i in range(1, 51):
+    if i % 2 != 0: continue
+    print(i, end=" ")`,
+`fruits = ["apple", "banana", "cherry"]
+for i, fruit in enumerate(fruits):
+    print(f"{i}: {fruit}")`,
+`names = ["Alice", "Bob"]
+ages = [25, 30]
+for name, age in zip(names, ages):
+    print(f"{name} is {age}")`,
+`for i in range(1, 100):
+    if i % 3 == 0 and i % 7 == 0:
+        print(f"First: {i}")
+        break`,
+`for i in range(1, 6):
+    for j in range(1, 6):
+        print(f"{i*j:4}", end="")
+    print()`,
+`for i in range(10, -1, -1):
+    print(i)`,
+`n = 29
+for i in range(2, int(n**0.5)+1):
+    if n % i == 0:
+        print(f"{n} not prime"); break
+else:
+    print(f"{n} is prime")`,
+`names=["A","B","C"]
+scores=[90,80,70]
+cities=["NY","LA","SF"]
+for i,(n,s,c) in enumerate(zip(names,scores,cities)):
+    print(f"{i}: {n} {s} {c}")`,
+`a, b, n = 0, 1, 10
+for _ in range(n):
+    print(a, end=" ")
+    a, b = b, a + b`,
+`chars = "abc"
+for a in chars:
+    for b in chars:
+        for c in chars:
+            if len(set([a,b,c]))==3: print(a+b+c)`,
+`def binary_search(arr, target):
+    lo, hi = 0, len(arr)-1
+    while lo <= hi:
+        mid = (lo+hi)//2
+        if arr[mid] == target: return mid
+        elif arr[mid] < target: lo = mid+1
+        else: hi = mid-1
+    return -1
+print(binary_search([1,3,5,7,9,11], 7))`,
+`n = 5
+for i in range(1, n+1):
+    print(" "*(n-i) + " ".join(str(x) for x in range(1, i+1)))`,
+`for n in range(1, 1001):
+    digits = [int(d) for d in str(n)]
+    if sum(d**len(digits) for d in digits) == n:
+        print(n, end=" ")`,
+`def bubble_sort(arr):
+    n = len(arr)
+    for i in range(n):
+        for j in range(n-i-1):
+            if arr[j] > arr[j+1]:
+                arr[j], arr[j+1] = arr[j+1], arr[j]
+    return arr
+print(bubble_sort([64, 34, 25, 12, 22, 11, 90]))`,
+`def spiral(n):
+    m = [[0]*n for _ in range(n)]
+    dx, dy = [0,1,0,-1], [1,0,-1,0]
+    x = y = d = 0
+    for i in range(1, n*n+1):
+        m[x][y] = i
+        nx, ny = x+dx[d], y+dy[d]
+        if 0<=nx<n and 0<=ny<n and m[nx][ny]==0:
+            x, y = nx, ny
+        else:
+            d = (d+1)%4
+            x, y = x+dx[d], y+dy[d]
+    return m
+for row in spiral(4): print(row)`,
+`def solve_nqueens(n):
+    solutions = []
+    def safe(board, r, c):
+        for i in range(r):
+            if board[i]==c or abs(board[i]-c)==abs(i-r): return False
+        return True
+    def solve(board, r):
+        if r == n: solutions.append(board[:]); return
+        for c in range(n):
+            if safe(board, r, c):
+                board[r] = c
+                solve(board, r+1)
+    solve([-1]*n, 0)
+    return len(solutions)
+print(f"4-Queens: {solve_nqueens(4)} solutions")`,
+`import sys
+total = 50
+for i in range(total+1):
+    pct = i/total
+    bar = "#"*int(pct*40) + "-"*(40-int(pct*40))
+    print(f"\\r[{bar}] {pct*100:.0f}%", end="")
+print()`,
+`def pascal(n):
+    tri = [[1]]
+    for i in range(1, n):
+        row = [1]
+        for j in range(1, i):
+            row.append(tri[i-1][j-1] + tri[i-1][j])
+        row.append(1)
+        tri.append(row)
+    return tri
+for row in pascal(6): print(row)`
+],
+7:[
+`def greet(name):
+    return f"Hello, {name}!"
+print(greet("Alice"))`,
+`def greet(name, msg="Hello"):
+    return f"{msg}, {name}!"
+print(greet("Bob"))
+print(greet("Alice", "Hi"))`,
+`def total(*args):
+    return sum(args)
+print(total(1, 2, 3, 4, 5))`,
+`is_even = lambda x: x % 2 == 0
+print(is_even(4), is_even(7))`,
+`def stats(lst):
+    return min(lst), max(lst), sum(lst)/len(lst)
+lo, hi, avg = stats([3,1,4,1,5,9])
+print(f"Min:{lo}, Max:{hi}, Avg:{avg:.2f}")`,
+`x = "global"
+def func():
+    x = "local"
+    print(f"Inside: {x}")
+func()
+print(f"Outside: {x}")`,
+`def person_info(**kwargs):
+    return ", ".join(f"{k}={v}" for k,v in kwargs.items())
+print(person_info(name="Alice", age=25, city="NYC"))`,
+`def id_generator():
+    n = 0
+    def next_id():
+        nonlocal n
+        n += 1
+        return f"ID-{n:04d}"
+    return next_id
+gen = id_generator()
+print(gen(), gen(), gen())`,
+`def power(base, exp):
+    if exp == 0: return 1
+    if exp < 0: return 1 / power(base, -exp)
+    return base * power(base, exp - 1)
+print(power(2, 10))`,
+`nums = [1,2,3,4,5,6,7,8,9,10]
+evens = list(filter(lambda x: x%2==0, nums))
+doubled = list(map(lambda x: x*2, nums))
+print(f"Evens: {evens}")
+print(f"Doubled: {doubled}")`,
+`def log_calls(func):
+    def wrapper(*args, **kwargs):
+        print(f"Calling {func.__name__}({args}, {kwargs})")
+        return func(*args, **kwargs)
+    return wrapper
+@log_calls
+def add(a, b): return a+b
+print(add(3, 5))`,
+`def apply_to_list(func, lst):
+    return [func(x) for x in lst]
+print(apply_to_list(lambda x: x**2, [1,2,3,4,5]))`,
+`def memoize(func):
+    cache = {}
+    def wrapper(*args):
+        if args not in cache:
+            cache[args] = func(*args)
+        return cache[args]
+    return wrapper
+@memoize
+def fib(n): return n if n<=1 else fib(n-1)+fib(n-2)
+print(fib(35))`,
+`def make_tag(*, tag, content, cls=None):
+    c = f' class="{cls}"' if cls else ""
+    return f"<{tag}{c}>{content}</{tag}>"
+print(make_tag(tag="p", content="Hello", cls="bold"))`,
+`def limit_calls(n):
+    def decorator(func):
+        count = [0]
+        def wrapper(*args, **kwargs):
+            if count[0] >= n: raise RuntimeError(f"Max {n} calls")
+            count[0] += 1
+            return func(*args, **kwargs)
+        return wrapper
+    return decorator
+@limit_calls(3)
+def hi(): return "hi"
+print(hi(), hi(), hi())`,
+`def curry(func):
+    import inspect
+    n = len(inspect.signature(func).parameters)
+    def curried(*args):
+        if len(args) >= n: return func(*args)
+        return lambda *more: curried(*args, *more)
+    return curried
+@curry
+def add3(a,b,c): return a+b+c
+print(add3(1)(2)(3))`,
+`def flatten(lst):
+    result = []
+    for item in lst:
+        if isinstance(item, list):
+            result.extend(flatten(item))
+        else:
+            result.append(item)
+    return result
+print(flatten([1,[2,[3,[4]],5],[6,7]]))`,
+`import time
+def retry(max_attempts=3):
+    def decorator(func):
+        def wrapper(*args, **kwargs):
+            for i in range(max_attempts):
+                try: return func(*args, **kwargs)
+                except Exception as e:
+                    if i == max_attempts-1: raise
+        return wrapper
+    return decorator
+@retry(3)
+def task(): return "success"
+print(task())`,
+`def pipe(*funcs):
+    def piped(data):
+        result = data
+        for f in funcs: result = f(result)
+        return result
+    return piped
+process = pipe(lambda x: x*2, lambda x: x+10, str)
+print(process(5))`,
+`def running_avg():
+    total = 0
+    count = 0
+    def add(val):
+        nonlocal total, count
+        total += val
+        count += 1
+        return total / count
+    return add
+avg = running_avg()
+for v in [10, 20, 30, 40]: print(f"Avg: {avg(v):.2f}")`
+],
+8:[
+`class Person:
+    def __init__(self, name, age):
+        self.name = name
+        self.age = age
+    def greet(self): return f"Hi, I'm {self.name}"
+p = Person("Alice", 25)
+print(p.greet())`,
+`class Circle:
+    def __init__(self, r): self.r = r
+    def area(self): return 3.14159 * self.r**2
+    def circumference(self): return 2 * 3.14159 * self.r
+c = Circle(5)
+print(f"Area: {c.area():.2f}")`,
+`class Counter:
+    count = 0
+    def __init__(self): Counter.count += 1
+    @classmethod
+    def get_count(cls): return cls.count
+Counter(); Counter(); Counter()
+print(Counter.get_count())`,
+`class Animal:
+    def speak(self): return "..."
+class Dog(Animal):
+    def speak(self): return "Woof!"
+class Cat(Animal):
+    def speak(self): return "Meow!"
+for a in [Dog(), Cat()]: print(a.speak())`,
+`class BankAccount:
+    def __init__(self, balance=0):
+        self.__balance = balance
+    @property
+    def balance(self): return self.__balance
+    def deposit(self, amt):
+        if amt > 0: self.__balance += amt
+acc = BankAccount(100)
+acc.deposit(50)
+print(acc.balance)`,
+`class Vector:
+    def __init__(self, x, y): self.x, self.y = x, y
+    def __add__(self, o): return Vector(self.x+o.x, self.y+o.y)
+    def __repr__(self): return f"Vector({self.x},{self.y})"
+print(Vector(1,2) + Vector(3,4))`,
+`class Shape:
+    def area(self): raise NotImplementedError
+class Rect(Shape):
+    def __init__(self,w,h): self.w,self.h = w,h
+    def area(self): return self.w*self.h
+class Tri(Shape):
+    def __init__(self,b,h): self.b,self.h = b,h
+    def area(self): return 0.5*self.b*self.h
+for s in [Rect(3,4),Tri(6,5)]: print(f"{type(s).__name__}: {s.area()}")`,
+`class Employee:
+    def __init__(self, name, sal):
+        self.name, self.sal = name, sal
+class Manager(Employee):
+    def __init__(self, name, sal, dept):
+        super().__init__(name, sal)
+        self.dept = dept
+m = Manager("Alice", 90000, "Eng")
+print(f"{m.name}, {m.dept}")`,
+`class Stack:
+    def __init__(self): self._items = []
+    def push(self, x): self._items.append(x)
+    def pop(self): return self._items.pop() if self._items else None
+    def __len__(self): return len(self._items)
+s = Stack()
+s.push(1); s.push(2)
+print(s.pop(), len(s))`,
+`class Temperature:
+    def __init__(self, celsius): self._c = celsius
+    @property
+    def fahrenheit(self): return self._c * 9/5 + 32
+    @fahrenheit.setter
+    def fahrenheit(self, f): self._c = (f-32)*5/9
+t = Temperature(100)
+print(t.fahrenheit)`,
+`class Node:
+    def __init__(self, val, nxt=None): self.val, self.next = val, nxt
+class LinkedList:
+    def __init__(self): self.head = None
+    def append(self, val):
+        if not self.head: self.head = Node(val); return
+        cur = self.head
+        while cur.next: cur = cur.next
+        cur.next = Node(val)
+    def __iter__(self):
+        cur = self.head
+        while cur: yield cur.val; cur = cur.next
+ll = LinkedList()
+ll.append(1); ll.append(2); ll.append(3)
+print(list(ll))`,
+`from abc import ABC, abstractmethod
+class Shape(ABC):
+    @abstractmethod
+    def area(self): pass
+class Square(Shape):
+    def __init__(self, s): self.s = s
+    def area(self): return self.s**2
+print(Square(5).area())`,
+`class Logger:
+    _instance = None
+    def __new__(cls):
+        if cls._instance is None:
+            cls._instance = super().__new__(cls)
+            cls._instance.logs = []
+        return cls._instance
+    def log(self, msg): self.logs.append(msg)
+L1, L2 = Logger(), Logger()
+L1.log("hello")
+print(L2.logs, L1 is L2)`,
+`class MyList:
+    def __init__(self, data): self.data = data
+    def __iter__(self): return iter(self.data)
+    def __getitem__(self, idx): return self.data[idx]
+    def __len__(self): return len(self.data)
+ml = MyList([10,20,30])
+print(ml[1], len(ml), list(ml))`,
+`class Meta(type):
+    def __new__(mcs, name, bases, dct):
+        dct["created_by"] = "Meta"
+        return super().__new__(mcs, name, bases, dct)
+class MyClass(metaclass=Meta): pass
+print(MyClass.created_by)`,
+`class EventEmitter:
+    def __init__(self): self._handlers = {}
+    def on(self, event, fn):
+        self._handlers.setdefault(event,[]).append(fn)
+    def emit(self, event, *args):
+        for fn in self._handlers.get(event,[]): fn(*args)
+ee = EventEmitter()
+ee.on("greet", lambda name: print(f"Hi {name}!"))
+ee.emit("greet", "Alice")`,
+`from dataclasses import dataclass
+@dataclass
+class Point:
+    x: float
+    y: float
+    def distance(self, other):
+        return ((self.x-other.x)**2 + (self.y-other.y)**2)**0.5
+p1, p2 = Point(0,0), Point(3,4)
+print(p1.distance(p2))`,
+`class Validator:
+    def __init__(self, min_v=None, max_v=None):
+        self.min_v, self.max_v = min_v, max_v
+    def __set_name__(self, owner, name): self.name = name
+    def __set__(self, obj, val):
+        if self.min_v and val < self.min_v: raise ValueError("Too low")
+        if self.max_v and val > self.max_v: raise ValueError("Too high")
+        obj.__dict__[self.name] = val
+    def __get__(self, obj, t=None): return obj.__dict__.get(self.name)
+class Student:
+    age = Validator(min_v=0, max_v=120)
+s = Student(); s.age = 20; print(s.age)`,
+`import time
+class Timer:
+    def __enter__(self): self.start = time.time(); return self
+    def __exit__(self, *a): print(f"Took {time.time()-self.start:.4f}s")
+with Timer():
+    sum(range(1000000))`,
+`import json
+class Serializable:
+    def to_dict(self): return self.__dict__.copy()
+    @classmethod
+    def from_dict(cls, d):
+        obj = cls.__new__(cls)
+        obj.__dict__.update(d)
+        return obj
+    def to_json(self): return json.dumps(self.to_dict())
+class User(Serializable):
+    def __init__(self, name, age): self.name, self.age = name, age
+u = User("Alice", 25)
+print(u.to_json())`
+],
+9:[
+`with open("test.txt", "w") as f:
+    f.write("Hello World\\n")
+with open("test.txt", "r") as f:
+    print(f.read())`,
+`with open("test.txt", "w") as f:
+    f.writelines(["Line 1\\n", "Line 2\\n", "Line 3\\n"])
+with open("test.txt") as f:
+    for line in f: print(line.strip())`,
+`with open("test.txt", "a") as f:
+    f.write("Appended line\\n")
+with open("test.txt") as f:
+    print(f.read())`,
+`with open("test.txt") as f:
+    lines = f.readlines()
+    print(f"Lines: {len(lines)}")
+    print(f"Words: {sum(len(l.split()) for l in lines)}")`,
+`import os
+if os.path.exists("test.txt"):
+    print(f"Size: {os.path.getsize('test.txt')} bytes")
+else:
+    print("File not found")`,
+`with open("source.txt","w") as f: f.write("Copy me!")
+with open("source.txt") as s, open("dest.txt","w") as d:
+    d.write(s.read())
+with open("dest.txt") as f: print(f.read())`,
+`import csv
+data = [["Name","Age"],["Alice",25],["Bob",30]]
+with open("out.csv","w",newline="") as f:
+    csv.writer(f).writerows(data)
+with open("out.csv") as f:
+    for row in csv.reader(f): print(row)`,
+`import json
+data = {"name":"Alice","scores":[90,85,92]}
+with open("data.json","w") as f:
+    json.dump(data, f, indent=2)
+with open("data.json") as f:
+    loaded = json.load(f)
+print(loaded)`,
+`import os
+for item in os.listdir("."):
+    kind = "DIR" if os.path.isdir(item) else "FILE"
+    print(f"{kind}: {item}")`,
+`with open("test.txt", "w") as f:
+    f.write("hello world")
+with open("test.txt", "r+") as f:
+    content = f.read()
+    f.seek(0)
+    f.write(content.upper())
+with open("test.txt") as f: print(f.read())`,
+`import csv
+with open("people.csv","w",newline="") as f:
+    w = csv.DictWriter(f, fieldnames=["name","age"])
+    w.writeheader()
+    w.writerow({"name":"Alice","age":25})
+with open("people.csv") as f:
+    for row in csv.DictReader(f): print(row)`,
+`with open("test.txt","w") as f:
+    f.write("find me here\\nnot here\\nfind me again")
+with open("test.txt") as f:
+    matches = [(i+1,l.strip()) for i,l in enumerate(f) if "find" in l]
+print(matches)`,
+`import json
+class Encoder(json.JSONEncoder):
+    def default(self, o):
+        if hasattr(o, "__dict__"): return o.__dict__
+        return super().default(o)
+class Pt:
+    def __init__(self,x,y): self.x,self.y = x,y
+print(json.dumps(Pt(1,2), cls=Encoder))`,
+`import os
+os.makedirs("test_dir/sub", exist_ok=True)
+with open("test_dir/sub/file.txt","w") as f: f.write("hello")
+print(os.listdir("test_dir/sub"))
+import shutil; shutil.rmtree("test_dir")`,
+`log_lines = ["INFO: started\\n","ERROR: failed\\n","INFO: done\\n"]
+with open("app.log","w") as f: f.writelines(log_lines)
+with open("app.log") as f:
+    errors = [l.strip() for l in f if l.startswith("ERROR")]
+print(errors)`,
+`import tempfile, os
+with tempfile.NamedTemporaryFile(mode="w", suffix=".txt", delete=False) as f:
+    f.write("temp data")
+    name = f.name
+print(f"Temp: {name}")
+os.unlink(name)`,
+`def tail(filename, n=5):
+    with open(filename) as f:
+        lines = f.readlines()
+    return lines[-n:]
+with open("test.txt","w") as f:
+    f.writelines([f"Line {i}\\n" for i in range(20)])
+print(tail("test.txt", 3))`,
+`import configparser
+config = configparser.ConfigParser()
+config["DEFAULT"] = {"debug":"True"}
+config["server"] = {"host":"localhost","port":"8080"}
+with open("config.ini","w") as f: config.write(f)
+config.read("config.ini")
+print(config["server"]["host"])`,
+`with open("binary.bin","wb") as f:
+    f.write(bytes([0x48,0x65,0x6C,0x6C,0x6F]))
+with open("binary.bin","rb") as f:
+    data = f.read()
+print(data, data.decode())`,
+`import json, os
+DB = "db.json"
+def load():
+    return json.load(open(DB)) if os.path.exists(DB) else {}
+def save(d): json.dump(d, open(DB,"w"), indent=2)
+def create(k,v): d=load(); d[k]=v; save(d)
+def read(k): return load().get(k)
+create("user1",{"name":"Alice"})
+print(read("user1"))`
+],
+10:[
+`try:
+    x = int("abc")
+except ValueError as e:
+    print(f"Error: {e}")`,
+`try:
+    result = 10 / 0
+except ZeroDivisionError:
+    print("Cannot divide by zero!")
+finally:
+    print("Cleanup done")`,
+`try:
+    nums = [1,2,3]
+    print(nums[5])
+except IndexError as e:
+    print(f"Index error: {e}")`,
+`try:
+    f = open("missing.txt")
+except FileNotFoundError:
+    print("File not found!")
+else:
+    print(f.read())
+    f.close()`,
+`def divide(a, b):
+    if b == 0: raise ValueError("Divisor cannot be zero")
+    return a / b
+try:
+    print(divide(10, 0))
+except ValueError as e:
+    print(e)`,
+`class InsufficientFunds(Exception):
+    def __init__(self, bal, amt):
+        super().__init__(f"Need {amt}, have {bal}")
+def withdraw(bal, amt):
+    if amt > bal: raise InsufficientFunds(bal, amt)
+    return bal - amt
+try: withdraw(100, 200)
+except InsufficientFunds as e: print(e)`,
+`numbers = ["1","2","abc","4","5.5"]
+results = []
+for n in numbers:
+    try: results.append(int(n))
+    except ValueError:
+        try: results.append(int(float(n)))
+        except: results.append(None)
+print(results)`,
+`def safe_divide(a, b):
+    try: return a / b
+    except ZeroDivisionError: return float("inf")
+    except TypeError: return None
+print(safe_divide(10, 0))
+print(safe_divide(10, "x"))`,
+`import logging
+logging.basicConfig(level=logging.ERROR)
+try:
+    x = int("bad")
+except ValueError as e:
+    logging.error(f"Conversion failed: {e}")
+    print("Logged the error")`,
+`class Validator:
+    @staticmethod
+    def validate_age(age):
+        if not isinstance(age, int): raise TypeError("Must be int")
+        if age < 0: raise ValueError("Cannot be negative")
+        if age > 150: raise ValueError("Too large")
+        return True
+try: Validator.validate_age(-5)
+except ValueError as e: print(e)`,
+`def retry(func, attempts=3):
+    for i in range(attempts):
+        try: return func()
+        except Exception as e:
+            if i == attempts-1: raise
+            print(f"Retry {i+1}: {e}")
+def ok(): return "success"
+print(retry(ok))`,
+`class AppError(Exception): pass
+class DBError(AppError): pass
+class NetworkError(AppError): pass
+def process(): raise DBError("Connection lost")
+try: process()
+except DBError as e: print(f"DB: {e}")
+except AppError as e: print(f"App: {e}")`,
+`from contextlib import suppress
+with suppress(FileNotFoundError):
+    with open("nonexistent.txt") as f: data = f.read()
+print("Continued without error")`,
+`def read_config(path):
+    try:
+        with open(path) as f: return f.read()
+    except FileNotFoundError:
+        with open(path, "w") as f: f.write("default=true")
+        return "default=true"
+print(read_config("config.txt"))`,
+`import traceback
+try:
+    def a(): return 1/0
+    a()
+except Exception:
+    tb = traceback.format_exc()
+    print(tb[:200])`,
+`def validate_input(data):
+    errors = []
+    if not data.get("name"): errors.append("Name required")
+    if not data.get("age"): errors.append("Age required")
+    elif data["age"] < 0: errors.append("Invalid age")
+    if errors: raise ValueError("; ".join(errors))
+try: validate_input({"name":"","age":-1})
+except ValueError as e: print(e)`,
+`class Transaction:
+    def __init__(self): self.ops = []
+    def add(self, op): self.ops.append(op)
+    def execute(self):
+        done = []
+        try:
+            for op in self.ops: op(); done.append(op)
+        except Exception as e:
+            print(f"Rolling back {len(done)} ops")
+            raise
+t = Transaction()
+t.add(lambda: print("op1"))
+t.execute()`,
+`def with_timeout(func, default="timeout"):
+    try: return func()
+    except Exception as e: return f"Error: {e}"
+print(with_timeout(lambda: sum(range(1000000))))`,
+`class CircuitBreaker:
+    def __init__(self, threshold=3):
+        self.failures = 0
+        self.threshold = threshold
+        self.is_open = False
+    def call(self, func):
+        if self.is_open: raise RuntimeError("Circuit open")
+        try:
+            result = func()
+            self.failures = 0
+            return result
+        except Exception:
+            self.failures += 1
+            if self.failures >= self.threshold: self.is_open = True
+            raise
+cb = CircuitBreaker(2)
+print("Circuit breaker ready")`,
+`# ExceptionGroup concept (Python 3.11+)
+errors = [ValueError("bad val"), TypeError("bad type")]
+for e in errors:
+    print(f"Error type: {type(e).__name__}, msg: {e}")`
+],
+11:[
+`import math
+print(f"sqrt(16)={math.sqrt(16)}, pi={math.pi:.4f}")`,
+`from datetime import datetime, timedelta
+now = datetime.now()
+print(f"Now: {now.strftime("%Y-%m-%d %H:%M")}")
+print(f"Tomorrow: {(now+timedelta(days=1)).strftime("%Y-%m-%d")}")`,
+`import random
+nums = [random.randint(1,100) for _ in range(5)]
+print(f"Random: {nums}")
+print(f"Choice: {random.choice(nums)}")`,
+`import os
+print(f"CWD: {os.getcwd()}")
+print(f"Files: {os.listdir('.')[:5]}")`,
+`import sys
+print(f"Python: {sys.version}")
+print(f"Platform: {sys.platform}")`,
+`import json
+data = {"name":"Alice","scores":[90,85,92]}
+j = json.dumps(data, indent=2)
+print(j)
+parsed = json.loads(j)
+print(parsed["name"])`,
+`from collections import Counter, defaultdict
+c = Counter("abracadabra")
+print(c.most_common(3))
+d = defaultdict(list)
+d["fruits"].append("apple")
+print(dict(d))`,
+`import itertools
+print(list(itertools.combinations("ABC", 2)))
+print(list(itertools.permutations("AB")))`,
+`def add(a, b): return a + b
+def sub(a, b): return a - b
+if __name__ == "__main__":
+    print(add(5, 3))
+    print(sub(5, 3))`,
+`import subprocess
+result = subprocess.run(["echo", "hello"], capture_output=True, text=True)
+print(f"Output: {result.stdout.strip()}")`,
+`import sys
+modules = sorted([m for m in sys.modules if not m.startswith("_")])[:10]
+print(f"Loaded: {len(sys.modules)} modules")
+print(modules)`,
+`from pathlib import Path
+p = Path(".")
+print(f"Absolute: {p.absolute()}")
+for f in list(p.glob("*.py"))[:5]: print(f.name)`,
+`import hashlib
+text = "Hello World"
+md5 = hashlib.md5(text.encode()).hexdigest()
+sha = hashlib.sha256(text.encode()).hexdigest()
+print(f"MD5: {md5[:16]}...")
+print(f"SHA256: {sha[:16]}...")`,
+`from functools import lru_cache
+@lru_cache(maxsize=128)
+def fib(n): return n if n <= 1 else fib(n-1) + fib(n-2)
+print(fib(50))
+print(fib.cache_info())`,
+`import argparse
+parser = argparse.ArgumentParser(description="Demo")
+parser.add_argument("--name", default="World")
+parser.add_argument("--count", type=int, default=1)
+print("argparse configured successfully")`,
+`import unittest
+class TestMath(unittest.TestCase):
+    def test_add(self): self.assertEqual(1+1, 2)
+    def test_sub(self): self.assertEqual(5-3, 2)
+print("Tests defined - run with: python -m unittest")`,
+`import sqlite3
+conn = sqlite3.connect(":memory:")
+conn.execute("CREATE TABLE t(id INTEGER PRIMARY KEY, name TEXT)")
+conn.execute("INSERT INTO t VALUES(1,'Alice')")
+rows = conn.execute("SELECT * FROM t").fetchall()
+print(rows)
+conn.close()`,
+`import threading
+def worker(name): print(f"{name} done")
+threads = [threading.Thread(target=worker, args=(f"T{i}",)) for i in range(3)]
+for t in threads: t.start()
+for t in threads: t.join()`,
+`from dataclasses import dataclass, asdict
+@dataclass
+class Config:
+    host: str = "localhost"
+    port: int = 8080
+    debug: bool = False
+c = Config(port=3000)
+print(c)
+print(asdict(c))`,
+`import pkg_resources
+installed = [(d.project_name, d.version) for d in pkg_resources.working_set]
+print(f"Installed: {len(installed)} packages")
+for name, ver in sorted(installed)[:5]: print(f"  {name}=={ver}")`
+],
+12:[
+`nums = [10, 20, 30]
+it = iter(nums)
+print(next(it), next(it), next(it))`,
+`class CountUp:
+    def __init__(self, start, end):
+        self.current = start
+        self.end = end
+    def __iter__(self): return self
+    def __next__(self):
+        if self.current > self.end: raise StopIteration
+        val = self.current
+        self.current += 1
+        return val
+for n in CountUp(1, 5): print(n)`,
+`def countdown(n):
+    while n > 0:
+        yield n
+        n -= 1
+for x in countdown(5): print(x, end=" ")`,
+`def fibonacci():
+    a, b = 0, 1
+    while True:
+        yield a
+        a, b = b, a + b
+fib = fibonacci()
+print([next(fib) for _ in range(10)])`,
+`squares = (x**2 for x in range(1, 11))
+print(sum(squares))`,
+`def read_chunks(data, size):
+    for i in range(0, len(data), size):
+        yield data[i:i+size]
+for chunk in read_chunks("HelloWorld!!", 4): print(chunk)`,
+`import itertools
+print(list(itertools.islice(itertools.count(10, 5), 5)))
+print(list(itertools.takewhile(lambda x: x<10, range(20))))`,
+`import itertools
+counter = itertools.count(1)
+cycler = itertools.cycle(["A","B","C"])
+for _ in range(6): print(f"{next(counter)}: {next(cycler)}")`,
+`def flatten_gen(nested):
+    for item in nested:
+        if isinstance(item, (list, tuple)):
+            yield from flatten_gen(item)
+        else:
+            yield item
+print(list(flatten_gen([1,[2,[3,4]],5,[6]])))`,
+`def gen_pipeline(data):
+    doubled = (x*2 for x in data)
+    filtered = (x for x in doubled if x > 5)
+    return list(filtered)
+print(gen_pipeline(range(1, 8)))`,
+`def accumulator():
+    total = 0
+    while True:
+        val = yield total
+        if val is None: break
+        total += val
+g = accumulator()
+next(g)
+print(g.send(10))
+print(g.send(20))`,
+`from itertools import groupby
+items = ["apple","avocado","banana","blueberry","cherry"]
+for key, group in groupby(sorted(items), key=lambda x: x[0]):
+    print(f"{key}: {list(group)}")`,
+`class InfRange:
+    def __init__(self, start=0, step=1):
+        self.val, self.step = start, step
+    def __iter__(self): return self
+    def __next__(self):
+        v = self.val
+        self.val += self.step
+        return v
+it = InfRange(0, 3)
+print([next(it) for _ in range(5)])`,
+`def window(seq, n=3):
+    it = iter(seq)
+    win = [next(it) for _ in range(n)]
+    yield tuple(win)
+    for item in it:
+        win = win[1:] + [item]
+        yield tuple(win)
+print(list(window([1,2,3,4,5,6], 3)))`,
+`import itertools
+def tee_manual(iterable, n=2):
+    return itertools.tee(iterable, n)
+a, b = tee_manual(range(5))
+print(list(a), list(b))`,
+`import itertools
+def powerset(iterable):
+    s = list(iterable)
+    return itertools.chain.from_iterable(
+        itertools.combinations(s, r) for r in range(len(s)+1))
+print(list(powerset("ABC")))`,
+`def coroutine():
+    results = []
+    while True:
+        val = yield results
+        if val is None: break
+        results.append(val * 2)
+c = coroutine()
+next(c)
+print(c.send(5))
+print(c.send(10))`,
+`class IterableFile:
+    def __init__(self, data):
+        self.lines = data.split("\\n")
+        self.idx = 0
+    def __iter__(self): return self
+    def __next__(self):
+        if self.idx >= len(self.lines): raise StopIteration
+        line = self.lines[self.idx]
+        self.idx += 1
+        return line
+for line in IterableFile("a\\nb\\nc"): print(line)`,
+`def batched(iterable, n):
+    from itertools import islice
+    it = iter(iterable)
+    while True:
+        batch = list(islice(it, n))
+        if not batch: break
+        yield batch
+print(list(batched(range(10), 3)))`,
+`def lazy_eval(computations):
+    for name, func in computations:
+        yield name, func()
+comps = [("square", lambda: 5**2), ("cube", lambda: 3**3)]
+for name, val in lazy_eval(comps): print(f"{name}: {val}")`
+],
+13:[
+`import functools
+def validate_types(*types):
+    def decorator(func):
+        @functools.wraps(func)
+        def wrapper(*args):
+            for a, t in zip(args, types):
+                if not isinstance(a, t): raise TypeError(f"Expected {t}")
+            return func(*args)
+        return wrapper
+    return decorator
+@validate_types(int, int)
+def add(a, b): return a+b
+print(add(3, 5))`,
+`from contextlib import contextmanager
+@contextmanager
+def managed_resource(name):
+    print(f"Acquiring {name}")
+    try: yield name
+    finally: print(f"Releasing {name}")
+with managed_resource("DB") as r: print(f"Using {r}")`,
+`import threading
+class SafeCounter:
+    def __init__(self): self._count = 0; self._lock = threading.Lock()
+    def increment(self):
+        with self._lock: self._count += 1
+    @property
+    def value(self): return self._count
+c = SafeCounter()
+ts = [threading.Thread(target=c.increment) for _ in range(100)]
+for t in ts: t.start()
+for t in ts: t.join()
+print(c.value)`,
+`import asyncio
+async def fetch(name, delay):
+    await asyncio.sleep(delay)
+    return f"{name} done"
+async def main():
+    results = await asyncio.gather(fetch("A",0.1), fetch("B",0.2))
+    print(results)
+asyncio.run(main())`,
+`from typing import List, Dict, Optional, Tuple
+def process(items: List[int], config: Dict[str, str]) -> Optional[Tuple[int, int]]:
+    if not items: return None
+    return min(items), max(items)
+print(process([3,1,4,1,5], {"mode":"fast"}))`,
+`from dataclasses import dataclass, field
+@dataclass(frozen=True)
+class Config:
+    host: str = "localhost"
+    port: int = 8080
+    tags: tuple = field(default_factory=tuple)
+    def url(self): return f"http://{self.host}:{self.port}"
+c = Config(port=3000)
+print(c.url())`,
+`from concurrent.futures import ThreadPoolExecutor
+def task(n): return n**2
+with ThreadPoolExecutor(max_workers=4) as ex:
+    futures = [ex.submit(task, i) for i in range(10)]
+    results = [f.result() for f in futures]
+print(results)`,
+`from abc import ABC, abstractmethod
+class Plugin(ABC):
+    @abstractmethod
+    def execute(self, data): pass
+    @abstractmethod
+    def name(self) -> str: pass
+class Upper(Plugin):
+    def execute(self, data): return data.upper()
+    def name(self): return "upper"
+print(Upper().execute("hello"))`,
+`import weakref
+class Cache:
+    def __init__(self): self._cache = weakref.WeakValueDictionary()
+    def get(self, key): return self._cache.get(key)
+    def put(self, key, obj): self._cache[key] = obj
+class Data: pass
+c = Cache()
+d = Data()
+c.put("key", d)
+print(c.get("key") is not None)`,
+`import functools
+@functools.total_ordering
+class Version:
+    def __init__(self, major, minor, patch):
+        self.major, self.minor, self.patch = major, minor, patch
+    def __eq__(self, o):
+        return (self.major,self.minor,self.patch)==(o.major,o.minor,o.patch)
+    def __lt__(self, o):
+        return (self.major,self.minor,self.patch)<(o.major,o.minor,o.patch)
+    def __repr__(self): return f"{self.major}.{self.minor}.{self.patch}"
+versions = [Version(1,2,0), Version(2,0,0), Version(1,1,5)]
+print(sorted(versions))`,
+`class Singleton(type):
+    _instances = {}
+    def __call__(cls, *args, **kwargs):
+        if cls not in cls._instances:
+            cls._instances[cls] = super().__call__(*args, **kwargs)
+        return cls._instances[cls]
+class DB(metaclass=Singleton):
+    def __init__(self): self.conn = "connected"
+print(DB() is DB())`,
+`def make_class(name, **attrs):
+    return type(name, (), attrs)
+Person = make_class("Person", greet=lambda self: "Hello!", age=25)
+p = Person()
+print(p.greet(), p.age)`,
+`class Drawable:
+    def draw(self) -> str: raise NotImplementedError
+class Circle(Drawable):
+    def draw(self): return "O"
+class Square(Drawable):
+    def draw(self): return "[]"
+def render(shape): print(shape.draw())
+render(Circle())
+render(Square())`,
+`import asyncio
+async def producer(queue):
+    for i in range(5):
+        await queue.put(i)
+    await queue.put(None)
+async def consumer(queue):
+    while True:
+        item = await queue.get()
+        if item is None: break
+        print(f"Got: {item}")
+async def main():
+    q = asyncio.Queue()
+    await asyncio.gather(producer(q), consumer(q))
+asyncio.run(main())`,
+`import ast
+def safe_eval(expr):
+    tree = ast.parse(expr, mode="eval")
+    for node in ast.walk(tree):
+        if isinstance(node, ast.Call):
+            raise ValueError("No function calls allowed")
+    return eval(compile(tree, "<>", "eval"))
+print(safe_eval("2 + 3 * 4"))`,
+`from multiprocessing import Pool
+def square(x): return x ** 2
+with Pool(4) as p:
+    results = p.map(square, range(10))
+print(results)`,
+`import gc, sys
+class Node:
+    def __init__(self): self.ref = None
+a, b = Node(), Node()
+a.ref, b.ref = b, a
+print(f"Before gc: {gc.get_count()}")
+del a, b
+gc.collect()
+print(f"After gc: {gc.get_count()}")`,
+`class Compact:
+    __slots__ = ("x", "y")
+    def __init__(self, x, y): self.x, self.y = x, y
+obj = Compact(1, 2)
+print(obj.x, obj.y)
+print(f"Has __dict__: {hasattr(obj, '__dict__')}")`,
+`import dis
+def example(x):
+    return x * 2 + 1
+dis.dis(example)`,
+`import cProfile
+def fib(n): return n if n<=1 else fib(n-1)+fib(n-2)
+cProfile.run("fib(20)")`
+]
+};
+
+function renderSolutions() {
+    const container = document.getElementById('solutionsContent');
+    if (!currentTopic) return;
+    const sols = solutionData[currentTopic.id] || [];
+    container.innerHTML = currentTopic.practice.map((p, i) => {
+        const sol = sols[i] || 'Solution coming soon...';
+        return `
+        <div class="solution-item">
+            <div class="solution-header" onclick="toggleSolution(${i})">
+                <span class="solution-num">#${i+1}</span>
+                <span class="solution-q">${p.q}</span>
+                <button class="solution-toggle" id="btn_${i}">Show Solution</button>
+            </div>
+            <div class="solution-body" id="sol_${i}">
+                <pre class="code-block"><code>${highlightPython(sol)}</code></pre>
+            </div>
+        </div>`;
+    }).join('');
+}
+
+function toggleSolution(i) {
+    const body = document.getElementById('sol_' + i);
+    const btn = document.getElementById('btn_' + i);
+    body.classList.toggle('open');
+    btn.textContent = body.classList.contains('open') ? 'Hide Solution' : 'Show Solution';
 }
 
 // Initialize
