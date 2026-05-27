@@ -73,6 +73,20 @@ pre.code-block{background:rgba(0,0,0,0.4);border:1px solid var(--border);border-
 .difficulty-header.medium-h{background:rgba(251,191,36,0.08);color:#fbbf24;border-left:3px solid #fbbf24}
 .difficulty-header.hard-h{background:rgba(244,114,182,0.08);color:#f472b6;border-left:3px solid #f472b6}
 @media(max-width:640px){.roadmap{padding-left:40px}.roadmap::before{left:16px}.node-number{left:-32px;width:26px;height:26px;font-size:0.7rem}.header-inner{flex-wrap:wrap;gap:8px}.progress-container{max-width:100%;margin-left:0}.section-label{padding-left:40px}}
+.solution-item{background:var(--card);border:1px solid var(--border);border-radius:10px;margin-bottom:12px;overflow:hidden}
+.solution-header{padding:12px 16px;display:flex;align-items:center;justify-content:space-between;cursor:pointer}
+.solution-header:hover{background:rgba(34,211,238,0.05)}
+.solution-num{font-size:0.75rem;color:var(--text-dim);font-family:'JetBrains Mono',monospace;margin-right:10px}
+.solution-q{font-size:0.82rem;flex:1}
+.solution-toggle{padding:4px 12px;border-radius:6px;border:1px solid var(--border);background:var(--card);color:var(--cyan);font-size:0.72rem;cursor:pointer;font-family:'Sora',sans-serif;transition:all 0.2s}
+.solution-toggle:hover{background:rgba(34,211,238,0.1);border-color:var(--cyan)}
+.solution-body{display:none;padding:0 16px 16px;border-top:1px solid var(--border)}
+.solution-body.open{display:block}
+.solution-approach{font-size:0.78rem;color:var(--text-dim);margin-bottom:8px;padding:8px 12px;background:rgba(74,222,128,0.05);border-left:3px solid var(--green);border-radius:0 4px 4px 0}
+.solution-complexity{display:flex;gap:8px;margin-bottom:8px}
+.solution-complexity span{font-size:0.7rem;padding:2px 8px;border-radius:4px;font-family:'JetBrains Mono',monospace}
+.solution-complexity .tc{background:rgba(34,211,238,0.15);color:#22d3ee}
+.solution-complexity .sc{background:rgba(167,139,250,0.15);color:#a78bfa}
 </style>
 </head>
 <body>
@@ -98,10 +112,12 @@ pre.code-block{background:rgba(0,0,0,0.4);border:1px solid var(--border);border-
 <div class="tab active" onclick="switchTab('theory')">Theory</div>
 <div class="tab" onclick="switchTab('examples')">Examples</div>
 <div class="tab" onclick="switchTab('practice')">Practice</div>
+<div class="tab" onclick="switchTab('solutions')">Solutions</div>
 </div>
 <div class="tab-content active" id="theoryContent"></div>
 <div class="tab-content" id="examplesContent"></div>
 <div class="tab-content" id="practiceContent"></div>
+<div class="tab-content" id="solutionsContent"></div>
 </div>
 <script>
 const STORAGE_KEY='dsa_roadmap_progress';
@@ -938,11 +954,12 @@ function showDetail(id){
 
 function switchTab(name){
     document.querySelectorAll('.tab').forEach((t,i)=>{
-        t.classList.toggle('active',['theory','examples','practice'][i]===name);
+        t.classList.toggle('active',['theory','examples','practice','solutions'][i]===name);
     });
     document.querySelectorAll('.tab-content').forEach((c,i)=>{
-        c.classList.toggle('active',['theory','examples','practice'][i]===name);
+        c.classList.toggle('active',['theory','examples','practice','solutions'][i]===name);
     });
+    if(name==='solutions') renderSolutions(currentTopic);
 }
 
 function highlightPython(code){
@@ -1032,6 +1049,4306 @@ function togglePractice(key,id,checked){
     updateProgressBar();
     const item=event.target.closest('.practice-item');
     if(item)item.classList.toggle('done',checked);
+}
+
+const solutionData = {
+1:[
+`def find_duplicate(nums):
+    seen = set()
+    for n in nums:
+        if n in seen: return n
+        seen.add(n)
+    return -1
+print(find_duplicate([1,3,4,2,2]))`,
+`def is_anagram(s, t):
+    from collections import Counter
+    return Counter(s) == Counter(t)
+print(is_anagram("anagram", "nagaram"))`,
+`def single_number(nums):
+    result = 0
+    for n in nums:
+        result ^= n
+    return result
+print(single_number([4,1,2,1,2]))`,
+`def two_sum(nums, target):
+    seen = {}
+    for i, n in enumerate(nums):
+        if target - n in seen:
+            return [seen[target-n], i]
+        seen[n] = i
+print(two_sum([2,7,11,15], 9))`,
+`def remove_duplicates(nums):
+    if not nums: return 0
+    i = 0
+    for j in range(1, len(nums)):
+        if nums[j] != nums[i]:
+            i += 1
+            nums[i] = nums[j]
+    return i + 1
+arr = [1,1,2,2,3]
+print(remove_duplicates(arr), arr[:3])`,
+`def majority_element(nums):
+    count, candidate = 0, None
+    for n in nums:
+        if count == 0: candidate = n
+        count += 1 if n == candidate else -1
+    return candidate
+print(majority_element([2,2,1,1,1,2,2]))`,
+`def move_zeroes(nums):
+    pos = 0
+    for i in range(len(nums)):
+        if nums[i] != 0:
+            nums[pos], nums[i] = nums[i], nums[pos]
+            pos += 1
+    return nums
+print(move_zeroes([0,1,0,3,12]))`,
+`def top_k_frequent(nums, k):
+    from collections import Counter
+    return [x for x, _ in Counter(nums).most_common(k)]
+print(top_k_frequent([1,1,1,2,2,3], 2))`,
+`def product_except_self(nums):
+    n = len(nums)
+    result = [1] * n
+    prefix = 1
+    for i in range(n):
+        result[i] = prefix
+        prefix *= nums[i]
+    suffix = 1
+    for i in range(n-1, -1, -1):
+        result[i] *= suffix
+        suffix *= nums[i]
+    return result
+print(product_except_self([1,2,3,4]))`,
+`def longest_consecutive(nums):
+    num_set = set(nums)
+    best = 0
+    for n in num_set:
+        if n - 1 not in num_set:
+            length = 0
+            while n + length in num_set:
+                length += 1
+            best = max(best, length)
+    return best
+print(longest_consecutive([100,4,200,1,3,2]))`,
+`def subarray_sum(nums, k):
+    count, prefix_sum = 0, 0
+    prefix_map = {0: 1}
+    for n in nums:
+        prefix_sum += n
+        count += prefix_map.get(prefix_sum - k, 0)
+        prefix_map[prefix_sum] = prefix_map.get(prefix_sum, 0) + 1
+    return count
+print(subarray_sum([1,1,1], 2))`,
+`def group_anagrams(strs):
+    from collections import defaultdict
+    groups = defaultdict(list)
+    for s in strs:
+        key = "".join(sorted(s))
+        groups[key].append(s)
+    return list(groups.values())
+print(group_anagrams(["eat","tea","tan","ate","nat","bat"]))`,
+`def is_valid_sudoku(board):
+    rows = [set() for _ in range(9)]
+    cols = [set() for _ in range(9)]
+    boxes = [set() for _ in range(9)]
+    for i in range(9):
+        for j in range(9):
+            val = board[i][j]
+            if val == ".": continue
+            box_idx = (i//3)*3 + j//3
+            if val in rows[i] or val in cols[j] or val in boxes[box_idx]:
+                return False
+            rows[i].add(val)
+            cols[j].add(val)
+            boxes[box_idx].add(val)
+    return True
+print("Valid Sudoku checker ready")`,
+`def encode(strs):
+    return "".join(f"{len(s)}#{s}" for s in strs)
+def decode(s):
+    result, i = [], 0
+    while i < len(s):
+        j = s.index("#", i)
+        length = int(s[i:j])
+        result.append(s[j+1:j+1+length])
+        i = j + 1 + length
+    return result
+encoded = encode(["hello","world"])
+print(decode(encoded))`,
+`def find_pairs_diff_k(nums, k):
+    num_set = set(nums)
+    pairs = []
+    for n in nums:
+        if n + k in num_set:
+            pairs.append((n, n+k))
+    return pairs
+print(find_pairs_diff_k([1,5,3,4,2], 2))`,
+`def min_window(s, t):
+    from collections import Counter
+    need = Counter(t)
+    have, need_cnt = 0, len(need)
+    result, res_len = [-1,-1], float("inf")
+    l = 0
+    window = {}
+    for r in range(len(s)):
+        c = s[r]
+        window[c] = window.get(c, 0) + 1
+        if c in need and window[c] == need[c]: have += 1
+        while have == need_cnt:
+            if (r-l+1) < res_len:
+                result, res_len = [l, r], r-l+1
+            window[s[l]] -= 1
+            if s[l] in need and window[s[l]] < need[s[l]]: have -= 1
+            l += 1
+    l, r = result
+    return s[l:r+1] if res_len != float("inf") else ""
+print(min_window("ADOBECODEBANC", "ABC"))`,
+`def first_missing_positive(nums):
+    n = len(nums)
+    for i in range(n):
+        while 1 <= nums[i] <= n and nums[nums[i]-1] != nums[i]:
+            nums[nums[i]-1], nums[i] = nums[i], nums[nums[i]-1]
+    for i in range(n):
+        if nums[i] != i+1: return i+1
+    return n+1
+print(first_missing_positive([3,4,-1,1]))`,
+`def length_of_longest_substring(s):
+    char_set = set()
+    l, max_len = 0, 0
+    for r in range(len(s)):
+        while s[r] in char_set:
+            char_set.remove(s[l])
+            l += 1
+        char_set.add(s[r])
+        max_len = max(max_len, r - l + 1)
+    return max_len
+print(length_of_longest_substring("abcabcbb"))`,
+`def four_sum(nums, target):
+    nums.sort()
+    result = []
+    n = len(nums)
+    for i in range(n-3):
+        if i > 0 and nums[i] == nums[i-1]: continue
+        for j in range(i+1, n-2):
+            if j > i+1 and nums[j] == nums[j-1]: continue
+            l, r = j+1, n-1
+            while l < r:
+                s = nums[i]+nums[j]+nums[l]+nums[r]
+                if s == target:
+                    result.append([nums[i],nums[j],nums[l],nums[r]])
+                    while l<r and nums[l]==nums[l+1]: l+=1
+                    while l<r and nums[r]==nums[r-1]: r-=1
+                    l+=1; r-=1
+                elif s < target: l+=1
+                else: r-=1
+    return result
+print(four_sum([1,0,-1,0,-2,2], 0))`,
+`def count_range_sum(nums, lower, upper):
+    prefix = [0]
+    for n in nums: prefix.append(prefix[-1] + n)
+    count = 0
+    for i in range(len(prefix)):
+        for j in range(i+1, len(prefix)):
+            if lower <= prefix[j] - prefix[i] <= upper:
+                count += 1
+    return count
+print(count_range_sum([-2,5,-1], -2, 2))`
+],
+2:[
+`class ListNode:
+    def __init__(self, val=0, nxt=None):
+        self.val, self.next = val, nxt
+def reverse(head):
+    prev = None
+    while head:
+        nxt = head.next
+        head.next = prev
+        prev = head
+        head = nxt
+    return prev`,
+`def has_cycle(head):
+    slow = fast = head
+    while fast and fast.next:
+        slow = slow.next
+        fast = fast.next.next
+        if slow == fast: return True
+    return False`,
+`def find_middle(head):
+    slow = fast = head
+    while fast and fast.next:
+        slow = slow.next
+        fast = fast.next.next
+    return slow.val`,
+`def merge_two_sorted(l1, l2):
+    dummy = ListNode(0)
+    curr = dummy
+    while l1 and l2:
+        if l1.val <= l2.val:
+            curr.next = l1; l1 = l1.next
+        else:
+            curr.next = l2; l2 = l2.next
+        curr = curr.next
+    curr.next = l1 or l2
+    return dummy.next`,
+`def remove_nth_from_end(head, n):
+    dummy = ListNode(0, head)
+    slow = fast = dummy
+    for _ in range(n+1): fast = fast.next
+    while fast:
+        slow = slow.next
+        fast = fast.next
+    slow.next = slow.next.next
+    return dummy.next`,
+`def delete_duplicates(head):
+    curr = head
+    while curr and curr.next:
+        if curr.val == curr.next.val:
+            curr.next = curr.next.next
+        else:
+            curr = curr.next
+    return head`,
+`def is_palindrome(head):
+    vals = []
+    while head:
+        vals.append(head.val)
+        head = head.next
+    return vals == vals[::-1]`,
+`def get_intersection(headA, headB):
+    a, b = headA, headB
+    while a != b:
+        a = a.next if a else headB
+        b = b.next if b else headA
+    return a`,
+`def add_two_numbers(l1, l2):
+    dummy = ListNode(0)
+    curr, carry = dummy, 0
+    while l1 or l2 or carry:
+        val = carry
+        if l1: val += l1.val; l1 = l1.next
+        if l2: val += l2.val; l2 = l2.next
+        carry, val = divmod(val, 10)
+        curr.next = ListNode(val)
+        curr = curr.next
+    return dummy.next`,
+`def swap_pairs(head):
+    dummy = ListNode(0, head)
+    prev = dummy
+    while prev.next and prev.next.next:
+        a, b = prev.next, prev.next.next
+        prev.next, a.next, b.next = b, b.next, a
+        prev = a
+    return dummy.next`,
+`def odd_even_list(head):
+    if not head: return head
+    odd, even = head, head.next
+    even_head = even
+    while even and even.next:
+        odd.next = even.next
+        odd = odd.next
+        even.next = odd.next
+        even = even.next
+    odd.next = even_head
+    return head`,
+`def rotate_right(head, k):
+    if not head: return head
+    length, tail = 1, head
+    while tail.next: tail = tail.next; length += 1
+    k %= length
+    if k == 0: return head
+    tail.next = head
+    for _ in range(length - k):
+        tail = tail.next
+    new_head = tail.next
+    tail.next = None
+    return new_head`,
+`def copy_random_list(head):
+    if not head: return None
+    old_to_new = {}
+    curr = head
+    while curr:
+        old_to_new[curr] = ListNode(curr.val)
+        curr = curr.next
+    curr = head
+    while curr:
+        old_to_new[curr].next = old_to_new.get(curr.next)
+        old_to_new[curr].random = old_to_new.get(curr.random)
+        curr = curr.next
+    return old_to_new[head]`,
+`def sort_list(head):
+    if not head or not head.next: return head
+    slow, fast = head, head.next
+    while fast and fast.next:
+        slow = slow.next; fast = fast.next.next
+    mid = slow.next
+    slow.next = None
+    left = sort_list(head)
+    right = sort_list(mid)
+    return merge_two_sorted(left, right)`,
+`def flatten_multilevel(head):
+    curr = head
+    while curr:
+        if curr.child:
+            nxt = curr.next
+            curr.next = curr.child
+            curr.child.prev = curr
+            curr.child = None
+            tail = curr.next
+            while tail.next: tail = tail.next
+            tail.next = nxt
+            if nxt: nxt.prev = tail
+        curr = curr.next
+    return head
+print("Flatten multilevel list ready")`,
+`def reverse_between(head, left, right):
+    dummy = ListNode(0, head)
+    prev = dummy
+    for _ in range(left-1): prev = prev.next
+    curr = prev.next
+    for _ in range(right-left):
+        nxt = curr.next
+        curr.next = nxt.next
+        nxt.next = prev.next
+        prev.next = nxt
+    return dummy.next`,
+`def reverse_k_group(head, k):
+    count, node = 0, head
+    while node and count < k:
+        node = node.next; count += 1
+    if count < k: return head
+    prev, curr = None, head
+    for _ in range(k):
+        nxt = curr.next
+        curr.next = prev
+        prev = curr
+        curr = nxt
+    head.next = reverse_k_group(curr, k)
+    return prev`,
+`class LRUNode:
+    def __init__(self, key=0, val=0):
+        self.key, self.val = key, val
+        self.prev = self.next = None
+print("LRU Cache using doubly linked list + hashmap")`,
+`def detect_cycle_start(head):
+    slow = fast = head
+    while fast and fast.next:
+        slow = slow.next
+        fast = fast.next.next
+        if slow == fast:
+            slow = head
+            while slow != fast:
+                slow = slow.next
+                fast = fast.next
+            return slow
+    return None`,
+`def reorder_list(head):
+    if not head: return
+    slow, fast = head, head
+    while fast.next and fast.next.next:
+        slow = slow.next; fast = fast.next.next
+    prev, curr = None, slow.next
+    slow.next = None
+    while curr:
+        nxt = curr.next; curr.next = prev; prev = curr; curr = nxt
+    first, second = head, prev
+    while second:
+        tmp1, tmp2 = first.next, second.next
+        first.next = second; second.next = tmp1
+        first, second = tmp1, tmp2`
+],
+3:[
+`def is_valid(s):
+    stack = []
+    pairs = {")":"(", "}":"{", "]":"["}
+    for c in s:
+        if c in pairs:
+            if not stack or stack[-1] != pairs[c]: return False
+            stack.pop()
+        else: stack.append(c)
+    return not stack
+print(is_valid("()[]{}"))`,
+`class MinStack:
+    def __init__(self): self.stack = []; self.min_stack = []
+    def push(self, val):
+        self.stack.append(val)
+        self.min_stack.append(min(val, self.min_stack[-1] if self.min_stack else val))
+    def pop(self): self.stack.pop(); self.min_stack.pop()
+    def top(self): return self.stack[-1]
+    def getMin(self): return self.min_stack[-1]
+ms = MinStack(); ms.push(3); ms.push(1); ms.push(2)
+print(ms.getMin())`,
+`def eval_rpn(tokens):
+    stack = []
+    for t in tokens:
+        if t in "+-*/":
+            b, a = stack.pop(), stack.pop()
+            if t == "+": stack.append(a+b)
+            elif t == "-": stack.append(a-b)
+            elif t == "*": stack.append(a*b)
+            else: stack.append(int(a/b))
+        else: stack.append(int(t))
+    return stack[0]
+print(eval_rpn(["2","1","+","3","*"]))`,
+`def daily_temperatures(temps):
+    n = len(temps)
+    result = [0] * n
+    stack = []
+    for i in range(n):
+        while stack and temps[i] > temps[stack[-1]]:
+            idx = stack.pop()
+            result[idx] = i - idx
+        stack.append(i)
+    return result
+print(daily_temperatures([73,74,75,71,69,72,76,73]))`,
+`def next_greater_element(nums):
+    stack, result = [], [-1] * len(nums)
+    for i in range(len(nums)-1, -1, -1):
+        while stack and stack[-1] <= nums[i]:
+            stack.pop()
+        if stack: result[i] = stack[-1]
+        stack.append(nums[i])
+    return result
+print(next_greater_element([4,5,2,25]))`,
+`def largest_rectangle(heights):
+    stack, max_area = [], 0
+    for i, h in enumerate(heights + [0]):
+        while stack and heights[stack[-1]] > h:
+            height = heights[stack.pop()]
+            width = i if not stack else i - stack[-1] - 1
+            max_area = max(max_area, height * width)
+        stack.append(i)
+    return max_area
+print(largest_rectangle([2,1,5,6,2,3]))`,
+`def decode_string(s):
+    stack = []
+    curr_str, curr_num = "", 0
+    for c in s:
+        if c.isdigit(): curr_num = curr_num*10 + int(c)
+        elif c == "[":
+            stack.append((curr_str, curr_num))
+            curr_str, curr_num = "", 0
+        elif c == "]":
+            prev_str, num = stack.pop()
+            curr_str = prev_str + curr_str * num
+        else: curr_str += c
+    return curr_str
+print(decode_string("3[a2[c]]"))`,
+`def asteroid_collision(asteroids):
+    stack = []
+    for a in asteroids:
+        while stack and a < 0 < stack[-1]:
+            if stack[-1] < -a: stack.pop(); continue
+            elif stack[-1] == -a: stack.pop()
+            break
+        else: stack.append(a)
+    return stack
+print(asteroid_collision([5,10,-5]))`,
+`def remove_duplicates_str(s):
+    stack = []
+    for c in s:
+        if stack and stack[-1] == c:
+            stack.pop()
+        else:
+            stack.append(c)
+    return "".join(stack)
+print(remove_duplicates_str("abbaca"))`,
+`def simplify_path(path):
+    stack = []
+    for part in path.split("/"):
+        if part == "..": 
+            if stack: stack.pop()
+        elif part and part != ".":
+            stack.append(part)
+    return "/" + "/".join(stack)
+print(simplify_path("/a/./b/../../c/"))`,
+`def trap_rain(height):
+    stack, water = [], 0
+    for i, h in enumerate(height):
+        while stack and height[stack[-1]] < h:
+            bottom = height[stack.pop()]
+            if stack:
+                width = i - stack[-1] - 1
+                bounded = min(h, height[stack[-1]]) - bottom
+                water += width * bounded
+        stack.append(i)
+    return water
+print(trap_rain([0,1,0,2,1,0,1,3,2,1,2,1]))`,
+`def remove_k_digits(num, k):
+    stack = []
+    for d in num:
+        while k and stack and stack[-1] > d:
+            stack.pop(); k -= 1
+        stack.append(d)
+    stack = stack[:-k] if k else stack
+    return "".join(stack).lstrip("0") or "0"
+print(remove_k_digits("1432219", 3))`,
+`def car_fleet(target, position, speed):
+    cars = sorted(zip(position, speed), reverse=True)
+    stack = []
+    for pos, spd in cars:
+        time = (target - pos) / spd
+        if not stack or time > stack[-1]:
+            stack.append(time)
+    return len(stack)
+print(car_fleet(12, [10,8,0,5,3], [2,4,1,1,3]))`,
+`def basic_calculator(s):
+    stack, num, sign, result = [], 0, 1, 0
+    for c in s:
+        if c.isdigit(): num = num*10 + int(c)
+        elif c in "+-":
+            result += sign * num
+            num = 0
+            sign = 1 if c == "+" else -1
+        elif c == "(":
+            stack.append(result); stack.append(sign)
+            result, sign = 0, 1
+        elif c == ")":
+            result += sign * num
+            num = 0
+            result *= stack.pop()
+            result += stack.pop()
+    return result + sign * num
+print(basic_calculator("(1+(4+5+2)-3)+(6+8)"))`,
+`def validate_stack_sequences(pushed, popped):
+    stack, j = [], 0
+    for x in pushed:
+        stack.append(x)
+        while stack and stack[-1] == popped[j]:
+            stack.pop(); j += 1
+    return j == len(popped)
+print(validate_stack_sequences([1,2,3,4,5], [4,5,3,2,1]))`,
+`def min_remove_parentheses(s):
+    stack, remove = [], set()
+    for i, c in enumerate(s):
+        if c == "(": stack.append(i)
+        elif c == ")":
+            if stack: stack.pop()
+            else: remove.add(i)
+    remove.update(stack)
+    return "".join(c for i,c in enumerate(s) if i not in remove)
+print(min_remove_parentheses("lee(t(c)o)de)"))`,
+`def exclusive_time(n, logs):
+    result = [0]*n
+    stack = []
+    prev_time = 0
+    for log in logs:
+        fid, typ, time = log.split(":")
+        fid, time = int(fid), int(time)
+        if typ == "start":
+            if stack: result[stack[-1]] += time - prev_time
+            stack.append(fid)
+            prev_time = time
+        else:
+            result[stack.pop()] += time - prev_time + 1
+            prev_time = time + 1
+    return result
+print(exclusive_time(2, ["0:start:0","1:start:2","1:end:5","0:end:6"]))`,
+`def max_frequency_stack():
+    from collections import defaultdict
+    freq = defaultdict(int)
+    group = defaultdict(list)
+    max_freq = 0
+    def push(val):
+        nonlocal max_freq
+        freq[val] += 1
+        max_freq = max(max_freq, freq[val])
+        group[freq[val]].append(val)
+    def pop():
+        nonlocal max_freq
+        val = group[max_freq].pop()
+        freq[val] -= 1
+        if not group[max_freq]: max_freq -= 1
+        return val
+    push(5); push(7); push(5); push(7); push(4); push(5)
+    print(pop(), pop(), pop())
+max_frequency_stack()`,
+`def score_of_parentheses(s):
+    stack = [0]
+    for c in s:
+        if c == "(": stack.append(0)
+        else:
+            v = stack.pop()
+            stack[-1] += max(2*v, 1)
+    return stack[0]
+print(score_of_parentheses("(()(()))"))`,
+`def longest_valid_parentheses(s):
+    stack, max_len = [-1], 0
+    for i, c in enumerate(s):
+        if c == "(": stack.append(i)
+        else:
+            stack.pop()
+            if not stack: stack.append(i)
+            else: max_len = max(max_len, i - stack[-1])
+    return max_len
+print(longest_valid_parentheses(")()())"))`
+],
+4:[
+`from collections import deque
+def bfs(graph, start):
+    visited, queue = {start}, deque([start])
+    result = []
+    while queue:
+        node = queue.popleft()
+        result.append(node)
+        for nb in graph.get(node, []):
+            if nb not in visited:
+                visited.add(nb)
+                queue.append(nb)
+    return result
+print(bfs({1:[2,3],2:[4],3:[4,5],4:[],5:[]}, 1))`,
+`from collections import deque
+class MyStack:
+    def __init__(self): self.q = deque()
+    def push(self, x):
+        self.q.append(x)
+        for _ in range(len(self.q)-1): self.q.append(self.q.popleft())
+    def pop(self): return self.q.popleft()
+    def top(self): return self.q[0]
+s = MyStack(); s.push(1); s.push(2)
+print(s.pop())`,
+`from collections import deque
+def moving_average(nums, k):
+    window = deque()
+    total, result = 0, []
+    for n in nums:
+        window.append(n); total += n
+        if len(window) > k: total -= window.popleft()
+        result.append(total / len(window))
+    return result
+print(moving_average([1,10,3,5,2,8], 3))`,
+`from collections import deque
+def walls_and_gates(rooms):
+    INF = 2**31 - 1
+    m, n = len(rooms), len(rooms[0])
+    queue = deque()
+    for i in range(m):
+        for j in range(n):
+            if rooms[i][j] == 0: queue.append((i,j))
+    while queue:
+        r, c = queue.popleft()
+        for dr, dc in [(0,1),(0,-1),(1,0),(-1,0)]:
+            nr, nc = r+dr, c+dc
+            if 0<=nr<m and 0<=nc<n and rooms[nr][nc] == INF:
+                rooms[nr][nc] = rooms[r][c] + 1
+                queue.append((nr, nc))
+    return rooms
+print("Walls & Gates BFS ready")`,
+`import heapq
+def kth_largest(nums, k):
+    heap = nums[:k]
+    heapq.heapify(heap)
+    for n in nums[k:]:
+        if n > heap[0]:
+            heapq.heapreplace(heap, n)
+    return heap[0]
+print(kth_largest([3,2,1,5,6,4], 2))`,
+`from collections import deque
+def max_sliding_window(nums, k):
+    dq, result = deque(), []
+    for i in range(len(nums)):
+        while dq and dq[0] < i - k + 1: dq.popleft()
+        while dq and nums[dq[-1]] < nums[i]: dq.pop()
+        dq.append(i)
+        if i >= k - 1: result.append(nums[dq[0]])
+    return result
+print(max_sliding_window([1,3,-1,-3,5,3,6,7], 3))`,
+`from collections import deque
+def oranges_rotting(grid):
+    m, n = len(grid), len(grid[0])
+    queue = deque()
+    fresh = 0
+    for i in range(m):
+        for j in range(n):
+            if grid[i][j] == 2: queue.append((i,j,0))
+            elif grid[i][j] == 1: fresh += 1
+    time = 0
+    while queue:
+        r, c, t = queue.popleft()
+        for dr, dc in [(0,1),(0,-1),(1,0),(-1,0)]:
+            nr, nc = r+dr, c+dc
+            if 0<=nr<m and 0<=nc<n and grid[nr][nc] == 1:
+                grid[nr][nc] = 2
+                fresh -= 1
+                time = t + 1
+                queue.append((nr, nc, t+1))
+    return time if fresh == 0 else -1
+print(oranges_rotting([[2,1,1],[1,1,0],[0,1,1]]))`,
+`import heapq
+def merge_k_sorted(lists):
+    heap = []
+    for i, lst in enumerate(lists):
+        if lst: heapq.heappush(heap, (lst[0], i, 0))
+    result = []
+    while heap:
+        val, li, idx = heapq.heappop(heap)
+        result.append(val)
+        if idx + 1 < len(lists[li]):
+            heapq.heappush(heap, (lists[li][idx+1], li, idx+1))
+    return result
+print(merge_k_sorted([[1,4,5],[1,3,4],[2,6]]))`,
+`from collections import deque
+def shortest_path_binary_matrix(grid):
+    n = len(grid)
+    if grid[0][0] or grid[n-1][n-1]: return -1
+    queue = deque([(0, 0, 1)])
+    grid[0][0] = 1
+    for r, c, dist in queue:
+        if r == n-1 and c == n-1: return dist
+        for dr in [-1,0,1]:
+            for dc in [-1,0,1]:
+                nr, nc = r+dr, c+dc
+                if 0<=nr<n and 0<=nc<n and not grid[nr][nc]:
+                    grid[nr][nc] = 1
+                    queue.append((nr, nc, dist+1))
+    return -1
+print(shortest_path_binary_matrix([[0,1],[1,0]]))`,
+`import heapq
+def task_scheduler(tasks, n):
+    from collections import Counter
+    freq = Counter(tasks)
+    max_heap = [-f for f in freq.values()]
+    heapq.heapify(max_heap)
+    time = 0
+    while max_heap:
+        cycle = []
+        for _ in range(n+1):
+            if max_heap: cycle.append(heapq.heappop(max_heap))
+        for f in cycle:
+            if f + 1 < 0: heapq.heappush(max_heap, f + 1)
+        time += n + 1 if max_heap else len(cycle)
+    return time
+print(task_scheduler(["A","A","A","B","B","B"], 2))`,
+`class CircularQueue:
+    def __init__(self, k):
+        self.q = [0]*k; self.size = k; self.head = self.count = 0
+    def enqueue(self, val):
+        if self.count == self.size: return False
+        self.q[(self.head+self.count)%self.size] = val
+        self.count += 1; return True
+    def dequeue(self):
+        if self.count == 0: return False
+        self.head = (self.head+1)%self.size
+        self.count -= 1; return True
+    def front(self): return self.q[self.head] if self.count else -1
+cq = CircularQueue(3); cq.enqueue(1); cq.enqueue(2)
+print(cq.front())`,
+`from collections import deque
+def level_order(root):
+    if not root: return []
+    result, queue = [], deque([root])
+    while queue:
+        level = []
+        for _ in range(len(queue)):
+            node = queue.popleft()
+            level.append(node.val)
+            if node.left: queue.append(node.left)
+            if node.right: queue.append(node.right)
+        result.append(level)
+    return result
+print("Level order BFS ready")`,
+`import heapq
+def find_kth_smallest_matrix(matrix, k):
+    n = len(matrix)
+    heap = [(matrix[0][j], 0, j) for j in range(n)]
+    heapq.heapify(heap)
+    for _ in range(k):
+        val, r, c = heapq.heappop(heap)
+        if r + 1 < n:
+            heapq.heappush(heap, (matrix[r+1][c], r+1, c))
+    return val
+print(find_kth_smallest_matrix([[1,5,9],[10,11,13],[12,13,15]], 8))`,
+`from collections import deque
+def snakes_and_ladders(board):
+    n = len(board)
+    def get_pos(s):
+        r, c = divmod(s-1, n)
+        if r % 2: c = n-1-c
+        return n-1-r, c
+    queue = deque([(1, 0)])
+    visited = {1}
+    while queue:
+        sq, moves = queue.popleft()
+        for i in range(1, 7):
+            nxt = sq + i
+            if nxt > n*n: break
+            r, c = get_pos(nxt)
+            if board[r][c] != -1: nxt = board[r][c]
+            if nxt == n*n: return moves + 1
+            if nxt not in visited:
+                visited.add(nxt)
+                queue.append((nxt, moves+1))
+    return -1
+print("Snakes & Ladders BFS ready")`,
+`import heapq
+def reorganize_string(s):
+    from collections import Counter
+    freq = Counter(s)
+    heap = [(-f, c) for c, f in freq.items()]
+    heapq.heapify(heap)
+    result = []
+    prev = (0, "")
+    while heap:
+        f, c = heapq.heappop(heap)
+        result.append(c)
+        if prev[0] < 0: heapq.heappush(heap, prev)
+        prev = (f+1, c)
+    return "".join(result) if len(result) == len(s) else ""
+print(reorganize_string("aab"))`,
+`from collections import deque
+def open_lock(deadends, target):
+    dead = set(deadends)
+    if "0000" in dead: return -1
+    queue = deque([("0000", 0)])
+    visited = {"0000"}
+    while queue:
+        state, turns = queue.popleft()
+        if state == target: return turns
+        for i in range(4):
+            d = int(state[i])
+            for nd in [(d+1)%10, (d-1)%10]:
+                ns = state[:i] + str(nd) + state[i+1:]
+                if ns not in visited and ns not in dead:
+                    visited.add(ns)
+                    queue.append((ns, turns+1))
+    return -1
+print(open_lock(["0201","0101","0102","1212","2002"], "0202"))`,
+`import heapq
+def k_closest_points(points, k):
+    heap = []
+    for x, y in points:
+        dist = -(x*x + y*y)
+        if len(heap) < k: heapq.heappush(heap, (dist, x, y))
+        else: heapq.heappushpop(heap, (dist, x, y))
+    return [[x, y] for _, x, y in heap]
+print(k_closest_points([[1,3],[-2,2],[5,8],[0,1]], 2))`,
+`from collections import deque
+def word_ladder_length(begin, end, word_list):
+    words = set(word_list)
+    if end not in words: return 0
+    queue = deque([(begin, 1)])
+    while queue:
+        word, steps = queue.popleft()
+        for i in range(len(word)):
+            for c in "abcdefghijklmnopqrstuvwxyz":
+                nw = word[:i] + c + word[i+1:]
+                if nw == end: return steps + 1
+                if nw in words:
+                    words.remove(nw)
+                    queue.append((nw, steps+1))
+    return 0
+print(word_ladder_length("hit","cog",["hot","dot","dog","lot","log","cog"]))`,
+`import heapq
+def find_median_stream():
+    lo, hi = [], []  # max-heap (neg), min-heap
+    def add(num):
+        heapq.heappush(lo, -num)
+        heapq.heappush(hi, -heapq.heappop(lo))
+        if len(hi) > len(lo): heapq.heappush(lo, -heapq.heappop(hi))
+    def median():
+        if len(lo) > len(hi): return -lo[0]
+        return (-lo[0] + hi[0]) / 2
+    for n in [2,3,4]: add(n)
+    print(median())
+find_median_stream()`,
+`import heapq
+def swim_in_rising_water(grid):
+    n = len(grid)
+    heap = [(grid[0][0], 0, 0)]
+    visited = {(0,0)}
+    while heap:
+        t, r, c = heapq.heappop(heap)
+        if r == n-1 and c == n-1: return t
+        for dr, dc in [(0,1),(0,-1),(1,0),(-1,0)]:
+            nr, nc = r+dr, c+dc
+            if 0<=nr<n and 0<=nc<n and (nr,nc) not in visited:
+                visited.add((nr,nc))
+                heapq.heappush(heap, (max(t, grid[nr][nc]), nr, nc))
+    return -1
+print(swim_in_rising_water([[0,2],[1,3]]))`
+],
+5:[
+`def inorder(root):
+    if not root: return []
+    return inorder(root.left) + [root.val] + inorder(root.right)
+print("Inorder traversal: left, root, right")`,
+`def max_depth(root):
+    if not root: return 0
+    return 1 + max(max_depth(root.left), max_depth(root.right))
+print("Max depth uses recursion")`,
+`def is_same_tree(p, q):
+    if not p and not q: return True
+    if not p or not q: return False
+    return p.val == q.val and is_same_tree(p.left, q.left) and is_same_tree(p.right, q.right)`,
+`def invert_tree(root):
+    if not root: return None
+    root.left, root.right = invert_tree(root.right), invert_tree(root.left)
+    return root`,
+`def is_balanced(root):
+    def height(node):
+        if not node: return 0
+        l, r = height(node.left), height(node.right)
+        if l == -1 or r == -1 or abs(l-r) > 1: return -1
+        return 1 + max(l, r)
+    return height(root) != -1`,
+`def is_valid_bst(root, lo=float("-inf"), hi=float("inf")):
+    if not root: return True
+    if root.val <= lo or root.val >= hi: return False
+    return is_valid_bst(root.left, lo, root.val) and is_valid_bst(root.right, root.val, hi)`,
+`def lowest_common_ancestor(root, p, q):
+    if not root or root == p or root == q: return root
+    left = lowest_common_ancestor(root.left, p, q)
+    right = lowest_common_ancestor(root.right, p, q)
+    if left and right: return root
+    return left or right`,
+`def level_order(root):
+    from collections import deque
+    if not root: return []
+    result, queue = [], deque([root])
+    while queue:
+        level = []
+        for _ in range(len(queue)):
+            node = queue.popleft()
+            level.append(node.val)
+            if node.left: queue.append(node.left)
+            if node.right: queue.append(node.right)
+        result.append(level)
+    return result`,
+`def diameter(root):
+    ans = [0]
+    def height(node):
+        if not node: return 0
+        l, r = height(node.left), height(node.right)
+        ans[0] = max(ans[0], l + r)
+        return 1 + max(l, r)
+    height(root)
+    return ans[0]`,
+`def path_sum(root, target):
+    if not root: return False
+    if not root.left and not root.right: return root.val == target
+    return path_sum(root.left, target-root.val) or path_sum(root.right, target-root.val)`,
+`def build_tree(preorder, inorder):
+    if not preorder: return None
+    root = TreeNode(preorder[0])
+    mid = inorder.index(preorder[0])
+    root.left = build_tree(preorder[1:mid+1], inorder[:mid])
+    root.right = build_tree(preorder[mid+1:], inorder[mid+1:])
+    return root`,
+`def serialize(root):
+    if not root: return "null"
+    return f"{root.val},{serialize(root.left)},{serialize(root.right)}"
+def deserialize(data):
+    vals = iter(data.split(","))
+    def build():
+        val = next(vals)
+        if val == "null": return None
+        node = TreeNode(int(val))
+        node.left, node.right = build(), build()
+        return node
+    return build()`,
+`def right_side_view(root):
+    from collections import deque
+    if not root: return []
+    result, queue = [], deque([root])
+    while queue:
+        for i in range(len(queue)):
+            node = queue.popleft()
+            if node.left: queue.append(node.left)
+            if node.right: queue.append(node.right)
+        result.append(node.val)
+    return result`,
+`def kth_smallest_bst(root, k):
+    stack = []
+    while True:
+        while root:
+            stack.append(root)
+            root = root.left
+        root = stack.pop()
+        k -= 1
+        if k == 0: return root.val
+        root = root.right`,
+`def max_path_sum(root):
+    ans = [float("-inf")]
+    def dfs(node):
+        if not node: return 0
+        l = max(dfs(node.left), 0)
+        r = max(dfs(node.right), 0)
+        ans[0] = max(ans[0], node.val + l + r)
+        return node.val + max(l, r)
+    dfs(root)
+    return ans[0]`,
+`def flatten_to_linked_list(root):
+    curr = root
+    while curr:
+        if curr.left:
+            rightmost = curr.left
+            while rightmost.right: rightmost = rightmost.right
+            rightmost.right = curr.right
+            curr.right = curr.left
+            curr.left = None
+        curr = curr.right`,
+`def zigzag_level_order(root):
+    from collections import deque
+    if not root: return []
+    result, queue, left_to_right = [], deque([root]), True
+    while queue:
+        level = deque()
+        for _ in range(len(queue)):
+            node = queue.popleft()
+            if left_to_right: level.append(node.val)
+            else: level.appendleft(node.val)
+            if node.left: queue.append(node.left)
+            if node.right: queue.append(node.right)
+        result.append(list(level))
+        left_to_right = not left_to_right
+    return result`,
+`def count_nodes(root):
+    if not root: return 0
+    ld = rd = 0
+    l, r = root, root
+    while l: ld += 1; l = l.left
+    while r: rd += 1; r = r.right
+    if ld == rd: return 2**ld - 1
+    return 1 + count_nodes(root.left) + count_nodes(root.right)`,
+`def vertical_order(root):
+    from collections import defaultdict, deque
+    if not root: return []
+    col_map = defaultdict(list)
+    queue = deque([(root, 0)])
+    min_col = max_col = 0
+    while queue:
+        node, col = queue.popleft()
+        col_map[col].append(node.val)
+        min_col = min(min_col, col)
+        max_col = max(max_col, col)
+        if node.left: queue.append((node.left, col-1))
+        if node.right: queue.append((node.right, col+1))
+    return [col_map[c] for c in range(min_col, max_col+1)]`,
+`def is_subtree(root, sub):
+    if not root: return False
+    if is_same(root, sub): return True
+    return is_subtree(root.left, sub) or is_subtree(root.right, sub)
+def is_same(a, b):
+    if not a and not b: return True
+    if not a or not b: return False
+    return a.val == b.val and is_same(a.left, b.left) and is_same(a.right, b.right)`
+],
+6:[
+`import heapq
+nums = [5,3,8,1,9,2]
+heapq.heapify(nums)
+print(heapq.heappop(nums))`,
+`import heapq
+def kth_largest(nums, k):
+    heap = nums[:k]
+    heapq.heapify(heap)
+    for n in nums[k:]:
+        if n > heap[0]: heapq.heapreplace(heap, n)
+    return heap[0]
+print(kth_largest([3,2,1,5,6,4], 2))`,
+`import heapq
+def top_k_frequent(nums, k):
+    from collections import Counter
+    freq = Counter(nums)
+    return heapq.nlargest(k, freq.keys(), key=freq.get)
+print(top_k_frequent([1,1,1,2,2,3], 2))`,
+`import heapq
+def k_closest(points, k):
+    return heapq.nsmallest(k, points, key=lambda p: p[0]**2+p[1]**2)
+print(k_closest([[1,3],[-2,2],[5,8],[0,1]], 2))`,
+`import heapq
+def merge_k_sorted(lists):
+    heap = [(lst[0], i, 0) for i, lst in enumerate(lists) if lst]
+    heapq.heapify(heap)
+    result = []
+    while heap:
+        val, li, idx = heapq.heappop(heap)
+        result.append(val)
+        if idx+1 < len(lists[li]):
+            heapq.heappush(heap, (lists[li][idx+1], li, idx+1))
+    return result
+print(merge_k_sorted([[1,4,5],[1,3,4],[2,6]]))`,
+`import heapq
+def find_median():
+    lo, hi = [], []
+    def add(num):
+        heapq.heappush(lo, -num)
+        heapq.heappush(hi, -heapq.heappop(lo))
+        if len(hi) > len(lo): heapq.heappush(lo, -heapq.heappop(hi))
+    def median():
+        return -lo[0] if len(lo) > len(hi) else (-lo[0]+hi[0])/2
+    for n in [1,2,3,4]: add(n)
+    print(median())
+find_median()`,
+`import heapq
+def last_stone_weight(stones):
+    heap = [-s for s in stones]
+    heapq.heapify(heap)
+    while len(heap) > 1:
+        a = -heapq.heappop(heap)
+        b = -heapq.heappop(heap)
+        if a != b: heapq.heappush(heap, -(a-b))
+    return -heap[0] if heap else 0
+print(last_stone_weight([2,7,4,1,8,1]))`,
+`import heapq
+def sort_nearly_sorted(arr, k):
+    heap = arr[:k+1]
+    heapq.heapify(heap)
+    result = []
+    for i in range(k+1, len(arr)):
+        result.append(heapq.heapreplace(heap, arr[i]))
+    while heap:
+        result.append(heapq.heappop(heap))
+    return result
+print(sort_nearly_sorted([6,5,3,2,8,10,9], 3))`,
+`import heapq
+def task_scheduler(tasks, n):
+    from collections import Counter
+    freq = Counter(tasks)
+    heap = [-f for f in freq.values()]
+    heapq.heapify(heap)
+    time = 0
+    while heap:
+        temp = []
+        for _ in range(n+1):
+            if heap: temp.append(heapq.heappop(heap))
+        for f in temp:
+            if f + 1 < 0: heapq.heappush(heap, f+1)
+        time += n+1 if heap else len(temp)
+    return time
+print(task_scheduler(["A","A","A","B","B","B"], 2))`,
+`import heapq
+def reorganize_string(s):
+    from collections import Counter
+    heap = [(-f, c) for c, f in Counter(s).items()]
+    heapq.heapify(heap)
+    result, prev = [], (0, "")
+    while heap:
+        f, c = heapq.heappop(heap)
+        result.append(c)
+        if prev[0] < 0: heapq.heappush(heap, prev)
+        prev = (f+1, c)
+    return "".join(result) if len(result)==len(s) else ""
+print(reorganize_string("aab"))`,
+`import heapq
+def kth_smallest_matrix(matrix, k):
+    n = len(matrix)
+    heap = [(matrix[i][0], i, 0) for i in range(n)]
+    heapq.heapify(heap)
+    for _ in range(k):
+        val, r, c = heapq.heappop(heap)
+        if c+1 < n: heapq.heappush(heap, (matrix[r][c+1], r, c+1))
+    return val
+print(kth_smallest_matrix([[1,5,9],[10,11,13],[12,13,15]], 8))`,
+`import heapq
+def meeting_rooms_ii(intervals):
+    intervals.sort()
+    heap = []
+    for start, end in intervals:
+        if heap and heap[0] <= start:
+            heapq.heappop(heap)
+        heapq.heappush(heap, end)
+    return len(heap)
+print(meeting_rooms_ii([[0,30],[5,10],[15,20]]))`,
+`import heapq
+def smallest_range(lists):
+    heap = [(lst[0], i, 0) for i, lst in enumerate(lists)]
+    heapq.heapify(heap)
+    right = max(lst[0] for lst in lists)
+    ans = [heap[0][0], right]
+    while True:
+        left, li, idx = heapq.heappop(heap)
+        if right - left < ans[1] - ans[0]: ans = [left, right]
+        if idx + 1 == len(lists[li]): break
+        nxt = lists[li][idx+1]
+        right = max(right, nxt)
+        heapq.heappush(heap, (nxt, li, idx+1))
+    return ans
+print(smallest_range([[4,10,15,24],[0,9,12,20],[5,18,22,30]]))`,
+`import heapq
+def ugly_number(n):
+    heap = [1]
+    seen = {1}
+    for _ in range(n):
+        val = heapq.heappop(heap)
+        for p in [2,3,5]:
+            nxt = val * p
+            if nxt not in seen:
+                seen.add(nxt)
+                heapq.heappush(heap, nxt)
+    return val
+print(ugly_number(10))`,
+`import heapq
+def max_score(nums1, nums2, k):
+    pairs = sorted(zip(nums2, nums1), reverse=True)
+    heap, total, ans = [], 0, 0
+    for mult, val in pairs:
+        heapq.heappush(heap, val)
+        total += val
+        if len(heap) > k: total -= heapq.heappop(heap)
+        if len(heap) == k: ans = max(ans, total * mult)
+    return ans
+print(max_score([1,3,3,2],[2,1,3,4], 3))`,
+`import heapq
+def ipo(k, w, profits, capital):
+    projects = sorted(zip(capital, profits))
+    heap, i = [], 0
+    for _ in range(k):
+        while i < len(projects) and projects[i][0] <= w:
+            heapq.heappush(heap, -projects[i][1])
+            i += 1
+        if not heap: break
+        w -= heapq.heappop(heap)
+    return w
+print(ipo(2, 0, [1,2,3], [0,1,1]))`,
+`import heapq
+def min_cost_connect(n, connections):
+    connections.sort(key=lambda x: x[2])
+    parent = list(range(n+1))
+    def find(x):
+        while parent[x] != x: parent[x] = parent[parent[x]]; x = parent[x]
+        return x
+    cost, edges = 0, 0
+    for u, v, w in connections:
+        pu, pv = find(u), find(v)
+        if pu != pv:
+            parent[pu] = pv
+            cost += w; edges += 1
+            if edges == n-1: return cost
+    return -1
+print(min_cost_connect(3, [[1,2,5],[1,3,6],[2,3,1]]))`,
+`import heapq
+def trap_rain_water_2d(heightMap):
+    if not heightMap: return 0
+    m, n = len(heightMap), len(heightMap[0])
+    visited = [[False]*n for _ in range(m)]
+    heap = []
+    for i in range(m):
+        for j in range(n):
+            if i==0 or i==m-1 or j==0 or j==n-1:
+                heapq.heappush(heap, (heightMap[i][j], i, j))
+                visited[i][j] = True
+    water = 0
+    while heap:
+        h, r, c = heapq.heappop(heap)
+        for dr, dc in [(0,1),(0,-1),(1,0),(-1,0)]:
+            nr, nc = r+dr, c+dc
+            if 0<=nr<m and 0<=nc<n and not visited[nr][nc]:
+                visited[nr][nc] = True
+                water += max(0, h - heightMap[nr][nc])
+                heapq.heappush(heap, (max(h, heightMap[nr][nc]), nr, nc))
+    return water
+print("2D trapping rain water ready")`,
+`import heapq
+def furthest_building(heights, bricks, ladders):
+    heap = []
+    for i in range(len(heights)-1):
+        diff = heights[i+1] - heights[i]
+        if diff <= 0: continue
+        heapq.heappush(heap, diff)
+        if len(heap) > ladders:
+            bricks -= heapq.heappop(heap)
+        if bricks < 0: return i
+    return len(heights) - 1
+print(furthest_building([4,2,7,6,9,14,12], 5, 1))`,
+`import heapq
+def max_performance(n, speed, efficiency, k):
+    pairs = sorted(zip(efficiency, speed), reverse=True)
+    heap, total, ans = [], 0, 0
+    for eff, spd in pairs:
+        heapq.heappush(heap, spd)
+        total += spd
+        if len(heap) > k: total -= heapq.heappop(heap)
+        ans = max(ans, total * eff)
+    return ans
+print(max_performance(6,[2,10,3,1,5,8],[5,4,3,9,7,2], 2))`
+],
+7:[
+`def num_islands(grid):
+    def dfs(i, j):
+        if i<0 or j<0 or i>=len(grid) or j>=len(grid[0]) or grid[i][j]!="1": return
+        grid[i][j] = "0"
+        dfs(i+1,j); dfs(i-1,j); dfs(i,j+1); dfs(i,j-1)
+    count = 0
+    for i in range(len(grid)):
+        for j in range(len(grid[0])):
+            if grid[i][j] == "1": dfs(i,j); count += 1
+    return count
+print(num_islands([["1","1","0"],["1","1","0"],["0","0","1"]]))`,
+`def clone_graph(node):
+    if not node: return None
+    visited = {}
+    def dfs(n):
+        if n in visited: return visited[n]
+        clone = Node(n.val)
+        visited[n] = clone
+        for nb in n.neighbors:
+            clone.neighbors.append(dfs(nb))
+        return clone
+    return dfs(node)
+print("Clone graph DFS ready")`,
+`def can_finish(numCourses, prerequisites):
+    graph = [[] for _ in range(numCourses)]
+    indegree = [0] * numCourses
+    for a, b in prerequisites:
+        graph[b].append(a)
+        indegree[a] += 1
+    from collections import deque
+    queue = deque(i for i in range(numCourses) if indegree[i] == 0)
+    count = 0
+    while queue:
+        node = queue.popleft()
+        count += 1
+        for nb in graph[node]:
+            indegree[nb] -= 1
+            if indegree[nb] == 0: queue.append(nb)
+    return count == numCourses
+print(can_finish(4, [[1,0],[2,0],[3,1],[3,2]]))`,
+`def pacific_atlantic(heights):
+    m, n = len(heights), len(heights[0])
+    pac, atl = set(), set()
+    def dfs(r, c, visit, prev):
+        if r<0 or c<0 or r>=m or c>=n or (r,c) in visit or heights[r][c]<prev: return
+        visit.add((r,c))
+        for dr,dc in [(1,0),(-1,0),(0,1),(0,-1)]:
+            dfs(r+dr, c+dc, visit, heights[r][c])
+    for i in range(m):
+        dfs(i, 0, pac, 0)
+        dfs(i, n-1, atl, 0)
+    for j in range(n):
+        dfs(0, j, pac, 0)
+        dfs(m-1, j, atl, 0)
+    return list(pac & atl)`,
+`import heapq
+def dijkstra(graph, start):
+    dist = {start: 0}
+    heap = [(0, start)]
+    while heap:
+        d, u = heapq.heappop(heap)
+        if d > dist.get(u, float("inf")): continue
+        for v, w in graph.get(u, []):
+            nd = d + w
+            if nd < dist.get(v, float("inf")):
+                dist[v] = nd
+                heapq.heappush(heap, (nd, v))
+    return dist
+print(dijkstra({0:[(1,4),(2,1)],1:[(3,1)],2:[(1,2),(3,5)],3:[]}, 0))`,
+`def has_cycle_directed(n, edges):
+    graph = [[] for _ in range(n)]
+    for u, v in edges: graph[u].append(v)
+    WHITE, GRAY, BLACK = 0, 1, 2
+    color = [WHITE] * n
+    def dfs(u):
+        color[u] = GRAY
+        for v in graph[u]:
+            if color[v] == GRAY: return True
+            if color[v] == WHITE and dfs(v): return True
+        color[u] = BLACK
+        return False
+    return any(color[i]==WHITE and dfs(i) for i in range(n))
+print(has_cycle_directed(4, [(0,1),(1,2),(2,0),(2,3)]))`,
+`def topological_sort(n, edges):
+    from collections import deque
+    graph = [[] for _ in range(n)]
+    indegree = [0] * n
+    for u, v in edges: graph[u].append(v); indegree[v] += 1
+    queue = deque(i for i in range(n) if indegree[i] == 0)
+    order = []
+    while queue:
+        node = queue.popleft()
+        order.append(node)
+        for nb in graph[node]:
+            indegree[nb] -= 1
+            if indegree[nb] == 0: queue.append(nb)
+    return order if len(order) == n else []
+print(topological_sort(6, [(5,2),(5,0),(4,0),(4,1),(2,3),(3,1)]))`,
+`def find_connected_components(n, edges):
+    parent = list(range(n))
+    def find(x):
+        while parent[x] != x: parent[x] = parent[parent[x]]; x = parent[x]
+        return x
+    def union(a, b): parent[find(a)] = find(b)
+    for u, v in edges: union(u, v)
+    return len(set(find(i) for i in range(n)))
+print(find_connected_components(5, [(0,1),(1,2),(3,4)]))`,
+`def shortest_path_bfs(n, edges, src, dst):
+    from collections import deque, defaultdict
+    graph = defaultdict(list)
+    for u, v in edges: graph[u].append(v); graph[v].append(u)
+    queue = deque([(src, 0)])
+    visited = {src}
+    while queue:
+        node, dist = queue.popleft()
+        if node == dst: return dist
+        for nb in graph[node]:
+            if nb not in visited:
+                visited.add(nb)
+                queue.append((nb, dist+1))
+    return -1
+print(shortest_path_bfs(6, [(0,1),(0,2),(1,3),(2,3),(3,4),(4,5)], 0, 5))`,
+`def is_bipartite(graph):
+    n = len(graph)
+    color = [0] * n
+    for i in range(n):
+        if color[i] != 0: continue
+        from collections import deque
+        queue = deque([i])
+        color[i] = 1
+        while queue:
+            node = queue.popleft()
+            for nb in graph[node]:
+                if color[nb] == 0:
+                    color[nb] = -color[node]
+                    queue.append(nb)
+                elif color[nb] == color[node]: return False
+    return True
+print(is_bipartite([[1,3],[0,2],[1,3],[0,2]]))`,
+`def alien_order(words):
+    from collections import defaultdict, deque
+    graph = defaultdict(set)
+    indegree = {c: 0 for w in words for c in w}
+    for i in range(len(words)-1):
+        w1, w2 = words[i], words[i+1]
+        for c1, c2 in zip(w1, w2):
+            if c1 != c2:
+                if c2 not in graph[c1]: graph[c1].add(c2); indegree[c2] += 1
+                break
+    queue = deque(c for c in indegree if indegree[c] == 0)
+    result = []
+    while queue:
+        c = queue.popleft(); result.append(c)
+        for nb in graph[c]:
+            indegree[nb] -= 1
+            if indegree[nb] == 0: queue.append(nb)
+    return "".join(result) if len(result) == len(indegree) else ""
+print(alien_order(["wrt","wrf","er","ett","rftt"]))`,
+`def min_spanning_tree_prim(n, edges):
+    import heapq
+    from collections import defaultdict
+    graph = defaultdict(list)
+    for u, v, w in edges: graph[u].append((w,v)); graph[v].append((w,u))
+    visited = set([0])
+    heap = graph[0][:]
+    heapq.heapify(heap)
+    total = 0
+    while heap and len(visited) < n:
+        w, v = heapq.heappop(heap)
+        if v in visited: continue
+        visited.add(v); total += w
+        for edge in graph[v]:
+            if edge[1] not in visited: heapq.heappush(heap, edge)
+    return total
+print(min_spanning_tree_prim(4, [(0,1,1),(0,2,4),(1,2,2),(1,3,6),(2,3,3)]))`,
+`def network_delay(times, n, k):
+    import heapq
+    from collections import defaultdict
+    graph = defaultdict(list)
+    for u, v, w in times: graph[u].append((v, w))
+    dist = {}
+    heap = [(0, k)]
+    while heap:
+        d, u = heapq.heappop(heap)
+        if u in dist: continue
+        dist[u] = d
+        for v, w in graph[u]:
+            if v not in dist: heapq.heappush(heap, (d+w, v))
+    return max(dist.values()) if len(dist) == n else -1
+print(network_delay([[2,1,1],[2,3,1],[3,4,1]], 4, 2))`,
+`def surrounded_regions(board):
+    m, n = len(board), len(board[0])
+    def dfs(i, j):
+        if i<0 or j<0 or i>=m or j>=n or board[i][j]!="O": return
+        board[i][j] = "S"
+        dfs(i+1,j); dfs(i-1,j); dfs(i,j+1); dfs(i,j-1)
+    for i in range(m):
+        dfs(i, 0); dfs(i, n-1)
+    for j in range(n):
+        dfs(0, j); dfs(m-1, j)
+    for i in range(m):
+        for j in range(n):
+            if board[i][j] == "O": board[i][j] = "X"
+            elif board[i][j] == "S": board[i][j] = "O"
+print("Surrounded regions ready")`,
+`def redundant_connection(edges):
+    parent = list(range(len(edges)+1))
+    def find(x):
+        while parent[x] != x: parent[x] = parent[parent[x]]; x = parent[x]
+        return x
+    for u, v in edges:
+        pu, pv = find(u), find(v)
+        if pu == pv: return [u, v]
+        parent[pu] = pv
+    return []
+print(redundant_connection([[1,2],[1,3],[2,3]]))`,
+`def all_paths_dag(graph):
+    result = []
+    def dfs(node, path):
+        if node == len(graph)-1: result.append(path[:]); return
+        for nb in graph[node]:
+            path.append(nb)
+            dfs(nb, path)
+            path.pop()
+    dfs(0, [0])
+    return result
+print(all_paths_dag([[1,2],[3],[3],[]]))`,
+`def cheapest_flights(n, flights, src, dst, k):
+    prices = [float("inf")] * n
+    prices[src] = 0
+    for _ in range(k+1):
+        temp = prices[:]
+        for u, v, w in flights:
+            if prices[u] != float("inf"):
+                temp[v] = min(temp[v], prices[u]+w)
+        prices = temp
+    return prices[dst] if prices[dst] != float("inf") else -1
+print(cheapest_flights(4,[[0,1,100],[1,2,100],[2,0,100],[1,3,600],[2,3,200]],0,3,1))`,
+`def critical_connections(n, connections):
+    from collections import defaultdict
+    graph = defaultdict(list)
+    for u, v in connections: graph[u].append(v); graph[v].append(u)
+    disc = [0]*n; low = [0]*n; timer = [0]; bridges = []
+    def dfs(u, parent):
+        timer[0] += 1
+        disc[u] = low[u] = timer[0]
+        for v in graph[u]:
+            if v == parent: continue
+            if disc[v] == 0:
+                dfs(v, u)
+                low[u] = min(low[u], low[v])
+                if low[v] > disc[u]: bridges.append([u, v])
+            else: low[u] = min(low[u], disc[v])
+    dfs(0, -1)
+    return bridges
+print(critical_connections(4, [[0,1],[1,2],[2,0],[1,3]]))`,
+`def reconstruct_itinerary(tickets):
+    from collections import defaultdict
+    graph = defaultdict(list)
+    for src, dst in sorted(tickets, reverse=True):
+        graph[src].append(dst)
+    route = []
+    def dfs(airport):
+        while graph[airport]: dfs(graph[airport].pop())
+        route.append(airport)
+    dfs("JFK")
+    return route[::-1]
+print(reconstruct_itinerary([["JFK","SFO"],["JFK","ATL"],["SFO","ATL"],["ATL","JFK"],["ATL","SFO"]]))`,
+`def accounts_merge(accounts):
+    parent = {}
+    def find(x):
+        if x not in parent: parent[x] = x
+        while parent[x] != x: parent[x] = parent[parent[x]]; x = parent[x]
+        return x
+    email_to_name = {}
+    for account in accounts:
+        name = account[0]
+        for email in account[1:]:
+            email_to_name[email] = name
+            parent[find(email)] = find(account[1])
+    from collections import defaultdict
+    groups = defaultdict(list)
+    for email in email_to_name:
+        groups[find(email)].append(email)
+    return [[email_to_name[root]] + sorted(emails) for root, emails in groups.items()]
+print("Accounts merge using Union-Find ready")`
+],
+8:[
+`class TrieNode:
+    def __init__(self): self.children = {}; self.is_end = False
+class Trie:
+    def __init__(self): self.root = TrieNode()
+    def insert(self, word):
+        node = self.root
+        for c in word:
+            if c not in node.children: node.children[c] = TrieNode()
+            node = node.children[c]
+        node.is_end = True
+    def search(self, word):
+        node = self.root
+        for c in word:
+            if c not in node.children: return False
+            node = node.children[c]
+        return node.is_end
+t = Trie(); t.insert("apple"); print(t.search("apple"), t.search("app"))`,
+`class Trie:
+    def __init__(self): self.root = {}
+    def insert(self, word):
+        node = self.root
+        for c in word: node = node.setdefault(c, {})
+        node["#"] = True
+    def starts_with(self, prefix):
+        node = self.root
+        for c in prefix:
+            if c not in node: return False
+            node = node[c]
+        return True
+t = Trie(); t.insert("apple"); print(t.starts_with("app"))`,
+`class UnionFind:
+    def __init__(self, n):
+        self.parent = list(range(n))
+        self.rank = [0] * n
+    def find(self, x):
+        if self.parent[x] != x: self.parent[x] = self.find(self.parent[x])
+        return self.parent[x]
+    def union(self, a, b):
+        pa, pb = self.find(a), self.find(b)
+        if pa == pb: return False
+        if self.rank[pa] < self.rank[pb]: pa, pb = pb, pa
+        self.parent[pb] = pa
+        if self.rank[pa] == self.rank[pb]: self.rank[pa] += 1
+        return True
+uf = UnionFind(5); uf.union(0,1); uf.union(1,2)
+print(uf.find(0) == uf.find(2))`,
+`def word_search_trie(board, words):
+    root = {}
+    for w in words:
+        node = root
+        for c in w: node = node.setdefault(c, {})
+        node["#"] = w
+    m, n = len(board), len(board[0])
+    result = []
+    def dfs(i, j, node):
+        c = board[i][j]
+        if c not in node: return
+        node = node[c]
+        if "#" in node: result.append(node.pop("#"))
+        board[i][j] = "."
+        for di, dj in [(0,1),(0,-1),(1,0),(-1,0)]:
+            ni, nj = i+di, j+dj
+            if 0<=ni<m and 0<=nj<n and board[ni][nj] != ".":
+                dfs(ni, nj, node)
+        board[i][j] = c
+    for i in range(m):
+        for j in range(n): dfs(i, j, root)
+    return result
+print("Word Search II with Trie ready")`,
+`def add_search_word():
+    root = {}
+    def add(word):
+        node = root
+        for c in word: node = node.setdefault(c, {})
+        node["#"] = True
+    def search(word, node=None):
+        if node is None: node = root
+        for i, c in enumerate(word):
+            if c == ".":
+                return any(search(word[i+1:], child) for key, child in node.items() if key != "#")
+            if c not in node: return False
+            node = node[c]
+        return "#" in node
+    add("bad"); add("dad"); add("mad")
+    print(search("b.d"), search("..."), search("b.."))
+add_search_word()`,
+`class UnionFind:
+    def __init__(self, n): self.p = list(range(n)); self.sz = [1]*n; self.count = n
+    def find(self, x):
+        while self.p[x]!=x: self.p[x]=self.p[self.p[x]]; x=self.p[x]
+        return x
+    def union(self, a, b):
+        pa, pb = self.find(a), self.find(b)
+        if pa==pb: return
+        if self.sz[pa]<self.sz[pb]: pa,pb=pb,pa
+        self.p[pb]=pa; self.sz[pa]+=self.sz[pb]; self.count-=1
+def num_islands_uf(grid):
+    m, n = len(grid), len(grid[0])
+    uf = UnionFind(m*n)
+    water = 0
+    for i in range(m):
+        for j in range(n):
+            if grid[i][j]=="0": water+=1; continue
+            if i>0 and grid[i-1][j]=="1": uf.union(i*n+j, (i-1)*n+j)
+            if j>0 and grid[i][j-1]=="1": uf.union(i*n+j, i*n+j-1)
+    return uf.count - water
+print(num_islands_uf([["1","1","0"],["0","1","0"],["0","0","1"]]))`,
+`def longest_word_trie(words):
+    root = {}
+    for w in words:
+        node = root
+        for c in w: node = node.setdefault(c, {})
+        node["#"] = True
+    result = ""
+    def dfs(node, path):
+        nonlocal result
+        if len(path) > len(result): result = path
+        for c in sorted(node):
+            if c != "#" and "#" in node[c]:
+                dfs(node[c], path + c)
+    dfs(root, "")
+    return result
+print(longest_word_trie(["w","wo","wor","worl","world"]))`,
+`class SegmentTree:
+    def __init__(self, arr):
+        self.n = len(arr)
+        self.tree = [0] * (2 * self.n)
+        for i in range(self.n): self.tree[self.n+i] = arr[i]
+        for i in range(self.n-1, 0, -1): self.tree[i] = self.tree[2*i] + self.tree[2*i+1]
+    def update(self, i, val):
+        i += self.n
+        self.tree[i] = val
+        while i > 1: i //= 2; self.tree[i] = self.tree[2*i] + self.tree[2*i+1]
+    def query(self, l, r):
+        res, l, r = 0, l+self.n, r+self.n+1
+        while l < r:
+            if l&1: res += self.tree[l]; l += 1
+            if r&1: r -= 1; res += self.tree[r]
+            l >>= 1; r >>= 1
+        return res
+st = SegmentTree([1,3,5,7,9,11])
+print(st.query(1, 3))`,
+`def autocomplete_trie(words, prefix):
+    root = {}
+    for w in words:
+        node = root
+        for c in w: node = node.setdefault(c, {})
+        node["#"] = w
+    node = root
+    for c in prefix:
+        if c not in node: return []
+        node = node[c]
+    results = []
+    def collect(node):
+        if "#" in node: results.append(node["#"])
+        for c in sorted(node):
+            if c != "#": collect(node[c])
+    collect(node)
+    return results[:3]
+print(autocomplete_trie(["apple","app","application","apply","apt"], "app"))`,
+`class BIT:
+    def __init__(self, n): self.n = n; self.tree = [0]*(n+1)
+    def update(self, i, delta):
+        while i <= self.n: self.tree[i] += delta; i += i & (-i)
+    def query(self, i):
+        s = 0
+        while i > 0: s += self.tree[i]; i -= i & (-i)
+        return s
+    def range_query(self, l, r): return self.query(r) - self.query(l-1)
+bit = BIT(5)
+for i, v in enumerate([3,2,5,1,4], 1): bit.update(i, v)
+print(bit.range_query(2, 4))`,
+`def count_smaller(nums):
+    sorted_arr = sorted(set(nums))
+    rank = {v: i+1 for i, v in enumerate(sorted_arr)}
+    bit = BIT(len(sorted_arr))
+    result = []
+    for n in reversed(nums):
+        result.append(bit.query(rank[n]-1))
+        bit.update(rank[n], 1)
+    return result[::-1]
+print("Count smaller after self ready")`,
+`def map_sum_trie():
+    root = {}
+    def insert(key, val):
+        node = root
+        for c in key: node = node.setdefault(c, {})
+        node["$"] = val
+    def sum_prefix(prefix):
+        node = root
+        for c in prefix:
+            if c not in node: return 0
+            node = node[c]
+        total = [0]
+        def dfs(n):
+            if "$" in n: total[0] += n["$"]
+            for c in n:
+                if c not in ("$", "#"): dfs(n[c])
+        dfs(node)
+        return total[0]
+    insert("apple", 3); insert("app", 2)
+    print(sum_prefix("ap"))
+map_sum_trie()`,
+`def palindrome_pairs_trie(words):
+    result = []
+    for i in range(len(words)):
+        for j in range(len(words)):
+            if i == j: continue
+            combined = words[i] + words[j]
+            if combined == combined[::-1]:
+                result.append([i, j])
+    return result
+print(palindrome_pairs_trie(["abcd","dcba","lls","s","sssll"]))`,
+`class DSU:
+    def __init__(self, n): self.p=list(range(n)); self.r=[0]*n
+    def find(self, x):
+        if self.p[x]!=x: self.p[x]=self.find(self.p[x])
+        return self.p[x]
+    def union(self, a, b):
+        a,b=self.find(a),self.find(b)
+        if a==b: return False
+        if self.r[a]<self.r[b]: a,b=b,a
+        self.p[b]=a
+        if self.r[a]==self.r[b]: self.r[a]+=1
+        return True
+def kruskal(n, edges):
+    edges.sort(key=lambda x:x[2])
+    dsu = DSU(n)
+    cost = 0
+    for u,v,w in edges:
+        if dsu.union(u,v): cost += w
+    return cost
+print(kruskal(4, [(0,1,1),(0,2,4),(1,2,2),(1,3,6),(2,3,3)]))`,
+`def replace_words_trie(dictionary, sentence):
+    root = {}
+    for w in dictionary:
+        node = root
+        for c in w: node = node.setdefault(c, {})
+        node["#"] = True
+    result = []
+    for word in sentence.split():
+        node = root
+        prefix = ""
+        found = False
+        for c in word:
+            if c not in node: break
+            prefix += c
+            node = node[c]
+            if "#" in node: found = True; break
+        result.append(prefix if found else word)
+    return " ".join(result)
+print(replace_words_trie(["cat","bat","rat"], "the cattle was rattled by the battery"))`,
+`class StreamChecker:
+    def __init__(self, words):
+        self.trie = {}
+        for w in words:
+            node = self.trie
+            for c in reversed(w): node = node.setdefault(c, {})
+            node["#"] = True
+        self.stream = []
+    def query(self, letter):
+        self.stream.append(letter)
+        node = self.trie
+        for c in reversed(self.stream):
+            if c not in node: return False
+            node = node[c]
+            if "#" in node: return True
+        return False
+sc = StreamChecker(["cd","f","kl"])
+print(sc.query("c"), sc.query("d"))`,
+`def earliest_connected(n, logs):
+    logs.sort()
+    parent = list(range(n))
+    components = n
+    def find(x):
+        while parent[x]!=x: parent[x]=parent[parent[x]]; x=parent[x]
+        return x
+    for time, u, v in logs:
+        pu, pv = find(u), find(v)
+        if pu != pv:
+            parent[pu] = pv
+            components -= 1
+            if components == 1: return time
+    return -1
+print(earliest_connected(4, [[0,0,1],[1,1,2],[2,2,3]]))`,
+`def max_xor_trie(nums):
+    root = {}
+    for n in nums:
+        node = root
+        for i in range(31, -1, -1):
+            bit = (n >> i) & 1
+            if bit not in node: node[bit] = {}
+            node = node[bit]
+    max_xor = 0
+    for n in nums:
+        node, curr_xor = root, 0
+        for i in range(31, -1, -1):
+            bit = (n >> i) & 1
+            want = 1 - bit
+            if want in node:
+                curr_xor |= (1 << i)
+                node = node[want]
+            else: node = node[bit]
+        max_xor = max(max_xor, curr_xor)
+    return max_xor
+print(max_xor_trie([3, 10, 5, 25, 2, 8]))`,
+`class LFUCache:
+    def __init__(self, capacity):
+        from collections import defaultdict, OrderedDict
+        self.cap = capacity
+        self.vals = {}
+        self.freq = {}
+        self.freq_map = defaultdict(OrderedDict)
+        self.min_freq = 0
+    def get(self, key):
+        if key not in self.vals: return -1
+        self._update(key)
+        return self.vals[key]
+    def put(self, key, val):
+        if self.cap <= 0: return
+        if key in self.vals:
+            self.vals[key] = val
+            self._update(key)
+            return
+        if len(self.vals) >= self.cap:
+            k, _ = self.freq_map[self.min_freq].popitem(last=False)
+            del self.vals[k]; del self.freq[k]
+        self.vals[key] = val
+        self.freq[key] = 1
+        self.freq_map[1][key] = True
+        self.min_freq = 1
+    def _update(self, key):
+        f = self.freq[key]
+        self.freq[key] += 1
+        del self.freq_map[f][key]
+        if not self.freq_map[f] and f == self.min_freq: self.min_freq += 1
+        self.freq_map[f+1][key] = True
+print("LFU Cache ready")`,
+`def count_inversions(arr):
+    if len(arr) <= 1: return arr, 0
+    mid = len(arr)//2
+    left, l_inv = count_inversions(arr[:mid])
+    right, r_inv = count_inversions(arr[mid:])
+    merged, split_inv = [], 0
+    i = j = 0
+    while i < len(left) and j < len(right):
+        if left[i] <= right[j]: merged.append(left[i]); i += 1
+        else: merged.append(right[j]); j += 1; split_inv += len(left)-i
+    merged += left[i:] + right[j:]
+    return merged, l_inv + r_inv + split_inv
+print(count_inversions([5,3,2,4,1])[1])`
+],
+9:[
+`def bubble_sort(arr):
+    n = len(arr)
+    for i in range(n):
+        for j in range(n-i-1):
+            if arr[j]>arr[j+1]: arr[j],arr[j+1]=arr[j+1],arr[j]
+    return arr
+print(bubble_sort([64,34,25,12,22,11,90]))`,
+`def selection_sort(arr):
+    for i in range(len(arr)):
+        mn = i
+        for j in range(i+1,len(arr)):
+            if arr[j]<arr[mn]: mn=j
+        arr[i],arr[mn]=arr[mn],arr[i]
+    return arr
+print(selection_sort([64,25,12,22,11]))`,
+`def insertion_sort(arr):
+    for i in range(1,len(arr)):
+        key=arr[i]; j=i-1
+        while j>=0 and arr[j]>key: arr[j+1]=arr[j]; j-=1
+        arr[j+1]=key
+    return arr
+print(insertion_sort([12,11,13,5,6]))`,
+`def merge_sort(arr):
+    if len(arr)<=1: return arr
+    mid=len(arr)//2
+    left=merge_sort(arr[:mid])
+    right=merge_sort(arr[mid:])
+    return merge(left,right)
+def merge(l,r):
+    result,i,j=[],0,0
+    while i<len(l) and j<len(r):
+        if l[i]<=r[j]: result.append(l[i]);i+=1
+        else: result.append(r[j]);j+=1
+    return result+l[i:]+r[j:]
+print(merge_sort([38,27,43,3,9,82,10]))`,
+`def quick_sort(arr):
+    if len(arr)<=1: return arr
+    pivot=arr[len(arr)//2]
+    left=[x for x in arr if x<pivot]
+    mid=[x for x in arr if x==pivot]
+    right=[x for x in arr if x>pivot]
+    return quick_sort(left)+mid+quick_sort(right)
+print(quick_sort([3,6,8,10,1,2,1]))`,
+`def counting_sort(arr):
+    if not arr: return arr
+    mn,mx=min(arr),max(arr)
+    count=[0]*(mx-mn+1)
+    for x in arr: count[x-mn]+=1
+    result=[]
+    for i,c in enumerate(count):
+        result.extend([i+mn]*c)
+    return result
+print(counting_sort([4,2,2,8,3,3,1]))`,
+`def radix_sort(arr):
+    mx=max(arr)
+    exp=1
+    while mx//exp>0:
+        buckets=[[] for _ in range(10)]
+        for n in arr: buckets[(n//exp)%10].append(n)
+        arr=[x for b in buckets for x in b]
+        exp*=10
+    return arr
+print(radix_sort([170,45,75,90,802,24,2,66]))`,
+`def sort_colors(nums):
+    l,m,r=0,0,len(nums)-1
+    while m<=r:
+        if nums[m]==0: nums[l],nums[m]=nums[m],nums[l]; l+=1; m+=1
+        elif nums[m]==1: m+=1
+        else: nums[m],nums[r]=nums[r],nums[m]; r-=1
+    return nums
+print(sort_colors([2,0,2,1,1,0]))`,
+`def merge_intervals(intervals):
+    intervals.sort()
+    merged=[intervals[0]]
+    for start,end in intervals[1:]:
+        if start<=merged[-1][1]: merged[-1][1]=max(merged[-1][1],end)
+        else: merged.append([start,end])
+    return merged
+print(merge_intervals([[1,3],[2,6],[8,10],[15,18]]))`,
+`def kth_largest_element(nums, k):
+    import heapq
+    return heapq.nlargest(k, nums)[-1]
+print(kth_largest_element([3,2,1,5,6,4], 2))`,
+`def sort_list_nodes(head):
+    if not head or not head.next: return head
+    slow,fast=head,head.next
+    while fast and fast.next: slow=slow.next; fast=fast.next.next
+    mid=slow.next; slow.next=None
+    return merge_lists(sort_list_nodes(head), sort_list_nodes(mid))
+print("Merge sort on linked list ready")`,
+`def largest_number(nums):
+    from functools import cmp_to_key
+    nums=list(map(str,nums))
+    nums.sort(key=cmp_to_key(lambda a,b: -1 if a+b>b+a else 1))
+    return str(int("".join(nums)))
+print(largest_number([3,30,34,5,9]))`,
+`def wiggle_sort(nums):
+    nums.sort()
+    half=len(nums[::2])
+    nums[::2],nums[1::2]=nums[:half][::-1],nums[half:][::-1]
+    return nums
+print(wiggle_sort([1,5,1,1,6,4]))`,
+`def h_index(citations):
+    citations.sort(reverse=True)
+    h=0
+    for i,c in enumerate(citations):
+        if c>=i+1: h=i+1
+        else: break
+    return h
+print(h_index([3,0,6,1,5]))`,
+`def pancake_sort(arr):
+    result=[]
+    for size in range(len(arr),1,-1):
+        mx_idx=arr.index(max(arr[:size]))
+        if mx_idx!=size-1:
+            if mx_idx!=0: arr[:mx_idx+1]=arr[:mx_idx+1][::-1]; result.append(mx_idx+1)
+            arr[:size]=arr[:size][::-1]; result.append(size)
+    return arr
+print(pancake_sort([3,2,4,1]))`,
+`def find_kth_smallest_quickselect(nums, k):
+    import random
+    def quickselect(l, r, k):
+        pivot=random.choice(nums[l:r+1])
+        lt,eq,gt=[],[],[]
+        for n in nums[l:r+1]:
+            if n<pivot: lt.append(n)
+            elif n==pivot: eq.append(n)
+            else: gt.append(n)
+        if k<=len(lt): return quickselect(0,len(lt)-1,k) if lt else pivot
+        elif k<=len(lt)+len(eq): return pivot
+        else: return quickselect(0,len(gt)-1,k-len(lt)-len(eq)) if gt else pivot
+    return quickselect(0, len(nums)-1, k)
+print(find_kth_smallest_quickselect([3,2,1,5,6,4], 3))`,
+`def is_sorted(arr):
+    return all(arr[i]<=arr[i+1] for i in range(len(arr)-1))
+print(is_sorted([1,2,3,4,5]), is_sorted([1,3,2]))`,
+`def minimum_swaps(arr):
+    n=len(arr)
+    indexed=sorted(enumerate(arr), key=lambda x:x[1])
+    visited=[False]*n
+    swaps=0
+    for i in range(n):
+        if visited[i] or indexed[i][0]==i: continue
+        cycle_size=0; j=i
+        while not visited[j]:
+            visited[j]=True; j=indexed[j][0]; cycle_size+=1
+        swaps+=cycle_size-1
+    return swaps
+print(minimum_swaps([4,3,1,2]))`,
+`def meeting_rooms_min(intervals):
+    import heapq
+    intervals.sort()
+    heap=[]
+    for s,e in intervals:
+        if heap and heap[0]<=s: heapq.heappop(heap)
+        heapq.heappush(heap,e)
+    return len(heap)
+print(meeting_rooms_min([[0,30],[5,10],[15,20]]))`,
+`def count_inversions_merge(arr):
+    if len(arr)<=1: return arr,0
+    mid=len(arr)//2
+    l,li=count_inversions_merge(arr[:mid])
+    r,ri=count_inversions_merge(arr[mid:])
+    merged,inv=[],0; i=j=0
+    while i<len(l) and j<len(r):
+        if l[i]<=r[j]: merged.append(l[i]);i+=1
+        else: merged.append(r[j]);j+=1;inv+=len(l)-i
+    return merged+l[i:]+r[j:], li+ri+inv
+print(count_inversions_merge([5,3,2,4,1])[1])`
+],
+10:[
+`def linear_search(arr, target):
+    for i, v in enumerate(arr):
+        if v == target: return i
+    return -1
+print(linear_search([5,3,8,1,9], 8))`,
+`def binary_search(arr, target):
+    lo, hi = 0, len(arr)-1
+    while lo <= hi:
+        mid = (lo+hi)//2
+        if arr[mid] == target: return mid
+        elif arr[mid] < target: lo = mid+1
+        else: hi = mid-1
+    return -1
+print(binary_search([1,3,5,7,9,11], 7))`,
+`def search_rotated(nums, target):
+    lo, hi = 0, len(nums)-1
+    while lo <= hi:
+        mid = (lo+hi)//2
+        if nums[mid] == target: return mid
+        if nums[lo] <= nums[mid]:
+            if nums[lo] <= target < nums[mid]: hi = mid-1
+            else: lo = mid+1
+        else:
+            if nums[mid] < target <= nums[hi]: lo = mid+1
+            else: hi = mid-1
+    return -1
+print(search_rotated([4,5,6,7,0,1,2], 0))`,
+`def find_min_rotated(nums):
+    lo, hi = 0, len(nums)-1
+    while lo < hi:
+        mid = (lo+hi)//2
+        if nums[mid] > nums[hi]: lo = mid+1
+        else: hi = mid
+    return nums[lo]
+print(find_min_rotated([3,4,5,1,2]))`,
+`def search_insert(nums, target):
+    lo, hi = 0, len(nums)
+    while lo < hi:
+        mid = (lo+hi)//2
+        if nums[mid] < target: lo = mid+1
+        else: hi = mid
+    return lo
+print(search_insert([1,3,5,6], 5))`,
+`def first_last_position(nums, target):
+    def find(leftmost):
+        lo, hi, idx = 0, len(nums)-1, -1
+        while lo <= hi:
+            mid = (lo+hi)//2
+            if nums[mid] == target:
+                idx = mid
+                if leftmost: hi = mid-1
+                else: lo = mid+1
+            elif nums[mid] < target: lo = mid+1
+            else: hi = mid-1
+        return idx
+    return [find(True), find(False)]
+print(first_last_position([5,7,7,8,8,10], 8))`,
+`def peak_element(nums):
+    lo, hi = 0, len(nums)-1
+    while lo < hi:
+        mid = (lo+hi)//2
+        if nums[mid] > nums[mid+1]: hi = mid
+        else: lo = mid+1
+    return lo
+print(peak_element([1,2,3,1]))`,
+`def search_2d_matrix(matrix, target):
+    m, n = len(matrix), len(matrix[0])
+    lo, hi = 0, m*n-1
+    while lo <= hi:
+        mid = (lo+hi)//2
+        val = matrix[mid//n][mid%n]
+        if val == target: return True
+        elif val < target: lo = mid+1
+        else: hi = mid-1
+    return False
+print(search_2d_matrix([[1,3,5],[10,11,16],[23,30,34]], 3))`,
+`def sqrt_int(x):
+    lo, hi = 0, x
+    while lo <= hi:
+        mid = (lo+hi)//2
+        if mid*mid <= x < (mid+1)*(mid+1): return mid
+        elif mid*mid > x: hi = mid-1
+        else: lo = mid+1
+    return lo
+print(sqrt_int(8))`,
+`def koko_bananas(piles, h):
+    lo, hi = 1, max(piles)
+    while lo < hi:
+        mid = (lo+hi)//2
+        hours = sum((p+mid-1)//mid for p in piles)
+        if hours <= h: hi = mid
+        else: lo = mid+1
+    return lo
+print(koko_bananas([3,6,7,11], 8))`,
+`def min_days_bouquets(bloomDay, m, k):
+    if m*k > len(bloomDay): return -1
+    def feasible(days):
+        bouquets, flowers = 0, 0
+        for d in bloomDay:
+            if d <= days: flowers += 1
+            else: flowers = 0
+            if flowers == k: bouquets += 1; flowers = 0
+        return bouquets >= m
+    lo, hi = min(bloomDay), max(bloomDay)
+    while lo < hi:
+        mid = (lo+hi)//2
+        if feasible(mid): hi = mid
+        else: lo = mid+1
+    return lo
+print(min_days_bouquets([1,10,3,10,2], 3, 1))`,
+`def ship_capacity(weights, days):
+    lo, hi = max(weights), sum(weights)
+    while lo < hi:
+        mid = (lo+hi)//2
+        d, curr = 1, 0
+        for w in weights:
+            if curr+w > mid: d += 1; curr = 0
+            curr += w
+        if d <= days: hi = mid
+        else: lo = mid+1
+    return lo
+print(ship_capacity([1,2,3,4,5,6,7,8,9,10], 5))`,
+`def split_array(nums, m):
+    lo, hi = max(nums), sum(nums)
+    while lo < hi:
+        mid = (lo+hi)//2
+        count, curr = 1, 0
+        for n in nums:
+            if curr+n > mid: count += 1; curr = 0
+            curr += n
+        if count <= m: hi = mid
+        else: lo = mid+1
+    return lo
+print(split_array([7,2,5,10,8], 2))`,
+`def find_duplicate_bs(nums):
+    lo, hi = 1, len(nums)-1
+    while lo < hi:
+        mid = (lo+hi)//2
+        count = sum(1 for n in nums if n <= mid)
+        if count > mid: hi = mid
+        else: lo = mid+1
+    return lo
+print(find_duplicate_bs([1,3,4,2,2]))`,
+`def median_two_sorted(nums1, nums2):
+    if len(nums1) > len(nums2): nums1, nums2 = nums2, nums1
+    m, n = len(nums1), len(nums2)
+    lo, hi = 0, m
+    while lo <= hi:
+        i = (lo+hi)//2
+        j = (m+n+1)//2 - i
+        l1 = nums1[i-1] if i>0 else float("-inf")
+        r1 = nums1[i] if i<m else float("inf")
+        l2 = nums2[j-1] if j>0 else float("-inf")
+        r2 = nums2[j] if j<n else float("inf")
+        if l1<=r2 and l2<=r1:
+            if (m+n)%2: return max(l1,l2)
+            return (max(l1,l2)+min(r1,r2))/2
+        elif l1>r2: hi=i-1
+        else: lo=i+1
+print(median_two_sorted([1,3],[2]))`,
+`def find_peak_2d(mat):
+    m, n = len(mat), len(mat[0])
+    lo, hi = 0, n-1
+    while lo <= hi:
+        mid = (lo+hi)//2
+        max_row = max(range(m), key=lambda i: mat[i][mid])
+        left = mat[max_row][mid-1] if mid>0 else -1
+        right = mat[max_row][mid+1] if mid<n-1 else -1
+        if mat[max_row][mid] > left and mat[max_row][mid] > right:
+            return [max_row, mid]
+        elif left > mat[max_row][mid]: hi = mid-1
+        else: lo = mid+1
+print("Find peak in 2D matrix ready")`,
+`def min_in_rotated_with_dups(nums):
+    lo, hi = 0, len(nums)-1
+    while lo < hi:
+        mid = (lo+hi)//2
+        if nums[mid] > nums[hi]: lo = mid+1
+        elif nums[mid] < nums[hi]: hi = mid
+        else: hi -= 1
+    return nums[lo]
+print(min_in_rotated_with_dups([2,2,2,0,1]))`,
+`def aggressive_cows(stalls, k):
+    stalls.sort()
+    lo, hi = 1, stalls[-1]-stalls[0]
+    while lo < hi:
+        mid = (lo+hi+1)//2
+        count, prev = 1, stalls[0]
+        for s in stalls[1:]:
+            if s - prev >= mid: count += 1; prev = s
+        if count >= k: lo = mid
+        else: hi = mid-1
+    return lo
+print(aggressive_cows([1,2,4,8,9], 3))`,
+`def find_kth_two_sorted(A, B, k):
+    if len(A) > len(B): return find_kth_two_sorted(B, A, k)
+    if not A: return B[k-1]
+    if k == 1: return min(A[0], B[0])
+    ia = min(k//2, len(A))
+    ib = k - ia
+    if A[ia-1] <= B[ib-1]: return find_kth_two_sorted(A[ia:], B, k-ia)
+    else: return find_kth_two_sorted(A, B[ib:], k-ib)
+print(find_kth_two_sorted([1,3,5,7], [2,4,6,8], 5))`
+],
+11:[
+`def fibonacci(n):
+    if n <= 1: return n
+    return fibonacci(n-1) + fibonacci(n-2)
+print(fibonacci(10))`,
+`def power(base, exp):
+    if exp == 0: return 1
+    if exp % 2 == 0: half = power(base, exp//2); return half*half
+    return base * power(base, exp-1)
+print(power(2, 10))`,
+`def subsets(nums):
+    result = []
+    def backtrack(start, path):
+        result.append(path[:])
+        for i in range(start, len(nums)):
+            path.append(nums[i])
+            backtrack(i+1, path)
+            path.pop()
+    backtrack(0, [])
+    return result
+print(subsets([1,2,3]))`,
+`def permutations(nums):
+    result = []
+    def backtrack(path, remaining):
+        if not remaining: result.append(path[:]); return
+        for i in range(len(remaining)):
+            path.append(remaining[i])
+            backtrack(path, remaining[:i]+remaining[i+1:])
+            path.pop()
+    backtrack([], nums)
+    return result
+print(permutations([1,2,3]))`,
+`def combination_sum(candidates, target):
+    result = []
+    def backtrack(start, path, remain):
+        if remain == 0: result.append(path[:]); return
+        for i in range(start, len(candidates)):
+            if candidates[i] > remain: break
+            path.append(candidates[i])
+            backtrack(i, path, remain-candidates[i])
+            path.pop()
+    candidates.sort()
+    backtrack(0, [], target)
+    return result
+print(combination_sum([2,3,6,7], 7))`,
+`def n_queens(n):
+    result = []
+    def backtrack(row, cols, diag1, diag2, board):
+        if row == n: result.append(["".join(r) for r in board]); return
+        for col in range(n):
+            if col in cols or row-col in diag1 or row+col in diag2: continue
+            board[row][col] = "Q"
+            backtrack(row+1, cols|{col}, diag1|{row-col}, diag2|{row+col}, board)
+            board[row][col] = "."
+    backtrack(0, set(), set(), set(), [["."]*n for _ in range(n)])
+    return len(result)
+print(n_queens(4))`,
+`def word_search(board, word):
+    m, n = len(board), len(board[0])
+    def dfs(i, j, k):
+        if k == len(word): return True
+        if i<0 or j<0 or i>=m or j>=n or board[i][j]!=word[k]: return False
+        tmp, board[i][j] = board[i][j], "#"
+        found = dfs(i+1,j,k+1) or dfs(i-1,j,k+1) or dfs(i,j+1,k+1) or dfs(i,j-1,k+1)
+        board[i][j] = tmp
+        return found
+    for i in range(m):
+        for j in range(n):
+            if dfs(i,j,0): return True
+    return False
+print(word_search([["A","B"],["C","D"]], "ABDC"))`,
+`def generate_parentheses(n):
+    result = []
+    def backtrack(s, left, right):
+        if len(s) == 2*n: result.append(s); return
+        if left < n: backtrack(s+"(", left+1, right)
+        if right < left: backtrack(s+")", left, right+1)
+    backtrack("", 0, 0)
+    return result
+print(generate_parentheses(3))`,
+`def letter_combinations(digits):
+    if not digits: return []
+    mapping = {"2":"abc","3":"def","4":"ghi","5":"jkl","6":"mno","7":"pqrs","8":"tuv","9":"wxyz"}
+    result = []
+    def backtrack(idx, path):
+        if idx == len(digits): result.append("".join(path)); return
+        for c in mapping[digits[idx]]:
+            path.append(c)
+            backtrack(idx+1, path)
+            path.pop()
+    backtrack(0, [])
+    return result
+print(letter_combinations("23"))`,
+`def sudoku_solver(board):
+    def is_valid(r, c, num):
+        for i in range(9):
+            if board[r][i]==num or board[i][c]==num: return False
+            if board[3*(r//3)+i//3][3*(c//3)+i%3]==num: return False
+        return True
+    def solve():
+        for i in range(9):
+            for j in range(9):
+                if board[i][j]==".":
+                    for num in "123456789":
+                        if is_valid(i,j,num):
+                            board[i][j]=num
+                            if solve(): return True
+                            board[i][j]="."
+                    return False
+        return True
+    solve()
+    return board
+print("Sudoku solver ready")`,
+`def restore_ip(s):
+    result = []
+    def backtrack(start, parts):
+        if len(parts)==4:
+            if start==len(s): result.append(".".join(parts))
+            return
+        for l in range(1,4):
+            if start+l>len(s): break
+            seg=s[start:start+l]
+            if (len(seg)>1 and seg[0]=="0") or int(seg)>255: continue
+            backtrack(start+l, parts+[seg])
+    backtrack(0, [])
+    return result
+print(restore_ip("25525511135"))`,
+`def palindrome_partition(s):
+    result = []
+    def backtrack(start, path):
+        if start == len(s): result.append(path[:]); return
+        for end in range(start+1, len(s)+1):
+            sub = s[start:end]
+            if sub == sub[::-1]:
+                backtrack(end, path+[sub])
+    backtrack(0, [])
+    return result
+print(palindrome_partition("aab"))`,
+`def flatten_nested(nested):
+    result = []
+    def helper(lst):
+        for item in lst:
+            if isinstance(item, list): helper(item)
+            else: result.append(item)
+    helper(nested)
+    return result
+print(flatten_nested([1,[2,[3,4]],5]))`,
+`def tower_of_hanoi(n, src="A", dst="C", aux="B"):
+    if n == 1: print(f"Move 1 from {src} to {dst}"); return
+    tower_of_hanoi(n-1, src, aux, dst)
+    print(f"Move {n} from {src} to {dst}")
+    tower_of_hanoi(n-1, aux, dst, src)
+tower_of_hanoi(3)`,
+`def rat_in_maze(maze, n):
+    result = []
+    def solve(x, y, path):
+        if x==n-1 and y==n-1: result.append(path); return
+        for dx,dy,d in [(1,0,"D"),(0,1,"R"),(-1,0,"U"),(0,-1,"L")]:
+            nx, ny = x+dx, y+dy
+            if 0<=nx<n and 0<=ny<n and maze[nx][ny]==1:
+                maze[nx][ny]=0
+                solve(nx, ny, path+d)
+                maze[nx][ny]=1
+    maze[0][0]=0
+    solve(0, 0, "")
+    return result
+print(rat_in_maze([[1,0,0,0],[1,1,0,1],[1,1,0,0],[0,1,1,1]], 4))`,
+`def count_paths(m, n):
+    if m==1 or n==1: return 1
+    return count_paths(m-1, n) + count_paths(m, n-1)
+print(count_paths(3, 3))`,
+`def string_permutations_unique(s):
+    result = []
+    def backtrack(path, remaining):
+        if not remaining: result.append("".join(path)); return
+        seen = set()
+        for i in range(len(remaining)):
+            if remaining[i] in seen: continue
+            seen.add(remaining[i])
+            backtrack(path+[remaining[i]], remaining[:i]+remaining[i+1:])
+    backtrack([], list(s))
+    return result
+print(string_permutations_unique("aab"))`,
+`def expression_add_operators(num, target):
+    result = []
+    def backtrack(idx, path, val, prev):
+        if idx == len(num):
+            if val == target: result.append(path)
+            return
+        for i in range(idx, len(num)):
+            if i > idx and num[idx] == "0": break
+            curr = int(num[idx:i+1])
+            if idx == 0:
+                backtrack(i+1, str(curr), curr, curr)
+            else:
+                backtrack(i+1, path+"+"+str(curr), val+curr, curr)
+                backtrack(i+1, path+"-"+str(curr), val-curr, -curr)
+                backtrack(i+1, path+"*"+str(curr), val-prev+prev*curr, prev*curr)
+    backtrack(0, "", 0, 0)
+    return result
+print(expression_add_operators("123", 6))`,
+`def subset_sum_exists(nums, target):
+    def backtrack(idx, curr):
+        if curr == target: return True
+        if idx >= len(nums) or curr > target: return False
+        return backtrack(idx+1, curr+nums[idx]) or backtrack(idx+1, curr)
+    return backtrack(0, 0)
+print(subset_sum_exists([3,34,4,12,5,2], 9))`,
+`def graph_coloring(graph, m):
+    n = len(graph)
+    colors = [0]*n
+    def safe(node, c):
+        return all(colors[nb]!=c for nb in graph[node])
+    def solve(node):
+        if node == n: return True
+        for c in range(1, m+1):
+            if safe(node, c):
+                colors[node] = c
+                if solve(node+1): return True
+                colors[node] = 0
+        return False
+    return solve(0)
+print(graph_coloring({0:[1,2],1:[0,2,3],2:[0,1,3],3:[1,2]}, 3))`
+],
+12:[
+`def fib_dp(n):
+    dp = [0]*(n+1)
+    dp[1] = 1
+    for i in range(2, n+1): dp[i] = dp[i-1]+dp[i-2]
+    return dp[n]
+print(fib_dp(10))`,
+`def climb_stairs(n):
+    a, b = 1, 1
+    for _ in range(n-1): a, b = b, a+b
+    return b
+print(climb_stairs(5))`,
+`def coin_change(coins, amount):
+    dp = [float("inf")]*(amount+1)
+    dp[0] = 0
+    for c in coins:
+        for a in range(c, amount+1):
+            dp[a] = min(dp[a], dp[a-c]+1)
+    return dp[amount] if dp[amount]!=float("inf") else -1
+print(coin_change([1,5,10,25], 30))`,
+`def longest_common_subseq(t1, t2):
+    m, n = len(t1), len(t2)
+    dp = [[0]*(n+1) for _ in range(m+1)]
+    for i in range(1, m+1):
+        for j in range(1, n+1):
+            if t1[i-1]==t2[j-1]: dp[i][j]=dp[i-1][j-1]+1
+            else: dp[i][j]=max(dp[i-1][j],dp[i][j-1])
+    return dp[m][n]
+print(longest_common_subseq("abcde","ace"))`,
+`def lis_length(nums):
+    from bisect import bisect_left
+    dp = []
+    for n in nums:
+        pos = bisect_left(dp, n)
+        if pos == len(dp): dp.append(n)
+        else: dp[pos] = n
+    return len(dp)
+print(lis_length([10,9,2,5,3,7,101,18]))`,
+`def knapsack_01(W, weights, values):
+    n = len(weights)
+    dp = [[0]*(W+1) for _ in range(n+1)]
+    for i in range(1, n+1):
+        for w in range(W+1):
+            dp[i][w] = dp[i-1][w]
+            if weights[i-1] <= w:
+                dp[i][w] = max(dp[i][w], dp[i-1][w-weights[i-1]]+values[i-1])
+    return dp[n][W]
+print(knapsack_01(50, [10,20,30], [60,100,120]))`,
+`def house_robber(nums):
+    if not nums: return 0
+    prev2, prev1 = 0, 0
+    for n in nums:
+        prev2, prev1 = prev1, max(prev1, prev2+n)
+    return prev1
+print(house_robber([2,7,9,3,1]))`,
+`def word_break(s, wordDict):
+    dp = [False]*(len(s)+1)
+    dp[0] = True
+    words = set(wordDict)
+    for i in range(1, len(s)+1):
+        for j in range(i):
+            if dp[j] and s[j:i] in words: dp[i]=True; break
+    return dp[len(s)]
+print(word_break("leetcode", ["leet","code"]))`,
+`def edit_distance(w1, w2):
+    m, n = len(w1), len(w2)
+    dp = [[0]*(n+1) for _ in range(m+1)]
+    for i in range(m+1): dp[i][0]=i
+    for j in range(n+1): dp[0][j]=j
+    for i in range(1,m+1):
+        for j in range(1,n+1):
+            if w1[i-1]==w2[j-1]: dp[i][j]=dp[i-1][j-1]
+            else: dp[i][j]=1+min(dp[i-1][j],dp[i][j-1],dp[i-1][j-1])
+    return dp[m][n]
+print(edit_distance("horse","ros"))`,
+`def unique_paths(m, n):
+    dp = [[1]*n for _ in range(m)]
+    for i in range(1,m):
+        for j in range(1,n):
+            dp[i][j] = dp[i-1][j]+dp[i][j-1]
+    return dp[m-1][n-1]
+print(unique_paths(3,7))`,
+`def max_product_subarray(nums):
+    max_p = min_p = result = nums[0]
+    for n in nums[1:]:
+        if n < 0: max_p, min_p = min_p, max_p
+        max_p = max(n, max_p*n)
+        min_p = min(n, min_p*n)
+        result = max(result, max_p)
+    return result
+print(max_product_subarray([2,3,-2,4]))`,
+`def decode_ways(s):
+    if not s or s[0]=="0": return 0
+    n = len(s)
+    dp = [0]*(n+1)
+    dp[0]=dp[1]=1
+    for i in range(2,n+1):
+        if s[i-1]!="0": dp[i]+=dp[i-1]
+        two = int(s[i-2:i])
+        if 10<=two<=26: dp[i]+=dp[i-2]
+    return dp[n]
+print(decode_ways("226"))`,
+`def longest_palindrome_subseq(s):
+    n = len(s)
+    dp = [[0]*n for _ in range(n)]
+    for i in range(n): dp[i][i]=1
+    for l in range(2,n+1):
+        for i in range(n-l+1):
+            j = i+l-1
+            if s[i]==s[j]: dp[i][j]=dp[i+1][j-1]+2
+            else: dp[i][j]=max(dp[i+1][j],dp[i][j-1])
+    return dp[0][n-1]
+print(longest_palindrome_subseq("bbbab"))`,
+`def partition_equal_subset(nums):
+    total = sum(nums)
+    if total%2: return False
+    target = total//2
+    dp = [False]*(target+1)
+    dp[0] = True
+    for n in nums:
+        for j in range(target, n-1, -1):
+            dp[j] = dp[j] or dp[j-n]
+    return dp[target]
+print(partition_equal_subset([1,5,11,5]))`,
+`def min_path_sum(grid):
+    m, n = len(grid), len(grid[0])
+    for i in range(1,m): grid[i][0]+=grid[i-1][0]
+    for j in range(1,n): grid[0][j]+=grid[0][j-1]
+    for i in range(1,m):
+        for j in range(1,n):
+            grid[i][j]+=min(grid[i-1][j],grid[i][j-1])
+    return grid[m-1][n-1]
+print(min_path_sum([[1,3,1],[1,5,1],[4,2,1]]))`,
+`def stock_buy_sell(prices):
+    min_price, max_profit = float("inf"), 0
+    for p in prices:
+        min_price = min(min_price, p)
+        max_profit = max(max_profit, p - min_price)
+    return max_profit
+print(stock_buy_sell([7,1,5,3,6,4]))`,
+`def coin_change_ways(coins, amount):
+    dp = [0]*(amount+1)
+    dp[0] = 1
+    for c in coins:
+        for a in range(c, amount+1):
+            dp[a] += dp[a-c]
+    return dp[amount]
+print(coin_change_ways([1,2,5], 5))`,
+`def longest_increasing_path(matrix):
+    m, n = len(matrix), len(matrix[0])
+    memo = {}
+    def dfs(i, j):
+        if (i,j) in memo: return memo[(i,j)]
+        best = 1
+        for di,dj in [(0,1),(0,-1),(1,0),(-1,0)]:
+            ni, nj = i+di, j+dj
+            if 0<=ni<m and 0<=nj<n and matrix[ni][nj]>matrix[i][j]:
+                best = max(best, 1+dfs(ni,nj))
+        memo[(i,j)] = best
+        return best
+    return max(dfs(i,j) for i in range(m) for j in range(n))
+print(longest_increasing_path([[9,9,4],[6,6,8],[2,1,1]]))`,
+`def burst_balloons(nums):
+    nums = [1]+nums+[1]
+    n = len(nums)
+    dp = [[0]*n for _ in range(n)]
+    for l in range(2, n):
+        for left in range(n-l):
+            right = left+l
+            for k in range(left+1, right):
+                dp[left][right] = max(dp[left][right],
+                    dp[left][k]+dp[k][right]+nums[left]*nums[k]*nums[right])
+    return dp[0][n-1]
+print(burst_balloons([3,1,5,8]))`,
+`def regular_expression_match(s, p):
+    m, n = len(s), len(p)
+    dp = [[False]*(n+1) for _ in range(m+1)]
+    dp[0][0] = True
+    for j in range(1, n+1):
+        if p[j-1]=="*": dp[0][j]=dp[0][j-2]
+    for i in range(1,m+1):
+        for j in range(1,n+1):
+            if p[j-1]=="." or p[j-1]==s[i-1]: dp[i][j]=dp[i-1][j-1]
+            elif p[j-1]=="*":
+                dp[i][j]=dp[i][j-2]
+                if p[j-2]=="." or p[j-2]==s[i-1]: dp[i][j]=dp[i][j] or dp[i-1][j]
+    return dp[m][n]
+print(regular_expression_match("aa","a*"))`
+],
+13:[
+`def activity_selection(starts, ends):
+    activities = sorted(zip(starts, ends), key=lambda x: x[1])
+    result, end = [activities[0]], activities[0][1]
+    for s, e in activities[1:]:
+        if s >= end: result.append((s,e)); end = e
+    return len(result)
+print(activity_selection([1,3,0,5,8,5],[2,4,6,7,9,9]))`,
+`def fractional_knapsack(W, items):
+    items.sort(key=lambda x: x[1]/x[0], reverse=True)
+    total = 0
+    for weight, value in items:
+        if W >= weight: total += value; W -= weight
+        else: total += value*(W/weight); break
+    return total
+print(fractional_knapsack(50, [(10,60),(20,100),(30,120)]))`,
+`def jump_game(nums):
+    reach = 0
+    for i, n in enumerate(nums):
+        if i > reach: return False
+        reach = max(reach, i+n)
+    return True
+print(jump_game([2,3,1,1,4]))`,
+`def min_platforms(arrivals, departures):
+    arrivals.sort(); departures.sort()
+    platforms, max_p = 0, 0
+    i = j = 0
+    while i < len(arrivals):
+        if arrivals[i] <= departures[j]: platforms += 1; i += 1
+        else: platforms -= 1; j += 1
+        max_p = max(max_p, platforms)
+    return max_p
+print(min_platforms([900,940,950,1100,1500,1800],[910,1200,1120,1130,1900,2000]))`,
+`def gas_station(gas, cost):
+    if sum(gas) < sum(cost): return -1
+    start, tank = 0, 0
+    for i in range(len(gas)):
+        tank += gas[i] - cost[i]
+        if tank < 0: start = i+1; tank = 0
+    return start
+print(gas_station([1,2,3,4,5],[3,4,5,1,2]))`,
+`def partition_labels(s):
+    last = {c: i for i, c in enumerate(s)}
+    result, start, end = [], 0, 0
+    for i, c in enumerate(s):
+        end = max(end, last[c])
+        if i == end: result.append(end-start+1); start = end+1
+    return result
+print(partition_labels("ababcbacadefegdehijhklij"))`,
+`def candy_distribution(ratings):
+    n = len(ratings)
+    candies = [1]*n
+    for i in range(1,n):
+        if ratings[i]>ratings[i-1]: candies[i]=candies[i-1]+1
+    for i in range(n-2,-1,-1):
+        if ratings[i]>ratings[i+1]: candies[i]=max(candies[i],candies[i+1]+1)
+    return sum(candies)
+print(candy_distribution([1,0,2]))`,
+`def job_sequencing(jobs):
+    jobs.sort(key=lambda x: x[1], reverse=True)
+    max_deadline = max(j[0] for j in jobs)
+    slots = [False]*(max_deadline+1)
+    profit = 0
+    for deadline, pay in jobs:
+        for s in range(deadline, 0, -1):
+            if not slots[s]: slots[s]=True; profit+=pay; break
+    return profit
+print(job_sequencing([(4,20),(1,10),(1,40),(1,30)]))`,
+`def min_coins_greedy(coins, amount):
+    coins.sort(reverse=True)
+    count = 0
+    for c in coins:
+        count += amount//c
+        amount %= c
+    return count if amount==0 else -1
+print(min_coins_greedy([25,10,5,1], 63))`,
+`def huffman_coding(freq):
+    import heapq
+    heap = [[f, [c, ""]] for c, f in freq.items()]
+    heapq.heapify(heap)
+    while len(heap) > 1:
+        lo = heapq.heappop(heap)
+        hi = heapq.heappop(heap)
+        for pair in lo[1:]: pair[1] = "0" + pair[1]
+        for pair in hi[1:]: pair[1] = "1" + pair[1]
+        heapq.heappush(heap, [lo[0]+hi[0]] + lo[1:] + hi[1:])
+    return sorted(heap[0][1:], key=lambda x: len(x[1]))
+print(huffman_coding({"a":5,"b":9,"c":12,"d":13,"e":16,"f":45}))`,
+`def minimum_spanning_tree(n, edges):
+    edges.sort(key=lambda x:x[2])
+    parent = list(range(n))
+    def find(x):
+        while parent[x]!=x: parent[x]=parent[parent[x]]; x=parent[x]
+        return x
+    cost, count = 0, 0
+    for u,v,w in edges:
+        pu, pv = find(u), find(v)
+        if pu!=pv: parent[pu]=pv; cost+=w; count+=1
+        if count==n-1: break
+    return cost
+print(minimum_spanning_tree(4, [(0,1,10),(0,2,6),(0,3,5),(1,3,15),(2,3,4)]))`,
+`def task_scheduler_greedy(tasks, n):
+    from collections import Counter
+    freq = Counter(tasks)
+    max_f = max(freq.values())
+    max_count = sum(1 for f in freq.values() if f==max_f)
+    return max(len(tasks), (max_f-1)*(n+1)+max_count)
+print(task_scheduler_greedy(["A","A","A","B","B","B"], 2))`,
+`def remove_duplicate_letters(s):
+    last = {c:i for i,c in enumerate(s)}
+    stack, seen = [], set()
+    for i, c in enumerate(s):
+        if c in seen: continue
+        while stack and c < stack[-1] and last[stack[-1]] > i:
+            seen.remove(stack.pop())
+        stack.append(c); seen.add(c)
+    return "".join(stack)
+print(remove_duplicate_letters("bcabc"))`,
+`def non_overlapping_intervals(intervals):
+    intervals.sort(key=lambda x:x[1])
+    count, end = 0, float("-inf")
+    for s, e in intervals:
+        if s >= end: end = e
+        else: count += 1
+    return count
+print(non_overlapping_intervals([[1,2],[2,3],[3,4],[1,3]]))`,
+`def min_arrows_burst_balloons(points):
+    points.sort(key=lambda x:x[1])
+    arrows, end = 1, points[0][1]
+    for s, e in points[1:]:
+        if s > end: arrows += 1; end = e
+    return arrows
+print(min_arrows_burst_balloons([[10,16],[2,8],[1,6],[7,12]]))`,
+`def lemonade_change(bills):
+    five = ten = 0
+    for b in bills:
+        if b==5: five+=1
+        elif b==10: five-=1; ten+=1
+        else:
+            if ten>0: ten-=1; five-=1
+            else: five-=3
+        if five<0: return False
+    return True
+print(lemonade_change([5,5,5,10,20]))`,
+`def boats_to_save(people, limit):
+    people.sort()
+    l, r, boats = 0, len(people)-1, 0
+    while l <= r:
+        if people[l]+people[r] <= limit: l += 1
+        r -= 1; boats += 1
+    return boats
+print(boats_to_save([3,2,2,1], 3))`,
+`def reorganize_string_greedy(s):
+    from collections import Counter
+    freq = Counter(s)
+    result = [""]*len(s)
+    idx = 0
+    for c, f in freq.most_common():
+        if f > (len(s)+1)//2: return ""
+        for _ in range(f):
+            result[idx] = c
+            idx += 2
+            if idx >= len(s): idx = 1
+    return "".join(result)
+print(reorganize_string_greedy("aab"))`,
+`def valid_parenthesis_string(s):
+    lo = hi = 0
+    for c in s:
+        lo += 1 if c=="(" else -1
+        hi += 1 if c!=")" else -1
+        if hi < 0: return False
+        lo = max(lo, 0)
+    return lo == 0
+print(valid_parenthesis_string("(*)"))`,
+`def maximize_sum_k_negations(nums, k):
+    nums.sort()
+    for i in range(len(nums)):
+        if k == 0 or nums[i] >= 0: break
+        nums[i] = -nums[i]; k -= 1
+    if k%2: nums.sort(); nums[0] = -nums[0]
+    return sum(nums)
+print(maximize_sum_k_negations([4,2,3], 1))`
+],
+14:[
+`def two_sum_sorted(nums, target):
+    l, r = 0, len(nums)-1
+    while l < r:
+        s = nums[l]+nums[r]
+        if s == target: return [l,r]
+        elif s < target: l += 1
+        else: r -= 1
+    return []
+print(two_sum_sorted([2,7,11,15], 9))`,
+`def remove_duplicates_sorted(nums):
+    if not nums: return 0
+    i = 0
+    for j in range(1, len(nums)):
+        if nums[j] != nums[i]: i += 1; nums[i] = nums[j]
+    return i+1
+print(remove_duplicates_sorted([1,1,2,2,3]))`,
+`def three_sum(nums):
+    nums.sort(); result = []
+    for i in range(len(nums)-2):
+        if i>0 and nums[i]==nums[i-1]: continue
+        l, r = i+1, len(nums)-1
+        while l < r:
+            s = nums[i]+nums[l]+nums[r]
+            if s==0: result.append([nums[i],nums[l],nums[r]]); l+=1; r-=1
+            elif s<0: l+=1
+            else: r-=1
+            while l<r and l>i+1 and nums[l]==nums[l-1]: l+=1
+    return result
+print(three_sum([-1,0,1,2,-1,-4]))`,
+`def container_most_water(height):
+    l, r, mx = 0, len(height)-1, 0
+    while l < r:
+        mx = max(mx, min(height[l],height[r])*(r-l))
+        if height[l] < height[r]: l += 1
+        else: r -= 1
+    return mx
+print(container_most_water([1,8,6,2,5,4,8,3,7]))`,
+`def trap_water(height):
+    l, r = 0, len(height)-1
+    l_max = r_max = water = 0
+    while l < r:
+        if height[l] < height[r]:
+            l_max = max(l_max, height[l])
+            water += l_max - height[l]; l += 1
+        else:
+            r_max = max(r_max, height[r])
+            water += r_max - height[r]; r -= 1
+    return water
+print(trap_water([0,1,0,2,1,0,1,3,2,1,2,1]))`,
+`def is_palindrome_str(s):
+    s = "".join(c.lower() for c in s if c.isalnum())
+    l, r = 0, len(s)-1
+    while l < r:
+        if s[l] != s[r]: return False
+        l += 1; r -= 1
+    return True
+print(is_palindrome_str("A man, a plan, a canal: Panama"))`,
+`def sort_colors(nums):
+    l, m, r = 0, 0, len(nums)-1
+    while m <= r:
+        if nums[m]==0: nums[l],nums[m]=nums[m],nums[l]; l+=1; m+=1
+        elif nums[m]==1: m+=1
+        else: nums[m],nums[r]=nums[r],nums[m]; r-=1
+    return nums
+print(sort_colors([2,0,2,1,1,0]))`,
+`def four_sum(nums, target):
+    nums.sort(); result = []
+    for i in range(len(nums)-3):
+        if i>0 and nums[i]==nums[i-1]: continue
+        for j in range(i+1, len(nums)-2):
+            if j>i+1 and nums[j]==nums[j-1]: continue
+            l, r = j+1, len(nums)-1
+            while l<r:
+                s=nums[i]+nums[j]+nums[l]+nums[r]
+                if s==target: result.append([nums[i],nums[j],nums[l],nums[r]]); l+=1; r-=1
+                elif s<target: l+=1
+                else: r-=1
+    return result
+print(four_sum([1,0,-1,0,-2,2], 0))`,
+`def move_zeroes(nums):
+    pos = 0
+    for i in range(len(nums)):
+        if nums[i] != 0: nums[pos], nums[i] = nums[i], nums[pos]; pos += 1
+    return nums
+print(move_zeroes([0,1,0,3,12]))`,
+`def squares_sorted(nums):
+    n = len(nums)
+    result = [0]*n
+    l, r, pos = 0, n-1, n-1
+    while l <= r:
+        if abs(nums[l]) > abs(nums[r]):
+            result[pos] = nums[l]**2; l += 1
+        else:
+            result[pos] = nums[r]**2; r -= 1
+        pos -= 1
+    return result
+print(squares_sorted([-4,-1,0,3,10]))`,
+`def backspace_compare(s, t):
+    def process(string):
+        stack = []
+        for c in string:
+            if c == "#": 
+                if stack: stack.pop()
+            else: stack.append(c)
+        return stack
+    return process(s) == process(t)
+print(backspace_compare("ab#c", "ad#c"))`,
+`def next_permutation(nums):
+    i = len(nums)-2
+    while i >= 0 and nums[i] >= nums[i+1]: i -= 1
+    if i >= 0:
+        j = len(nums)-1
+        while nums[j] <= nums[i]: j -= 1
+        nums[i], nums[j] = nums[j], nums[i]
+    nums[i+1:] = nums[i+1:][::-1]
+    return nums
+print(next_permutation([1,2,3]))`,
+`def remove_element(nums, val):
+    i = 0
+    for j in range(len(nums)):
+        if nums[j] != val: nums[i] = nums[j]; i += 1
+    return i
+print(remove_element([3,2,2,3], 3))`,
+`def longest_mountain(arr):
+    n = len(arr); best = 0
+    for i in range(1, n-1):
+        if arr[i-1] < arr[i] > arr[i+1]:
+            l = r = i
+            while l>0 and arr[l-1]<arr[l]: l-=1
+            while r<n-1 and arr[r+1]<arr[r]: r+=1
+            best = max(best, r-l+1)
+    return best
+print(longest_mountain([2,1,4,7,3,2,5]))`,
+`def three_sum_closest(nums, target):
+    nums.sort(); closest = float("inf")
+    for i in range(len(nums)-2):
+        l, r = i+1, len(nums)-1
+        while l < r:
+            s = nums[i]+nums[l]+nums[r]
+            if abs(s-target) < abs(closest-target): closest = s
+            if s < target: l += 1
+            elif s > target: r -= 1
+            else: return s
+    return closest
+print(three_sum_closest([-1,2,1,-4], 1))`,
+`def partition_list(arr, pivot):
+    less = [x for x in arr if x < pivot]
+    equal = [x for x in arr if x == pivot]
+    greater = [x for x in arr if x > pivot]
+    return less + equal + greater
+print(partition_list([3,5,8,5,10,2,1], 5))`,
+`def reverse_vowels(s):
+    s = list(s)
+    vowels = set("aeiouAEIOU")
+    l, r = 0, len(s)-1
+    while l < r:
+        while l < r and s[l] not in vowels: l += 1
+        while l < r and s[r] not in vowels: r -= 1
+        s[l], s[r] = s[r], s[l]; l += 1; r -= 1
+    return "".join(s)
+print(reverse_vowels("hello"))`,
+`def max_consecutive_ones_flip(nums, k):
+    l = zeros = 0; best = 0
+    for r in range(len(nums)):
+        if nums[r] == 0: zeros += 1
+        while zeros > k: 
+            if nums[l] == 0: zeros -= 1
+            l += 1
+        best = max(best, r-l+1)
+    return best
+print(max_consecutive_ones_flip([1,1,0,0,1,1,1,0,1], 2))`,
+`def boats_to_save(people, limit):
+    people.sort(); l, r, boats = 0, len(people)-1, 0
+    while l <= r:
+        if people[l]+people[r] <= limit: l += 1
+        r -= 1; boats += 1
+    return boats
+print(boats_to_save([3,2,2,1], 3))`,
+`def interval_intersection(A, B):
+    result = []; i = j = 0
+    while i < len(A) and j < len(B):
+        lo = max(A[i][0], B[j][0])
+        hi = min(A[i][1], B[j][1])
+        if lo <= hi: result.append([lo, hi])
+        if A[i][1] < B[j][1]: i += 1
+        else: j += 1
+    return result
+print(interval_intersection([[0,2],[5,10]],[[1,5],[8,12]]))`
+],
+15:[
+`def max_subarray_sum_k(nums, k):
+    window = sum(nums[:k])
+    best = window
+    for i in range(k, len(nums)):
+        window += nums[i] - nums[i-k]
+        best = max(best, window)
+    return best
+print(max_subarray_sum_k([2,1,5,1,3,2], 3))`,
+`def longest_substring_k_distinct(s, k):
+    freq = {}; l = best = 0
+    for r in range(len(s)):
+        freq[s[r]] = freq.get(s[r], 0) + 1
+        while len(freq) > k:
+            freq[s[l]] -= 1
+            if freq[s[l]] == 0: del freq[s[l]]
+            l += 1
+        best = max(best, r-l+1)
+    return best
+print(longest_substring_k_distinct("araaci", 2))`,
+`def min_window_substring(s, t):
+    from collections import Counter
+    need = Counter(t); have = 0; need_cnt = len(need)
+    l = 0; result = ""; res_len = float("inf")
+    window = {}
+    for r in range(len(s)):
+        c = s[r]; window[c] = window.get(c,0)+1
+        if c in need and window[c]==need[c]: have+=1
+        while have==need_cnt:
+            if r-l+1 < res_len: result=s[l:r+1]; res_len=r-l+1
+            window[s[l]]-=1
+            if s[l] in need and window[s[l]]<need[s[l]]: have-=1
+            l+=1
+    return result
+print(min_window_substring("ADOBECODEBANC","ABC"))`,
+`def length_longest_substring(s):
+    seen = set(); l = best = 0
+    for r in range(len(s)):
+        while s[r] in seen: seen.remove(s[l]); l+=1
+        seen.add(s[r]); best = max(best, r-l+1)
+    return best
+print(length_longest_substring("abcabcbb"))`,
+`def max_consecutive_ones_k(nums, k):
+    l = zeros = best = 0
+    for r in range(len(nums)):
+        if nums[r]==0: zeros+=1
+        while zeros>k: 
+            if nums[l]==0: zeros-=1
+            l+=1
+        best = max(best, r-l+1)
+    return best
+print(max_consecutive_ones_k([1,1,1,0,0,0,1,1,1,1,0], 2))`,
+`def fruit_baskets(fruits):
+    basket = {}; l = best = 0
+    for r in range(len(fruits)):
+        basket[fruits[r]] = basket.get(fruits[r],0)+1
+        while len(basket) > 2:
+            basket[fruits[l]] -= 1
+            if basket[fruits[l]]==0: del basket[fruits[l]]
+            l += 1
+        best = max(best, r-l+1)
+    return best
+print(fruit_baskets([1,2,1,2,3,3,4]))`,
+`def permutation_in_string(s1, s2):
+    from collections import Counter
+    need = Counter(s1); window = {}; have = 0; k = len(s1)
+    for r in range(len(s2)):
+        c = s2[r]; window[c] = window.get(c,0)+1
+        if c in need and window[c]==need[c]: have+=1
+        if r >= k:
+            lc = s2[r-k]; window[lc]-=1
+            if lc in need and window[lc]==need[lc]-1: have-=1
+            if window[lc]==0: del window[lc]
+        if have==len(need): return True
+    return False
+print(permutation_in_string("ab","eidbaooo"))`,
+`def longest_repeating_replacement(s, k):
+    freq = {}; l = max_freq = best = 0
+    for r in range(len(s)):
+        freq[s[r]] = freq.get(s[r],0)+1
+        max_freq = max(max_freq, freq[s[r]])
+        while (r-l+1) - max_freq > k:
+            freq[s[l]]-=1; l+=1
+        best = max(best, r-l+1)
+    return best
+print(longest_repeating_replacement("AABABBA", 1))`,
+`def min_size_subarray_sum(target, nums):
+    l = total = 0; best = float("inf")
+    for r in range(len(nums)):
+        total += nums[r]
+        while total >= target:
+            best = min(best, r-l+1)
+            total -= nums[l]; l += 1
+    return best if best!=float("inf") else 0
+print(min_size_subarray_sum(7, [2,3,1,2,4,3]))`,
+`def max_sum_two_no_overlap(nums, L, M):
+    def max_sum(l, m):
+        prefix = [0]*(len(nums)+1)
+        for i in range(len(nums)): prefix[i+1]=prefix[i]+nums[i]
+        best = mx_l = 0
+        for i in range(l+m, len(nums)+1):
+            mx_l = max(mx_l, prefix[i-m]-prefix[i-m-l])
+            best = max(best, mx_l+prefix[i]-prefix[i-m])
+        return best
+    return max(max_sum(L,M), max_sum(M,L))
+print(max_sum_two_no_overlap([0,6,5,2,2,5,1,9,4], 1, 2))`,
+`def count_nice_subarrays(nums, k):
+    def at_most(k):
+        l = count = 0; odds = 0
+        for r in range(len(nums)):
+            if nums[r]%2==1: odds+=1
+            while odds > k: 
+                if nums[l]%2==1: odds-=1
+                l+=1
+            count += r-l+1
+        return count
+    return at_most(k) - at_most(k-1)
+print(count_nice_subarrays([1,1,2,1,1], 3))`,
+`def subarrays_with_k_different(nums, k):
+    def at_most(k):
+        freq = {}; l = count = 0
+        for r in range(len(nums)):
+            freq[nums[r]]=freq.get(nums[r],0)+1
+            while len(freq)>k:
+                freq[nums[l]]-=1
+                if freq[nums[l]]==0: del freq[nums[l]]
+                l+=1
+            count += r-l+1
+        return count
+    return at_most(k)-at_most(k-1)
+print(subarrays_with_k_different([1,2,1,2,3], 2))`,
+`def find_all_anagrams(s, p):
+    from collections import Counter
+    need = Counter(p); k = len(p); result = []
+    window = Counter(s[:k])
+    if window == need: result.append(0)
+    for i in range(k, len(s)):
+        window[s[i]] += 1
+        window[s[i-k]] -= 1
+        if window[s[i-k]]==0: del window[s[i-k]]
+        if window == need: result.append(i-k+1)
+    return result
+print(find_all_anagrams("cbaebabacd","abc"))`,
+`def grumpy_bookstore(customers, grumpy, minutes):
+    base = sum(c for c,g in zip(customers,grumpy) if g==0)
+    extra = sum(customers[i]*grumpy[i] for i in range(minutes))
+    best = extra
+    for i in range(minutes, len(customers)):
+        extra += customers[i]*grumpy[i] - customers[i-minutes]*grumpy[i-minutes]
+        best = max(best, extra)
+    return base + best
+print(grumpy_bookstore([1,0,1,2,1,1,7,5],[0,1,0,1,0,1,0,1], 3))`,
+`def longest_turbulent(arr):
+    best = l = 0
+    for r in range(len(arr)):
+        if r >= 2 and ((arr[r-2]<arr[r-1]>arr[r]) or (arr[r-2]>arr[r-1]<arr[r])):
+            pass
+        elif r >= 1 and arr[r] != arr[r-1]: l = r-1
+        else: l = r
+        best = max(best, r-l+1)
+    return best
+print(longest_turbulent([9,4,2,10,7,8,8,1,9]))`,
+`def max_vowels_k(s, k):
+    vowels = set("aeiou")
+    count = sum(1 for c in s[:k] if c in vowels)
+    best = count
+    for i in range(k, len(s)):
+        count += (s[i] in vowels) - (s[i-k] in vowels)
+        best = max(best, count)
+    return best
+print(max_vowels_k("abciiidef", 3))`,
+`def number_subarrays_bounded_max(nums, left, right):
+    count = l = bounded = 0
+    for r in range(len(nums)):
+        if left <= nums[r] <= right: bounded = r-l+1
+        elif nums[r] > right: l = r+1; bounded = 0
+        count += bounded
+    return count
+print(number_subarrays_bounded_max([2,1,4,3], 2, 3))`,
+`def max_points_cards(cardPoints, k):
+    n = len(cardPoints)
+    total = sum(cardPoints)
+    window = sum(cardPoints[:n-k])
+    min_window = window
+    for i in range(n-k, n):
+        window += cardPoints[i] - cardPoints[i-(n-k)]
+        min_window = min(min_window, window)
+    return total - min_window
+print(max_points_cards([1,2,3,4,5,6,1], 3))`,
+`def binary_subarrays_sum(nums, goal):
+    def at_most(g):
+        if g < 0: return 0
+        l = count = total = 0
+        for r in range(len(nums)):
+            total += nums[r]
+            while total > g: total -= nums[l]; l += 1
+            count += r-l+1
+        return count
+    return at_most(goal) - at_most(goal-1)
+print(binary_subarrays_sum([1,0,1,0,1], 2))`,
+`def get_equal_substrings(s, t, maxCost):
+    l = best = 0; cost = 0
+    for r in range(len(s)):
+        cost += abs(ord(s[r])-ord(t[r]))
+        while cost > maxCost:
+            cost -= abs(ord(s[l])-ord(t[l])); l += 1
+        best = max(best, r-l+1)
+    return best
+print(get_equal_substrings("abcd","bcdf", 3))`
+],
+16:[
+`def has_cycle(head):
+    slow=fast=head
+    while fast and fast.next:
+        slow=slow.next; fast=fast.next.next
+        if slow==fast: return True
+    return False`,
+`def find_cycle_start(head):
+    slow=fast=head
+    while fast and fast.next:
+        slow=slow.next; fast=fast.next.next
+        if slow==fast:
+            slow=head
+            while slow!=fast: slow=slow.next; fast=fast.next
+            return slow
+    return None`,
+`def middle_node(head):
+    slow=fast=head
+    while fast and fast.next: slow=slow.next; fast=fast.next.next
+    return slow`,
+`def is_happy(n):
+    slow=fast=n
+    def next_num(x):
+        total=0
+        while x: total+=(x%10)**2; x//=10
+        return total
+    slow=next_num(slow); fast=next_num(next_num(fast))
+    while slow!=fast: slow=next_num(slow); fast=next_num(next_num(fast))
+    return slow==1
+print(is_happy(19))`,
+`def find_duplicate(nums):
+    slow=fast=nums[0]
+    while True:
+        slow=nums[slow]; fast=nums[nums[fast]]
+        if slow==fast: break
+    slow=nums[0]
+    while slow!=fast: slow=nums[slow]; fast=nums[fast]
+    return slow
+print(find_duplicate([1,3,4,2,2]))`,
+`def is_palindrome_ll(head):
+    slow=fast=head
+    while fast and fast.next: slow=slow.next; fast=fast.next.next
+    prev=None; curr=slow
+    while curr: nxt=curr.next; curr.next=prev; prev=curr; curr=nxt
+    l,r=head,prev
+    while r:
+        if l.val!=r.val: return False
+        l=l.next; r=r.next
+    return True`,
+`def reorder_list(head):
+    slow=fast=head
+    while fast.next and fast.next.next: slow=slow.next; fast=fast.next.next
+    prev,curr=None,slow.next; slow.next=None
+    while curr: nxt=curr.next; curr.next=prev; prev=curr; curr=nxt
+    first,second=head,prev
+    while second:
+        t1,t2=first.next,second.next
+        first.next=second; second.next=t1
+        first,second=t1,t2`,
+`def circular_array_loop(nums):
+    n=len(nums)
+    for i in range(n):
+        slow=fast=i; forward=nums[i]>0
+        while True:
+            slow=(slow+nums[slow])%n
+            fast=(fast+nums[fast])%n
+            if nums[fast]>0!=forward: break
+            fast=(fast+nums[fast])%n
+            if nums[fast]>0!=forward: break
+            if slow==fast:
+                if slow==(slow+nums[slow])%n: break
+                return True
+    return False
+print("Circular array loop ready")`,
+`def linked_list_cycle_length(head):
+    slow=fast=head
+    while fast and fast.next:
+        slow=slow.next; fast=fast.next.next
+        if slow==fast:
+            count=1; fast=fast.next
+            while slow!=fast: fast=fast.next; count+=1
+            return count
+    return 0`,
+`def sqrt_converge(n):
+    x=n
+    while x*x>n: x=(x+n//x)//2
+    return x
+print(sqrt_converge(26))`,
+`def intersection_point(h1, h2):
+    a,b=h1,h2
+    while a!=b:
+        a=a.next if a else h2
+        b=b.next if b else h1
+    return a`,
+`def rearrange_linked_list(head):
+    slow=fast=head
+    while fast and fast.next: slow=slow.next; fast=fast.next.next
+    second=slow.next; slow.next=None
+    prev=None
+    while second: nxt=second.next; second.next=prev; prev=second; second=nxt
+    first,second=head,prev
+    while second:
+        t1,t2=first.next,second.next
+        first.next=second; second.next=t1
+        first,second=t1,t2
+    return head`,
+`def segregate_even_odd(head):
+    even_h=even_t=None; odd_h=odd_t=None; curr=head
+    while curr:
+        if curr.val%2==0:
+            if not even_h: even_h=even_t=curr
+            else: even_t.next=curr; even_t=curr
+        else:
+            if not odd_h: odd_h=odd_t=curr
+            else: odd_t.next=curr; odd_t=curr
+        curr=curr.next
+    if even_t: even_t.next=odd_h
+    if odd_t: odd_t.next=None
+    return even_h or odd_h`,
+`def sort_linked_list(head):
+    if not head or not head.next: return head
+    slow,fast=head,head.next
+    while fast and fast.next: slow=slow.next; fast=fast.next.next
+    mid=slow.next; slow.next=None
+    l=sort_linked_list(head); r=sort_linked_list(mid)
+    dummy=curr=type(head)(0)
+    while l and r:
+        if l.val<=r.val: curr.next=l; l=l.next
+        else: curr.next=r; r=r.next
+        curr=curr.next
+    curr.next=l or r
+    return dummy.next`,
+`def remove_loop(head):
+    slow=fast=head
+    while fast and fast.next:
+        slow=slow.next; fast=fast.next.next
+        if slow==fast:
+            slow=head
+            while slow.next!=fast.next: slow=slow.next; fast=fast.next
+            fast.next=None; return True
+    return False`,
+`def power_of_two_fast(n):
+    if n<=0: return False
+    return n&(n-1)==0
+print(power_of_two_fast(16))`,
+`def count_nodes_cycle(head):
+    slow=fast=head; has_cycle=False
+    while fast and fast.next:
+        slow=slow.next; fast=fast.next.next
+        if slow==fast: has_cycle=True; break
+    if not has_cycle: return 0
+    count=1; fast=fast.next
+    while slow!=fast: fast=fast.next; count+=1
+    return count`,
+`def get_kth_from_end(head, k):
+    slow=fast=head
+    for _ in range(k): fast=fast.next
+    while fast: slow=slow.next; fast=fast.next
+    return slow.val`,
+`def rotate_list(head, k):
+    if not head: return head
+    length,tail=1,head
+    while tail.next: tail=tail.next; length+=1
+    k%=length
+    if k==0: return head
+    tail.next=head
+    for _ in range(length-k): tail=tail.next
+    new_head=tail.next; tail.next=None
+    return new_head`,
+`def add_one_linked_list(head):
+    def helper(node):
+        if not node: return 1
+        carry=helper(node.next)
+        total=node.val+carry
+        node.val=total%10
+        return total//10
+    carry=helper(head)
+    if carry:
+        new=type(head)(carry); new.next=head; head=new
+    return head`
+],
+17:[
+`def merge_intervals(intervals):
+    intervals.sort()
+    merged=[intervals[0]]
+    for s,e in intervals[1:]:
+        if s<=merged[-1][1]: merged[-1][1]=max(merged[-1][1],e)
+        else: merged.append([s,e])
+    return merged
+print(merge_intervals([[1,3],[2,6],[8,10],[15,18]]))`,
+`def insert_interval(intervals, new):
+    result=[]; i=0; n=len(intervals)
+    while i<n and intervals[i][1]<new[0]: result.append(intervals[i]); i+=1
+    while i<n and intervals[i][0]<=new[1]:
+        new=[min(new[0],intervals[i][0]),max(new[1],intervals[i][1])]; i+=1
+    result.append(new)
+    while i<n: result.append(intervals[i]); i+=1
+    return result
+print(insert_interval([[1,3],[6,9]],[2,5]))`,
+`def interval_intersection(A, B):
+    result=[]; i=j=0
+    while i<len(A) and j<len(B):
+        lo=max(A[i][0],B[j][0]); hi=min(A[i][1],B[j][1])
+        if lo<=hi: result.append([lo,hi])
+        if A[i][1]<B[j][1]: i+=1
+        else: j+=1
+    return result
+print(interval_intersection([[0,2],[5,10]],[[1,5],[8,12]]))`,
+`def can_attend_meetings(intervals):
+    intervals.sort()
+    for i in range(1,len(intervals)):
+        if intervals[i][0]<intervals[i-1][1]: return False
+    return True
+print(can_attend_meetings([[0,30],[5,10],[15,20]]))`,
+`def min_meeting_rooms(intervals):
+    import heapq
+    intervals.sort(); heap=[]
+    for s,e in intervals:
+        if heap and heap[0]<=s: heapq.heappop(heap)
+        heapq.heappush(heap,e)
+    return len(heap)
+print(min_meeting_rooms([[0,30],[5,10],[15,20]]))`,
+`def employee_free_time(schedules):
+    import heapq
+    events=[]
+    for emp in schedules:
+        for s,e in emp: events.append((s,1)); events.append((e,-1))
+    events.sort()
+    result=[]; active=0; prev_end=None
+    for time,typ in events:
+        if active==0 and prev_end is not None and prev_end<time:
+            result.append([prev_end,time])
+        active+=typ
+        if typ==-1: prev_end=time
+    return result
+print(employee_free_time([[[1,2],[5,6]],[[1,3]],[[4,10]]]))`,
+`def non_overlapping_count(intervals):
+    intervals.sort(key=lambda x:x[1])
+    count,end=0,float("-inf")
+    for s,e in intervals:
+        if s>=end: end=e
+        else: count+=1
+    return count
+print(non_overlapping_count([[1,2],[2,3],[3,4],[1,3]]))`,
+`def min_arrows(points):
+    points.sort(key=lambda x:x[1])
+    arrows,end=1,points[0][1]
+    for s,e in points[1:]:
+        if s>end: arrows+=1; end=e
+    return arrows
+print(min_arrows([[10,16],[2,8],[1,6],[7,12]]))`,
+`def merge_similar_items(items1, items2):
+    d={}
+    for v,w in items1+items2: d[v]=d.get(v,0)+w
+    return sorted(d.items())
+print(merge_similar_items([(1,1),(4,5),(3,8)],[(3,1),(1,5)]))`,
+`def interval_list_intersections(A, B):
+    result=[]; i=j=0
+    while i<len(A) and j<len(B):
+        lo,hi=max(A[i][0],B[j][0]),min(A[i][1],B[j][1])
+        if lo<=hi: result.append([lo,hi])
+        if A[i][1]<B[j][1]: i+=1
+        else: j+=1
+    return result`,
+`def max_cpu_load(jobs):
+    import heapq
+    jobs.sort(); heap=[]; max_load=curr_load=0
+    for start,end,load in jobs:
+        while heap and heap[0][0]<=start:
+            _,l=heapq.heappop(heap); curr_load-=l
+        heapq.heappush(heap,(end,load)); curr_load+=load
+        max_load=max(max_load,curr_load)
+    return max_load
+print(max_cpu_load([(1,4,3),(2,5,4),(7,9,6)]))`,
+`def remove_covered_intervals(intervals):
+    intervals.sort(key=lambda x:(x[0],-x[1]))
+    count,end=0,0
+    for s,e in intervals:
+        if e>end: count+=1; end=e
+    return count
+print(remove_covered_intervals([[1,4],[3,6],[2,8]]))`,
+`def car_pooling(trips, capacity):
+    events=[]
+    for num,start,end in trips:
+        events.append((start,num)); events.append((end,-num))
+    events.sort()
+    curr=0
+    for _,change in events:
+        curr+=change
+        if curr>capacity: return False
+    return True
+print(car_pooling([(2,1,5),(3,3,7)], 4))`,
+`def summary_ranges(nums):
+    if not nums: return []
+    result=[]; start=nums[0]
+    for i in range(1,len(nums)):
+        if nums[i]!=nums[i-1]+1:
+            result.append(f"{start}->{nums[i-1]}" if start!=nums[i-1] else str(start))
+            start=nums[i]
+    result.append(f"{start}->{nums[-1]}" if start!=nums[-1] else str(start))
+    return result
+print(summary_ranges([0,1,2,4,5,7]))`,
+`def find_right_interval(intervals):
+    import bisect
+    starts=sorted((iv[0],i) for i,iv in enumerate(intervals))
+    result=[]
+    for _,end in [(iv[1],iv[1]) for iv in intervals]:
+        idx=bisect.bisect_left(starts,(end,))
+        result.append(starts[idx][1] if idx<len(starts) else -1)
+    return result
+print(find_right_interval([[3,4],[2,3],[1,2]]))`,
+`def max_events(events):
+    import heapq
+    events.sort(); heap=[]; i=day=count=0
+    while heap or i<len(events):
+        if not heap: day=events[i][0]
+        while i<len(events) and events[i][0]<=day:
+            heapq.heappush(heap,events[i][1]); i+=1
+        heapq.heappop(heap); count+=1; day+=1
+        while heap and heap[0]<day: heapq.heappop(heap)
+    return count
+print(max_events([[1,2],[2,3],[3,4]]))`,
+`def add_bold_tag(s, words):
+    n=len(s); bold=[False]*n
+    for w in words:
+        start=s.find(w)
+        while start!=-1:
+            for i in range(start,start+len(w)): bold[i]=True
+            start=s.find(w,start+1)
+    result=[]; i=0
+    while i<n:
+        if bold[i]:
+            result.append("<b>")
+            while i<n and bold[i]: result.append(s[i]); i+=1
+            result.append("</b>")
+        else: result.append(s[i]); i+=1
+    return "".join(result)
+print(add_bold_tag("abcxyz123",["abc","123"]))`,
+`def my_calendar():
+    bookings=[]
+    def book(start,end):
+        for s,e in bookings:
+            if start<e and end>s: return False
+        bookings.append((start,end)); return True
+    print(book(10,20), book(15,25), book(20,30))
+my_calendar()`,
+`def range_module():
+    ranges=[]
+    def add(left,right):
+        new=[]
+        placed=False
+        for s,e in ranges:
+            if e<left or s>right: new.append([s,e])
+            else: left=min(left,s); right=max(right,e)
+        new.append([left,right])
+        new.sort()
+        return new
+    r=add(10,20); r=add(15,25)
+    print(r)
+range_module()`,
+`def interval_scheduling_max_weight(jobs):
+    import bisect
+    jobs.sort(key=lambda x:x[1])
+    dp=[0]*(len(jobs)+1)
+    ends=[j[1] for j in jobs]
+    for i in range(1,len(jobs)+1):
+        s,e,w=jobs[i-1]
+        j=bisect.bisect_right(ends,s,0,i-1)
+        dp[i]=max(dp[i-1],dp[j]+w)
+    return dp[-1]
+print(interval_scheduling_max_weight([(1,3,5),(2,5,6),(4,6,5),(6,7,4)]))`
+],
+18:[
+`def binary_search(arr,t):
+    lo,hi=0,len(arr)-1
+    while lo<=hi:
+        mid=(lo+hi)//2
+        if arr[mid]==t: return mid
+        elif arr[mid]<t: lo=mid+1
+        else: hi=mid-1
+    return -1
+print(binary_search([1,3,5,7,9],5))`,
+`def search_rotated(nums,t):
+    lo,hi=0,len(nums)-1
+    while lo<=hi:
+        mid=(lo+hi)//2
+        if nums[mid]==t: return mid
+        if nums[lo]<=nums[mid]:
+            if nums[lo]<=t<nums[mid]: hi=mid-1
+            else: lo=mid+1
+        else:
+            if nums[mid]<t<=nums[hi]: lo=mid+1
+            else: hi=mid-1
+    return -1
+print(search_rotated([4,5,6,7,0,1,2],0))`,
+`def koko_bananas(piles,h):
+    lo,hi=1,max(piles)
+    while lo<hi:
+        mid=(lo+hi)//2
+        if sum((p+mid-1)//mid for p in piles)<=h: hi=mid
+        else: lo=mid+1
+    return lo
+print(koko_bananas([3,6,7,11],8))`,
+`def ship_packages(weights,days):
+    lo,hi=max(weights),sum(weights)
+    while lo<hi:
+        mid=(lo+hi)//2; d=curr=0
+        for w in weights:
+            if curr+w>mid: d+=1; curr=0
+            curr+=w
+        if d+1<=days: hi=mid
+        else: lo=mid+1
+    return lo
+print(ship_packages([1,2,3,4,5,6,7,8,9,10],5))`,
+`def median_sorted_arrays(a,b):
+    if len(a)>len(b): a,b=b,a
+    m,n=len(a),len(b)
+    lo,hi=0,m
+    while lo<=hi:
+        i=(lo+hi)//2; j=(m+n+1)//2-i
+        l1=a[i-1] if i>0 else float("-inf")
+        r1=a[i] if i<m else float("inf")
+        l2=b[j-1] if j>0 else float("-inf")
+        r2=b[j] if j<n else float("inf")
+        if l1<=r2 and l2<=r1:
+            if (m+n)%2: return max(l1,l2)
+            return (max(l1,l2)+min(r1,r2))/2
+        elif l1>r2: hi=i-1
+        else: lo=i+1
+print(median_sorted_arrays([1,3],[2]))`,
+`def split_array_min(nums,m):
+    lo,hi=max(nums),sum(nums)
+    while lo<hi:
+        mid=(lo+hi)//2; cnt=curr=1; s=0
+        for n in nums:
+            if s+n>mid: cnt+=1; s=0
+            s+=n
+        if cnt<=m: hi=mid
+        else: lo=mid+1
+    return lo
+print(split_array_min([7,2,5,10,8],2))`,
+`def min_days_bouquets(bloom,m,k):
+    if m*k>len(bloom): return -1
+    def ok(d):
+        bouq=flow=0
+        for b in bloom:
+            if b<=d: flow+=1
+            else: flow=0
+            if flow==k: bouq+=1; flow=0
+        return bouq>=m
+    lo,hi=min(bloom),max(bloom)
+    while lo<hi:
+        mid=(lo+hi)//2
+        if ok(mid): hi=mid
+        else: lo=mid+1
+    return lo
+print(min_days_bouquets([1,10,3,10,2],3,1))`,
+`def find_peak(nums):
+    lo,hi=0,len(nums)-1
+    while lo<hi:
+        mid=(lo+hi)//2
+        if nums[mid]>nums[mid+1]: hi=mid
+        else: lo=mid+1
+    return lo
+print(find_peak([1,2,3,1]))`,
+`def sqrt_int(x):
+    lo,hi=0,x
+    while lo<=hi:
+        mid=(lo+hi)//2
+        if mid*mid<=x<(mid+1)*(mid+1): return mid
+        elif mid*mid>x: hi=mid-1
+        else: lo=mid+1
+print(sqrt_int(8))`,
+`def aggressive_cows(stalls,k):
+    stalls.sort()
+    lo,hi=1,stalls[-1]-stalls[0]
+    while lo<hi:
+        mid=(lo+hi+1)//2; cnt=1; prev=stalls[0]
+        for s in stalls[1:]:
+            if s-prev>=mid: cnt+=1; prev=s
+        if cnt>=k: lo=mid
+        else: hi=mid-1
+    return lo
+print(aggressive_cows([1,2,4,8,9],3))`,
+`def first_bad_version(n,bad):
+    lo,hi=1,n
+    while lo<hi:
+        mid=(lo+hi)//2
+        if mid>=bad: hi=mid
+        else: lo=mid+1
+    return lo
+print(first_bad_version(10,4))`,
+`def find_min_rotated(nums):
+    lo,hi=0,len(nums)-1
+    while lo<hi:
+        mid=(lo+hi)//2
+        if nums[mid]>nums[hi]: lo=mid+1
+        else: hi=mid
+    return nums[lo]
+print(find_min_rotated([3,4,5,1,2]))`,
+`def search_2d(matrix,target):
+    m,n=len(matrix),len(matrix[0])
+    lo,hi=0,m*n-1
+    while lo<=hi:
+        mid=(lo+hi)//2
+        val=matrix[mid//n][mid%n]
+        if val==target: return True
+        elif val<target: lo=mid+1
+        else: hi=mid-1
+    return False
+print(search_2d([[1,3,5],[10,11,16],[23,30,34]],3))`,
+`def find_right_bound(nums,target):
+    lo,hi=0,len(nums)-1; ans=-1
+    while lo<=hi:
+        mid=(lo+hi)//2
+        if nums[mid]==target: ans=mid; lo=mid+1
+        elif nums[mid]<target: lo=mid+1
+        else: hi=mid-1
+    return ans
+print(find_right_bound([5,7,7,8,8,10],8))`,
+`def magnetic_force(position,m):
+    position.sort()
+    lo,hi=1,position[-1]-position[0]
+    while lo<hi:
+        mid=(lo+hi+1)//2; cnt=1; prev=position[0]
+        for p in position[1:]:
+            if p-prev>=mid: cnt+=1; prev=p
+        if cnt>=m: lo=mid
+        else: hi=mid-1
+    return lo
+print(magnetic_force([1,2,3,4,7],3))`,
+`def smallest_divisor(nums,threshold):
+    lo,hi=1,max(nums)
+    while lo<hi:
+        mid=(lo+hi)//2
+        if sum((n+mid-1)//mid for n in nums)<=threshold: hi=mid
+        else: lo=mid+1
+    return lo
+print(smallest_divisor([1,2,5,9],6))`,
+`def find_kth_pair_distance(nums,k):
+    nums.sort(); n=len(nums)
+    lo,hi=0,nums[-1]-nums[0]
+    while lo<hi:
+        mid=(lo+hi)//2; count=left=0
+        for right in range(n):
+            while nums[right]-nums[left]>mid: left+=1
+            count+=right-left
+        if count>=k: hi=mid
+        else: lo=mid+1
+    return lo
+print(find_kth_pair_distance([1,3,1],1))`,
+`def min_eating_speed(piles,h):
+    lo,hi=1,max(piles)
+    while lo<hi:
+        mid=(lo+hi)//2
+        if sum((p+mid-1)//mid for p in piles)<=h: hi=mid
+        else: lo=mid+1
+    return lo
+print(min_eating_speed([30,11,23,4,20],5))`,
+`def capacity_ship(weights,days):
+    lo,hi=max(weights),sum(weights)
+    while lo<hi:
+        mid=(lo+hi)//2; d=1; curr=0
+        for w in weights:
+            if curr+w>mid: d+=1; curr=0
+            curr+=w
+        if d<=days: hi=mid
+        else: lo=mid+1
+    return lo
+print(capacity_ship([1,2,3,4,5,6,7,8,9,10],5))`,
+`def max_candies(candies,k):
+    lo,hi=1,max(candies)
+    while lo<hi:
+        mid=(lo+hi+1)//2
+        if sum(c//mid for c in candies)>=k: lo=mid
+        else: hi=mid-1
+    return lo
+print(max_candies([5,8,6],3))`
+],
+19:[
+`def level_order_bfs(root):
+    from collections import deque
+    if not root: return []
+    result,queue=[],deque([root])
+    while queue:
+        level=[]
+        for _ in range(len(queue)):
+            node=queue.popleft(); level.append(node.val)
+            if node.left: queue.append(node.left)
+            if node.right: queue.append(node.right)
+        result.append(level)
+    return result`,
+`def num_islands(grid):
+    def dfs(i,j):
+        if i<0 or j<0 or i>=len(grid) or j>=len(grid[0]) or grid[i][j]!="1": return
+        grid[i][j]="0"
+        dfs(i+1,j); dfs(i-1,j); dfs(i,j+1); dfs(i,j-1)
+    count=0
+    for i in range(len(grid)):
+        for j in range(len(grid[0])):
+            if grid[i][j]=="1": dfs(i,j); count+=1
+    return count`,
+`def shortest_path_bfs(grid):
+    from collections import deque
+    m,n=len(grid),len(grid[0])
+    if grid[0][0] or grid[m-1][n-1]: return -1
+    queue=deque([(0,0,1)]); grid[0][0]=1
+    while queue:
+        r,c,d=queue.popleft()
+        if r==m-1 and c==n-1: return d
+        for dr,dc in [(0,1),(0,-1),(1,0),(-1,0)]:
+            nr,nc=r+dr,c+dc
+            if 0<=nr<m and 0<=nc<n and not grid[nr][nc]:
+                grid[nr][nc]=1; queue.append((nr,nc,d+1))
+    return -1`,
+`def word_ladder(begin,end,words):
+    from collections import deque
+    words=set(words)
+    if end not in words: return 0
+    queue=deque([(begin,1)])
+    while queue:
+        word,steps=queue.popleft()
+        for i in range(len(word)):
+            for c in "abcdefghijklmnopqrstuvwxyz":
+                nw=word[:i]+c+word[i+1:]
+                if nw==end: return steps+1
+                if nw in words: words.remove(nw); queue.append((nw,steps+1))
+    return 0
+print(word_ladder("hit","cog",["hot","dot","dog","lot","log","cog"]))`,
+`def max_area_island(grid):
+    def dfs(i,j):
+        if i<0 or j<0 or i>=len(grid) or j>=len(grid[0]) or grid[i][j]!=1: return 0
+        grid[i][j]=0
+        return 1+dfs(i+1,j)+dfs(i-1,j)+dfs(i,j+1)+dfs(i,j-1)
+    return max((dfs(i,j) for i in range(len(grid)) for j in range(len(grid[0]))),default=0)`,
+`def clone_graph(node):
+    if not node: return None
+    visited={}
+    def dfs(n):
+        if n in visited: return visited[n]
+        clone=Node(n.val); visited[n]=clone
+        for nb in n.neighbors: clone.neighbors.append(dfs(nb))
+        return clone
+    return dfs(node)`,
+`def pacific_atlantic(heights):
+    m,n=len(heights),len(heights[0])
+    pac,atl=set(),set()
+    def dfs(r,c,visit,prev):
+        if r<0 or c<0 or r>=m or c>=n or (r,c) in visit or heights[r][c]<prev: return
+        visit.add((r,c))
+        for dr,dc in [(1,0),(-1,0),(0,1),(0,-1)]: dfs(r+dr,c+dc,visit,heights[r][c])
+    for i in range(m): dfs(i,0,pac,0); dfs(i,n-1,atl,0)
+    for j in range(n): dfs(0,j,pac,0); dfs(m-1,j,atl,0)
+    return list(pac&atl)`,
+`def surrounded_regions(board):
+    m,n=len(board),len(board[0])
+    def dfs(i,j):
+        if i<0 or j<0 or i>=m or j>=n or board[i][j]!="O": return
+        board[i][j]="S"; dfs(i+1,j); dfs(i-1,j); dfs(i,j+1); dfs(i,j-1)
+    for i in range(m): dfs(i,0); dfs(i,n-1)
+    for j in range(n): dfs(0,j); dfs(m-1,j)
+    for i in range(m):
+        for j in range(n):
+            if board[i][j]=="O": board[i][j]="X"
+            elif board[i][j]=="S": board[i][j]="O"`,
+`def course_schedule(n,prereqs):
+    from collections import deque
+    graph=[[] for _ in range(n)]; ind=[0]*n
+    for a,b in prereqs: graph[b].append(a); ind[a]+=1
+    queue=deque(i for i in range(n) if ind[i]==0); count=0
+    while queue:
+        node=queue.popleft(); count+=1
+        for nb in graph[node]:
+            ind[nb]-=1
+            if ind[nb]==0: queue.append(nb)
+    return count==n
+print(course_schedule(4,[[1,0],[2,0],[3,1],[3,2]]))`,
+`def rotting_oranges(grid):
+    from collections import deque
+    m,n=len(grid),len(grid[0]); queue=deque(); fresh=0
+    for i in range(m):
+        for j in range(n):
+            if grid[i][j]==2: queue.append((i,j,0))
+            elif grid[i][j]==1: fresh+=1
+    time=0
+    while queue:
+        r,c,t=queue.popleft()
+        for dr,dc in [(0,1),(0,-1),(1,0),(-1,0)]:
+            nr,nc=r+dr,c+dc
+            if 0<=nr<m and 0<=nc<n and grid[nr][nc]==1:
+                grid[nr][nc]=2; fresh-=1; time=t+1; queue.append((nr,nc,t+1))
+    return time if fresh==0 else -1`,
+`def walls_and_gates(rooms):
+    from collections import deque
+    INF=2**31-1; m,n=len(rooms),len(rooms[0])
+    queue=deque()
+    for i in range(m):
+        for j in range(n):
+            if rooms[i][j]==0: queue.append((i,j))
+    while queue:
+        r,c=queue.popleft()
+        for dr,dc in [(0,1),(0,-1),(1,0),(-1,0)]:
+            nr,nc=r+dr,c+dc
+            if 0<=nr<m and 0<=nc<n and rooms[nr][nc]==INF:
+                rooms[nr][nc]=rooms[r][c]+1; queue.append((nr,nc))`,
+`def all_paths_source_target(graph):
+    result=[]
+    def dfs(node,path):
+        if node==len(graph)-1: result.append(path[:]); return
+        for nb in graph[node]: dfs(nb,path+[nb])
+    dfs(0,[0])
+    return result
+print(all_paths_source_target([[1,2],[3],[3],[]]))`,
+`def open_lock(deadends,target):
+    from collections import deque
+    dead=set(deadends)
+    if "0000" in dead: return -1
+    queue=deque([("0000",0)]); visited={"0000"}
+    while queue:
+        state,turns=queue.popleft()
+        if state==target: return turns
+        for i in range(4):
+            d=int(state[i])
+            for nd in [(d+1)%10,(d-1)%10]:
+                ns=state[:i]+str(nd)+state[i+1:]
+                if ns not in visited and ns not in dead:
+                    visited.add(ns); queue.append((ns,turns+1))
+    return -1
+print(open_lock(["0201","0101","0102","1212","2002"],"0202"))`,
+`def flood_fill(image,sr,sc,color):
+    orig=image[sr][sc]
+    if orig==color: return image
+    def dfs(r,c):
+        if r<0 or c<0 or r>=len(image) or c>=len(image[0]) or image[r][c]!=orig: return
+        image[r][c]=color
+        dfs(r+1,c); dfs(r-1,c); dfs(r,c+1); dfs(r,c-1)
+    dfs(sr,sc)
+    return image
+print(flood_fill([[1,1,1],[1,1,0],[1,0,1]],1,1,2))`,
+`def graph_valid_tree(n,edges):
+    if len(edges)!=n-1: return False
+    from collections import defaultdict,deque
+    graph=defaultdict(list)
+    for u,v in edges: graph[u].append(v); graph[v].append(u)
+    visited=set([0]); queue=deque([0])
+    while queue:
+        node=queue.popleft()
+        for nb in graph[node]:
+            if nb not in visited: visited.add(nb); queue.append(nb)
+    return len(visited)==n
+print(graph_valid_tree(5,[[0,1],[0,2],[0,3],[1,4]]))`,
+`def minimum_knight_moves(x,y):
+    from collections import deque
+    x,y=abs(x),abs(y)
+    queue=deque([(0,0,0)]); visited={(0,0)}
+    while queue:
+        cx,cy,steps=queue.popleft()
+        if cx==x and cy==y: return steps
+        for dx,dy in [(2,1),(2,-1),(-2,1),(-2,-1),(1,2),(1,-2),(-1,2),(-1,-2)]:
+            nx,ny=cx+dx,cy+dy
+            if (nx,ny) not in visited and -2<=nx<=x+2 and -2<=ny<=y+2:
+                visited.add((nx,ny)); queue.append((nx,ny,steps+1))
+    return -1
+print(minimum_knight_moves(5,5))`,
+`def longest_path_dag(n,edges):
+    from collections import defaultdict,deque
+    graph=defaultdict(list); ind=[0]*n
+    for u,v in edges: graph[u].append(v); ind[v]+=1
+    queue=deque(i for i in range(n) if ind[i]==0)
+    dist=[0]*n
+    while queue:
+        u=queue.popleft()
+        for v in graph[u]:
+            dist[v]=max(dist[v],dist[u]+1)
+            ind[v]-=1
+            if ind[v]==0: queue.append(v)
+    return max(dist)
+print(longest_path_dag(6,[(0,1),(0,2),(1,3),(2,3),(3,4),(4,5)]))`,
+`def bipartite_check(graph):
+    n=len(graph); color=[0]*n
+    from collections import deque
+    for i in range(n):
+        if color[i]: continue
+        queue=deque([i]); color[i]=1
+        while queue:
+            node=queue.popleft()
+            for nb in graph[node]:
+                if color[nb]==0: color[nb]=-color[node]; queue.append(nb)
+                elif color[nb]==color[node]: return False
+    return True
+print(bipartite_check([[1,3],[0,2],[1,3],[0,2]]))`,
+`def zigzag_level_order(root):
+    from collections import deque
+    if not root: return []
+    result,queue,left=deque([root]),[],True
+    queue_obj=deque([root])
+    result_arr=[]
+    while queue_obj:
+        level=deque()
+        for _ in range(len(queue_obj)):
+            node=queue_obj.popleft()
+            if left: level.append(node.val)
+            else: level.appendleft(node.val)
+            if node.left: queue_obj.append(node.left)
+            if node.right: queue_obj.append(node.right)
+        result_arr.append(list(level))
+        left=not left
+    return result_arr`,
+`def network_delay(times,n,k):
+    import heapq
+    from collections import defaultdict
+    graph=defaultdict(list)
+    for u,v,w in times: graph[u].append((v,w))
+    dist={}; heap=[(0,k)]
+    while heap:
+        d,u=heapq.heappop(heap)
+        if u in dist: continue
+        dist[u]=d
+        for v,w in graph[u]:
+            if v not in dist: heapq.heappush(heap,(d+w,v))
+    return max(dist.values()) if len(dist)==n else -1
+print(network_delay([[2,1,1],[2,3,1],[3,4,1]],4,2))`
+],
+20:[
+`def single_number(nums):
+    result=0
+    for n in nums: result^=n
+    return result
+print(single_number([4,1,2,1,2]))`,
+`def count_bits(n):
+    return [bin(i).count("1") for i in range(n+1)]
+print(count_bits(5))`,
+`def power_of_two(n):
+    return n>0 and n&(n-1)==0
+print(power_of_two(16), power_of_two(6))`,
+`def reverse_bits(n):
+    result=0
+    for _ in range(32): result=(result<<1)|(n&1); n>>=1
+    return result
+print(reverse_bits(43261596))`,
+`def hamming_weight(n):
+    count=0
+    while n: count+=1; n&=n-1
+    return count
+print(hamming_weight(11))`,
+`def missing_number(nums):
+    n=len(nums)
+    return n*(n+1)//2-sum(nums)
+print(missing_number([3,0,1]))`,
+`def subsets_bitmask(nums):
+    n=len(nums); result=[]
+    for mask in range(1<<n):
+        subset=[]
+        for i in range(n):
+            if mask&(1<<i): subset.append(nums[i])
+        result.append(subset)
+    return result
+print(subsets_bitmask([1,2,3]))`,
+`def two_single_numbers(nums):
+    xor=0
+    for n in nums: xor^=n
+    diff_bit=xor&(-xor)
+    a=b=0
+    for n in nums:
+        if n&diff_bit: a^=n
+        else: b^=n
+    return [a,b]
+print(two_single_numbers([1,2,1,3,2,5]))`,
+`def max_xor(nums):
+    max_val=0; mask=0
+    for i in range(31,-1,-1):
+        mask|=(1<<i)
+        prefixes={n&mask for n in nums}
+        candidate=max_val|(1<<i)
+        if any(candidate^p in prefixes for p in prefixes): max_val=candidate
+    return max_val
+print(max_xor([3,10,5,25,2,8]))`,
+`def hamming_distance(x,y):
+    xor=x^y; count=0
+    while xor: count+=1; xor&=xor-1
+    return count
+print(hamming_distance(1,4))`,
+`def add_without_plus(a,b):
+    mask=0xFFFFFFFF
+    while b&mask:
+        carry=(a&b)<<1
+        a=a^b; b=carry
+    return a if b==0 else a&mask
+print(add_without_plus(5,3))`,
+`def is_power_of_four(n):
+    return n>0 and n&(n-1)==0 and n&0x55555555!=0
+print(is_power_of_four(16), is_power_of_four(8))`,
+`def single_number_iii(nums):
+    ones=twos=0
+    for n in nums:
+        ones=(ones^n)&~twos
+        twos=(twos^n)&~ones
+    return ones
+print(single_number_iii([2,2,3,2]))`,
+`def total_hamming(nums):
+    total=0
+    for bit in range(32):
+        ones=sum(1 for n in nums if n&(1<<bit))
+        total+=ones*(len(nums)-ones)
+    return total
+print(total_hamming([4,14,2]))`,
+`def complement_number(n):
+    mask=(1<<n.bit_length())-1
+    return n^mask
+print(complement_number(5))`,
+`def decode_xor(encoded, first):
+    result=[first]
+    for e in encoded: result.append(result[-1]^e)
+    return result
+print(decode_xor([1,2,3],1))`,
+`def min_flips_or(a,b,c):
+    flips=0
+    for i in range(32):
+        ba,bb,bc=(a>>i)&1,(b>>i)&1,(c>>i)&1
+        if bc==1: flips+=0 if ba|bb else 1
+        else: flips+=ba+bb
+    return flips
+print(min_flips_or(2,6,5))`,
+`def gray_code(n):
+    return [i^(i>>1) for i in range(1<<n)]
+print(gray_code(3))`,
+`def bit_manipulation_range(left,right):
+    shift=0
+    while left!=right: left>>=1; right>>=1; shift+=1
+    return left<<shift
+print(bit_manipulation_range(5,7))`,
+`def utf8_validation(data):
+    remaining=0
+    for byte in data:
+        if remaining==0:
+            if byte>>7==0: remaining=0
+            elif byte>>5==0b110: remaining=1
+            elif byte>>4==0b1110: remaining=2
+            elif byte>>3==0b11110: remaining=3
+            else: return False
+        else:
+            if byte>>6!=0b10: return False
+            remaining-=1
+    return remaining==0
+print(utf8_validation([197,130,1]))`
+]
+};
+
+function renderSolutions(topic){
+    const container = document.getElementById('solutionsContent');
+    if(!topic) return;
+    const sols = solutionData[topic.id] || [];
+    let html = '';
+    topic.practice.forEach((p, i) => {
+        const sol = sols[i] || 'Solution coming soon...';
+        html += `<div class="solution-item">
+            <div class="solution-header" onclick="toggleSolution(${i})">
+                <span class="solution-num">#${i+1}</span>
+                <span class="solution-q">${p.q}</span>
+                <button class="solution-toggle" id="btn_${i}">Show Solution</button>
+            </div>
+            <div class="solution-body" id="sol_${i}">
+                <div class="solution-approach">Approach: ${p.approach}</div>
+                <pre class="code-block"><code>${highlightPython(sol)}</code></pre>
+            </div>
+        </div>`;
+    });
+    container.innerHTML = html;
+}
+
+function toggleSolution(i){
+    const body = document.getElementById('sol_' + i);
+    const btn = document.getElementById('btn_' + i);
+    body.classList.toggle('open');
+    btn.textContent = body.classList.contains('open') ? 'Hide Solution' : 'Show Solution';
 }
 
 // Initialize
