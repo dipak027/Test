@@ -803,6 +803,10 @@ function renderExamples() {
     `).join('');
 }
 
+function escHtml(str) {
+    return str.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+
 function renderPractice() {
     const container = document.getElementById('practiceContent');
     const prog = getProgress();
@@ -816,9 +820,9 @@ function renderPractice() {
         html += '<div class="practice-item ' + doneClass + '">' +
             '<input type="checkbox" ' + checked + ' onchange="togglePractice(\'' + key + '\', this)">' +
             '<div class="practice-text">' +
-            '<div>' + (i+1) + '. ' + p.q + '</div>' +
+            '<div>' + (i+1) + '. ' + escHtml(p.q) + '</div>' +
             '<ul class="mcq-options">' +
-            p.options.map(function(opt) { return '<li class="mcq-option">' + opt + '</li>'; }).join('') +
+            p.options.map(function(opt) { return '<li class="mcq-option">' + escHtml(opt) + '</li>'; }).join('') +
             '</ul></div>' +
             '<span class="difficulty ' + diffClass + '">' + diffLabel + '</span></div>';
     });
@@ -1178,7 +1182,7 @@ function renderSolutions() {
         html += '<div class="solution-item">' +
             '<div class="solution-header" onclick="toggleSolution(' + i + ')">' +
             '<span class="solution-num">#' + (i+1) + '</span>' +
-            '<span class="solution-q">' + p.q + '</span>' +
+            '<span class="solution-q">' + escHtml(p.q) + '</span>' +
             '<button class="solution-toggle" id="btn_' + i + '">Show Answer</button>' +
             '</div>' +
             '<div class="solution-body" id="sol_' + i + '">' +
@@ -1186,10 +1190,10 @@ function renderSolutions() {
             '<ul class="mcq-options">' +
             p.options.map(function(opt) {
                 var isCorrect = opt.startsWith(p.answer + ')');
-                return '<li class="mcq-option' + (isCorrect ? ' correct' : '') + '">' + opt + '</li>';
+                return '<li class="mcq-option' + (isCorrect ? ' correct' : '') + '">' + escHtml(opt) + '</li>';
             }).join('') +
             '</ul>' +
-            '<div class="solution-explanation">' + sol + '</div>' +
+            '<div class="solution-explanation">' + escHtml(sol) + '</div>' +
             '</div></div>';
     });
     container.innerHTML = html;
