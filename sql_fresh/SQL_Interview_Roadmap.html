@@ -1,0 +1,368 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SQL Interview Roadmap</title>
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{--bg:#080c14;--card:#141d2e;--border:#1e2d45;--text:#dde4f0;--text-dim:#8892a4;--green:#4ade80;--cyan:#22d3ee;--purple:#a78bfa;--gradient:linear-gradient(135deg,#4ade80,#22d3ee,#a78bfa)}
+body{font-family:'Sora',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;overflow-x:hidden}
+code,pre,.code{font-family:'JetBrains Mono',monospace}
+.header{position:sticky;top:0;z-index:1000;background:rgba(8,12,20,0.95);backdrop-filter:blur(12px);border-bottom:1px solid var(--border);padding:12px 24px}
+.header-inner{max-width:1200px;margin:0 auto;display:flex;align-items:center;justify-content:space-between}
+.logo{font-size:1.4rem;font-weight:700;background:var(--gradient);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.progress-container{flex:1;max-width:300px;margin-left:24px}
+.progress-label{font-size:0.7rem;color:var(--text-dim);margin-bottom:4px;text-align:right}
+.progress-bar{height:6px;background:var(--border);border-radius:3px;overflow:hidden}
+.progress-fill{height:100%;background:var(--gradient);border-radius:3px;transition:width 0.5s ease}
+</style>
+
+
+<style>
+.page{display:none;padding:40px 24px 80px;max-width:900px;margin:0 auto;animation:fadeIn 0.3s ease}
+.page.active{display:block}
+@keyframes fadeIn{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
+.roadmap{position:relative;padding-left:60px}
+.roadmap::before{content:'';position:absolute;left:28px;top:0;bottom:0;width:2px;background:linear-gradient(to bottom,var(--green),var(--cyan),var(--purple));opacity:0.4}
+.node{position:relative;margin-bottom:24px;cursor:pointer;transition:transform 0.2s ease}
+.node:hover{transform:translateX(4px)}
+.node-number{position:absolute;left:-48px;top:16px;width:32px;height:32px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:0.8rem;border:2px solid;background:var(--bg)}
+.node-card{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:20px 24px;transition:border-color 0.2s,box-shadow 0.2s}
+.node:hover .node-card{border-color:var(--cyan);box-shadow:0 4px 20px rgba(34,211,238,0.1)}
+.node-title{font-size:1.1rem;font-weight:600;margin-bottom:8px}
+.node-chips{display:flex;flex-wrap:wrap;gap:6px}
+.chip{font-size:0.65rem;padding:3px 8px;border-radius:4px;background:rgba(255,255,255,0.05);border:1px solid var(--border);color:var(--text-dim)}
+.node-progress{font-size:0.7rem;color:var(--text-dim);margin-top:8px}
+.back-btn{display:inline-flex;align-items:center;gap:6px;padding:8px 16px;background:var(--card);border:1px solid var(--border);border-radius:8px;color:var(--text);cursor:pointer;font-family:'Sora',sans-serif;font-size:0.85rem;margin-bottom:24px;transition:border-color 0.2s}
+.back-btn:hover{border-color:var(--cyan)}
+.detail-header{margin-bottom:24px}
+.detail-title{font-size:1.8rem;font-weight:700;margin-bottom:8px}
+.detail-subtitle{font-size:0.85rem;color:var(--text-dim)}
+.tabs{display:flex;gap:4px;margin-bottom:24px;background:var(--card);border-radius:10px;padding:4px;border:1px solid var(--border)}
+.tab{flex:1;padding:10px 16px;text-align:center;border-radius:8px;cursor:pointer;font-size:0.85rem;font-weight:500;color:var(--text-dim);transition:all 0.2s}
+.tab.active{background:var(--border);color:var(--text)}
+.tab:hover:not(.active){color:var(--text)}
+.tab-content{display:none;animation:fadeIn 0.3s ease}
+.tab-content.active{display:block}
+
+.theory-section{margin-bottom:24px;background:var(--card);border:1px solid var(--border);border-radius:10px;padding:20px}
+.theory-title{font-size:1rem;font-weight:600;margin-bottom:12px;color:var(--cyan)}
+.theory-point{font-size:0.85rem;color:var(--text-dim);margin-bottom:8px;padding-left:16px;position:relative;line-height:1.6}
+.theory-point::before{content:'>';position:absolute;left:0;color:var(--green)}
+pre.code-block{background:rgba(0,0,0,0.4);border:1px solid var(--border);border-radius:8px;padding:16px;margin-top:12px;overflow-x:auto;font-size:0.8rem;line-height:1.6}
+.example-card{background:var(--card);border:1px solid var(--border);border-radius:10px;padding:20px;margin-bottom:16px}
+.example-title{font-size:0.9rem;font-weight:600;margin-bottom:8px;color:var(--purple)}
+.example-desc{font-size:0.82rem;color:var(--text-dim);margin-bottom:12px}
+.practice-item{display:flex;align-items:flex-start;gap:12px;padding:12px 16px;background:var(--card);border:1px solid var(--border);border-radius:8px;margin-bottom:8px;transition:border-color 0.2s}
+.practice-item:hover{border-color:var(--cyan)}
+.practice-item input[type="checkbox"]{width:18px;height:18px;margin-top:2px;accent-color:var(--green);cursor:pointer}
+.practice-item.done{opacity:0.6;border-color:var(--green)}
+.practice-text{flex:1;font-size:0.82rem;line-height:1.5}
+.difficulty{font-size:0.65rem;padding:2px 8px;border-radius:4px;font-weight:600;white-space:nowrap}
+.difficulty.easy{background:rgba(74,222,128,0.15);color:#4ade80}
+.difficulty.medium{background:rgba(251,191,36,0.15);color:#fbbf24}
+.difficulty.hard{background:rgba(244,114,182,0.15);color:#f472b6}
+.solution-item{background:var(--card);border:1px solid var(--border);border-radius:10px;margin-bottom:12px;overflow:hidden}
+.solution-header{padding:12px 16px;display:flex;align-items:center;justify-content:space-between;cursor:pointer}
+.solution-header:hover{background:rgba(34,211,238,0.05)}
+.solution-num{font-size:0.75rem;color:var(--text-dim);font-family:'JetBrains Mono',monospace;margin-right:10px}
+.solution-q{font-size:0.82rem;flex:1}
+.solution-toggle{padding:4px 12px;border-radius:6px;border:1px solid var(--border);background:var(--card);color:var(--cyan);font-size:0.72rem;cursor:pointer;font-family:'Sora',sans-serif;transition:all 0.2s}
+.solution-toggle:hover{background:rgba(34,211,238,0.1);border-color:var(--cyan)}
+.solution-body{display:none;padding:0 16px 16px;border-top:1px solid var(--border)}
+.solution-body.open{display:block}
+@media(max-width:640px){.roadmap{padding-left:40px}.roadmap::before{left:16px}.node-number{left:-32px;width:26px;height:26px;font-size:0.7rem}.header-inner{flex-wrap:wrap;gap:8px}.progress-container{max-width:100%;margin-left:0}}
+</style>
+</head>
+
+<body>
+<header class="header">
+<div class="header-inner">
+<div class="logo">SQL Interview</div>
+<div class="progress-container">
+<div class="progress-label"><span id="progressText">0 / 0</span> completed</div>
+<div class="progress-bar"><div class="progress-fill" id="progressFill" style="width:0%"></div></div>
+</div>
+</div>
+</header>
+<div class="page active" id="roadmapPage">
+<div class="roadmap" id="roadmapContainer"></div>
+</div>
+<div class="page" id="detailPage">
+<button class="back-btn" onclick="showRoadmap()">&#8592; Back to Roadmap</button>
+<div class="detail-header">
+<h1 class="detail-title" id="detailTitle"></h1>
+<p class="detail-subtitle" id="detailSubtitle"></p>
+</div>
+<div class="tabs">
+<div class="tab active" onclick="switchTab('theory')">Theory</div>
+<div class="tab" onclick="switchTab('examples')">Examples</div>
+<div class="tab" onclick="switchTab('practice')">Practice</div>
+<div class="tab" onclick="switchTab('solutions')">Solutions</div>
+</div>
+<div class="tab-content active" id="theoryContent"></div>
+<div class="tab-content" id="examplesContent"></div>
+<div class="tab-content" id="practiceContent"></div>
+<div class="tab-content" id="solutionsContent"></div>
+</div>
+
+<script>
+let currentTopic = null;
+const STORAGE_KEY = 'sql_interview_roadmap_progress';
+
+
+const topics = [
+{id:1,title:"Top-N Per Group",color:"#38bdf8",chips:["ROW_NUMBER","DENSE_RANK","Top-N","Per Group"],
+subtopics:[
+{name:"Top-N with Window Functions",theory:["ROW_NUMBER() OVER (PARTITION BY group ORDER BY metric DESC) assigns a unique rank within each group.","Filter the ranked result in a subquery or CTE with WHERE rn <= N to get top-N per group.","Use DENSE_RANK instead of ROW_NUMBER when you want ties to share the same rank position."],code:"-- Top-N per group using ROW_NUMBER\nWITH ranked AS (\n    SELECT product_name, category, revenue,\n        ROW_NUMBER() OVER (\n            PARTITION BY category\n            ORDER BY revenue DESC\n        ) AS rn\n    FROM products\n)\nSELECT product_name, category, revenue\nFROM ranked\nWHERE rn <= 3;\n\n-- Using DENSE_RANK (includes ties)\nWITH ranked AS (\n    SELECT product_name, category, revenue,\n        DENSE_RANK() OVER (\n            PARTITION BY category\n            ORDER BY revenue DESC\n        ) AS rnk\n    FROM products\n)\nSELECT product_name, category, revenue\nFROM ranked\nWHERE rnk <= 3;"},
+{name:"Top-N with Correlated Subquery",theory:["Before window functions, correlated subqueries were the standard approach for top-N per group.","Count how many rows in the same group have a higher value; if count < N, the row is in top-N.","This approach works on older databases but can be slower on large datasets due to row-by-row evaluation."],code:"-- Old-school top-N per group with correlated subquery\nSELECT p1.product_name, p1.category, p1.revenue\nFROM products p1\nWHERE (\n    SELECT COUNT(*)\n    FROM products p2\n    WHERE p2.category = p1.category\n      AND p2.revenue > p1.revenue\n) < 3\nORDER BY p1.category, p1.revenue DESC;\n\n-- Using NOT EXISTS for top-1 per group\nSELECT p1.product_name, p1.category, p1.revenue\nFROM products p1\nWHERE NOT EXISTS (\n    SELECT 1 FROM products p2\n    WHERE p2.category = p1.category\n      AND p2.revenue > p1.revenue\n);"},
+{name:"Nth Highest Value",theory:["Finding the Nth highest salary is a classic interview question with multiple approaches.","DENSE_RANK approach: rank all values, then filter WHERE rnk = N to get the exact Nth value.","LIMIT/OFFSET approach: ORDER BY DESC LIMIT 1 OFFSET N-1 gets the Nth row directly."],code:"-- Find 2nd highest salary using DENSE_RANK\nSELECT DISTINCT salary\nFROM (\n    SELECT salary,\n        DENSE_RANK() OVER (ORDER BY salary DESC) AS rnk\n    FROM employees\n) ranked\nWHERE rnk = 2;\n\n-- Find Nth highest using LIMIT OFFSET\nSELECT DISTINCT salary\nFROM employees\nORDER BY salary DESC\nLIMIT 1 OFFSET 1;  -- 0-indexed: offset 1 = 2nd\n\n-- Find 3rd highest salary per department\nWITH ranked AS (\n    SELECT dept_id, salary,\n        DENSE_RANK() OVER (\n            PARTITION BY dept_id ORDER BY salary DESC\n        ) AS rnk\n    FROM employees\n)\nSELECT dept_id, salary AS third_highest\nFROM ranked\nWHERE rnk = 3;"}
+],
+examples:[
+{title:"Top 3 Products per Category by Revenue",desc:"Find the 3 highest-revenue products in each category using window functions.",code:"WITH product_ranked AS (\n    SELECT product_name, category, revenue,\n        ROW_NUMBER() OVER (\n            PARTITION BY category\n            ORDER BY revenue DESC\n        ) AS rn\n    FROM products\n)\nSELECT category, product_name, revenue\nFROM product_ranked\nWHERE rn <= 3\nORDER BY category, rn;"},
+{title:"Second Highest Salary",desc:"Find the second highest salary in the company, returning NULL if it does not exist.",code:"SELECT MAX(salary) AS second_highest_salary\nFROM employees\nWHERE salary < (\n    SELECT MAX(salary) FROM employees\n);\n\n-- Alternative with DENSE_RANK\nSELECT salary AS second_highest_salary\nFROM (\n    SELECT salary,\n        DENSE_RANK() OVER (ORDER BY salary DESC) AS rnk\n    FROM employees\n) t\nWHERE rnk = 2\nLIMIT 1;"}
+],
+practice:[
+{q:"Find the top-2 highest-paid employees in each department using ROW_NUMBER.",d:"E"},
+{q:"Find the second highest salary in the employees table.",d:"E"},
+{q:"Find the top-3 products by sales in each category using DENSE_RANK.",d:"M"},
+{q:"Write a correlated subquery to find the highest earner per department without window functions.",d:"M"},
+{q:"Find the Nth highest salary where N is parameterized (e.g., 4th highest).",d:"M"},
+{q:"Find the top-2 students by score in each class, handling ties correctly.",d:"M"},
+{q:"Find departments where the top earner makes more than double the second highest.",d:"H"},
+{q:"Find the top-3 most recent orders per customer with order details.",d:"H"},
+{q:"Implement a generic top-N per group solution that handles NULLs and ties.",d:"H"},
+{q:"Find the 2nd highest salary in each department; return NULL if only one employee exists.",d:"H"}
+]},
+
+{id:2,title:"Duplicates & Data Cleaning",color:"#34d399",chips:["Find Duplicates","Remove Duplicates","DISTINCT","GROUP BY HAVING"],
+subtopics:[
+{name:"Finding Duplicates",theory:["GROUP BY the columns that define duplicates, then HAVING COUNT(*) > 1 identifies duplicate groups.","Self-join approach: join a table to itself on the duplicate columns with different IDs to find pairs.","Window functions can mark duplicates: ROW_NUMBER partitioned by duplicate columns flags extras with rn > 1."],code:"-- Find duplicate emails using GROUP BY HAVING\nSELECT email, COUNT(*) AS cnt\nFROM users\nGROUP BY email\nHAVING COUNT(*) > 1;\n\n-- Find all rows that are duplicates (with details)\nSELECT u.*\nFROM users u\nJOIN (\n    SELECT email FROM users\n    GROUP BY email HAVING COUNT(*) > 1\n) dups ON u.email = dups.email\nORDER BY u.email;\n\n-- Mark duplicates with ROW_NUMBER\nSELECT *,\n    ROW_NUMBER() OVER (\n        PARTITION BY email ORDER BY id\n    ) AS rn\nFROM users;\n-- Rows with rn > 1 are duplicates"},
+{name:"Removing Duplicates",theory:["DELETE with CTE/ROW_NUMBER: keep the first occurrence (rn=1) and delete all others (rn>1).","DELETE using self-join: delete rows where a duplicate exists with a smaller ID.","CREATE TABLE AS SELECT DISTINCT is a brute-force approach that rebuilds the table without duplicates."],code:"-- Remove duplicates keeping lowest id (PostgreSQL)\nDELETE FROM users\nWHERE id IN (\n    SELECT id FROM (\n        SELECT id,\n            ROW_NUMBER() OVER (\n                PARTITION BY email ORDER BY id\n            ) AS rn\n        FROM users\n    ) t WHERE rn > 1\n);\n\n-- Remove duplicates using self-join\nDELETE u1 FROM users u1\nINNER JOIN users u2\n    ON u1.email = u2.email\n    AND u1.id > u2.id;\n\n-- SQL Server: CTE-based delete\nWITH cte AS (\n    SELECT *,\n        ROW_NUMBER() OVER (PARTITION BY email ORDER BY id) AS rn\n    FROM users\n)\nDELETE FROM cte WHERE rn > 1;"},
+{name:"Data Deduplication Strategies",theory:["Soft dedup: add a is_duplicate flag column rather than deleting; safer for audit trails.","Merge strategy: when duplicates have different data, merge non-null fields into one master record.","Prevention: use UNIQUE constraints, UPSERT (INSERT ON CONFLICT), or staging tables for data loads."],code:"-- Soft dedup: flag duplicates without deleting\nUPDATE users SET is_duplicate = TRUE\nWHERE id IN (\n    SELECT id FROM (\n        SELECT id,\n            ROW_NUMBER() OVER (\n                PARTITION BY email ORDER BY created_at\n            ) AS rn\n        FROM users\n    ) t WHERE rn > 1\n);\n\n-- Prevent future duplicates with UPSERT\nINSERT INTO users (email, name, created_at)\nVALUES ('john@example.com', 'John', NOW())\nON CONFLICT (email)\nDO UPDATE SET name = EXCLUDED.name;\n\n-- Dedup during ETL with staging table\nINSERT INTO users_clean\nSELECT DISTINCT ON (email) *\nFROM staging_users\nORDER BY email, created_at DESC;"}
+],
+examples:[
+{title:"Find and Remove Duplicate Emails",desc:"Identify duplicate email addresses and remove all but the first occurrence.",code:"-- Step 1: Find duplicates\nSELECT email, COUNT(*) AS occurrences\nFROM person\nGROUP BY email\nHAVING COUNT(*) > 1;\n\n-- Step 2: Remove duplicates keeping smallest id\nDELETE FROM person\nWHERE id NOT IN (\n    SELECT MIN(id)\n    FROM person\n    GROUP BY email\n);"},
+{title:"Identify Near-Duplicates",desc:"Find records that are similar but not exact matches using fuzzy comparison.",code:"-- Find near-duplicate customers by similar names\nSELECT a.id AS id1, b.id AS id2,\n    a.name AS name1, b.name AS name2,\n    a.email, b.email\nFROM customers a\nJOIN customers b ON a.id < b.id\nWHERE (\n    LOWER(TRIM(a.name)) = LOWER(TRIM(b.name))\n    OR a.email = b.email\n    OR SOUNDEX(a.name) = SOUNDEX(b.name)\n)\nORDER BY a.name;"}
+],
+practice:[
+{q:"Find duplicate rows in a table based on email column using GROUP BY HAVING.",d:"E"},
+{q:"Write a query to show all duplicate records with their full details.",d:"E"},
+{q:"Delete duplicate emails keeping only the row with the smallest id.",d:"M"},
+{q:"Use ROW_NUMBER to mark and then remove duplicate entries.",d:"M"},
+{q:"Find records that appear exactly 3 times in a table.",d:"M"},
+{q:"Deduplicate a table keeping the most recently updated version of each record.",d:"M"},
+{q:"Write an UPSERT statement to prevent duplicates on insert.",d:"H"},
+{q:"Find near-duplicate records using fuzzy string matching techniques.",d:"H"}
+]},
+
+{id:3,title:"Consecutive & Streaks",color:"#a78bfa",chips:["Consecutive Numbers","Gaps","Islands","Streaks"],
+subtopics:[
+{name:"Consecutive Numbers",theory:["The classic approach uses self-joins: join a table to itself on id = id+1 to find consecutive pairs.","For 3+ consecutive values, chain multiple joins or use the island technique with ROW_NUMBER.","The row_number difference trick groups consecutive values: value - ROW_NUMBER() produces a constant for each island."],code:"-- Find 3 consecutive numbers using self-join\nSELECT DISTINCT l1.num AS consecutive_num\nFROM logs l1\nJOIN logs l2 ON l1.id = l2.id - 1\nJOIN logs l3 ON l2.id = l3.id - 1\nWHERE l1.num = l2.num AND l2.num = l3.num;\n\n-- Find consecutive IDs with same value using LAG/LEAD\nSELECT id, num\nFROM (\n    SELECT id, num,\n        LAG(num) OVER (ORDER BY id) AS prev_num,\n        LEAD(num) OVER (ORDER BY id) AS next_num\n    FROM logs\n) t\nWHERE num = prev_num AND num = next_num;\n\n-- Island technique for consecutive groups\nWITH grouped AS (\n    SELECT num,\n        id - ROW_NUMBER() OVER (PARTITION BY num ORDER BY id) AS grp\n    FROM logs\n)\nSELECT num, COUNT(*) AS streak_length\nFROM grouped\nGROUP BY num, grp\nHAVING COUNT(*) >= 3;"},
+{name:"Login Streaks",theory:["Login streaks count consecutive calendar days a user logged in without missing a day.","Use DISTINCT dates first (a user may log in multiple times per day), then apply the island technique.","Subtract ROW_NUMBER from date: consecutive dates produce the same base date for grouping."],code:"-- Find consecutive login days per user\nWITH distinct_logins AS (\n    SELECT DISTINCT user_id, login_date::DATE AS login_date\n    FROM logins\n),\nstreaks AS (\n    SELECT user_id, login_date,\n        login_date - (ROW_NUMBER() OVER (\n            PARTITION BY user_id ORDER BY login_date\n        ))::INT AS grp\n    FROM distinct_logins\n)\nSELECT user_id, grp,\n    COUNT(*) AS streak_days,\n    MIN(login_date) AS streak_start,\n    MAX(login_date) AS streak_end\nFROM streaks\nGROUP BY user_id, grp\nORDER BY user_id, streak_start;\n\n-- Longest streak per user\nSELECT user_id, MAX(streak_days) AS longest_streak\nFROM (\n    SELECT user_id,\n        COUNT(*) AS streak_days\n    FROM streaks\n    GROUP BY user_id, grp\n) t\nGROUP BY user_id;"},
+{name:"Gaps in Sequences",theory:["Gaps are missing values between existing entries in an ordered sequence (IDs, dates, numbers).","Use LEAD to compare current value with next value; if the difference > 1, there is a gap.","Generate a complete series and LEFT JOIN to the data; NULLs in the join indicate gaps."],code:"-- Find gaps in ID sequence\nSELECT id + 1 AS gap_start,\n    next_id - 1 AS gap_end\nFROM (\n    SELECT id, LEAD(id) OVER (ORDER BY id) AS next_id\n    FROM sequence_table\n) t\nWHERE next_id - id > 1;\n\n-- Find missing dates in daily data\nWITH date_range AS (\n    SELECT generate_series(\n        (SELECT MIN(log_date) FROM daily_logs),\n        (SELECT MAX(log_date) FROM daily_logs),\n        '1 day'::INTERVAL\n    )::DATE AS expected_date\n)\nSELECT dr.expected_date AS missing_date\nFROM date_range dr\nLEFT JOIN daily_logs dl ON dr.expected_date = dl.log_date\nWHERE dl.log_date IS NULL\nORDER BY dr.expected_date;"}
+],
+examples:[
+{title:"Find 3+ Consecutive Login Days",desc:"Find users who logged in for at least 3 consecutive days.",code:"WITH distinct_logins AS (\n    SELECT DISTINCT user_id, login_date::DATE AS dt\n    FROM logins\n),\nislands AS (\n    SELECT user_id, dt,\n        dt - (ROW_NUMBER() OVER (\n            PARTITION BY user_id ORDER BY dt\n        ))::INT AS grp\n    FROM distinct_logins\n),\nstreak_lengths AS (\n    SELECT user_id, grp, COUNT(*) AS days\n    FROM islands\n    GROUP BY user_id, grp\n)\nSELECT DISTINCT user_id\nFROM streak_lengths\nWHERE days >= 3;"},
+{title:"Longest Winning Streak",desc:"Find the longest consecutive winning streak for each team.",code:"WITH marked AS (\n    SELECT team, game_date, result,\n        ROW_NUMBER() OVER (PARTITION BY team ORDER BY game_date) -\n        ROW_NUMBER() OVER (\n            PARTITION BY team, result ORDER BY game_date\n        ) AS grp\n    FROM games\n    WHERE result = 'W'\n)\nSELECT team, MAX(streak) AS longest_win_streak\nFROM (\n    SELECT team, COUNT(*) AS streak\n    FROM marked\n    GROUP BY team, grp\n) t\nGROUP BY team\nORDER BY longest_win_streak DESC;"}
+],
+practice:[
+{q:"Find all numbers that appear at least 3 times consecutively in a Logs table.",d:"E"},
+{q:"Find gaps in a sequence of IDs (e.g., 1,2,4,7 -> gaps at 3, 5-6).",d:"E"},
+{q:"Calculate the longest login streak for each user.",d:"M"},
+{q:"Find users who logged in for at least 5 consecutive days.",d:"M"},
+{q:"Identify consecutive sequences of the same status in an event log.",d:"M"},
+{q:"Find missing dates in a daily sales table.",d:"M"},
+{q:"Find the longest streak of increasing daily revenue.",d:"H"},
+{q:"Identify all islands of consecutive available seats in a cinema table.",d:"H"}
+]},
+
+{id:4,title:"Date Problems",color:"#fbbf24",chips:["Date Diffs","Gaps","Overlaps","Running Totals"],
+subtopics:[
+{name:"Date Differences & Gaps",theory:["DATEDIFF or subtraction between dates calculates days between events (syntax varies by DB).","Use LAG to get the previous event date, then compute the gap to find inactive periods.","DATE_TRUNC groups dates to month/week/quarter for time-based aggregations."],code:"-- Days between consecutive orders per customer\nSELECT customer_id, order_date,\n    order_date - LAG(order_date) OVER (\n        PARTITION BY customer_id ORDER BY order_date\n    ) AS days_since_last_order\nFROM orders;\n\n-- Find customers inactive for 30+ days\nWITH last_activity AS (\n    SELECT customer_id,\n        MAX(order_date) AS last_order_date,\n        CURRENT_DATE - MAX(order_date) AS days_inactive\n    FROM orders\n    GROUP BY customer_id\n)\nSELECT customer_id, last_order_date, days_inactive\nFROM last_activity\nWHERE days_inactive > 30\nORDER BY days_inactive DESC;\n\n-- Average days between orders\nWITH gaps AS (\n    SELECT customer_id,\n        order_date - LAG(order_date) OVER (\n            PARTITION BY customer_id ORDER BY order_date\n        ) AS gap_days\n    FROM orders\n)\nSELECT customer_id, AVG(gap_days) AS avg_days_between_orders\nFROM gaps\nWHERE gap_days IS NOT NULL\nGROUP BY customer_id;"},
+{name:"Overlapping Ranges",theory:["Two ranges [A_start, A_end] and [B_start, B_end] overlap when A_start <= B_end AND B_start <= A_end.","Self-join the table with the overlap condition and a.id < b.id to avoid duplicate pairs.","Merging overlapping ranges requires iterative or recursive approaches to combine into non-overlapping spans."],code:"-- Find overlapping bookings\nSELECT a.booking_id AS booking1,\n    b.booking_id AS booking2,\n    a.room_id\nFROM bookings a\nJOIN bookings b ON a.room_id = b.room_id\n    AND a.booking_id < b.booking_id\n    AND a.check_in <= b.check_out\n    AND b.check_in <= a.check_out;\n\n-- Find double-booked time slots\nSELECT a.event_name AS event1,\n    b.event_name AS event2,\n    GREATEST(a.start_time, b.start_time) AS overlap_start,\n    LEAST(a.end_time, b.end_time) AS overlap_end\nFROM events a\nJOIN events b ON a.id < b.id\n    AND a.start_time < b.end_time\n    AND b.start_time < a.end_time;\n\n-- Merge overlapping intervals\nWITH ordered AS (\n    SELECT *,\n        MAX(end_date) OVER (\n            ORDER BY start_date\n            ROWS BETWEEN UNBOUNDED PRECEDING AND 1 PRECEDING\n        ) AS prev_max_end\n    FROM intervals\n),\nflagged AS (\n    SELECT *,\n        CASE WHEN start_date > prev_max_end THEN 1 ELSE 0 END AS new_group\n    FROM ordered\n)\nSELECT MIN(start_date) AS merged_start, MAX(end_date) AS merged_end\nFROM flagged\nGROUP BY SUM(new_group) OVER (ORDER BY start_date);"},
+{name:"Date-Based Aggregations",theory:["MTD (Month-to-Date): aggregate from the first of the month to the current row date.","YTD (Year-to-Date): aggregate from January 1st to the current date using window frames or filtered sums.","Rolling aggregations use window frames like ROWS BETWEEN 6 PRECEDING AND CURRENT ROW for 7-day windows."],code:"-- Month-to-Date revenue\nSELECT order_date, daily_revenue,\n    SUM(daily_revenue) OVER (\n        PARTITION BY DATE_TRUNC('month', order_date)\n        ORDER BY order_date\n    ) AS mtd_revenue\nFROM daily_sales;\n\n-- Year-to-Date revenue\nSELECT order_date, daily_revenue,\n    SUM(daily_revenue) OVER (\n        PARTITION BY EXTRACT(YEAR FROM order_date)\n        ORDER BY order_date\n    ) AS ytd_revenue\nFROM daily_sales;\n\n-- 7-day rolling average\nSELECT order_date, daily_revenue,\n    AVG(daily_revenue) OVER (\n        ORDER BY order_date\n        ROWS BETWEEN 6 PRECEDING AND CURRENT ROW\n    ) AS rolling_7day_avg\nFROM daily_sales;"}
+],
+examples:[
+{title:"Customers Inactive for 30+ Days",desc:"Find customers who have not placed an order in the last 30 days.",code:"SELECT c.customer_id, c.name,\n    MAX(o.order_date) AS last_order,\n    CURRENT_DATE - MAX(o.order_date) AS days_since_last\nFROM customers c\nJOIN orders o ON c.customer_id = o.customer_id\nGROUP BY c.customer_id, c.name\nHAVING CURRENT_DATE - MAX(o.order_date) > 30\nORDER BY days_since_last DESC;"},
+{title:"Find Overlapping Bookings",desc:"Detect room bookings that overlap with each other.",code:"SELECT a.booking_id, b.booking_id,\n    a.room_id,\n    a.check_in AS a_checkin, a.check_out AS a_checkout,\n    b.check_in AS b_checkin, b.check_out AS b_checkout\nFROM bookings a\nJOIN bookings b\n    ON a.room_id = b.room_id\n    AND a.booking_id < b.booking_id\n    AND a.check_in < b.check_out\n    AND b.check_in < a.check_out\nORDER BY a.room_id, a.check_in;"}
+],
+practice:[
+{q:"Calculate the number of days between each customer's consecutive orders.",d:"E"},
+{q:"Find customers who have not ordered in the last 30 days.",d:"E"},
+{q:"Find overlapping date ranges in a bookings table.",d:"M"},
+{q:"Calculate Month-to-Date (MTD) revenue for each day.",d:"M"},
+{q:"Write a 7-day rolling average of daily sales.",d:"M"},
+{q:"Find the longest gap between consecutive orders per customer.",d:"M"},
+{q:"Merge overlapping date intervals into consolidated ranges.",d:"H"},
+{q:"Calculate Year-over-Year growth for each month.",d:"H"},
+{q:"Find employees whose contracts overlap (same department, overlapping date ranges).",d:"H"},
+{q:"Build a calendar table and identify business days vs holidays for date calculations.",d:"H"}
+]},
+
+{id:5,title:"Cumulative & Running Metrics",color:"#f472b6",chips:["Running Total","Cumulative","Percent of Total","Moving Average"],
+subtopics:[
+{name:"Running Totals",theory:["SUM(column) OVER (ORDER BY date) computes a cumulative sum that grows with each row.","PARTITION BY resets the running total for each group (e.g., per customer, per month).","The default frame with ORDER BY is RANGE BETWEEN UNBOUNDED PRECEDING AND CURRENT ROW."],code:"-- Basic running total\nSELECT order_date, amount,\n    SUM(amount) OVER (\n        ORDER BY order_date\n    ) AS running_total\nFROM orders;\n\n-- Running total per customer\nSELECT customer_id, order_date, amount,\n    SUM(amount) OVER (\n        PARTITION BY customer_id\n        ORDER BY order_date\n    ) AS customer_running_total\nFROM orders;\n\n-- Running count and running average\nSELECT order_date, amount,\n    COUNT(*) OVER (ORDER BY order_date) AS running_count,\n    AVG(amount) OVER (ORDER BY order_date) AS running_avg,\n    SUM(amount) OVER (ORDER BY order_date) AS running_sum\nFROM orders;"},
+{name:"Percentage of Total",theory:["Divide each value by SUM() OVER() (no ORDER BY = entire partition) to get percentage of total.","PARTITION BY gives percentage within a group; omitting it gives percentage of the grand total.","Combine with ROUND for display-friendly percentages; multiply by 100 for percent format."],code:"-- Each order as percentage of total revenue\nSELECT order_id, customer_id, amount,\n    ROUND(100.0 * amount / SUM(amount) OVER (), 2) AS pct_of_total\nFROM orders;\n\n-- Each employee salary as percentage of department total\nSELECT name, dept_id, salary,\n    ROUND(100.0 * salary / SUM(salary) OVER (\n        PARTITION BY dept_id\n    ), 2) AS pct_of_dept\nFROM employees;\n\n-- Revenue contribution by product category\nSELECT category,\n    SUM(revenue) AS category_revenue,\n    ROUND(100.0 * SUM(revenue) / SUM(SUM(revenue)) OVER (), 2) AS pct_of_total\nFROM products\nGROUP BY category\nORDER BY category_revenue DESC;"},
+{name:"Month-over-Month Growth",theory:["LAG(revenue, 1) OVER (ORDER BY month) gets the previous month value for comparison.","Growth rate = (current - previous) / previous * 100; handle NULLs for the first month.","Use NULLIF to avoid division-by-zero when previous value is zero."],code:"-- Month-over-Month revenue growth\nWITH monthly AS (\n    SELECT DATE_TRUNC('month', order_date) AS month,\n        SUM(amount) AS revenue\n    FROM orders\n    GROUP BY 1\n)\nSELECT month, revenue,\n    LAG(revenue) OVER (ORDER BY month) AS prev_month_rev,\n    ROUND(100.0 * (\n        revenue - LAG(revenue) OVER (ORDER BY month)\n    ) / NULLIF(LAG(revenue) OVER (ORDER BY month), 0), 1) AS growth_pct\nFROM monthly\nORDER BY month;\n\n-- Week-over-Week user signups\nWITH weekly AS (\n    SELECT DATE_TRUNC('week', signup_date) AS week,\n        COUNT(*) AS signups\n    FROM users\n    GROUP BY 1\n)\nSELECT week, signups,\n    signups - LAG(signups) OVER (ORDER BY week) AS wow_change,\n    ROUND(100.0 * (signups - LAG(signups) OVER (ORDER BY week))\n        / NULLIF(LAG(signups) OVER (ORDER BY week), 0), 1) AS wow_growth_pct\nFROM weekly;"}
+],
+examples:[
+{title:"Cumulative Revenue by Month",desc:"Show monthly revenue alongside a cumulative running total across all months.",code:"WITH monthly_rev AS (\n    SELECT DATE_TRUNC('month', order_date) AS month,\n        SUM(amount) AS revenue\n    FROM orders\n    GROUP BY 1\n)\nSELECT month,\n    revenue,\n    SUM(revenue) OVER (ORDER BY month) AS cumulative_revenue\nFROM monthly_rev\nORDER BY month;"},
+{title:"Revenue Growth Rate",desc:"Calculate the month-over-month growth rate of total revenue.",code:"WITH monthly_rev AS (\n    SELECT DATE_TRUNC('month', order_date) AS month,\n        SUM(amount) AS revenue\n    FROM orders\n    GROUP BY 1\n)\nSELECT month, revenue,\n    LAG(revenue) OVER (ORDER BY month) AS prev_revenue,\n    CASE\n        WHEN LAG(revenue) OVER (ORDER BY month) IS NULL THEN NULL\n        WHEN LAG(revenue) OVER (ORDER BY month) = 0 THEN NULL\n        ELSE ROUND(100.0 * (revenue - LAG(revenue) OVER (ORDER BY month))\n            / LAG(revenue) OVER (ORDER BY month), 2)\n    END AS growth_rate_pct\nFROM monthly_rev\nORDER BY month;"}
+],
+practice:[
+{q:"Calculate a running total of order amounts ordered by date.",d:"E"},
+{q:"Show each product revenue as a percentage of total company revenue.",d:"E"},
+{q:"Calculate running total per customer that resets for each customer.",d:"M"},
+{q:"Compute month-over-month revenue growth using LAG.",d:"M"},
+{q:"Calculate a 3-month moving average of monthly sales.",d:"M"},
+{q:"Find the point in time when cumulative revenue first exceeded 1 million.",d:"M"},
+{q:"Calculate each department salary spend as percentage of total company payroll.",d:"H"},
+{q:"Build a compound growth rate calculation (CAGR) using window functions.",d:"H"}
+]},
+
+{id:6,title:"Hierarchies & Self-Joins",color:"#22d3ee",chips:["Manager-Employee","Self-Join","Recursive","Tree"],
+subtopics:[
+{name:"Employee-Manager Queries",theory:["Self-join connects a table to itself: JOIN employees mgr ON emp.manager_id = mgr.id to get manager info.","This pattern answers questions like 'employees earning more than their manager' or 'find manager name'.","Multiple self-joins can traverse multiple levels (employee -> manager -> manager's manager)."],code:"-- Get employee with their manager name\nSELECT e.name AS employee, m.name AS manager\nFROM employees e\nLEFT JOIN employees m ON e.manager_id = m.id;\n\n-- Employees earning more than their manager\nSELECT e.name AS employee, e.salary AS emp_salary,\n    m.name AS manager, m.salary AS mgr_salary\nFROM employees e\nJOIN employees m ON e.manager_id = m.id\nWHERE e.salary > m.salary;\n\n-- Find all direct reports for each manager\nSELECT m.name AS manager,\n    COUNT(e.id) AS direct_reports,\n    ROUND(AVG(e.salary), 2) AS avg_report_salary\nFROM employees e\nJOIN employees m ON e.manager_id = m.id\nGROUP BY m.name\nORDER BY direct_reports DESC;"},
+{name:"Recursive Hierarchies",theory:["Recursive CTEs traverse the full org tree: start at root (manager_id IS NULL) and recurse through children.","Track the level/depth to know how deep each node is in the hierarchy.","Accumulate the path to show the full chain from CEO to any employee."],code:"-- Full org chart with recursive CTE\nWITH RECURSIVE org_tree AS (\n    -- Anchor: top-level (CEO)\n    SELECT id, name, manager_id, 1 AS level,\n        name::TEXT AS path\n    FROM employees\n    WHERE manager_id IS NULL\n\n    UNION ALL\n\n    -- Recurse: find reports of current level\n    SELECT e.id, e.name, e.manager_id,\n        ot.level + 1,\n        ot.path || ' > ' || e.name\n    FROM employees e\n    JOIN org_tree ot ON e.manager_id = ot.id\n)\nSELECT REPEAT('  ', level - 1) || name AS org_chart,\n    level, path\nFROM org_tree\nORDER BY path;\n\n-- Count all subordinates (direct + indirect)\nWITH RECURSIVE subordinates AS (\n    SELECT id, name, manager_id\n    FROM employees\n    WHERE manager_id = 1  -- specific manager\n\n    UNION ALL\n\n    SELECT e.id, e.name, e.manager_id\n    FROM employees e\n    JOIN subordinates s ON e.manager_id = s.id\n)\nSELECT COUNT(*) AS total_subordinates\nFROM subordinates;"},
+{name:"Tree Operations",theory:["Root nodes have manager_id IS NULL; leaf nodes have no employees referencing them as manager.","Finding leaf nodes: LEFT JOIN to find employees with no subordinates (WHERE sub.id IS NULL).","Path enumeration stores the full ancestor path for each node, enabling fast ancestor/descendant queries."],code:"-- Find root nodes (top-level managers)\nSELECT id, name\nFROM employees\nWHERE manager_id IS NULL;\n\n-- Find leaf nodes (no subordinates)\nSELECT e.id, e.name\nFROM employees e\nLEFT JOIN employees sub ON sub.manager_id = e.id\nWHERE sub.id IS NULL;\n\n-- Find depth of the tree\nWITH RECURSIVE tree AS (\n    SELECT id, name, manager_id, 1 AS depth\n    FROM employees WHERE manager_id IS NULL\n    UNION ALL\n    SELECT e.id, e.name, e.manager_id, t.depth + 1\n    FROM employees e\n    JOIN tree t ON e.manager_id = t.id\n)\nSELECT MAX(depth) AS tree_depth FROM tree;\n\n-- Find all ancestors of a specific employee\nWITH RECURSIVE ancestors AS (\n    SELECT id, name, manager_id\n    FROM employees WHERE id = 42\n    UNION ALL\n    SELECT e.id, e.name, e.manager_id\n    FROM employees e\n    JOIN ancestors a ON a.manager_id = e.id\n)\nSELECT * FROM ancestors;"}
+],
+examples:[
+{title:"Employees Earning More Than Their Manager",desc:"Find all employees whose salary exceeds their direct manager's salary.",code:"SELECT e.id, e.name AS employee,\n    e.salary AS emp_salary,\n    m.name AS manager,\n    m.salary AS mgr_salary,\n    e.salary - m.salary AS difference\nFROM employees e\nJOIN employees m ON e.manager_id = m.id\nWHERE e.salary > m.salary\nORDER BY difference DESC;"},
+{title:"Full Org Chart with Levels",desc:"Display the complete organizational hierarchy with indentation showing levels.",code:"WITH RECURSIVE org AS (\n    SELECT id, name, manager_id, 1 AS level,\n        ARRAY[name] AS path_arr\n    FROM employees\n    WHERE manager_id IS NULL\n    UNION ALL\n    SELECT e.id, e.name, e.manager_id,\n        o.level + 1,\n        o.path_arr || e.name\n    FROM employees e\n    JOIN org o ON e.manager_id = o.id\n)\nSELECT\n    REPEAT('    ', level - 1) || name AS org_chart,\n    level,\n    array_to_string(path_arr, ' > ') AS full_path\nFROM org\nORDER BY path_arr;"}
+],
+practice:[
+{q:"Write a self-join to display each employee alongside their manager name.",d:"E"},
+{q:"Find all employees who earn more than their manager.",d:"E"},
+{q:"Count the number of direct reports for each manager.",d:"M"},
+{q:"Use a recursive CTE to display the full org chart with levels.",d:"M"},
+{q:"Find all subordinates (direct and indirect) of a specific manager.",d:"M"},
+{q:"Find leaf nodes (employees with no one reporting to them).",d:"M"},
+{q:"Calculate the total salary cost for each manager including all subordinates.",d:"H"},
+{q:"Find the longest management chain (maximum depth) in the org tree.",d:"H"}
+]},
+
+{id:7,title:"Classic Interview Problems",color:"#fb923c",chips:["Median","Pivot","Anti-Join","Sessionization"],
+subtopics:[
+{name:"Median in SQL",theory:["Median is the middle value when data is sorted; for even counts, average the two middle values.","Percentile approach: use PERCENTILE_CONT(0.5) WITHIN GROUP (ORDER BY column) for exact median.","Row counting approach: find rows where position equals half the count, works on all databases."],code:"-- Median using PERCENTILE_CONT (PostgreSQL, Oracle)\nSELECT PERCENTILE_CONT(0.5) WITHIN GROUP (ORDER BY salary) AS median_salary\nFROM employees;\n\n-- Median per department\nSELECT dept_id,\n    PERCENTILE_CONT(0.5) WITHIN GROUP (ORDER BY salary) AS median_salary\nFROM employees\nGROUP BY dept_id;\n\n-- Median using row counting (universal approach)\nSELECT AVG(salary) AS median_salary\nFROM (\n    SELECT salary,\n        ROW_NUMBER() OVER (ORDER BY salary) AS rn,\n        COUNT(*) OVER () AS cnt\n    FROM employees\n) t\nWHERE rn IN (FLOOR((cnt + 1) / 2.0), CEIL((cnt + 1) / 2.0));"},
+{name:"Pivot Without PIVOT",theory:["Use CASE expressions inside aggregate functions to transform row values into columns.","Each CASE WHEN value THEN metric END becomes one column in the pivoted output.","GROUP BY the row identifier to collapse multiple rows into a single pivoted row."],code:"-- Pivot: monthly revenue by product\nSELECT product_name,\n    SUM(CASE WHEN month = 'Jan' THEN revenue ELSE 0 END) AS jan,\n    SUM(CASE WHEN month = 'Feb' THEN revenue ELSE 0 END) AS feb,\n    SUM(CASE WHEN month = 'Mar' THEN revenue ELSE 0 END) AS mar,\n    SUM(CASE WHEN month = 'Apr' THEN revenue ELSE 0 END) AS apr\nFROM monthly_sales\nGROUP BY product_name;\n\n-- Pivot: department budget allocation\nSELECT dept_name,\n    SUM(CASE WHEN category = 'Salaries' THEN amount ELSE 0 END) AS salaries,\n    SUM(CASE WHEN category = 'Equipment' THEN amount ELSE 0 END) AS equipment,\n    SUM(CASE WHEN category = 'Travel' THEN amount ELSE 0 END) AS travel,\n    SUM(CASE WHEN category = 'Training' THEN amount ELSE 0 END) AS training\nFROM budgets\nGROUP BY dept_name\nORDER BY dept_name;\n\n-- Dynamic-like pivot with boolean flags\nSELECT student_name,\n    MAX(CASE WHEN course = 'Math' THEN grade END) AS math,\n    MAX(CASE WHEN course = 'Science' THEN grade END) AS science,\n    MAX(CASE WHEN course = 'English' THEN grade END) AS english\nFROM enrollments\nGROUP BY student_name;"},
+{name:"Anti-Join Patterns",theory:["Anti-join finds rows in one table with NO matching row in another (the opposite of a regular join).","NOT EXISTS is typically the most efficient anti-join pattern across all database engines.","LEFT JOIN WHERE right.id IS NULL achieves the same result and is often more readable."],code:"-- Customers with no orders (NOT EXISTS)\nSELECT c.customer_id, c.name\nFROM customers c\nWHERE NOT EXISTS (\n    SELECT 1 FROM orders o\n    WHERE o.customer_id = c.customer_id\n);\n\n-- Customers with no orders (LEFT JOIN + IS NULL)\nSELECT c.customer_id, c.name\nFROM customers c\nLEFT JOIN orders o ON c.customer_id = o.customer_id\nWHERE o.order_id IS NULL;\n\n-- Customers with no orders (NOT IN - caution with NULLs)\nSELECT customer_id, name\nFROM customers\nWHERE customer_id NOT IN (\n    SELECT customer_id FROM orders\n    WHERE customer_id IS NOT NULL\n);\n\n-- Products never ordered\nSELECT p.product_id, p.name\nFROM products p\nWHERE NOT EXISTS (\n    SELECT 1 FROM order_items oi\n    WHERE oi.product_id = p.product_id\n);"},
+{name:"Sessionization",theory:["Sessionization groups sequential events into sessions based on time gaps between events.","If the gap between consecutive events exceeds a threshold (e.g., 30 min), a new session starts.","Use LAG to detect gaps, mark boundaries with a flag, then cumulative SUM of flags assigns session IDs."],code:"-- Sessionize user events (30-min inactivity = new session)\nWITH with_gaps AS (\n    SELECT user_id, event_time, event_type,\n        CASE WHEN event_time - LAG(event_time) OVER (\n            PARTITION BY user_id ORDER BY event_time\n        ) > INTERVAL '30 minutes'\n        OR LAG(event_time) OVER (\n            PARTITION BY user_id ORDER BY event_time\n        ) IS NULL\n        THEN 1 ELSE 0 END AS is_new_session\n    FROM user_events\n),\nsessioned AS (\n    SELECT *,\n        SUM(is_new_session) OVER (\n            PARTITION BY user_id ORDER BY event_time\n        ) AS session_id\n    FROM with_gaps\n)\nSELECT user_id, session_id,\n    MIN(event_time) AS session_start,\n    MAX(event_time) AS session_end,\n    COUNT(*) AS events_count,\n    MAX(event_time) - MIN(event_time) AS session_duration\nFROM sessioned\nGROUP BY user_id, session_id\nORDER BY user_id, session_start;"}
+],
+examples:[
+{title:"Calculate Median Salary",desc:"Find the median salary across all employees using two different approaches.",code:"-- Approach 1: PERCENTILE_CONT\nSELECT PERCENTILE_CONT(0.5)\n    WITHIN GROUP (ORDER BY salary) AS median_salary\nFROM employees;\n\n-- Approach 2: Row counting (works on all DBs)\nSELECT AVG(salary) AS median_salary\nFROM (\n    SELECT salary,\n        ROW_NUMBER() OVER (ORDER BY salary) AS rn,\n        COUNT(*) OVER () AS total\n    FROM employees\n) t\nWHERE rn BETWEEN total/2.0 AND total/2.0 + 1;"},
+{title:"Department Budget Pivot Table",desc:"Transform budget rows into a cross-tab with departments as rows and categories as columns.",code:"SELECT d.dept_name,\n    COALESCE(SUM(CASE WHEN b.category = 'Salaries' THEN b.amount END), 0) AS salaries,\n    COALESCE(SUM(CASE WHEN b.category = 'Equipment' THEN b.amount END), 0) AS equipment,\n    COALESCE(SUM(CASE WHEN b.category = 'Travel' THEN b.amount END), 0) AS travel,\n    COALESCE(SUM(CASE WHEN b.category = 'Training' THEN b.amount END), 0) AS training,\n    COALESCE(SUM(b.amount), 0) AS total_budget\nFROM departments d\nLEFT JOIN budgets b ON d.dept_id = b.dept_id\nGROUP BY d.dept_name\nORDER BY total_budget DESC;"},
+{title:"Customers With No Orders",desc:"Find customers who have never placed an order using anti-join patterns.",code:"-- Method 1: NOT EXISTS (recommended)\nSELECT c.customer_id, c.name, c.email\nFROM customers c\nWHERE NOT EXISTS (\n    SELECT 1 FROM orders o\n    WHERE o.customer_id = c.customer_id\n);\n\n-- Method 2: LEFT JOIN + IS NULL\nSELECT c.customer_id, c.name, c.email\nFROM customers c\nLEFT JOIN orders o ON c.customer_id = o.customer_id\nWHERE o.order_id IS NULL;"}
+],
+practice:[
+{q:"Calculate the median salary for the entire company.",d:"E"},
+{q:"Find all customers who have never placed an order using NOT EXISTS.",d:"E"},
+{q:"Find customers with no orders using LEFT JOIN WHERE NULL pattern.",d:"E"},
+{q:"Create a pivot table showing revenue by quarter for each product.",d:"M"},
+{q:"Calculate the median salary per department.",d:"M"},
+{q:"Sessionize web clickstream events with a 30-minute inactivity threshold.",d:"M"},
+{q:"Compare NOT EXISTS vs LEFT JOIN vs NOT IN and explain when each is best.",d:"M"},
+{q:"Find products that were ordered last month but not this month (anti-join).",d:"M"},
+{q:"Calculate median, 25th percentile, and 75th percentile of order values.",d:"H"},
+{q:"Build a complete session analytics report: session count, avg duration, avg events per session.",d:"H"},
+{q:"Create a pivot showing daily active users by day-of-week for each week.",d:"H"},
+{q:"Implement sessionization with variable timeout thresholds based on user segment.",d:"H"}
+]}
+
+];
+
+
+function highlightSQL(code) {
+    let html = code.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+    html = html.replace(/(--.*)/g, '<span style="color:#6b7280">$1</span>');
+    html = html.replace(/('(?:[^'\\]|\\.)*')/g, '<span style="color:#fbbf24">$1</span>');
+    html = html.replace(/\b(\d+\.?\d*)\b/g, '<span style="color:#f472b6">$1</span>');
+    const keywords = ['SELECT','FROM','WHERE','INSERT','INTO','VALUES','UPDATE','SET','DELETE','CREATE','ALTER','DROP','TABLE','INDEX','VIEW','SCHEMA','DATABASE','GRANT','REVOKE','BEGIN','COMMIT','ROLLBACK','SAVEPOINT','JOIN','INNER','LEFT','RIGHT','FULL','OUTER','CROSS','ON','AND','OR','NOT','IN','EXISTS','BETWEEN','LIKE','ILIKE','IS','NULL','AS','CASE','WHEN','THEN','ELSE','END','ORDER','BY','GROUP','HAVING','LIMIT','OFFSET','FETCH','FIRST','ROWS','ONLY','UNION','ALL','INTERSECT','EXCEPT','DISTINCT','ASC','DESC','WITH','RECURSIVE','OVER','PARTITION','WINDOW','PRIMARY','KEY','FOREIGN','REFERENCES','UNIQUE','CHECK','DEFAULT','CONSTRAINT','CASCADE','IF','REPLACE','SERIAL','RETURNS','RETURN','DECLARE','FUNCTION','PROCEDURE','TRIGGER','BEFORE','AFTER','FOR','EACH','ROW','EXECUTE','LATERAL','MATERIALIZED','REFRESH','CONCURRENTLY','TRUNCATE','ADD','COLUMN','RENAME','TO','TYPE','USING','DO','RAISE','EXCEPTION','MERGE','MATCHED','CONFLICT','EXCLUDED','ROLE','USER','PRIVILEGES','USAGE','ENABLE','DISABLE','SECURITY','POLICY','FORCE','TRUE','FALSE','INT','INTEGER','BIGINT','SMALLINT','DECIMAL','NUMERIC','FLOAT','DOUBLE','VARCHAR','CHAR','TEXT','BOOLEAN','DATE','TIME','TIMESTAMP','INTERVAL','JSONB','JSON','ARRAY','ENUM','ANY','SOME','COALESCE','NULLIF','CAST','EXTRACT','YEAR','MONTH','DAY','HOUR','MINUTE','SECOND','NOW','CURRENT_DATE','CURRENT_TIMESTAMP','COUNT','SUM','AVG','MIN','MAX','ROUND','CEIL','FLOOR','ABS','MOD','POWER','SQRT','LENGTH','UPPER','LOWER','TRIM','CONCAT','SUBSTRING','POSITION','LPAD','RPAD','SPLIT_PART','TO_CHAR','TO_DATE','TO_TIMESTAMP','DATE_TRUNC','AGE','GENERATE_SERIES','ROW_NUMBER','RANK','DENSE_RANK','NTILE','LAG','LEAD','FIRST_VALUE','LAST_VALUE','NTH_VALUE','PERCENT_RANK','CUME_DIST','GROUPING','SETS','ROLLUP','CUBE','TOP','ROWNUM','LEVEL','CONNECT','PRIOR','START','UNBOUNDED','PRECEDING','FOLLOWING','CURRENT','RANGE','FILTER','REGEXP_MATCHES','REGEXP_REPLACE','REGEXP_SPLIT_TO_TABLE','UNNEST','ARRAY_AGG','JSON_AGG','JSON_BUILD_OBJECT','JSONB_ARRAY_ELEMENTS','SYSTEM_TIME','PERCENTILE_CONT','WITHIN','TEMP','SOUNDEX'];
+    const kwPattern = new RegExp('\\b(' + keywords.join('|') + ')\\b', 'gi');
+    html = html.replace(kwPattern, '<span style="color:#22d3ee">$1</span>');
+    return html;
+}
+
+
+function getProgress() { try { return JSON.parse(localStorage.getItem(STORAGE_KEY)) || {}; } catch { return {}; } }
+function saveProgress(data) { localStorage.setItem(STORAGE_KEY, JSON.stringify(data)); }
+function getTotalPractice() { return topics.reduce((sum, t) => sum + t.practice.length, 0); }
+function getCompletedCount() { const prog = getProgress(); return Object.values(prog).filter(v => v).length; }
+function updateProgressBar() {
+    const total = getTotalPractice(), done = getCompletedCount();
+    const pct = total > 0 ? (done / total * 100) : 0;
+    document.getElementById('progressFill').style.width = pct + '%';
+    document.getElementById('progressText').textContent = done + ' / ' + total;
+}
+function getTopicProgress(topicId) {
+    const prog = getProgress();
+    const topic = topics.find(t => t.id === topicId);
+    if (!topic) return {done:0,total:0};
+    let done = 0;
+    topic.practice.forEach((_,i) => { if (prog[topicId+'_'+i]) done++; });
+    return {done, total: topic.practice.length};
+}
+function renderRoadmap() {
+    const container = document.getElementById('roadmapContainer');
+    container.innerHTML = '';
+    topics.forEach(topic => {
+        const prog = getTopicProgress(topic.id);
+        const node = document.createElement('div');
+        node.className = 'node';
+        node.onclick = () => showDetail(topic.id);
+        node.innerHTML = `<div class="node-number" style="border-color:${topic.color};color:${topic.color}">${topic.id}</div><div class="node-card"><div class="node-title" style="color:${topic.color}">${topic.title}</div><div class="node-chips">${topic.chips.map(c=>'<span class="chip">'+c+'</span>').join('')}</div><div class="node-progress">${prog.done} / ${prog.total} practice completed</div></div>`;
+        container.appendChild(node);
+    });
+}
+function showDetail(topicId) {
+    currentTopic = topics.find(t => t.id === topicId);
+    if (!currentTopic) return;
+    document.getElementById('roadmapPage').classList.remove('active');
+    document.getElementById('detailPage').classList.add('active');
+    document.getElementById('detailTitle').textContent = currentTopic.title;
+    document.getElementById('detailTitle').style.color = currentTopic.color;
+    document.getElementById('detailSubtitle').textContent = currentTopic.subtopics.map(s=>s.name).join(' \u2022 ');
+    renderTheory(); renderExamples(); renderPractice(); switchTab('theory');
+    window.scrollTo(0,0);
+}
+function showRoadmap() {
+    document.getElementById('detailPage').classList.remove('active');
+    document.getElementById('roadmapPage').classList.add('active');
+    renderRoadmap(); updateProgressBar();
+}
+function switchTab(tab) {
+    document.querySelectorAll('.tab').forEach((t,i) => { t.classList.toggle('active',['theory','examples','practice','solutions'][i]===tab); });
+    document.querySelectorAll('.tab-content').forEach((tc,i) => { tc.classList.toggle('active',['theory','examples','practice','solutions'][i]===tab); });
+    if (tab==='solutions') renderSolutions();
+}
+function renderTheory() {
+    document.getElementById('theoryContent').innerHTML = currentTopic.subtopics.map(sub => `<div class="theory-section"><div class="theory-title">${sub.name}</div>${sub.theory.map(t=>'<p class="theory-point">'+t+'</p>').join('')}<pre class="code-block">${highlightSQL(sub.code)}</pre></div>`).join('');
+}
+function renderExamples() {
+    document.getElementById('examplesContent').innerHTML = currentTopic.examples.map(ex => `<div class="example-card"><div class="example-title">${ex.title}</div><p class="example-desc">${ex.desc}</p><pre class="code-block">${highlightSQL(ex.code)}</pre></div>`).join('');
+}
+
+function renderPractice() {
+    const prog = getProgress();
+    document.getElementById('practiceContent').innerHTML = currentTopic.practice.map((p,i) => {
+        const key = currentTopic.id+'_'+i;
+        const checked = prog[key]?'checked':'';
+        const doneClass = prog[key]?'done':'';
+        const diffClass = p.d==='E'?'easy':p.d==='M'?'medium':'hard';
+        const diffLabel = p.d==='E'?'Easy':p.d==='M'?'Medium':'Hard';
+        return `<div class="practice-item ${doneClass}"><input type="checkbox" ${checked} onchange="togglePractice('${key}',this)"><span class="practice-text">${i+1}. ${p.q}</span><span class="difficulty ${diffClass}">${diffLabel}</span></div>`;
+    }).join('');
+}
+function togglePractice(key, el) {
+    const prog = getProgress(); prog[key] = el.checked; saveProgress(prog);
+    updateProgressBar(); el.parentElement.classList.toggle('done', el.checked);
+}
+function renderSolutions() {
+    document.getElementById('solutionsContent').innerHTML = '<div class="theory-section"><div class="theory-title">Solutions Coming Soon</div><p class="theory-point">Practice solving these problems on your own first. Solutions will be added in a future update.</p></div>';
+}
+renderRoadmap(); updateProgressBar();
+</script>
+</body>
+</html>

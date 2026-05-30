@@ -1,0 +1,358 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SQL Advanced Roadmap</title>
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{--bg:#080c14;--card:#141d2e;--border:#1e2d45;--text:#dde4f0;--text-dim:#8892a4;--green:#4ade80;--cyan:#22d3ee;--purple:#a78bfa;--gradient:linear-gradient(135deg,#4ade80,#22d3ee,#a78bfa)}
+body{font-family:'Sora',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;overflow-x:hidden}
+code,pre,.code{font-family:'JetBrains Mono',monospace}
+.header{position:sticky;top:0;z-index:1000;background:rgba(8,12,20,0.95);backdrop-filter:blur(12px);border-bottom:1px solid var(--border);padding:12px 24px}
+.header-inner{max-width:1200px;margin:0 auto;display:flex;align-items:center;justify-content:space-between}
+.logo{font-size:1.4rem;font-weight:700;background:var(--gradient);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.progress-container{flex:1;max-width:300px;margin-left:24px}
+.progress-label{font-size:0.7rem;color:var(--text-dim);margin-bottom:4px;text-align:right}
+.progress-bar{height:6px;background:var(--border);border-radius:3px;overflow:hidden}
+.progress-fill{height:100%;background:var(--gradient);border-radius:3px;transition:width 0.5s ease}
+</style>
+
+<style>
+.page{display:none;padding:40px 24px 80px;max-width:900px;margin:0 auto;animation:fadeIn 0.3s ease}
+.page.active{display:block}
+@keyframes fadeIn{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
+.roadmap{position:relative;padding-left:60px}
+.roadmap::before{content:'';position:absolute;left:28px;top:0;bottom:0;width:2px;background:linear-gradient(to bottom,var(--green),var(--cyan),var(--purple));opacity:0.4}
+.node{position:relative;margin-bottom:24px;cursor:pointer;transition:transform 0.2s ease}
+.node:hover{transform:translateX(4px)}
+.node-number{position:absolute;left:-48px;top:16px;width:32px;height:32px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:0.8rem;border:2px solid;background:var(--bg)}
+.node-card{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:20px 24px;transition:border-color 0.2s,box-shadow 0.2s}
+.node:hover .node-card{border-color:var(--cyan);box-shadow:0 4px 20px rgba(34,211,238,0.1)}
+.node-title{font-size:1.1rem;font-weight:600;margin-bottom:8px}
+.node-chips{display:flex;flex-wrap:wrap;gap:6px}
+.chip{font-size:0.65rem;padding:3px 8px;border-radius:4px;background:rgba(255,255,255,0.05);border:1px solid var(--border);color:var(--text-dim)}
+.node-progress{font-size:0.7rem;color:var(--text-dim);margin-top:8px}
+.back-btn{display:inline-flex;align-items:center;gap:6px;padding:8px 16px;background:var(--card);border:1px solid var(--border);border-radius:8px;color:var(--text);cursor:pointer;font-family:'Sora',sans-serif;font-size:0.85rem;margin-bottom:24px;transition:border-color 0.2s}
+.back-btn:hover{border-color:var(--cyan)}
+.detail-header{margin-bottom:24px}
+.detail-title{font-size:1.8rem;font-weight:700;margin-bottom:8px}
+.detail-subtitle{font-size:0.85rem;color:var(--text-dim)}
+.tabs{display:flex;gap:4px;margin-bottom:24px;background:var(--card);border-radius:10px;padding:4px;border:1px solid var(--border)}
+.tab{flex:1;padding:10px 16px;text-align:center;border-radius:8px;cursor:pointer;font-size:0.85rem;font-weight:500;color:var(--text-dim);transition:all 0.2s}
+.tab.active{background:var(--border);color:var(--text)}
+.tab:hover:not(.active){color:var(--text)}
+.tab-content{display:none;animation:fadeIn 0.3s ease}
+.tab-content.active{display:block}
+.theory-section{margin-bottom:24px;background:var(--card);border:1px solid var(--border);border-radius:10px;padding:20px}
+.theory-title{font-size:1rem;font-weight:600;margin-bottom:12px;color:var(--cyan)}
+.theory-point{font-size:0.85rem;color:var(--text-dim);margin-bottom:8px;padding-left:16px;position:relative;line-height:1.6}
+.theory-point::before{content:'>';position:absolute;left:0;color:var(--green)}
+pre.code-block{background:rgba(0,0,0,0.4);border:1px solid var(--border);border-radius:8px;padding:16px;margin-top:12px;overflow-x:auto;font-size:0.8rem;line-height:1.6}
+.example-card{background:var(--card);border:1px solid var(--border);border-radius:10px;padding:20px;margin-bottom:16px}
+.example-title{font-size:0.9rem;font-weight:600;margin-bottom:8px;color:var(--purple)}
+.example-desc{font-size:0.82rem;color:var(--text-dim);margin-bottom:12px}
+.practice-item{display:flex;align-items:flex-start;gap:12px;padding:12px 16px;background:var(--card);border:1px solid var(--border);border-radius:8px;margin-bottom:8px;transition:border-color 0.2s}
+.practice-item:hover{border-color:var(--cyan)}
+.practice-item input[type="checkbox"]{width:18px;height:18px;margin-top:2px;accent-color:var(--green);cursor:pointer}
+.practice-item.done{opacity:0.6;border-color:var(--green)}
+.practice-text{flex:1;font-size:0.82rem;line-height:1.5}
+.difficulty{font-size:0.65rem;padding:2px 8px;border-radius:4px;font-weight:600;white-space:nowrap}
+.difficulty.easy{background:rgba(74,222,128,0.15);color:#4ade80}
+.difficulty.medium{background:rgba(251,191,36,0.15);color:#fbbf24}
+.difficulty.hard{background:rgba(244,114,182,0.15);color:#f472b6}
+.solution-item{background:var(--card);border:1px solid var(--border);border-radius:10px;margin-bottom:12px;overflow:hidden}
+.solution-header{padding:12px 16px;display:flex;align-items:center;justify-content:space-between;cursor:pointer}
+.solution-header:hover{background:rgba(34,211,238,0.05)}
+.solution-num{font-size:0.75rem;color:var(--text-dim);font-family:'JetBrains Mono',monospace;margin-right:10px}
+.solution-q{font-size:0.82rem;flex:1}
+.solution-toggle{padding:4px 12px;border-radius:6px;border:1px solid var(--border);background:var(--card);color:var(--cyan);font-size:0.72rem;cursor:pointer;font-family:'Sora',sans-serif;transition:all 0.2s}
+.solution-toggle:hover{background:rgba(34,211,238,0.1);border-color:var(--cyan)}
+.solution-body{display:none;padding:0 16px 16px;border-top:1px solid var(--border)}
+.solution-body.open{display:block}
+@media(max-width:640px){.roadmap{padding-left:40px}.roadmap::before{left:16px}.node-number{left:-32px;width:26px;height:26px;font-size:0.7rem}.header-inner{flex-wrap:wrap;gap:8px}.progress-container{max-width:100%;margin-left:0}}
+</style>
+</head>
+<body>
+<header class="header">
+<div class="header-inner">
+<div class="logo">SQL Advanced</div>
+<div class="progress-container">
+<div class="progress-label"><span id="progressText">0 / 0</span> completed</div>
+<div class="progress-bar"><div class="progress-fill" id="progressFill" style="width:0%"></div></div>
+</div>
+</div>
+</header>
+<div class="page active" id="roadmapPage">
+<div class="roadmap" id="roadmapContainer"></div>
+</div>
+<div class="page" id="detailPage">
+<button class="back-btn" onclick="showRoadmap()">&#8592; Back to Roadmap</button>
+<div class="detail-header">
+<h1 class="detail-title" id="detailTitle"></h1>
+<p class="detail-subtitle" id="detailSubtitle"></p>
+</div>
+<div class="tabs">
+<div class="tab active" onclick="switchTab('theory')">Theory</div>
+<div class="tab" onclick="switchTab('examples')">Examples</div>
+<div class="tab" onclick="switchTab('practice')">Practice</div>
+<div class="tab" onclick="switchTab('solutions')">Solutions</div>
+</div>
+<div class="tab-content active" id="theoryContent"></div>
+<div class="tab-content" id="examplesContent"></div>
+<div class="tab-content" id="practiceContent"></div>
+<div class="tab-content" id="solutionsContent"></div>
+</div>
+
+<script>
+let currentTopic = null;
+const STORAGE_KEY = 'sql_advanced_roadmap_progress';
+
+const topics = [
+{id:1,title:"Window Functions - Ranking",color:"#38bdf8",chips:["ROW_NUMBER","RANK","DENSE_RANK","NTILE","OVER","PARTITION BY"],
+subtopics:[
+{name:"ROW_NUMBER, RANK, DENSE_RANK",theory:["ROW_NUMBER assigns a unique sequential number to each row within its partition.","RANK assigns same rank to ties but leaves gaps (1,2,2,4); DENSE_RANK has no gaps (1,2,2,3).","PARTITION BY divides rows into groups; ORDER BY within OVER determines ranking order."],code:"-- Basic ranking functions\nSELECT name, dept_id, salary,\n    ROW_NUMBER() OVER (ORDER BY salary DESC) AS row_num,\n    RANK() OVER (ORDER BY salary DESC) AS rnk,\n    DENSE_RANK() OVER (ORDER BY salary DESC) AS dense_rnk\nFROM employees;\n\n-- Ranking within partitions (per department)\nSELECT name, dept_id, salary,\n    ROW_NUMBER() OVER (PARTITION BY dept_id ORDER BY salary DESC) AS dept_rank\nFROM employees;\n\n-- Top-N per group\nSELECT * FROM (\n    SELECT name, dept_id, salary,\n        ROW_NUMBER() OVER (PARTITION BY dept_id ORDER BY salary DESC) AS rn\n    FROM employees\n) ranked\nWHERE rn <= 3;"},
+{name:"NTILE",theory:["NTILE(n) divides rows into n approximately equal groups (buckets), numbered 1 to n.","Useful for percentile calculations, quartiles, or distributing work evenly.","If rows don't divide evenly, earlier buckets get one extra row."],code:"-- Divide employees into quartiles by salary\nSELECT name, salary,\n    NTILE(4) OVER (ORDER BY salary) AS quartile\nFROM employees;\n\n-- Create salary percentile buckets\nSELECT name, salary,\n    NTILE(100) OVER (ORDER BY salary) AS percentile\nFROM employees;\n\n-- Distribute orders evenly among 5 workers\nSELECT order_id, customer_id,\n    NTILE(5) OVER (ORDER BY order_id) AS assigned_worker\nFROM pending_orders;"},
+{name:"OVER Clause & Named Windows",theory:["OVER() without arguments applies the function to the entire result set.","OVER(PARTITION BY x ORDER BY y) creates groups and orders within each group.","WINDOW clause names a window definition to reuse across multiple functions."],code:"-- OVER() with no partition = entire table\nSELECT name, salary,\n    salary - AVG(salary) OVER () AS diff_from_avg,\n    ROUND(100.0 * salary / SUM(salary) OVER (), 2) AS pct_of_total\nFROM employees;\n\n-- Named window (reusable)\nSELECT name, dept_id, salary,\n    ROW_NUMBER() OVER w AS rn,\n    RANK() OVER w AS rnk,\n    SUM(salary) OVER w AS running_total\nFROM employees\nWINDOW w AS (PARTITION BY dept_id ORDER BY salary DESC);\n\n-- Multiple different windows\nSELECT name, salary,\n    RANK() OVER (ORDER BY salary DESC) AS company_rank,\n    RANK() OVER (PARTITION BY dept_id ORDER BY salary DESC) AS dept_rank\nFROM employees;"}
+],
+examples:[
+{title:"Top-3 Earners per Department",desc:"Find the 3 highest-paid employees in each department.",code:"WITH ranked AS (\n    SELECT name, dept_id, salary,\n        DENSE_RANK() OVER (\n            PARTITION BY dept_id\n            ORDER BY salary DESC\n        ) AS rnk\n    FROM employees\n)\nSELECT name, dept_id, salary, rnk\nFROM ranked\nWHERE rnk <= 3\nORDER BY dept_id, rnk;"},
+{title:"Percentile Classification",desc:"Classify employees into performance bands using NTILE.",code:"SELECT name, salary,\n    CASE NTILE(4) OVER (ORDER BY salary)\n        WHEN 1 THEN 'Bottom 25%'\n        WHEN 2 THEN '25-50%'\n        WHEN 3 THEN '50-75%'\n        WHEN 4 THEN 'Top 25%'\n    END AS salary_band\nFROM employees\nORDER BY salary;"}
+],
+practice:[
+{q:"Use ROW_NUMBER to assign a sequential number to all employees ordered by hire_date.",d:"E"},
+{q:"Use RANK and DENSE_RANK on the same query and explain the difference in output.",d:"E"},
+{q:"Find the top-2 highest-paid employees in each department using ROW_NUMBER.",d:"M"},
+{q:"Use NTILE(4) to divide all products into price quartiles.",d:"M"},
+{q:"Write a query using named WINDOW to apply the same partition to 3 different functions.",d:"M"},
+{q:"Find the Nth highest salary using DENSE_RANK (make N a parameter).",d:"M"},
+{q:"Find employees whose salary rank within their department differs from their company-wide rank by more than 10.",d:"H"},
+{q:"Use window functions to find the median salary per department.",d:"H"},
+{q:"Identify departments where the top earner makes more than 3x the lowest earner using ranking.",d:"H"},
+{q:"Implement a page-rank style scoring: rank products by sales within category, then overall.",d:"H"}
+]},
+
+{id:2,title:"Window Functions - Aggregates & Frames",color:"#34d399",chips:["SUM OVER","AVG OVER","ROWS BETWEEN","RANGE","Running Totals"],
+subtopics:[
+{name:"Running Totals & Moving Averages",theory:["SUM() OVER (ORDER BY x) creates a running total that accumulates row by row.","The default frame with ORDER BY is RANGE BETWEEN UNBOUNDED PRECEDING AND CURRENT ROW.","Moving averages use ROWS BETWEEN N PRECEDING AND CURRENT ROW for a sliding window."],code:"-- Running total of sales\nSELECT order_date, amount,\n    SUM(amount) OVER (ORDER BY order_date) AS running_total\nFROM orders;\n\n-- Running total per customer\nSELECT customer_id, order_date, amount,\n    SUM(amount) OVER (\n        PARTITION BY customer_id\n        ORDER BY order_date\n    ) AS customer_running_total\nFROM orders;\n\n-- 7-day moving average\nSELECT order_date, daily_revenue,\n    AVG(daily_revenue) OVER (\n        ORDER BY order_date\n        ROWS BETWEEN 6 PRECEDING AND CURRENT ROW\n    ) AS moving_avg_7d\nFROM daily_sales;"},
+{name:"Frame Clauses (ROWS vs RANGE)",theory:["ROWS BETWEEN counts physical rows; RANGE BETWEEN considers logical value ranges.","UNBOUNDED PRECEDING = start of partition; UNBOUNDED FOLLOWING = end of partition.","CURRENT ROW can mean different things: in ROWS it's the literal row; in RANGE it's all peers."],code:"-- Explicit frame: running total\nSELECT name, salary,\n    SUM(salary) OVER (\n        ORDER BY salary\n        ROWS BETWEEN UNBOUNDED PRECEDING AND CURRENT ROW\n    ) AS running_sum\nFROM employees;\n\n-- Last 3 rows (sliding window)\nSELECT order_date, amount,\n    SUM(amount) OVER (\n        ORDER BY order_date\n        ROWS BETWEEN 2 PRECEDING AND CURRENT ROW\n    ) AS sum_last_3\nFROM orders;\n\n-- Full partition aggregate (all rows)\nSELECT name, salary,\n    AVG(salary) OVER (\n        PARTITION BY dept_id\n        ROWS BETWEEN UNBOUNDED PRECEDING AND UNBOUNDED FOLLOWING\n    ) AS dept_avg\nFROM employees;"},
+{name:"LAG, LEAD, FIRST_VALUE, LAST_VALUE",theory:["LAG(col, n, default) accesses n rows before current row; LEAD accesses n rows after.","FIRST_VALUE returns the first value in the window frame; LAST_VALUE returns the last.","For LAST_VALUE to work correctly, set frame to ROWS BETWEEN UNBOUNDED PRECEDING AND UNBOUNDED FOLLOWING."],code:"-- LAG and LEAD: compare with previous/next row\nSELECT order_date, amount,\n    LAG(amount, 1, 0) OVER (ORDER BY order_date) AS prev_amount,\n    LEAD(amount, 1, 0) OVER (ORDER BY order_date) AS next_amount,\n    amount - LAG(amount, 1) OVER (ORDER BY order_date) AS change\nFROM orders;\n\n-- FIRST_VALUE and LAST_VALUE\nSELECT name, dept_id, salary,\n    FIRST_VALUE(name) OVER (\n        PARTITION BY dept_id ORDER BY salary DESC\n    ) AS highest_paid,\n    LAST_VALUE(name) OVER (\n        PARTITION BY dept_id ORDER BY salary DESC\n        ROWS BETWEEN UNBOUNDED PRECEDING AND UNBOUNDED FOLLOWING\n    ) AS lowest_paid\nFROM employees;\n\n-- Percentage change from previous\nSELECT month, revenue,\n    ROUND(100.0 * (revenue - LAG(revenue) OVER (ORDER BY month))\n        / LAG(revenue) OVER (ORDER BY month), 1) AS pct_change\nFROM monthly_revenue;"},
+{name:"NTH_VALUE & PERCENT_RANK",theory:["NTH_VALUE(col, n) returns the nth value in the ordered window frame.","PERCENT_RANK: (rank - 1) / (total_rows - 1); CUME_DIST: fraction of rows <= current.","Both return values between 0 and 1; useful for percentile calculations."],code:"-- NTH_VALUE: get the 2nd highest salary per department\nSELECT name, dept_id, salary,\n    NTH_VALUE(salary, 2) OVER (\n        PARTITION BY dept_id ORDER BY salary DESC\n        ROWS BETWEEN UNBOUNDED PRECEDING AND UNBOUNDED FOLLOWING\n    ) AS second_highest\nFROM employees;\n\n-- PERCENT_RANK and CUME_DIST\nSELECT name, salary,\n    ROUND(PERCENT_RANK() OVER (ORDER BY salary)::NUMERIC, 3) AS pct_rank,\n    ROUND(CUME_DIST() OVER (ORDER BY salary)::NUMERIC, 3) AS cume_dist\nFROM employees;\n\n-- Find employees in top 10% salary\nSELECT * FROM (\n    SELECT name, salary,\n        PERCENT_RANK() OVER (ORDER BY salary DESC) AS pct\n    FROM employees\n) t WHERE pct <= 0.10;"}
+],
+examples:[
+{title:"Month-over-Month Growth",desc:"Calculate revenue growth percentage compared to previous month.",code:"WITH monthly AS (\n    SELECT DATE_TRUNC('month', order_date) AS month,\n           SUM(amount) AS revenue\n    FROM orders\n    GROUP BY 1\n)\nSELECT month,\n    revenue,\n    LAG(revenue) OVER (ORDER BY month) AS prev_month,\n    ROUND(100.0 * (revenue - LAG(revenue) OVER (ORDER BY month))\n        / NULLIF(LAG(revenue) OVER (ORDER BY month), 0), 1) AS growth_pct\nFROM monthly\nORDER BY month;"},
+{title:"Running Balance with Reset",desc:"Calculate running balance that resets each month.",code:"SELECT customer_id, txn_date, amount,\n    SUM(amount) OVER (\n        PARTITION BY customer_id, DATE_TRUNC('month', txn_date)\n        ORDER BY txn_date\n        ROWS BETWEEN UNBOUNDED PRECEDING AND CURRENT ROW\n    ) AS monthly_running_balance\nFROM transactions\nORDER BY customer_id, txn_date;"}
+],
+practice:[
+{q:"Calculate a running total of order amounts ordered by date.",d:"E"},
+{q:"Use LAG to show previous day's sales alongside current day's sales.",d:"E"},
+{q:"Compute each employee's salary as a percentage of their department's total using SUM OVER.",d:"M"},
+{q:"Calculate a 3-row moving average of daily sales.",d:"M"},
+{q:"Use LEAD to find the gap in days between consecutive orders per customer.",d:"M"},
+{q:"Use FIRST_VALUE and LAST_VALUE to show the highest and lowest salary per department.",d:"M"},
+{q:"Calculate month-over-month revenue growth using LAG.",d:"M"},
+{q:"Use PERCENT_RANK to find employees in the top 20% by salary.",d:"H"},
+{q:"Implement a cumulative distribution function for order amounts.",d:"H"},
+{q:"Write a query with ROWS BETWEEN to calculate year-to-date totals that reset each fiscal year.",d:"H"}
+]},
+
+{id:3,title:"CTEs (Common Table Expressions)",color:"#a78bfa",chips:["WITH","Chained CTEs","Readability","Modularity"],
+subtopics:[
+{name:"Basic CTEs",theory:["CTE uses WITH keyword to define a named temporary result set for the main query.","CTEs improve readability by breaking complex queries into logical named steps.","CTEs are not materialized by default (optimizer may inline them); some DBs support MATERIALIZED hint."],code:"-- Basic CTE\nWITH high_earners AS (\n    SELECT name, dept_id, salary\n    FROM employees\n    WHERE salary > 80000\n)\nSELECT dept_id, COUNT(*) AS count, AVG(salary) AS avg_sal\nFROM high_earners\nGROUP BY dept_id;\n\n-- CTE replacing subquery\nWITH dept_stats AS (\n    SELECT dept_id, AVG(salary) AS avg_salary\n    FROM employees\n    GROUP BY dept_id\n)\nSELECT e.name, e.salary, ds.avg_salary,\n       e.salary - ds.avg_salary AS diff\nFROM employees e\nJOIN dept_stats ds ON e.dept_id = ds.dept_id\nWHERE e.salary > ds.avg_salary;"},
+{name:"Chained CTEs",theory:["Multiple CTEs separated by commas; each can reference previously defined CTEs.","Build complex logic step by step: filter → aggregate → join → format.","Chained CTEs make code review easier; each step has a clear purpose."],code:"-- Chained CTEs for complex analysis\nWITH\n-- Step 1: Get monthly revenue\nmonthly_rev AS (\n    SELECT DATE_TRUNC('month', order_date) AS month,\n           SUM(amount) AS revenue\n    FROM orders\n    GROUP BY 1\n),\n-- Step 2: Calculate growth\nwith_growth AS (\n    SELECT month, revenue,\n           LAG(revenue) OVER (ORDER BY month) AS prev_revenue\n    FROM monthly_rev\n),\n-- Step 3: Classify trends\nclassified AS (\n    SELECT *,\n        CASE\n            WHEN revenue > prev_revenue * 1.1 THEN 'Growing'\n            WHEN revenue < prev_revenue * 0.9 THEN 'Declining'\n            ELSE 'Stable'\n        END AS trend\n    FROM with_growth\n)\nSELECT * FROM classified ORDER BY month;"},
+{name:"CTEs vs Subqueries vs Temp Tables",theory:["CTEs: readable, scoped to one statement; best for breaking down complex queries.","Subqueries: inline, sometimes harder to read; optimizer handles same as CTE in most cases.","Temp tables: physically stored, reusable across statements; best for large intermediate results."],code:"-- Approach 1: CTE (most readable)\nWITH top_customers AS (\n    SELECT customer_id, SUM(amount) AS total\n    FROM orders GROUP BY customer_id\n    ORDER BY total DESC LIMIT 10\n)\nSELECT c.name, tc.total\nFROM top_customers tc\nJOIN customers c ON tc.customer_id = c.customer_id;\n\n-- Approach 2: Subquery (inline)\nSELECT c.name, sub.total\nFROM (\n    SELECT customer_id, SUM(amount) AS total\n    FROM orders GROUP BY customer_id\n    ORDER BY total DESC LIMIT 10\n) sub\nJOIN customers c ON sub.customer_id = c.customer_id;\n\n-- Approach 3: Temp table (reusable)\nCREATE TEMP TABLE top_customers AS\nSELECT customer_id, SUM(amount) AS total\nFROM orders GROUP BY customer_id\nORDER BY total DESC LIMIT 10;"}
+],
+examples:[
+{title:"Multi-Step Business Analysis",desc:"Use chained CTEs to build a customer segmentation report.",code:"WITH\ncustomer_orders AS (\n    SELECT customer_id,\n           COUNT(*) AS order_count,\n           SUM(amount) AS total_spent,\n           MAX(order_date) AS last_order\n    FROM orders\n    GROUP BY customer_id\n),\nsegmented AS (\n    SELECT *,\n        CASE\n            WHEN total_spent > 10000 THEN 'VIP'\n            WHEN total_spent > 5000 THEN 'Regular'\n            ELSE 'Occasional'\n        END AS segment,\n        CURRENT_DATE - last_order AS days_inactive\n    FROM customer_orders\n)\nSELECT segment,\n    COUNT(*) AS customers,\n    ROUND(AVG(total_spent), 2) AS avg_spent,\n    ROUND(AVG(days_inactive)) AS avg_days_inactive\nFROM segmented\nGROUP BY segment;"}
+],
+practice:[
+{q:"Rewrite a nested subquery as a CTE for better readability.",d:"E"},
+{q:"Write a CTE that calculates department averages, then join back to find above-average employees.",d:"E"},
+{q:"Chain 3 CTEs: filter data → aggregate → format output.",d:"M"},
+{q:"Use a CTE with window functions to rank and then filter results.",d:"M"},
+{q:"Write a CTE-based query to compare current month vs previous month metrics.",d:"M"},
+{q:"Create a multi-CTE query that performs customer RFM (Recency, Frequency, Monetary) segmentation.",d:"H"},
+{q:"Write a CTE that references itself (recursive) to generate a number sequence 1-100.",d:"H"},
+{q:"Compare execution plans of a CTE vs equivalent subquery and document differences.",d:"H"}
+]},
+
+{id:4,title:"Recursive CTEs",color:"#fbbf24",chips:["WITH RECURSIVE","Hierarchies","Graphs","Sequences"],
+subtopics:[
+{name:"Recursive CTE Basics",theory:["WITH RECURSIVE defines a CTE that references itself; has anchor + recursive members joined by UNION ALL.","Anchor member: the base case (non-recursive SELECT); recursive member: references the CTE itself.","Terminates when the recursive member returns no rows; use LIMIT or depth check to prevent infinite loops."],code:"-- Generate sequence 1-10\nWITH RECURSIVE nums AS (\n    SELECT 1 AS n          -- anchor\n    UNION ALL\n    SELECT n + 1 FROM nums -- recursive\n    WHERE n < 10           -- termination\n)\nSELECT n FROM nums;\n\n-- Generate date series\nWITH RECURSIVE dates AS (\n    SELECT DATE '2024-01-01' AS d\n    UNION ALL\n    SELECT d + INTERVAL '1 day'\n    FROM dates\n    WHERE d < '2024-01-31'\n)\nSELECT d FROM dates;\n\n-- Fibonacci sequence\nWITH RECURSIVE fib AS (\n    SELECT 1 AS n, 0 AS a, 1 AS b\n    UNION ALL\n    SELECT n+1, b, a+b FROM fib WHERE n < 20\n)\nSELECT n, a AS fibonacci FROM fib;"},
+{name:"Hierarchical Queries (Trees)",theory:["Employee-manager hierarchies are classic tree structures modeled with self-referencing FK.","Recursive CTE traverses from root (WHERE manager_id IS NULL) down through children.","Track depth/level and path for display; concatenate names to show full hierarchy path."],code:"-- Employee hierarchy (org chart)\nWITH RECURSIVE org_tree AS (\n    -- Anchor: top-level managers\n    SELECT emp_id, name, manager_id, 1 AS level,\n           name::TEXT AS path\n    FROM employees\n    WHERE manager_id IS NULL\n\n    UNION ALL\n\n    -- Recursive: get reports\n    SELECT e.emp_id, e.name, e.manager_id, ot.level + 1,\n           ot.path || ' > ' || e.name\n    FROM employees e\n    JOIN org_tree ot ON e.manager_id = ot.emp_id\n)\nSELECT REPEAT('  ', level-1) || name AS org_chart,\n       level, path\nFROM org_tree\nORDER BY path;"},
+{name:"Graph Traversal",theory:["Recursive CTEs can traverse graph structures like routes, networks, or dependencies.","Track visited nodes to prevent cycles; use array or string accumulation.","CYCLE detection (SQL:2016) or manual path-checking prevents infinite loops in cyclic graphs."],code:"-- Find all routes between cities\nWITH RECURSIVE routes AS (\n    SELECT start_city, end_city, distance,\n           ARRAY[start_city] AS visited,\n           start_city || ' -> ' || end_city AS path\n    FROM flights\n    WHERE start_city = 'NYC'\n\n    UNION ALL\n\n    SELECT r.start_city, f.end_city,\n           r.distance + f.distance,\n           r.visited || f.end_city,\n           r.path || ' -> ' || f.end_city\n    FROM routes r\n    JOIN flights f ON r.end_city = f.start_city\n    WHERE NOT f.end_city = ANY(r.visited)  -- prevent cycles\n      AND array_length(r.visited, 1) < 5   -- max hops\n)\nSELECT path, distance\nFROM routes\nWHERE end_city = 'LAX'\nORDER BY distance;"}
+],
+examples:[
+{title:"Bill of Materials (BOM) Explosion",desc:"Expand a product's component tree to all levels.",code:"WITH RECURSIVE bom AS (\n    SELECT component_id, parent_id, quantity, 1 AS level\n    FROM components\n    WHERE parent_id = 'PROD-001'  -- top-level product\n\n    UNION ALL\n\n    SELECT c.component_id, c.parent_id,\n           c.quantity * bom.quantity AS total_qty,\n           bom.level + 1\n    FROM components c\n    JOIN bom ON c.parent_id = bom.component_id\n    WHERE bom.level < 10\n)\nSELECT component_id, SUM(quantity) AS total_needed, MAX(level) AS depth\nFROM bom\nGROUP BY component_id\nORDER BY total_needed DESC;"},
+{title:"Category Breadcrumbs",desc:"Generate full category paths for a nested category tree.",code:"WITH RECURSIVE cat_tree AS (\n    SELECT id, name, parent_id,\n           name::TEXT AS breadcrumb\n    FROM categories\n    WHERE parent_id IS NULL\n\n    UNION ALL\n\n    SELECT c.id, c.name, c.parent_id,\n           ct.breadcrumb || ' / ' || c.name\n    FROM categories c\n    JOIN cat_tree ct ON c.parent_id = ct.id\n)\nSELECT id, breadcrumb FROM cat_tree\nORDER BY breadcrumb;"}
+],
+practice:[
+{q:"Write a recursive CTE to generate numbers 1 through 50.",d:"E"},
+{q:"Use recursive CTE to generate all dates in the current month.",d:"E"},
+{q:"Traverse an employee-manager hierarchy and display the org chart with indentation.",d:"M"},
+{q:"Calculate the total depth of each node in a category tree.",d:"M"},
+{q:"Find all subordinates (direct and indirect) for a given manager.",d:"M"},
+{q:"Build a breadcrumb path for each category in a nested category table.",d:"M"},
+{q:"Implement shortest path between two nodes in a graph using recursive CTE.",d:"H"},
+{q:"Write a recursive CTE with cycle detection for a graph with potential loops.",d:"H"},
+{q:"Expand a bill of materials (BOM) and calculate total component quantities.",d:"H"},
+{q:"Generate a Fibonacci sequence up to N terms using recursive CTE.",d:"H"}
+]},
+
+{id:5,title:"PIVOT, UNPIVOT & JSON",color:"#f472b6",chips:["PIVOT","UNPIVOT","CROSSTAB","JSON","JSONB"],
+subtopics:[
+{name:"PIVOT with CASE (Cross-tab)",theory:["PIVOT transforms rows into columns; not all DBs support PIVOT keyword directly.","Universal approach: use CASE inside aggregate functions to create columns from row values.","FILTER clause (PostgreSQL) is a cleaner alternative to CASE for conditional aggregation."],code:"-- Pivot using CASE (works everywhere)\nSELECT dept_id,\n    COUNT(CASE WHEN status = 'active' THEN 1 END) AS active,\n    COUNT(CASE WHEN status = 'inactive' THEN 1 END) AS inactive,\n    COUNT(CASE WHEN status = 'on_leave' THEN 1 END) AS on_leave\nFROM employees\nGROUP BY dept_id;\n\n-- Monthly pivot: sales by month\nSELECT product_id,\n    SUM(CASE WHEN EXTRACT(MONTH FROM sale_date) = 1 THEN amount ELSE 0 END) AS jan,\n    SUM(CASE WHEN EXTRACT(MONTH FROM sale_date) = 2 THEN amount ELSE 0 END) AS feb,\n    SUM(CASE WHEN EXTRACT(MONTH FROM sale_date) = 3 THEN amount ELSE 0 END) AS mar\nFROM sales\nGROUP BY product_id;\n\n-- PostgreSQL FILTER clause\nSELECT dept_id,\n    COUNT(*) FILTER (WHERE status = 'active') AS active,\n    COUNT(*) FILTER (WHERE status = 'inactive') AS inactive\nFROM employees\nGROUP BY dept_id;"},
+{name:"UNPIVOT (Columns to Rows)",theory:["UNPIVOT transforms columns back into rows; reverse of PIVOT operation.","Use LATERAL JOIN with VALUES to unpivot in PostgreSQL; CROSS APPLY in SQL Server.","UNION ALL approach works in all databases but is more verbose."],code:"-- UNPIVOT with LATERAL (PostgreSQL)\nSELECT student_id, subject, score\nFROM student_scores s,\nLATERAL (\n    VALUES ('Math', s.math),\n           ('Science', s.science),\n           ('English', s.english)\n) AS t(subject, score);\n\n-- UNPIVOT with UNION ALL (universal)\nSELECT student_id, 'Math' AS subject, math AS score FROM student_scores\nUNION ALL\nSELECT student_id, 'Science', science FROM student_scores\nUNION ALL\nSELECT student_id, 'English', english FROM student_scores\nORDER BY student_id, subject;\n\n-- SQL Server UNPIVOT\nSELECT student_id, subject, score\nFROM student_scores\nUNPIVOT (score FOR subject IN (math, science, english)) AS u;"},
+{name:"JSON Querying",theory:["->  returns JSON object at key; ->> returns text value at key.","JSONB supports indexing, containment (@>), and existence (?) operators for fast queries.","JSON_AGG / JSON_BUILD_OBJECT construct JSON from relational data."],code:"-- Query JSON fields\nSELECT\n    data->>'name' AS name,\n    data->>'email' AS email,\n    (data->'address'->>'city') AS city,\n    (data->'scores'->>0)::INT AS first_score\nFROM user_profiles;\n\n-- Filter by JSON content\nSELECT * FROM events\nWHERE payload @> '{\"type\": \"purchase\"}';\n\n-- Check key existence\nSELECT * FROM events\nWHERE payload ? 'error_code';\n\n-- Build JSON from relational data\nSELECT JSON_BUILD_OBJECT(\n    'employee', name,\n    'department', dept_name,\n    'salary', salary\n) AS json_record\nFROM employees e\nJOIN departments d ON e.dept_id = d.dept_id;"},
+{name:"JSON_TABLE & Aggregation",theory:["JSON_TABLE (SQL:2016) expands JSON arrays into relational rows with column definitions.","JSON_AGG aggregates rows into a JSON array; JSON_OBJECT_AGG creates key-value JSON.","JSONB_EACH / JSONB_ARRAY_ELEMENTS expand JSON into set of records."],code:"-- Expand JSON array to rows (PostgreSQL)\nSELECT order_id, item.*\nFROM orders,\nLATERAL JSONB_ARRAY_ELEMENTS(items) WITH ORDINALITY AS item(val, idx);\n\n-- Aggregate to JSON\nSELECT dept_id,\n    JSON_AGG(name ORDER BY salary DESC) AS employees,\n    JSON_AGG(salary ORDER BY salary DESC) AS salaries\nFROM employees\nGROUP BY dept_id;\n\n-- JSON_TABLE (SQL Standard / MySQL 8+)\nSELECT jt.*\nFROM orders,\nJSON_TABLE(items, '$[*]' COLUMNS (\n    product_name VARCHAR(100) PATH '$.name',\n    quantity INT PATH '$.qty',\n    price DECIMAL(10,2) PATH '$.price'\n)) AS jt;"}
+],
+examples:[
+{title:"Dynamic Pivot Report",desc:"Create a quarterly sales pivot table.",code:"WITH quarterly AS (\n    SELECT product_name,\n        EXTRACT(QUARTER FROM sale_date) AS q,\n        SUM(amount) AS total\n    FROM sales\n    WHERE sale_date >= '2024-01-01'\n    GROUP BY product_name, EXTRACT(QUARTER FROM sale_date)\n)\nSELECT product_name,\n    COALESCE(SUM(CASE WHEN q=1 THEN total END), 0) AS Q1,\n    COALESCE(SUM(CASE WHEN q=2 THEN total END), 0) AS Q2,\n    COALESCE(SUM(CASE WHEN q=3 THEN total END), 0) AS Q3,\n    COALESCE(SUM(CASE WHEN q=4 THEN total END), 0) AS Q4\nFROM quarterly\nGROUP BY product_name\nORDER BY product_name;"},
+{title:"JSON API Response Builder",desc:"Build nested JSON responses from relational tables.",code:"SELECT JSON_BUILD_OBJECT(\n    'departments', (\n        SELECT JSON_AGG(dept_json)\n        FROM (\n            SELECT JSON_BUILD_OBJECT(\n                'name', d.dept_name,\n                'budget', d.budget,\n                'employees', (\n                    SELECT JSON_AGG(JSON_BUILD_OBJECT('name', e.name, 'salary', e.salary))\n                    FROM employees e WHERE e.dept_id = d.dept_id\n                )\n            ) AS dept_json\n            FROM departments d\n        ) sub\n    )\n) AS api_response;"}
+],
+practice:[
+{q:"Pivot employee counts by status (active/inactive) for each department using CASE.",d:"E"},
+{q:"Create a monthly revenue pivot table showing months as columns.",d:"M"},
+{q:"Unpivot a table with columns Q1, Q2, Q3, Q4 into rows with quarter and value.",d:"M"},
+{q:"Query a JSONB column to extract nested fields and filter by JSON content.",d:"M"},
+{q:"Use JSON_AGG to build a JSON array of employees grouped by department.",d:"M"},
+{q:"Use JSONB_ARRAY_ELEMENTS to expand a JSON array into individual rows.",d:"H"},
+{q:"Build a complete nested JSON API response from multiple joined tables.",d:"H"},
+{q:"Write a dynamic pivot query for an unknown number of categories.",d:"H"}
+]},
+
+{id:6,title:"Gaps, Islands & Pattern Matching",color:"#22d3ee",chips:["Gaps","Islands","Consecutive","Sequences","MATCH_RECOGNIZE"],
+subtopics:[
+{name:"Gaps in Sequences",theory:["Gaps are missing values in a sequence (missing dates, skipped IDs).","Use LAG/LEAD to compare consecutive rows and find where differences exceed 1.","Generate a complete series and LEFT JOIN to find missing values."],code:"-- Find gaps in ID sequence\nSELECT id + 1 AS gap_start,\n       next_id - 1 AS gap_end\nFROM (\n    SELECT id, LEAD(id) OVER (ORDER BY id) AS next_id\n    FROM sequence_table\n) t\nWHERE next_id - id > 1;\n\n-- Find missing dates\nWITH all_dates AS (\n    SELECT generate_series(\n        (SELECT MIN(log_date) FROM daily_logs),\n        (SELECT MAX(log_date) FROM daily_logs),\n        '1 day'::INTERVAL\n    )::DATE AS d\n)\nSELECT ad.d AS missing_date\nFROM all_dates ad\nLEFT JOIN daily_logs dl ON ad.d = dl.log_date\nWHERE dl.log_date IS NULL;"},
+{name:"Islands (Consecutive Groups)",theory:["Islands are groups of consecutive rows sharing a property (consecutive active days, streaks).","Classic technique: row_number difference (ROW_NUMBER partitioned vs overall creates a group ID).","When the difference between two row numbers is constant, rows belong to the same island."],code:"-- Find islands of consecutive dates\nWITH numbered AS (\n    SELECT log_date, status,\n        log_date - (ROW_NUMBER() OVER (ORDER BY log_date))::INT AS grp\n    FROM daily_status\n    WHERE status = 'active'\n)\nSELECT MIN(log_date) AS island_start,\n       MAX(log_date) AS island_end,\n       COUNT(*) AS consecutive_days\nFROM numbered\nGROUP BY grp\nORDER BY island_start;\n\n-- Islands with value grouping\nWITH marked AS (\n    SELECT *,\n        ROW_NUMBER() OVER (ORDER BY id) -\n        ROW_NUMBER() OVER (PARTITION BY status ORDER BY id) AS grp\n    FROM events\n)\nSELECT status, MIN(id) AS start_id, MAX(id) AS end_id, COUNT(*) AS length\nFROM marked\nGROUP BY status, grp\nORDER BY start_id;"},
+{name:"Streaks & Consecutive Numbers",theory:["Streaks = longest island; find max consecutive wins, login days, etc.","Use the island technique + ranking to find the longest consecutive group.","Practical uses: user engagement streaks, equipment uptime, stock price trends."],code:"-- Longest winning streak per team\nWITH games_marked AS (\n    SELECT team, game_date, result,\n        ROW_NUMBER() OVER (PARTITION BY team ORDER BY game_date) -\n        ROW_NUMBER() OVER (PARTITION BY team, result ORDER BY game_date) AS streak_grp\n    FROM game_results\n    WHERE result = 'win'\n)\nSELECT team,\n    MAX(streak_length) AS longest_win_streak\nFROM (\n    SELECT team, streak_grp, COUNT(*) AS streak_length\n    FROM games_marked\n    GROUP BY team, streak_grp\n) streaks\nGROUP BY team;\n\n-- Find consecutive numbers in a table\nWITH grouped AS (\n    SELECT num,\n        num - ROW_NUMBER() OVER (ORDER BY num) AS grp\n    FROM numbers_table\n)\nSELECT MIN(num) AS start_num, MAX(num) AS end_num, COUNT(*) AS length\nFROM grouped\nGROUP BY grp\nHAVING COUNT(*) >= 3  -- at least 3 consecutive\nORDER BY start_num;"},
+{name:"Sessionization",theory:["Sessionization groups events into sessions based on time gaps (e.g., 30 min inactivity = new session).","Use LAG to detect time gaps, then SUM of boundary flags to assign session IDs.","Common in web analytics, user behavior analysis, and event stream processing."],code:"-- Sessionize user events (30 min gap = new session)\nWITH with_gaps AS (\n    SELECT user_id, event_time, event_type,\n        CASE WHEN event_time - LAG(event_time) OVER (\n            PARTITION BY user_id ORDER BY event_time\n        ) > INTERVAL '30 minutes' THEN 1 ELSE 0 END AS new_session\n    FROM user_events\n),\nwith_session_id AS (\n    SELECT *,\n        SUM(new_session) OVER (\n            PARTITION BY user_id ORDER BY event_time\n        ) + 1 AS session_id\n    FROM with_gaps\n)\nSELECT user_id, session_id,\n    MIN(event_time) AS session_start,\n    MAX(event_time) AS session_end,\n    COUNT(*) AS events_in_session,\n    MAX(event_time) - MIN(event_time) AS session_duration\nFROM with_session_id\nGROUP BY user_id, session_id\nORDER BY user_id, session_start;"}
+],
+examples:[
+{title:"User Login Streaks",desc:"Find each user's longest consecutive login streak.",code:"WITH login_islands AS (\n    SELECT user_id, login_date,\n        login_date - (ROW_NUMBER() OVER (\n            PARTITION BY user_id ORDER BY login_date\n        ))::INT AS grp\n    FROM (SELECT DISTINCT user_id, login_date::DATE AS login_date FROM logins) t\n),\nstreaks AS (\n    SELECT user_id, grp,\n        COUNT(*) AS streak_days,\n        MIN(login_date) AS streak_start,\n        MAX(login_date) AS streak_end\n    FROM login_islands\n    GROUP BY user_id, grp\n)\nSELECT user_id,\n    MAX(streak_days) AS longest_streak,\n    FIRST_VALUE(streak_start) OVER (\n        PARTITION BY user_id ORDER BY streak_days DESC\n    ) AS best_streak_start\nFROM streaks\nGROUP BY user_id;"}
+],
+practice:[
+{q:"Find gaps in a sequence of IDs (e.g., 1,2,4,5,8 → gaps at 3, 6-7).",d:"E"},
+{q:"Find missing dates in a daily log table.",d:"M"},
+{q:"Identify consecutive groups (islands) of the same status in an event table.",d:"M"},
+{q:"Find the longest streak of consecutive days a user logged in.",d:"M"},
+{q:"Sessionize user clickstream data with a 30-minute inactivity timeout.",d:"M"},
+{q:"Find all sequences of 3+ consecutive numbers in a table.",d:"H"},
+{q:"Calculate the longest uptime streak for each server from a status log.",d:"H"},
+{q:"Identify price increase streaks in stock data (consecutive days of gains).",d:"H"}
+]},
+
+{id:7,title:"Advanced Techniques",color:"#fb923c",chips:["Regex","Temporal Tables","Arrays","LATERAL","GROUPING"],
+subtopics:[
+{name:"Regular Expressions in SQL",theory:["~ (POSIX regex match), ~* (case-insensitive), REGEXP_MATCHES, REGEXP_REPLACE.","SIMILAR TO is SQL standard regex (limited); most use POSIX operators or REGEXP.","REGEXP_SPLIT_TO_TABLE / REGEXP_SPLIT_TO_ARRAY split strings by pattern."],code:"-- Pattern matching with regex\nSELECT * FROM employees\nWHERE email ~ '^[a-z]+\\.[a-z]+@company\\.com$';\n\n-- Extract parts\nSELECT\n    REGEXP_MATCHES(url, '(https?)://([^/]+)(.*)', 'g') AS parts\nFROM web_logs;\n\n-- Replace patterns\nSELECT REGEXP_REPLACE(phone, '[^0-9]', '', 'g') AS clean_phone\nFROM contacts;\n\n-- Split by regex\nSELECT REGEXP_SPLIT_TO_TABLE('one,two;;three', '[,;]+') AS word;\n\n-- Validate email format\nSELECT email,\n    email ~ '^[\\w.+-]+@[\\w-]+\\.[a-zA-Z]{2,}$' AS is_valid\nFROM users;"},
+{name:"Array Operations",theory:["PostgreSQL arrays: INT[], TEXT[]; created with ARRAY[] or '{}' literal syntax.","ANY/ALL compare a value against all elements; @> contains, && overlap operators.","UNNEST expands array to rows; ARRAY_AGG collapses rows to array."],code:"-- Array creation and access\nSELECT ARRAY[1,2,3,4,5] AS nums;\nSELECT tags[1] AS first_tag FROM articles; -- 1-indexed!\n\n-- Filter by array content\nSELECT * FROM articles\nWHERE 'sql' = ANY(tags);  -- has 'sql' tag\n\nSELECT * FROM articles\nWHERE tags @> ARRAY['sql', 'advanced']; -- has both\n\nSELECT * FROM articles\nWHERE tags && ARRAY['python', 'javascript']; -- has any\n\n-- Expand array to rows\nSELECT article_id, UNNEST(tags) AS tag\nFROM articles;\n\n-- Aggregate to array\nSELECT dept_id, ARRAY_AGG(name ORDER BY name) AS members\nFROM employees\nGROUP BY dept_id;"},
+{name:"LATERAL Joins",theory:["LATERAL allows a subquery in FROM to reference columns from preceding FROM items.","Like a correlated subquery but in the FROM clause; can return multiple rows/columns.","Essential for top-N per group, table-valued function calls, and JSON expansion."],code:"-- Top-3 orders per customer\nSELECT c.name, recent.*\nFROM customers c\nCROSS JOIN LATERAL (\n    SELECT order_id, amount, order_date\n    FROM orders o\n    WHERE o.customer_id = c.customer_id\n    ORDER BY order_date DESC\n    LIMIT 3\n) recent;\n\n-- Running calculations\nSELECT e.name, e.salary, stats.*\nFROM employees e\nCROSS JOIN LATERAL (\n    SELECT AVG(salary) AS dept_avg,\n           MAX(salary) AS dept_max,\n           COUNT(*) AS dept_size\n    FROM employees\n    WHERE dept_id = e.dept_id\n) stats;\n\n-- Expand JSONB arrays\nSELECT o.order_id, item.*\nFROM orders o,\nLATERAL JSONB_ARRAY_ELEMENTS(o.items) AS item(val);"},
+{name:"Temporal / System-Versioned Tables",theory:["System-versioned tables automatically track historical versions of each row.","SQL:2011 standard; supported in SQL Server, MariaDB, PostgreSQL (via extensions).","Query historical state with FOR SYSTEM_TIME AS OF, BETWEEN, or FROM...TO."],code:"-- Create system-versioned table (SQL Server syntax)\nCREATE TABLE products (\n    product_id INT PRIMARY KEY,\n    name VARCHAR(100),\n    price DECIMAL(10,2),\n    valid_from DATETIME2 GENERATED ALWAYS AS ROW START,\n    valid_to DATETIME2 GENERATED ALWAYS AS ROW END,\n    PERIOD FOR SYSTEM_TIME (valid_from, valid_to)\n) WITH (SYSTEM_VERSIONING = ON);\n\n-- Query current data (normal)\nSELECT * FROM products;\n\n-- Query point-in-time\nSELECT * FROM products\nFOR SYSTEM_TIME AS OF '2024-01-15 10:00:00';\n\n-- Query change history\nSELECT * FROM products\nFOR SYSTEM_TIME BETWEEN '2024-01-01' AND '2024-06-01'\nWHERE product_id = 42\nORDER BY valid_from;"}
+],
+examples:[
+{title:"Tag Analytics with Arrays",desc:"Analyze article tags stored as PostgreSQL arrays.",code:"-- Most popular tags\nSELECT tag, COUNT(*) AS article_count\nFROM articles, UNNEST(tags) AS tag\nGROUP BY tag\nORDER BY article_count DESC\nLIMIT 10;\n\n-- Find articles with overlapping tags\nSELECT a1.title, a2.title,\n    a1.tags & a2.tags AS shared_tags  -- array intersection\nFROM articles a1\nJOIN articles a2 ON a1.id < a2.id\nWHERE a1.tags && a2.tags;  -- overlap operator"}
+],
+practice:[
+{q:"Use regex to find all emails matching a specific domain pattern.",d:"E"},
+{q:"Use UNNEST to expand an array column into individual rows.",d:"E"},
+{q:"Write a LATERAL join to get the latest 2 orders per customer.",d:"M"},
+{q:"Use ARRAY_AGG to collect employee names into an array per department.",d:"M"},
+{q:"Use regex to extract and clean phone numbers from free-text fields.",d:"M"},
+{q:"Filter rows where an array column contains specific elements using ANY and @>.",d:"M"},
+{q:"Query a system-versioned table to see the state of data at a specific past timestamp.",d:"H"},
+{q:"Use LATERAL with generate_series to create a time-bucketed report.",d:"H"}
+]},
+];
+
+
+function highlightSQL(code) {
+    let html = code.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+    html = html.replace(/(--.*)/g, '<span style="color:#6b7280">$1</span>');
+    html = html.replace(/('(?:[^'\\]|\\.)*')/g, '<span style="color:#fbbf24">$1</span>');
+    html = html.replace(/\b(\d+\.?\d*)\b/g, '<span style="color:#f472b6">$1</span>');
+    const keywords = ['SELECT','FROM','WHERE','INSERT','INTO','VALUES','UPDATE','SET','DELETE','CREATE','ALTER','DROP','TABLE','INDEX','VIEW','SCHEMA','DATABASE','GRANT','REVOKE','BEGIN','COMMIT','ROLLBACK','SAVEPOINT','JOIN','INNER','LEFT','RIGHT','FULL','OUTER','CROSS','ON','AND','OR','NOT','IN','EXISTS','BETWEEN','LIKE','ILIKE','IS','NULL','AS','CASE','WHEN','THEN','ELSE','END','ORDER','BY','GROUP','HAVING','LIMIT','OFFSET','FETCH','FIRST','ROWS','ONLY','UNION','ALL','INTERSECT','EXCEPT','DISTINCT','ASC','DESC','WITH','RECURSIVE','OVER','PARTITION','WINDOW','PRIMARY','KEY','FOREIGN','REFERENCES','UNIQUE','CHECK','DEFAULT','CONSTRAINT','CASCADE','IF','REPLACE','SERIAL','RETURNS','RETURN','DECLARE','FUNCTION','PROCEDURE','TRIGGER','BEFORE','AFTER','FOR','EACH','ROW','EXECUTE','LATERAL','MATERIALIZED','REFRESH','CONCURRENTLY','TRUNCATE','ADD','COLUMN','RENAME','TO','TYPE','USING','DO','RAISE','EXCEPTION','MERGE','MATCHED','CONFLICT','EXCLUDED','ROLE','USER','PRIVILEGES','USAGE','ENABLE','DISABLE','SECURITY','POLICY','FORCE','TRUE','FALSE','INT','INTEGER','BIGINT','SMALLINT','DECIMAL','NUMERIC','FLOAT','DOUBLE','VARCHAR','CHAR','TEXT','BOOLEAN','DATE','TIME','TIMESTAMP','INTERVAL','JSONB','JSON','ARRAY','ENUM','ANY','SOME','COALESCE','NULLIF','CAST','EXTRACT','YEAR','MONTH','DAY','HOUR','MINUTE','SECOND','NOW','CURRENT_DATE','CURRENT_TIMESTAMP','COUNT','SUM','AVG','MIN','MAX','ROUND','CEIL','FLOOR','ABS','MOD','POWER','SQRT','LENGTH','UPPER','LOWER','TRIM','CONCAT','SUBSTRING','POSITION','LPAD','RPAD','SPLIT_PART','TO_CHAR','TO_DATE','TO_TIMESTAMP','DATE_TRUNC','AGE','GENERATE_SERIES','ROW_NUMBER','RANK','DENSE_RANK','NTILE','LAG','LEAD','FIRST_VALUE','LAST_VALUE','NTH_VALUE','PERCENT_RANK','CUME_DIST','GROUPING','SETS','ROLLUP','CUBE','TOP','ROWNUM','LEVEL','CONNECT','PRIOR','START','UNBOUNDED','PRECEDING','FOLLOWING','CURRENT','RANGE','FILTER','REGEXP_MATCHES','REGEXP_REPLACE','REGEXP_SPLIT_TO_TABLE','UNNEST','ARRAY_AGG','JSON_AGG','JSON_BUILD_OBJECT','JSONB_ARRAY_ELEMENTS','SYSTEM_TIME'];
+    const kwPattern = new RegExp('\\b(' + keywords.join('|') + ')\\b', 'gi');
+    html = html.replace(kwPattern, '<span style="color:#22d3ee">$1</span>');
+    return html;
+}
+
+function getProgress() { try { return JSON.parse(localStorage.getItem(STORAGE_KEY)) || {}; } catch { return {}; } }
+function saveProgress(data) { localStorage.setItem(STORAGE_KEY, JSON.stringify(data)); }
+function getTotalPractice() { return topics.reduce((sum, t) => sum + t.practice.length, 0); }
+function getCompletedCount() { const prog = getProgress(); return Object.values(prog).filter(v => v).length; }
+function updateProgressBar() {
+    const total = getTotalPractice(), done = getCompletedCount();
+    const pct = total > 0 ? (done / total * 100) : 0;
+    document.getElementById('progressFill').style.width = pct + '%';
+    document.getElementById('progressText').textContent = done + ' / ' + total;
+}
+function getTopicProgress(topicId) {
+    const prog = getProgress();
+    const topic = topics.find(t => t.id === topicId);
+    if (!topic) return {done:0,total:0};
+    let done = 0;
+    topic.practice.forEach((_,i) => { if (prog[topicId+'_'+i]) done++; });
+    return {done, total: topic.practice.length};
+}
+function renderRoadmap() {
+    const container = document.getElementById('roadmapContainer');
+    container.innerHTML = '';
+    topics.forEach(topic => {
+        const prog = getTopicProgress(topic.id);
+        const node = document.createElement('div');
+        node.className = 'node';
+        node.onclick = () => showDetail(topic.id);
+        node.innerHTML = `<div class="node-number" style="border-color:${topic.color};color:${topic.color}">${topic.id}</div><div class="node-card"><div class="node-title" style="color:${topic.color}">${topic.title}</div><div class="node-chips">${topic.chips.map(c=>'<span class="chip">'+c+'</span>').join('')}</div><div class="node-progress">${prog.done} / ${prog.total} practice completed</div></div>`;
+        container.appendChild(node);
+    });
+}
+function showDetail(topicId) {
+    currentTopic = topics.find(t => t.id === topicId);
+    if (!currentTopic) return;
+    document.getElementById('roadmapPage').classList.remove('active');
+    document.getElementById('detailPage').classList.add('active');
+    document.getElementById('detailTitle').textContent = currentTopic.title;
+    document.getElementById('detailTitle').style.color = currentTopic.color;
+    document.getElementById('detailSubtitle').textContent = currentTopic.subtopics.map(s=>s.name).join(' • ');
+    renderTheory(); renderExamples(); renderPractice(); switchTab('theory');
+    window.scrollTo(0,0);
+}
+function showRoadmap() {
+    document.getElementById('detailPage').classList.remove('active');
+    document.getElementById('roadmapPage').classList.add('active');
+    renderRoadmap(); updateProgressBar();
+}
+function switchTab(tab) {
+    document.querySelectorAll('.tab').forEach((t,i) => { t.classList.toggle('active',['theory','examples','practice','solutions'][i]===tab); });
+    document.querySelectorAll('.tab-content').forEach((tc,i) => { tc.classList.toggle('active',['theory','examples','practice','solutions'][i]===tab); });
+    if (tab==='solutions') renderSolutions();
+}
+function renderTheory() {
+    document.getElementById('theoryContent').innerHTML = currentTopic.subtopics.map(sub => `<div class="theory-section"><div class="theory-title">${sub.name}</div>${sub.theory.map(t=>'<p class="theory-point">'+t+'</p>').join('')}<pre class="code-block">${highlightSQL(sub.code)}</pre></div>`).join('');
+}
+function renderExamples() {
+    document.getElementById('examplesContent').innerHTML = currentTopic.examples.map(ex => `<div class="example-card"><div class="example-title">${ex.title}</div><p class="example-desc">${ex.desc}</p><pre class="code-block">${highlightSQL(ex.code)}</pre></div>`).join('');
+}
+function renderPractice() {
+    const prog = getProgress();
+    document.getElementById('practiceContent').innerHTML = currentTopic.practice.map((p,i) => {
+        const key = currentTopic.id+'_'+i;
+        const checked = prog[key]?'checked':'';
+        const doneClass = prog[key]?'done':'';
+        const diffClass = p.d==='E'?'easy':p.d==='M'?'medium':'hard';
+        const diffLabel = p.d==='E'?'Easy':p.d==='M'?'Medium':'Hard';
+        return `<div class="practice-item ${doneClass}"><input type="checkbox" ${checked} onchange="togglePractice('${key}',this)"><span class="practice-text">${i+1}. ${p.q}</span><span class="difficulty ${diffClass}">${diffLabel}</span></div>`;
+    }).join('');
+}
+function togglePractice(key, el) {
+    const prog = getProgress(); prog[key] = el.checked; saveProgress(prog);
+    updateProgressBar(); el.parentElement.classList.toggle('done', el.checked);
+}
+function renderSolutions() {
+    document.getElementById('solutionsContent').innerHTML = '<div class="theory-section"><div class="theory-title">Solutions Coming Soon</div><p class="theory-point">Practice solving these problems on your own first. Solutions will be added in a future update.</p></div>';
+}
+renderRoadmap(); updateProgressBar();
+</script>
+</body>
+</html>

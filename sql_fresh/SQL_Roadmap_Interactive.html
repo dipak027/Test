@@ -1,0 +1,520 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SQL Learning Roadmap</title>
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{--bg:#080c14;--card:#141d2e;--border:#1e2d45;--text:#dde4f0;--text-dim:#8892a4;--green:#4ade80;--cyan:#22d3ee;--purple:#a78bfa;--gradient:linear-gradient(135deg,#4ade80,#22d3ee,#a78bfa)}
+body{font-family:'Sora',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;overflow-x:hidden}
+code,pre,.code{font-family:'JetBrains Mono',monospace}
+.header{position:sticky;top:0;z-index:1000;background:rgba(8,12,20,0.95);backdrop-filter:blur(12px);border-bottom:1px solid var(--border);padding:12px 24px}
+.header-inner{max-width:1200px;margin:0 auto;display:flex;align-items:center;justify-content:space-between}
+.logo{font-size:1.4rem;font-weight:700;background:var(--gradient);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.progress-container{flex:1;max-width:300px;margin-left:24px}
+.progress-label{font-size:0.7rem;color:var(--text-dim);margin-bottom:4px;text-align:right}
+.progress-bar{height:6px;background:var(--border);border-radius:3px;overflow:hidden}
+.progress-fill{height:100%;background:var(--gradient);border-radius:3px;transition:width 0.5s ease}
+</style>
+
+<style>
+.page{display:none;padding:40px 24px 80px;max-width:900px;margin:0 auto;animation:fadeIn 0.3s ease}
+.page.active{display:block}
+@keyframes fadeIn{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
+.roadmap{position:relative;padding-left:60px}
+.roadmap::before{content:'';position:absolute;left:28px;top:0;bottom:0;width:2px;background:linear-gradient(to bottom,var(--green),var(--cyan),var(--purple));opacity:0.4}
+.node{position:relative;margin-bottom:24px;cursor:pointer;transition:transform 0.2s ease}
+.node:hover{transform:translateX(4px)}
+.node-number{position:absolute;left:-48px;top:16px;width:32px;height:32px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:0.8rem;border:2px solid;background:var(--bg)}
+.node-card{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:20px 24px;transition:border-color 0.2s,box-shadow 0.2s}
+.node:hover .node-card{border-color:var(--cyan);box-shadow:0 4px 20px rgba(34,211,238,0.1)}
+.node-title{font-size:1.1rem;font-weight:600;margin-bottom:8px}
+.node-chips{display:flex;flex-wrap:wrap;gap:6px}
+.chip{font-size:0.65rem;padding:3px 8px;border-radius:4px;background:rgba(255,255,255,0.05);border:1px solid var(--border);color:var(--text-dim)}
+.node-progress{font-size:0.7rem;color:var(--text-dim);margin-top:8px}
+.back-btn{display:inline-flex;align-items:center;gap:6px;padding:8px 16px;background:var(--card);border:1px solid var(--border);border-radius:8px;color:var(--text);cursor:pointer;font-family:'Sora',sans-serif;font-size:0.85rem;margin-bottom:24px;transition:border-color 0.2s}
+.back-btn:hover{border-color:var(--cyan)}
+.detail-header{margin-bottom:24px}
+.detail-title{font-size:1.8rem;font-weight:700;margin-bottom:8px}
+.detail-subtitle{font-size:0.85rem;color:var(--text-dim)}
+.tabs{display:flex;gap:4px;margin-bottom:24px;background:var(--card);border-radius:10px;padding:4px;border:1px solid var(--border)}
+.tab{flex:1;padding:10px 16px;text-align:center;border-radius:8px;cursor:pointer;font-size:0.85rem;font-weight:500;color:var(--text-dim);transition:all 0.2s}
+.tab.active{background:var(--border);color:var(--text)}
+.tab:hover:not(.active){color:var(--text)}
+.tab-content{display:none;animation:fadeIn 0.3s ease}
+.tab-content.active{display:block}
+.theory-section{margin-bottom:24px;background:var(--card);border:1px solid var(--border);border-radius:10px;padding:20px}
+.theory-title{font-size:1rem;font-weight:600;margin-bottom:12px;color:var(--cyan)}
+.theory-point{font-size:0.85rem;color:var(--text-dim);margin-bottom:8px;padding-left:16px;position:relative;line-height:1.6}
+.theory-point::before{content:'>';position:absolute;left:0;color:var(--green)}
+pre.code-block{background:rgba(0,0,0,0.4);border:1px solid var(--border);border-radius:8px;padding:16px;margin-top:12px;overflow-x:auto;font-size:0.8rem;line-height:1.6}
+.example-card{background:var(--card);border:1px solid var(--border);border-radius:10px;padding:20px;margin-bottom:16px}
+.example-title{font-size:0.9rem;font-weight:600;margin-bottom:8px;color:var(--purple)}
+.example-desc{font-size:0.82rem;color:var(--text-dim);margin-bottom:12px}
+.practice-item{display:flex;align-items:flex-start;gap:12px;padding:12px 16px;background:var(--card);border:1px solid var(--border);border-radius:8px;margin-bottom:8px;transition:border-color 0.2s}
+.practice-item:hover{border-color:var(--cyan)}
+.practice-item input[type="checkbox"]{width:18px;height:18px;margin-top:2px;accent-color:var(--green);cursor:pointer}
+.practice-item.done{opacity:0.6;border-color:var(--green)}
+.practice-text{flex:1;font-size:0.82rem;line-height:1.5}
+.difficulty{font-size:0.65rem;padding:2px 8px;border-radius:4px;font-weight:600;white-space:nowrap}
+.difficulty.easy{background:rgba(74,222,128,0.15);color:#4ade80}
+.difficulty.medium{background:rgba(251,191,36,0.15);color:#fbbf24}
+.difficulty.hard{background:rgba(244,114,182,0.15);color:#f472b6}
+</style>
+
+<style>
+.solution-item{background:var(--card);border:1px solid var(--border);border-radius:10px;margin-bottom:12px;overflow:hidden}
+.solution-header{padding:12px 16px;display:flex;align-items:center;justify-content:space-between;cursor:pointer}
+.solution-header:hover{background:rgba(34,211,238,0.05)}
+.solution-num{font-size:0.75rem;color:var(--text-dim);font-family:'JetBrains Mono',monospace;margin-right:10px}
+.solution-q{font-size:0.82rem;flex:1}
+.solution-toggle{padding:4px 12px;border-radius:6px;border:1px solid var(--border);background:var(--card);color:var(--cyan);font-size:0.72rem;cursor:pointer;font-family:'Sora',sans-serif;transition:all 0.2s}
+.solution-toggle:hover{background:rgba(34,211,238,0.1);border-color:var(--cyan)}
+.solution-body{display:none;padding:0 16px 16px;border-top:1px solid var(--border)}
+.solution-body.open{display:block}
+.solution-approach{font-size:0.78rem;color:var(--text-dim);margin-bottom:8px;padding:8px 12px;background:rgba(74,222,128,0.05);border-left:3px solid var(--green);border-radius:0 4px 4px 0}
+@media(max-width:640px){.roadmap{padding-left:40px}.roadmap::before{left:16px}.node-number{left:-32px;width:26px;height:26px;font-size:0.7rem}.header-inner{flex-wrap:wrap;gap:8px}.progress-container{max-width:100%;margin-left:0}}
+</style>
+</head>
+<body>
+<header class="header">
+<div class="header-inner">
+<div class="logo">SQL Roadmap</div>
+<div class="progress-container">
+<div class="progress-label"><span id="progressText">0 / 0</span> completed</div>
+<div class="progress-bar"><div class="progress-fill" id="progressFill" style="width:0%"></div></div>
+</div>
+</div>
+</header>
+<div class="page active" id="roadmapPage">
+<div class="roadmap" id="roadmapContainer"></div>
+</div>
+<div class="page" id="detailPage">
+<button class="back-btn" onclick="showRoadmap()">&#8592; Back to Roadmap</button>
+<div class="detail-header">
+<h1 class="detail-title" id="detailTitle"></h1>
+<p class="detail-subtitle" id="detailSubtitle"></p>
+</div>
+<div class="tabs">
+<div class="tab active" onclick="switchTab('theory')">Theory</div>
+<div class="tab" onclick="switchTab('examples')">Examples</div>
+<div class="tab" onclick="switchTab('practice')">Practice</div>
+<div class="tab" onclick="switchTab('solutions')">Solutions</div>
+</div>
+<div class="tab-content active" id="theoryContent"></div>
+<div class="tab-content" id="examplesContent"></div>
+<div class="tab-content" id="practiceContent"></div>
+<div class="tab-content" id="solutionsContent"></div>
+</div>
+
+<script>
+let currentTopic = null;
+const STORAGE_KEY = 'sql_roadmap_progress';
+
+const topics = [
+{id:1,title:"SQL Basics & Data Types",color:"#38bdf8",chips:["RDBMS","Tables","Data Types","Schemas"],
+subtopics:[
+{name:"RDBMS Concepts",theory:["A Relational Database Management System stores data in tables with rows and columns.","Tables represent entities; rows are records/tuples; columns are attributes/fields.","Schemas organize database objects; catalogs group schemas in larger systems."],code:"-- A database contains schemas, schemas contain tables\nCREATE SCHEMA sales;\n\n-- Tables hold structured data\nCREATE TABLE sales.customers (\n    customer_id INT PRIMARY KEY,\n    name VARCHAR(100),\n    email VARCHAR(255)\n);\n\n-- View table structure\nDESCRIBE sales.customers;\n-- or in PostgreSQL:\n\\d sales.customers"},
+{name:"Numeric Data Types",theory:["INT/INTEGER: whole numbers (-2B to 2B); BIGINT for larger ranges.","DECIMAL(p,s)/NUMERIC(p,s): exact precision for money; FLOAT/DOUBLE for approximate.","SMALLINT (2 bytes), INT (4 bytes), BIGINT (8 bytes) vary by storage needs."],code:"-- Numeric types\nCREATE TABLE products (\n    id          INT PRIMARY KEY,\n    quantity    SMALLINT,          -- -32768 to 32767\n    price       DECIMAL(10,2),     -- exact: 10 digits, 2 decimal\n    weight_kg   FLOAT,             -- approximate decimal\n    views       BIGINT             -- very large integers\n);\n\n-- DECIMAL vs FLOAT\nSELECT CAST(1.1 + 2.2 AS DECIMAL(3,1));  -- 3.3 (exact)\nSELECT CAST(1.1 + 2.2 AS FLOAT);          -- 3.3000000000000003"},
+
+{name:"Character & Text Types",theory:["CHAR(n): fixed-length, padded with spaces; VARCHAR(n): variable-length up to n.","TEXT/CLOB: unlimited length text (no length constraint); performance differs by DB.","Use VARCHAR for most cases; CHAR only when all values are same length (e.g., country codes)."],code:"-- Character types\nCREATE TABLE users (\n    country_code  CHAR(2),          -- always 2 chars: 'US', 'IN'\n    username      VARCHAR(50),       -- up to 50 chars\n    bio           TEXT,              -- unlimited length\n    status        VARCHAR(20) DEFAULT 'active'\n);\n\n-- String functions\nSELECT LENGTH('Hello'),            -- 5\n       UPPER('hello'),              -- HELLO\n       TRIM('  hi  '),             -- hi\n       CONCAT('Hello', ' ', 'World'); -- Hello World"},
+{name:"Date/Time & Boolean",theory:["DATE: calendar date (YYYY-MM-DD); TIME: time of day; TIMESTAMP: date + time.","INTERVAL represents duration; BOOLEAN stores TRUE/FALSE/NULL.","Use CURRENT_DATE, CURRENT_TIMESTAMP, NOW() for current values."],code:"-- Date/Time types\nCREATE TABLE events (\n    event_id    INT PRIMARY KEY,\n    event_date  DATE,               -- 2024-03-15\n    start_time  TIME,               -- 14:30:00\n    created_at  TIMESTAMP DEFAULT CURRENT_TIMESTAMP,\n    is_active   BOOLEAN DEFAULT TRUE\n);\n\n-- Date arithmetic\nSELECT CURRENT_DATE,\n       CURRENT_DATE + INTERVAL '7 days' AS next_week,\n       AGE(CURRENT_DATE, '1990-01-01') AS age;\n\n-- Extract parts\nSELECT EXTRACT(YEAR FROM CURRENT_DATE),\n       EXTRACT(MONTH FROM CURRENT_TIMESTAMP);"},
+{name:"JSON & Other Types",theory:["JSON/JSONB stores semi-structured data; JSONB is binary and faster for queries.","ARRAY types store lists in a single column (PostgreSQL); UUID for unique identifiers.","ENUM creates a set of allowed string values; useful for status fields."],code:"-- JSON type (PostgreSQL)\nCREATE TABLE api_logs (\n    id      SERIAL PRIMARY KEY,\n    payload JSONB,\n    tags    TEXT[]\n);\n\nINSERT INTO api_logs (payload, tags)\nVALUES ('{\"method\":\"GET\",\"status\":200}', ARRAY['api','v2']);\n\n-- Query JSON\nSELECT payload->>'method' AS http_method,\n       payload->>'status' AS status_code\nFROM api_logs;\n\n-- ENUM type\nCREATE TYPE mood AS ENUM ('happy', 'sad', 'neutral');"}
+],
+examples:[
+{title:"Create a Complete Table",desc:"Design a table with various data types and constraints.",code:"CREATE TABLE employees (\n    emp_id      SERIAL PRIMARY KEY,\n    first_name  VARCHAR(50) NOT NULL,\n    last_name   VARCHAR(50) NOT NULL,\n    email       VARCHAR(100) UNIQUE,\n    salary      DECIMAL(10,2) CHECK (salary > 0),\n    hire_date   DATE DEFAULT CURRENT_DATE,\n    department  VARCHAR(30),\n    is_active   BOOLEAN DEFAULT TRUE,\n    metadata    JSONB\n);"},
+{title:"Type Casting Examples",desc:"Convert between different data types safely.",code:"-- Implicit and explicit casting\nSELECT '100'::INTEGER + 50;           -- 150\nSELECT CAST('2024-01-15' AS DATE);    -- date value\nSELECT CAST(3.7 AS INTEGER);          -- 4 (rounded)\nSELECT TO_CHAR(12345.6, '99,999.00'); -- ' 12,345.60'\nSELECT TO_DATE('15-Jan-2024', 'DD-Mon-YYYY');\n\n-- Safe casting with COALESCE\nSELECT COALESCE(NULLIF(col,'')::INTEGER, 0)\nFROM some_table;"}
+],
+practice:[
+{q:"Create a table with at least one column of each major type: INT, VARCHAR, DECIMAL, DATE, BOOLEAN.",d:"E"},
+{q:"Insert 5 rows into your table using explicit type values.",d:"E"},
+{q:"Write a query that uses CAST to convert a string '2024-06-15' to a DATE.",d:"E"},
+{q:"Create a table with a SERIAL/AUTO_INCREMENT primary key and insert rows without specifying the ID.",d:"E"},
+{q:"Use INFORMATION_SCHEMA to list all columns and their data types for a given table.",d:"M"},
+{q:"Create a table with a CHECK constraint ensuring price > 0 and quantity >= 0.",d:"M"},
+{q:"Write queries demonstrating the difference between CHAR(10) and VARCHAR(10) storage.",d:"M"},
+{q:"Create a table with a JSONB column; insert data and query a nested JSON field.",d:"H"},
+{q:"Design a schema with 3 related tables using appropriate types for an e-commerce system.",d:"H"},
+{q:"Demonstrate precision differences between FLOAT and DECIMAL with arithmetic operations.",d:"H"}
+]},
+
+{id:2,title:"DDL - Data Definition",color:"#34d399",chips:["CREATE","ALTER","DROP","Constraints","Keys"],
+subtopics:[
+{name:"CREATE TABLE & Constraints",theory:["CREATE TABLE defines structure with columns, types, and inline constraints.","PRIMARY KEY uniquely identifies each row; can be single column or composite.","FOREIGN KEY references another table's primary key, enforcing referential integrity."],code:"-- Basic CREATE with constraints\nCREATE TABLE departments (\n    dept_id     INT PRIMARY KEY,\n    dept_name   VARCHAR(50) NOT NULL UNIQUE,\n    budget      DECIMAL(12,2) DEFAULT 0,\n    created_at  TIMESTAMP DEFAULT CURRENT_TIMESTAMP\n);\n\nCREATE TABLE employees (\n    emp_id      INT PRIMARY KEY,\n    name        VARCHAR(100) NOT NULL,\n    dept_id     INT REFERENCES departments(dept_id),\n    salary      DECIMAL(10,2) CHECK (salary >= 0),\n    email       VARCHAR(255) UNIQUE\n);"},
+{name:"ALTER TABLE",theory:["ADD COLUMN adds new columns; DROP COLUMN removes them (with data!).","ALTER COLUMN/MODIFY changes type, default, or nullability of existing columns.","ADD CONSTRAINT / DROP CONSTRAINT manage table-level constraints after creation."],code:"-- Add a column\nALTER TABLE employees ADD COLUMN phone VARCHAR(20);\n\n-- Change column type\nALTER TABLE employees ALTER COLUMN salary TYPE DECIMAL(12,2);\n\n-- Add constraint\nALTER TABLE employees\n    ADD CONSTRAINT fk_dept\n    FOREIGN KEY (dept_id) REFERENCES departments(dept_id);\n\n-- Rename\nALTER TABLE employees RENAME COLUMN phone TO mobile;\nALTER TABLE employees RENAME TO staff;\n\n-- Drop column\nALTER TABLE staff DROP COLUMN mobile;"},
+{name:"DROP & TRUNCATE",theory:["DROP TABLE removes the table and all its data permanently; use IF EXISTS for safety.","TRUNCATE removes all rows but keeps the table structure; faster than DELETE (no logging per row).","CASCADE option drops dependent objects (foreign keys, views) automatically."],code:"-- Drop table safely\nDROP TABLE IF EXISTS temp_data;\n\n-- Drop with cascade (removes dependent FKs)\nDROP TABLE departments CASCADE;\n\n-- Truncate (fast delete all rows)\nTRUNCATE TABLE logs;\n\n-- Truncate with restart identity (reset serial)\nTRUNCATE TABLE orders RESTART IDENTITY CASCADE;\n\n-- Drop entire schema\nDROP SCHEMA IF EXISTS staging CASCADE;"},
+{name:"Indexes",theory:["Indexes speed up SELECT queries but slow down INSERT/UPDATE/DELETE.","B-tree (default) works for equality and range; Hash for equality only.","Composite indexes follow leftmost-prefix rule; column order matters."],code:"-- Create indexes\nCREATE INDEX idx_emp_name ON employees(name);\nCREATE INDEX idx_emp_dept_salary ON employees(dept_id, salary);\n\n-- Unique index (also enforces uniqueness)\nCREATE UNIQUE INDEX idx_emp_email ON employees(email);\n\n-- Partial index (PostgreSQL)\nCREATE INDEX idx_active_emps ON employees(name)\n    WHERE is_active = TRUE;\n\n-- Drop index\nDROP INDEX idx_emp_name;\n\n-- List indexes (PostgreSQL)\nSELECT indexname, indexdef FROM pg_indexes\nWHERE tablename = 'employees';"}
+],
+examples:[
+{title:"Design a Normalized Schema",desc:"Create a 3-table schema with proper relationships.",code:"CREATE TABLE authors (\n    author_id SERIAL PRIMARY KEY,\n    name VARCHAR(100) NOT NULL\n);\n\nCREATE TABLE books (\n    book_id SERIAL PRIMARY KEY,\n    title VARCHAR(200) NOT NULL,\n    author_id INT REFERENCES authors(author_id) ON DELETE SET NULL,\n    price DECIMAL(8,2) NOT NULL CHECK (price >= 0),\n    published_date DATE\n);\n\nCREATE TABLE reviews (\n    review_id SERIAL PRIMARY KEY,\n    book_id INT REFERENCES books(book_id) ON DELETE CASCADE,\n    rating INT CHECK (rating BETWEEN 1 AND 5),\n    comment TEXT,\n    review_date TIMESTAMP DEFAULT NOW()\n);"},
+{title:"Migration-Style ALTER",desc:"Simulate a schema migration adding features to an existing table.",code:"-- Step 1: Add new columns\nALTER TABLE employees ADD COLUMN manager_id INT;\nALTER TABLE employees ADD COLUMN hire_date DATE DEFAULT CURRENT_DATE;\n\n-- Step 2: Add self-referencing foreign key\nALTER TABLE employees\n    ADD CONSTRAINT fk_manager\n    FOREIGN KEY (manager_id) REFERENCES employees(emp_id);\n\n-- Step 3: Create performance index\nCREATE INDEX idx_emp_manager ON employees(manager_id);\nCREATE INDEX idx_emp_hire ON employees(hire_date DESC);"}
+],
+practice:[
+{q:"Create a table with PRIMARY KEY, NOT NULL, UNIQUE, CHECK, and DEFAULT constraints.",d:"E"},
+{q:"Create two tables with a FOREIGN KEY relationship between them.",d:"E"},
+{q:"Use ALTER TABLE to add a column, rename a column, and change a column type.",d:"E"},
+{q:"Drop a table using IF EXISTS and explain why it's safer.",d:"E"},
+{q:"Create a composite PRIMARY KEY on two columns and explain when this is useful.",d:"M"},
+{q:"Add ON DELETE CASCADE and ON UPDATE CASCADE to a foreign key and test behavior.",d:"M"},
+{q:"Create a partial index that only indexes rows WHERE status = 'active'.",d:"M"},
+{q:"Write ALTER statements to add a CHECK constraint on an existing column.",d:"M"},
+{q:"Design a self-referencing table (employee → manager) with proper constraints.",d:"H"},
+{q:"Create a table with a composite unique constraint and a generated/computed column.",d:"H"}
+]},
+
+{id:3,title:"DML - INSERT, UPDATE, DELETE",color:"#a78bfa",chips:["INSERT","UPDATE","DELETE","MERGE","UPSERT"],
+subtopics:[
+{name:"INSERT Statements",theory:["INSERT INTO adds new rows; specify columns explicitly for clarity and safety.","INSERT multiple rows in one statement for better performance.","INSERT ... SELECT copies data from one table/query into another."],code:"-- Single row insert\nINSERT INTO employees (name, dept_id, salary, email)\nVALUES ('Alice Smith', 1, 75000.00, 'alice@company.com');\n\n-- Multiple rows\nINSERT INTO employees (name, dept_id, salary) VALUES\n    ('Bob Jones', 2, 65000.00),\n    ('Carol White', 1, 80000.00),\n    ('Dave Brown', 3, 70000.00);\n\n-- INSERT from SELECT\nINSERT INTO employee_archive (name, dept_id, salary)\nSELECT name, dept_id, salary\nFROM employees\nWHERE hire_date < '2020-01-01';"},
+{name:"UPDATE Statements",theory:["UPDATE modifies existing rows; always use WHERE to avoid updating all rows accidentally.","SET clause can update multiple columns; can use subqueries for computed values.","UPDATE with JOIN updates rows based on related table data."],code:"-- Basic update\nUPDATE employees SET salary = 80000 WHERE emp_id = 1;\n\n-- Update multiple columns\nUPDATE employees\nSET salary = salary * 1.10,\n    dept_id = 2\nWHERE dept_id = 1 AND salary < 70000;\n\n-- Update with subquery\nUPDATE employees e\nSET salary = (\n    SELECT AVG(salary) FROM employees WHERE dept_id = e.dept_id\n)\nWHERE performance_rating = 'meets_expectations';\n\n-- Update with JOIN (PostgreSQL)\nUPDATE employees e\nSET dept_id = d.dept_id\nFROM departments d\nWHERE d.dept_name = 'Engineering' AND e.name = 'Alice';"},
+{name:"DELETE Statements",theory:["DELETE removes rows matching WHERE condition; without WHERE, deletes ALL rows.","DELETE is logged per row (can rollback); TRUNCATE is faster for clearing all data.","DELETE with JOIN or subquery removes rows based on related table conditions."],code:"-- Delete specific rows\nDELETE FROM employees WHERE emp_id = 5;\n\n-- Delete with condition\nDELETE FROM employees\nWHERE dept_id = 3 AND salary < 50000;\n\n-- Delete using subquery\nDELETE FROM employees\nWHERE dept_id IN (\n    SELECT dept_id FROM departments WHERE budget = 0\n);\n\n-- Delete with EXISTS\nDELETE FROM orders o\nWHERE NOT EXISTS (\n    SELECT 1 FROM customers c WHERE c.customer_id = o.customer_id\n);"},
+{name:"MERGE / UPSERT",theory:["MERGE (SQL Standard) combines INSERT, UPDATE, DELETE in one atomic statement.","PostgreSQL uses INSERT ... ON CONFLICT (UPSERT); MySQL uses ON DUPLICATE KEY UPDATE.","Useful for syncing data from staging tables or handling idempotent operations."],code:"-- PostgreSQL UPSERT\nINSERT INTO products (sku, name, price)\nVALUES ('ABC123', 'Widget', 9.99)\nON CONFLICT (sku)\nDO UPDATE SET price = EXCLUDED.price,\n             name = EXCLUDED.name;\n\n-- SQL Server / Standard MERGE\nMERGE INTO target_table t\nUSING source_table s ON t.id = s.id\nWHEN MATCHED THEN\n    UPDATE SET t.value = s.value\nWHEN NOT MATCHED THEN\n    INSERT (id, value) VALUES (s.id, s.value)\nWHEN NOT MATCHED BY SOURCE THEN\n    DELETE;"}
+],
+examples:[
+{title:"Bulk Data Loading",desc:"Insert multiple rows efficiently with various techniques.",code:"-- Method 1: Multi-row VALUES\nINSERT INTO logs (level, message, created_at) VALUES\n    ('INFO', 'Server started', NOW()),\n    ('WARN', 'High memory usage', NOW()),\n    ('ERROR', 'Connection failed', NOW());\n\n-- Method 2: INSERT from SELECT with transformation\nINSERT INTO monthly_summary (month, total_sales, order_count)\nSELECT DATE_TRUNC('month', order_date),\n       SUM(amount),\n       COUNT(*)\nFROM orders\nGROUP BY DATE_TRUNC('month', order_date);"},
+{title:"Conditional Update",desc:"Update salaries with different rules based on department.",code:"UPDATE employees\nSET salary = CASE\n    WHEN dept_id = 1 THEN salary * 1.15  -- Engineering: 15% raise\n    WHEN dept_id = 2 THEN salary * 1.10  -- Marketing: 10% raise\n    WHEN dept_id = 3 THEN salary * 1.05  -- Admin: 5% raise\n    ELSE salary\nEND\nWHERE hire_date < CURRENT_DATE - INTERVAL '1 year';"}
+],
+practice:[
+{q:"Insert 5 rows into a table using a single INSERT statement with multiple VALUES.",d:"E"},
+{q:"Update the salary of all employees in department 2 by increasing 10%.",d:"E"},
+{q:"Delete all rows from a table where a date column is older than 1 year ago.",d:"E"},
+{q:"Write an INSERT ... SELECT that copies rows from one table to an archive table.",d:"E"},
+{q:"Write an UPDATE with a CASE expression that sets different values based on conditions.",d:"M"},
+{q:"Use UPDATE with a subquery to set a column based on an aggregate from another table.",d:"M"},
+{q:"Write a DELETE using EXISTS to remove orphaned records.",d:"M"},
+{q:"Implement an UPSERT (INSERT ON CONFLICT) that updates price if SKU already exists.",d:"M"},
+{q:"Write a MERGE statement that syncs a staging table into a production table.",d:"H"},
+{q:"Create a trigger that automatically logs all DELETE operations into an audit table.",d:"H"}
+]},
+
+{id:4,title:"SELECT & Filtering",color:"#fbbf24",chips:["SELECT","WHERE","ORDER BY","LIMIT","DISTINCT"],
+subtopics:[
+{name:"Basic SELECT",theory:["SELECT retrieves data from tables; * selects all columns (avoid in production code).","Column aliases with AS improve readability; expressions can be computed inline.","DISTINCT eliminates duplicate rows from the result set."],code:"-- Select specific columns\nSELECT first_name, last_name, salary\nFROM employees;\n\n-- With aliases and expressions\nSELECT first_name || ' ' || last_name AS full_name,\n       salary * 12 AS annual_salary,\n       ROUND(salary / 160, 2) AS hourly_rate\nFROM employees;\n\n-- DISTINCT\nSELECT DISTINCT department FROM employees;\nSELECT DISTINCT ON (dept_id) * FROM employees\nORDER BY dept_id, salary DESC; -- PostgreSQL"},
+{name:"WHERE Clause & Operators",theory:["WHERE filters rows before grouping; supports comparison, logical, and special operators.","BETWEEN is inclusive on both ends; IN checks membership in a list.","LIKE uses % (any chars) and _ (single char) for pattern matching; ILIKE for case-insensitive."],code:"-- Comparison operators\nSELECT * FROM employees WHERE salary > 70000;\nSELECT * FROM employees WHERE dept_id != 3;\n\n-- BETWEEN (inclusive)\nSELECT * FROM employees\nWHERE salary BETWEEN 50000 AND 80000;\n\n-- IN list\nSELECT * FROM employees\nWHERE dept_id IN (1, 2, 5);\n\n-- Pattern matching\nSELECT * FROM employees WHERE name LIKE 'A%';     -- starts with A\nSELECT * FROM employees WHERE email LIKE '%@gmail%';\nSELECT * FROM employees WHERE name LIKE '_a%';    -- 2nd char is 'a'\n\n-- NULL checks\nSELECT * FROM employees WHERE manager_id IS NULL;\nSELECT * FROM employees WHERE phone IS NOT NULL;"},
+{name:"ORDER BY & Pagination",theory:["ORDER BY sorts results; ASC (default) or DESC; can sort by multiple columns.","LIMIT/OFFSET for pagination; FETCH FIRST n ROWS (SQL standard); TOP (SQL Server).","NULLS FIRST / NULLS LAST controls where NULLs appear in sorted results."],code:"-- Basic ordering\nSELECT * FROM employees ORDER BY salary DESC;\nSELECT * FROM employees ORDER BY dept_id ASC, salary DESC;\n\n-- Pagination\nSELECT * FROM employees\nORDER BY emp_id\nLIMIT 10 OFFSET 20;  -- Page 3 (10 per page)\n\n-- SQL Standard\nSELECT * FROM employees\nORDER BY salary DESC\nFETCH FIRST 5 ROWS ONLY;\n\n-- NULL handling\nSELECT * FROM employees\nORDER BY manager_id NULLS LAST;\n\n-- Order by expression\nSELECT * FROM employees\nORDER BY CASE WHEN dept_id = 1 THEN 0 ELSE 1 END, name;"},
+{name:"Conditional Expressions",theory:["CASE WHEN provides if/else logic within queries; two forms: simple and searched.","COALESCE returns first non-NULL value from a list; NULLIF returns NULL if two values are equal.","IIF (SQL Server) is shorthand for simple CASE; most DBs prefer CASE."],code:"-- Searched CASE\nSELECT name, salary,\n    CASE\n        WHEN salary >= 100000 THEN 'Senior'\n        WHEN salary >= 70000 THEN 'Mid'\n        ELSE 'Junior'\n    END AS level\nFROM employees;\n\n-- Simple CASE\nSELECT name,\n    CASE dept_id\n        WHEN 1 THEN 'Engineering'\n        WHEN 2 THEN 'Marketing'\n        WHEN 3 THEN 'Sales'\n    END AS department\nFROM employees;\n\n-- COALESCE & NULLIF\nSELECT COALESCE(phone, email, 'No contact') AS contact,\n       NULLIF(status, 'inactive') AS active_status\nFROM employees;"}
+],
+examples:[
+{title:"Advanced Filtering",desc:"Combine multiple filter conditions with proper precedence.",code:"SELECT emp_id, name, salary, dept_id, hire_date\nFROM employees\nWHERE (dept_id IN (1, 2) AND salary > 60000)\n   OR (dept_id = 3 AND hire_date > '2022-01-01')\nORDER BY dept_id, salary DESC\nLIMIT 20;"},
+{title:"Dynamic Categories with CASE",desc:"Create computed categories and sort by them.",code:"SELECT name, salary,\n    CASE\n        WHEN salary >= 120000 THEN 'A - Executive'\n        WHEN salary >= 80000 THEN 'B - Senior'\n        WHEN salary >= 50000 THEN 'C - Mid'\n        ELSE 'D - Entry'\n    END AS pay_band,\n    RANK() OVER (ORDER BY salary DESC) AS salary_rank\nFROM employees\nORDER BY pay_band, salary DESC;"}
+],
+practice:[
+{q:"Select all employees ordered by salary descending, showing only top 5.",d:"E"},
+{q:"Filter employees whose name starts with 'J' and salary is above 50000.",d:"E"},
+{q:"Use BETWEEN to find all orders placed in the last 30 days.",d:"E"},
+{q:"Select distinct department names from the employees table.",d:"E"},
+{q:"Write a query using CASE to categorize salaries into Low/Medium/High.",d:"M"},
+{q:"Implement pagination: get page 3 with 15 records per page.",d:"M"},
+{q:"Find employees who have NULL phone OR NULL email using IS NULL.",d:"M"},
+{q:"Use COALESCE to display 'N/A' for any NULL values in a report query.",d:"M"},
+{q:"Write a query with complex WHERE using AND, OR, and parentheses for precedence.",d:"M"},
+{q:"Create a query that sorts NULLs last and uses a CASE-based custom sort order.",d:"H"}
+]},
+
+{id:5,title:"Aggregations & Grouping",color:"#f472b6",chips:["COUNT","SUM","AVG","GROUP BY","HAVING"],
+subtopics:[
+{name:"Aggregate Functions",theory:["COUNT(*) counts all rows; COUNT(col) counts non-NULL values; COUNT(DISTINCT col) counts unique.","SUM, AVG work on numeric columns; MIN, MAX work on any comparable type.","Aggregates ignore NULL values (except COUNT(*)); use COALESCE to handle NULLs."],code:"-- Basic aggregates\nSELECT\n    COUNT(*) AS total_employees,\n    COUNT(DISTINCT dept_id) AS departments,\n    AVG(salary) AS avg_salary,\n    SUM(salary) AS total_payroll,\n    MIN(hire_date) AS earliest_hire,\n    MAX(salary) AS highest_salary\nFROM employees;\n\n-- COUNT variations\nSELECT\n    COUNT(*) AS all_rows,\n    COUNT(phone) AS has_phone,\n    COUNT(*) - COUNT(phone) AS missing_phone\nFROM employees;"},
+{name:"GROUP BY",theory:["GROUP BY groups rows sharing column values; aggregates compute per group.","Every non-aggregated column in SELECT must appear in GROUP BY.","GROUP BY can use column positions (GROUP BY 1,2) or expressions."],code:"-- Group by department\nSELECT dept_id,\n       COUNT(*) AS emp_count,\n       AVG(salary) AS avg_salary,\n       MAX(salary) AS max_salary\nFROM employees\nGROUP BY dept_id\nORDER BY avg_salary DESC;\n\n-- Group by expression\nSELECT EXTRACT(YEAR FROM hire_date) AS hire_year,\n       COUNT(*) AS hired\nFROM employees\nGROUP BY EXTRACT(YEAR FROM hire_date)\nORDER BY hire_year;\n\n-- Multiple grouping columns\nSELECT dept_id, EXTRACT(YEAR FROM hire_date) AS year,\n       COUNT(*), AVG(salary)\nFROM employees\nGROUP BY dept_id, EXTRACT(YEAR FROM hire_date);"},
+{name:"HAVING Clause",theory:["HAVING filters groups after aggregation; WHERE filters rows before grouping.","HAVING can reference aggregate functions; WHERE cannot.","Use WHERE for row-level filters, HAVING for group-level filters."],code:"-- Filter groups\nSELECT dept_id, COUNT(*) AS emp_count, AVG(salary) AS avg_sal\nFROM employees\nGROUP BY dept_id\nHAVING COUNT(*) >= 5;\n\n-- HAVING with multiple conditions\nSELECT dept_id, AVG(salary) AS avg_sal\nFROM employees\nWHERE is_active = TRUE\nGROUP BY dept_id\nHAVING AVG(salary) > 60000\n   AND COUNT(*) > 3\nORDER BY avg_sal DESC;\n\n-- WHERE vs HAVING (combined)\nSELECT dept_id, SUM(salary) AS total\nFROM employees\nWHERE hire_date >= '2020-01-01'   -- row filter\nGROUP BY dept_id\nHAVING SUM(salary) > 200000;       -- group filter"},
+{name:"GROUPING SETS, ROLLUP, CUBE",theory:["GROUPING SETS computes multiple groupings in one query (avoids UNION ALL).","ROLLUP adds subtotals hierarchically: (a,b), (a), () — like drill-up in reports.","CUBE computes all possible grouping combinations — useful for cross-tab analysis."],code:"-- GROUPING SETS\nSELECT dept_id, EXTRACT(YEAR FROM hire_date) AS year,\n       COUNT(*), SUM(salary)\nFROM employees\nGROUP BY GROUPING SETS (\n    (dept_id, EXTRACT(YEAR FROM hire_date)),\n    (dept_id),\n    ()\n);\n\n-- ROLLUP (hierarchical subtotals)\nSELECT dept_id, job_title, SUM(salary)\nFROM employees\nGROUP BY ROLLUP (dept_id, job_title);\n-- Produces: (dept,job), (dept), (grand total)\n\n-- CUBE (all combinations)\nSELECT dept_id, is_active, COUNT(*)\nFROM employees\nGROUP BY CUBE (dept_id, is_active);"}
+],
+examples:[
+{title:"Sales Summary Report",desc:"Create a comprehensive sales report with multiple aggregations.",code:"SELECT\n    DATE_TRUNC('month', order_date) AS month,\n    COUNT(*) AS total_orders,\n    COUNT(DISTINCT customer_id) AS unique_customers,\n    SUM(amount) AS revenue,\n    AVG(amount) AS avg_order_value,\n    MAX(amount) AS largest_order\nFROM orders\nWHERE order_date >= '2024-01-01'\nGROUP BY DATE_TRUNC('month', order_date)\nHAVING SUM(amount) > 10000\nORDER BY month;"},
+{title:"Department Analysis",desc:"Compare departments with grouping and conditional aggregates.",code:"SELECT dept_id,\n    COUNT(*) AS total,\n    SUM(CASE WHEN salary > 80000 THEN 1 ELSE 0 END) AS high_earners,\n    ROUND(AVG(salary), 2) AS avg_salary,\n    ROUND(100.0 * COUNT(CASE WHEN is_active THEN 1 END) / COUNT(*), 1) AS active_pct\nFROM employees\nGROUP BY dept_id\nORDER BY avg_salary DESC;"}
+],
+practice:[
+{q:"Count the total number of employees and the number of distinct departments.",d:"E"},
+{q:"Calculate the average, min, and max salary grouped by department.",d:"E"},
+{q:"Use GROUP BY with HAVING to find departments with more than 10 employees.",d:"E"},
+{q:"Count orders per month for the current year using date truncation.",d:"M"},
+{q:"Find the top 3 departments by total salary expenditure.",d:"M"},
+{q:"Use conditional aggregation (CASE inside SUM) to count status categories per group.",d:"M"},
+{q:"Write a query with both WHERE and HAVING, explaining the execution order difference.",d:"M"},
+{q:"Use ROLLUP to create a report with subtotals by region and product category.",d:"H"},
+{q:"Use GROUPING SETS to compute year-totals, month-totals, and grand total in one query.",d:"H"},
+{q:"Calculate running percentage of total using SUM with a window vs GROUP BY approach.",d:"H"}
+]},
+
+{id:6,title:"JOINs",color:"#22d3ee",chips:["INNER","LEFT","RIGHT","FULL","CROSS","SELF"],
+subtopics:[
+{name:"INNER JOIN",theory:["INNER JOIN returns only rows with matching values in both tables.","The ON clause specifies the join condition; can join on multiple columns.","INNER JOIN is the most common join type; unmatched rows are excluded."],code:"-- Basic INNER JOIN\nSELECT e.name, e.salary, d.dept_name\nFROM employees e\nINNER JOIN departments d ON e.dept_id = d.dept_id;\n\n-- Multi-column join\nSELECT o.order_id, o.amount, c.name, p.product_name\nFROM orders o\nINNER JOIN customers c ON o.customer_id = c.customer_id\nINNER JOIN products p ON o.product_id = p.product_id;\n\n-- Join with additional filtering\nSELECT e.name, d.dept_name\nFROM employees e\nJOIN departments d ON e.dept_id = d.dept_id\nWHERE d.budget > 100000 AND e.is_active = TRUE;"},
+{name:"LEFT / RIGHT JOIN",theory:["LEFT JOIN keeps all rows from the left table; NULLs fill unmatched right columns.","RIGHT JOIN keeps all rows from the right table; rarely used (rewrite as LEFT JOIN).","LEFT JOIN is essential for finding missing/orphaned records (anti-join pattern)."],code:"-- LEFT JOIN: all employees, even without department\nSELECT e.name, COALESCE(d.dept_name, 'Unassigned') AS dept\nFROM employees e\nLEFT JOIN departments d ON e.dept_id = d.dept_id;\n\n-- Find employees WITHOUT a department (anti-join)\nSELECT e.name\nFROM employees e\nLEFT JOIN departments d ON e.dept_id = d.dept_id\nWHERE d.dept_id IS NULL;\n\n-- RIGHT JOIN equivalent\nSELECT d.dept_name, COUNT(e.emp_id) AS emp_count\nFROM employees e\nRIGHT JOIN departments d ON e.dept_id = d.dept_id\nGROUP BY d.dept_name;"},
+{name:"FULL OUTER & CROSS JOIN",theory:["FULL OUTER JOIN keeps all rows from both tables; NULLs fill non-matching sides.","CROSS JOIN produces cartesian product (all combinations); rows = table1 × table2.","CROSS JOIN is useful for generating date ranges, combinations, or matrix data."],code:"-- FULL OUTER JOIN: show all from both sides\nSELECT e.name, d.dept_name\nFROM employees e\nFULL OUTER JOIN departments d ON e.dept_id = d.dept_id;\n\n-- CROSS JOIN: all combinations\nSELECT d.dept_name, m.month_name\nFROM departments d\nCROSS JOIN (\n    SELECT 'January' AS month_name UNION ALL\n    SELECT 'February' UNION ALL\n    SELECT 'March'\n) m;\n\n-- Generate date series × categories\nSELECT dates.d, categories.name\nFROM generate_series('2024-01-01'::date, '2024-12-31', '1 month') AS dates(d)\nCROSS JOIN (SELECT DISTINCT category FROM products) AS categories;"},
+{name:"SELF JOIN & Anti/Semi Joins",theory:["Self-join joins a table to itself; use aliases to distinguish the two references.","Common for hierarchies (employee→manager), finding duplicates, or comparing rows.","Semi-join (EXISTS) checks existence without duplicating rows; anti-join finds non-matches."],code:"-- Self join: employee with manager name\nSELECT e.name AS employee, m.name AS manager\nFROM employees e\nLEFT JOIN employees m ON e.manager_id = m.emp_id;\n\n-- Find duplicates using self join\nSELECT a.emp_id, a.email\nFROM employees a\nJOIN employees b ON a.email = b.email AND a.emp_id < b.emp_id;\n\n-- Semi-join with EXISTS\nSELECT d.dept_name\nFROM departments d\nWHERE EXISTS (\n    SELECT 1 FROM employees e WHERE e.dept_id = d.dept_id\n);\n\n-- Anti-join: departments with NO employees\nSELECT d.dept_name\nFROM departments d\nWHERE NOT EXISTS (\n    SELECT 1 FROM employees e WHERE e.dept_id = d.dept_id\n);"}
+],
+examples:[
+{title:"Multi-Table Report",desc:"Join 4 tables to create a comprehensive order report.",code:"SELECT\n    c.name AS customer,\n    o.order_id,\n    o.order_date,\n    p.product_name,\n    oi.quantity,\n    oi.unit_price,\n    oi.quantity * oi.unit_price AS line_total\nFROM orders o\nJOIN customers c ON o.customer_id = c.customer_id\nJOIN order_items oi ON o.order_id = oi.order_id\nJOIN products p ON oi.product_id = p.product_id\nWHERE o.order_date >= CURRENT_DATE - INTERVAL '30 days'\nORDER BY o.order_date DESC, line_total DESC;"},
+{title:"Find Data Gaps",desc:"Use LEFT JOIN to find missing relationships.",code:"-- Products never ordered\nSELECT p.product_name, p.price\nFROM products p\nLEFT JOIN order_items oi ON p.product_id = oi.product_id\nWHERE oi.order_id IS NULL\nORDER BY p.price DESC;\n\n-- Customers who haven't ordered in 90 days\nSELECT c.name, MAX(o.order_date) AS last_order\nFROM customers c\nLEFT JOIN orders o ON c.customer_id = o.customer_id\nGROUP BY c.customer_id, c.name\nHAVING MAX(o.order_date) < CURRENT_DATE - 90\n    OR MAX(o.order_date) IS NULL;"}
+],
+practice:[
+{q:"Write an INNER JOIN between employees and departments to show employee name and department name.",d:"E"},
+{q:"Use LEFT JOIN to show all departments, including those with no employees.",d:"E"},
+{q:"Write a self-join to display each employee alongside their manager's name.",d:"E"},
+{q:"Join 3 tables: orders → customers → products, and display relevant columns.",d:"M"},
+{q:"Use LEFT JOIN + WHERE IS NULL to find customers who have never placed an order.",d:"M"},
+{q:"Write a CROSS JOIN to generate a calendar of all days × all product categories.",d:"M"},
+{q:"Use EXISTS (semi-join) to find departments that have at least one employee earning > 100K.",d:"M"},
+{q:"Write a query joining a table to itself to find all pairs of employees in the same department.",d:"H"},
+{q:"Use FULL OUTER JOIN to find mismatches between two related tables (e.g., staging vs prod).",d:"H"},
+{q:"Rewrite a correlated subquery as a JOIN and compare execution plans for performance.",d:"H"}
+]},
+
+{id:7,title:"Subqueries & Set Operations",color:"#fb923c",chips:["Subquery","EXISTS","IN","UNION","INTERSECT","EXCEPT"],
+subtopics:[
+{name:"Scalar & Column Subqueries",theory:["Scalar subquery returns a single value; can be used in SELECT, WHERE, or HAVING.","Column subquery returns multiple values; used with IN, ANY, ALL operators.","Subqueries in FROM clause (derived tables) create temporary result sets."],code:"-- Scalar subquery in SELECT\nSELECT name, salary,\n    salary - (SELECT AVG(salary) FROM employees) AS diff_from_avg\nFROM employees;\n\n-- Column subquery with IN\nSELECT * FROM employees\nWHERE dept_id IN (\n    SELECT dept_id FROM departments WHERE budget > 500000\n);\n\n-- Subquery in FROM (derived table)\nSELECT dept_id, avg_salary\nFROM (\n    SELECT dept_id, AVG(salary) AS avg_salary\n    FROM employees\n    GROUP BY dept_id\n) dept_stats\nWHERE avg_salary > 70000;"},
+{name:"Correlated Subqueries",theory:["Correlated subquery references the outer query; re-executes for each outer row.","Often used with EXISTS/NOT EXISTS for checking related records.","Can be less performant than JOINs but sometimes more readable for complex logic."],code:"-- Employees earning above their department average\nSELECT e.name, e.salary, e.dept_id\nFROM employees e\nWHERE e.salary > (\n    SELECT AVG(salary)\n    FROM employees\n    WHERE dept_id = e.dept_id\n);\n\n-- EXISTS: departments with high earners\nSELECT d.dept_name\nFROM departments d\nWHERE EXISTS (\n    SELECT 1 FROM employees e\n    WHERE e.dept_id = d.dept_id AND e.salary > 100000\n);\n\n-- Lateral join (modern alternative to correlated subquery)\nSELECT d.dept_name, top_emp.name, top_emp.salary\nFROM departments d\nCROSS JOIN LATERAL (\n    SELECT name, salary FROM employees\n    WHERE dept_id = d.dept_id\n    ORDER BY salary DESC LIMIT 1\n) top_emp;"},
+{name:"ANY, ALL Operators",theory:["ANY returns TRUE if the condition is true for at least one value in the subquery.","ALL returns TRUE only if the condition is true for every value in the subquery.","salary > ALL(subquery) means salary exceeds the maximum; > ANY means exceeds the minimum."],code:"-- ANY: salary greater than at least one person in dept 2\nSELECT name, salary\nFROM employees\nWHERE salary > ANY (\n    SELECT salary FROM employees WHERE dept_id = 2\n);\n\n-- ALL: salary greater than everyone in dept 2\nSELECT name, salary\nFROM employees\nWHERE salary > ALL (\n    SELECT salary FROM employees WHERE dept_id = 2\n);\n\n-- Equivalent without ANY/ALL\n-- > ANY ≡ > (SELECT MIN(salary) ...)\n-- > ALL ≡ > (SELECT MAX(salary) ...)"},
+{name:"UNION, INTERSECT, EXCEPT",theory:["UNION combines results from two queries, removing duplicates; UNION ALL keeps duplicates.","INTERSECT returns only rows that appear in both result sets.","EXCEPT returns rows from the first query that don't appear in the second."],code:"-- UNION: all contacts (customers + suppliers)\nSELECT name, email, 'Customer' AS type FROM customers\nUNION ALL\nSELECT name, email, 'Supplier' AS type FROM suppliers;\n\n-- INTERSECT: customers who are also suppliers\nSELECT email FROM customers\nINTERSECT\nSELECT email FROM suppliers;\n\n-- EXCEPT: customers who are NOT suppliers\nSELECT email FROM customers\nEXCEPT\nSELECT email FROM suppliers;\n\n-- UNION with ORDER BY (applied to final result)\nSELECT name, salary FROM employees WHERE dept_id = 1\nUNION\nSELECT name, salary FROM employees WHERE dept_id = 2\nORDER BY salary DESC;"}
+],
+examples:[
+{title:"Top-N per Group with Subquery",desc:"Find the highest-paid employee in each department using a correlated subquery.",code:"SELECT e.name, e.dept_id, e.salary\nFROM employees e\nWHERE e.salary = (\n    SELECT MAX(salary)\n    FROM employees\n    WHERE dept_id = e.dept_id\n)\nORDER BY e.dept_id;"},
+{title:"Combine Multiple Reports",desc:"Use UNION ALL to create a unified activity log.",code:"SELECT 'Order' AS event_type, order_date AS event_date,\n       customer_id, amount AS value\nFROM orders WHERE order_date >= CURRENT_DATE - 30\nUNION ALL\nSELECT 'Return', return_date, customer_id, -refund_amount\nFROM returns WHERE return_date >= CURRENT_DATE - 30\nUNION ALL\nSELECT 'Payment', payment_date, customer_id, amount\nFROM payments WHERE payment_date >= CURRENT_DATE - 30\nORDER BY event_date DESC;"}
+],
+practice:[
+{q:"Write a subquery in WHERE to find employees in the department with the highest average salary.",d:"E"},
+{q:"Use IN with a subquery to find products that have been ordered at least once.",d:"E"},
+{q:"Write a scalar subquery in SELECT to show each employee's salary vs company average.",d:"E"},
+{q:"Use a correlated subquery to find employees earning above their department average.",d:"M"},
+{q:"Write a query using EXISTS to find customers who placed orders in the last month.",d:"M"},
+{q:"Use UNION to combine two different queries into one result set.",d:"M"},
+{q:"Use EXCEPT to find products that exist in catalog but have never been ordered.",d:"M"},
+{q:"Write a query using ALL to find the employee with the highest salary without MAX().",d:"H"},
+{q:"Use LATERAL JOIN to get top-3 products per category in a single query.",d:"H"},
+{q:"Rewrite a complex correlated subquery as a JOIN and compare the two approaches.",d:"H"}
+]},
+
+{id:8,title:"Built-in Functions",color:"#e879f9",chips:["String","Numeric","Date/Time","Type Casting"],
+subtopics:[
+{name:"String Functions",theory:["CONCAT, ||: join strings; LENGTH/LEN: character count; SUBSTRING: extract portion.","UPPER/LOWER/INITCAP: case changes; TRIM/LTRIM/RTRIM: remove whitespace.","REPLACE: substitute text; SPLIT_PART/STRING_TO_ARRAY: break strings apart."],code:"SELECT\n    CONCAT(first_name, ' ', last_name) AS full_name,\n    LENGTH(email) AS email_length,\n    UPPER(last_name) AS upper_name,\n    SUBSTRING(email FROM 1 FOR POSITION('@' IN email)-1) AS username,\n    REPLACE(phone, '-', '') AS clean_phone,\n    SPLIT_PART(email, '@', 2) AS domain\nFROM employees;\n\n-- Padding and formatting\nSELECT LPAD(CAST(emp_id AS VARCHAR), 5, '0') AS padded_id,\n       REPEAT('*', LENGTH(password)) AS masked,\n       REVERSE(name) AS reversed\nFROM employees;"},
+{name:"Numeric Functions",theory:["ROUND(n, d): round to d decimals; CEIL/FLOOR: round up/down to integer.","ABS: absolute value; MOD: remainder; POWER/SQRT: exponentiation.","TRUNC truncates without rounding; SIGN returns -1, 0, or 1."],code:"SELECT\n    ROUND(3.14159, 2) AS rounded,      -- 3.14\n    CEIL(4.1) AS ceiling,               -- 5\n    FLOOR(4.9) AS floored,              -- 4\n    ABS(-42) AS absolute,               -- 42\n    MOD(17, 5) AS remainder,            -- 2\n    POWER(2, 10) AS power_of_2,         -- 1024\n    SQRT(144) AS square_root,           -- 12\n    TRUNC(3.789, 1) AS truncated;       -- 3.7\n\n-- Practical: calculate percentage\nSELECT dept_id,\n    COUNT(*) AS cnt,\n    ROUND(100.0 * COUNT(*) / SUM(COUNT(*)) OVER (), 1) AS pct\nFROM employees GROUP BY dept_id;"},
+{name:"Date/Time Functions",theory:["CURRENT_DATE, NOW(), CURRENT_TIMESTAMP: get current date/time values.","DATE_TRUNC: truncate to precision (month, year); EXTRACT: get date parts.","DATE_ADD/INTERVAL: add/subtract time; DATEDIFF/AGE: calculate differences."],code:"SELECT\n    CURRENT_DATE AS today,\n    NOW() AS current_timestamp,\n    DATE_TRUNC('month', NOW()) AS month_start,\n    EXTRACT(DOW FROM NOW()) AS day_of_week,\n    EXTRACT(QUARTER FROM NOW()) AS quarter;\n\n-- Date arithmetic\nSELECT\n    hire_date,\n    hire_date + INTERVAL '90 days' AS probation_end,\n    AGE(CURRENT_DATE, hire_date) AS tenure,\n    EXTRACT(YEAR FROM AGE(CURRENT_DATE, hire_date)) AS years_worked\nFROM employees;\n\n-- Generate date series\nSELECT d::DATE\nFROM generate_series('2024-01-01', '2024-12-31', '1 month'::INTERVAL) d;"},
+{name:"Type Casting & Conversion",theory:["CAST(x AS type) or x::type converts between types; TO_CHAR formats output.","TO_DATE/TO_TIMESTAMP parse strings into dates with format patterns.","Implicit casting varies by database; explicit CAST is always safer."],code:"-- Explicit casting\nSELECT CAST('42' AS INTEGER) + 8;          -- 50\nSELECT CAST(NOW() AS DATE);                -- date only\nSELECT '100'::NUMERIC / 3;                 -- 33.333...\n\n-- Formatting with TO_CHAR\nSELECT TO_CHAR(salary, '$999,999.00') AS formatted_salary,\n       TO_CHAR(hire_date, 'Mon DD, YYYY') AS hire_formatted,\n       TO_CHAR(NOW(), 'HH24:MI:SS') AS current_time\nFROM employees;\n\n-- Parsing strings to dates\nSELECT TO_DATE('15-Jan-2024', 'DD-Mon-YYYY');\nSELECT TO_TIMESTAMP('2024-03-15 14:30:00', 'YYYY-MM-DD HH24:MI:SS');"}
+],
+examples:[
+{title:"Data Cleaning Functions",desc:"Clean and standardize messy data using built-in functions.",code:"SELECT\n    TRIM(BOTH ' ' FROM name) AS clean_name,\n    LOWER(TRIM(email)) AS normalized_email,\n    REGEXP_REPLACE(phone, '[^0-9]', '', 'g') AS digits_only,\n    COALESCE(NULLIF(TRIM(city), ''), 'Unknown') AS city,\n    INITCAP(LOWER(address)) AS proper_address\nFROM raw_customers\nWHERE LENGTH(TRIM(name)) > 0;"},
+{title:"Date-Based Business Logic",desc:"Calculate business metrics using date functions.",code:"SELECT\n    emp_id,\n    name,\n    hire_date,\n    EXTRACT(YEAR FROM AGE(NOW(), hire_date)) AS years_tenure,\n    CASE\n        WHEN AGE(NOW(), hire_date) < INTERVAL '1 year' THEN 'New'\n        WHEN AGE(NOW(), hire_date) < INTERVAL '5 years' THEN 'Mid'\n        ELSE 'Senior'\n    END AS tenure_band,\n    hire_date + INTERVAL '1 year' AS first_anniversary\nFROM employees\nORDER BY hire_date;"}
+],
+practice:[
+{q:"Use CONCAT and UPPER to create a formatted full name from first_name and last_name.",d:"E"},
+{q:"Use ROUND, CEIL, and FLOOR on the same decimal number and compare results.",d:"E"},
+{q:"Extract the year and month from a date column using EXTRACT.",d:"E"},
+{q:"Use SUBSTRING and POSITION to extract the domain from email addresses.",d:"M"},
+{q:"Calculate each employee's tenure in years and months using AGE or DATEDIFF.",d:"M"},
+{q:"Use TO_CHAR to format a salary as currency and a date in 'Month DD, YYYY' format.",d:"M"},
+{q:"Write a query using GENERATE_SERIES to create a date range for the current year.",d:"M"},
+{q:"Use REGEXP_REPLACE to clean phone numbers (remove all non-digit characters).",d:"H"},
+{q:"Write a query that converts between time zones using AT TIME ZONE.",d:"H"},
+{q:"Create a function-based query that parses and validates date strings from various formats.",d:"H"}
+]},
+
+{id:9,title:"Views & Transactions",color:"#4ade80",chips:["Views","Materialized Views","ACID","Isolation Levels"],
+subtopics:[
+{name:"Views",theory:["A view is a saved query that acts like a virtual table; no data stored physically.","Views simplify complex queries, enforce security (expose subset of columns), and provide abstraction.","Updatable views allow INSERT/UPDATE/DELETE if the view meets certain conditions."],code:"-- Create a view\nCREATE VIEW active_employees AS\nSELECT emp_id, name, dept_id, salary\nFROM employees\nWHERE is_active = TRUE;\n\n-- Use it like a table\nSELECT * FROM active_employees WHERE salary > 70000;\n\n-- View with JOIN\nCREATE VIEW employee_details AS\nSELECT e.name, e.salary, d.dept_name, m.name AS manager\nFROM employees e\nJOIN departments d ON e.dept_id = d.dept_id\nLEFT JOIN employees m ON e.manager_id = m.emp_id;\n\n-- Drop view\nDROP VIEW IF EXISTS active_employees;"},
+{name:"Materialized Views",theory:["Materialized views store query results physically; faster reads but stale data.","Must be refreshed manually or on schedule: REFRESH MATERIALIZED VIEW.","CONCURRENTLY option allows refresh without blocking reads (requires unique index)."],code:"-- Create materialized view\nCREATE MATERIALIZED VIEW monthly_sales AS\nSELECT DATE_TRUNC('month', order_date) AS month,\n       SUM(amount) AS revenue,\n       COUNT(*) AS order_count\nFROM orders\nGROUP BY DATE_TRUNC('month', order_date);\n\n-- Refresh (blocks reads unless CONCURRENTLY)\nREFRESH MATERIALIZED VIEW monthly_sales;\n\n-- Concurrent refresh (needs unique index)\nCREATE UNIQUE INDEX idx_ms_month ON monthly_sales(month);\nREFRESH MATERIALIZED VIEW CONCURRENTLY monthly_sales;\n\n-- Query it (very fast)\nSELECT * FROM monthly_sales WHERE month >= '2024-01-01';"},
+{name:"Transactions & ACID",theory:["ACID: Atomicity (all or nothing), Consistency (valid state), Isolation (concurrent safety), Durability (permanent).","BEGIN starts a transaction; COMMIT saves changes; ROLLBACK undoes changes.","SAVEPOINT creates a checkpoint within a transaction for partial rollback."],code:"-- Basic transaction\nBEGIN;\n    UPDATE accounts SET balance = balance - 500 WHERE id = 1;\n    UPDATE accounts SET balance = balance + 500 WHERE id = 2;\nCOMMIT;\n\n-- With error handling\nBEGIN;\n    INSERT INTO orders (customer_id, amount) VALUES (1, 99.99);\n    SAVEPOINT order_created;\n\n    INSERT INTO order_items (order_id, product_id, qty)\n    VALUES (currval('orders_id_seq'), 42, 1);\n    -- If this fails:\n    -- ROLLBACK TO SAVEPOINT order_created;\nCOMMIT;\n\n-- Rollback entire transaction\nBEGIN;\n    DELETE FROM employees WHERE dept_id = 5;\n    -- Oops, wrong department!\nROLLBACK;"},
+{name:"Isolation Levels",theory:["READ UNCOMMITTED: dirty reads possible (rarely used); READ COMMITTED: default in most DBs.","REPEATABLE READ: same query returns same results within transaction; prevents non-repeatable reads.","SERIALIZABLE: strongest isolation; transactions behave as if executed sequentially."],code:"-- Set isolation level\nSET TRANSACTION ISOLATION LEVEL SERIALIZABLE;\n\nBEGIN;\n    -- This query sees a consistent snapshot\n    SELECT SUM(balance) FROM accounts;\n\n    -- Even if another transaction modifies accounts,\n    -- this transaction sees the original data\n    SELECT * FROM accounts WHERE id = 1;\nCOMMIT;\n\n-- Check current isolation level (PostgreSQL)\nSHOW transaction_isolation;\n\n-- Per-transaction isolation\nBEGIN TRANSACTION ISOLATION LEVEL REPEATABLE READ;\n    SELECT * FROM inventory WHERE product_id = 1;\n    -- Guaranteed same result if re-read\nCOMMIT;"}
+],
+examples:[
+{title:"Bank Transfer Transaction",desc:"Implement a safe money transfer between accounts.",code:"BEGIN;\n    -- Verify sufficient funds\n    DO $$\n    DECLARE\n        src_balance DECIMAL;\n    BEGIN\n        SELECT balance INTO src_balance\n        FROM accounts WHERE id = 1 FOR UPDATE;\n\n        IF src_balance < 500 THEN\n            RAISE EXCEPTION 'Insufficient funds';\n        END IF;\n\n        UPDATE accounts SET balance = balance - 500 WHERE id = 1;\n        UPDATE accounts SET balance = balance + 500 WHERE id = 2;\n\n        INSERT INTO transfers (from_id, to_id, amount, transferred_at)\n        VALUES (1, 2, 500, NOW());\n    END $$;\nCOMMIT;"},
+{title:"Reporting View with Security",desc:"Create a view that restricts sensitive data.",code:"-- Full employee table has SSN, salary details\n-- Create restricted view for managers\nCREATE VIEW manager_employee_view AS\nSELECT emp_id, name, dept_id, hire_date,\n       CASE WHEN salary > 100000 THEN 'Band A'\n            WHEN salary > 70000 THEN 'Band B'\n            ELSE 'Band C'\n       END AS salary_band\nFROM employees\nWHERE is_active = TRUE;\n\n-- Grant access only to manager role\nGRANT SELECT ON manager_employee_view TO manager_role;\nREVOKE SELECT ON employees FROM manager_role;"}
+],
+practice:[
+{q:"Create a simple view that joins two tables and query from it.",d:"E"},
+{q:"Write a BEGIN/COMMIT transaction that inserts into two related tables.",d:"E"},
+{q:"Create a view that shows only active employees with selected columns.",d:"E"},
+{q:"Create a materialized view for a heavy aggregate query and refresh it.",d:"M"},
+{q:"Write a transaction with SAVEPOINT and demonstrate partial rollback.",d:"M"},
+{q:"Create a view that uses CASE to mask sensitive salary information.",d:"M"},
+{q:"Demonstrate the difference between READ COMMITTED and REPEATABLE READ isolation.",d:"H"},
+{q:"Create an updatable view with CHECK OPTION and test insert/update behavior.",d:"H"},
+{q:"Write a transaction that uses SELECT FOR UPDATE to prevent race conditions.",d:"H"},
+{q:"Design a view-based security model that exposes different data to different roles.",d:"H"}
+]},
+
+{id:10,title:"DCL & Security",color:"#f59e0b",chips:["GRANT","REVOKE","Roles","Permissions","RLS"],
+subtopics:[
+{name:"GRANT & REVOKE",theory:["GRANT gives privileges (SELECT, INSERT, UPDATE, DELETE, ALL) on objects to users/roles.","REVOKE removes previously granted privileges; CASCADE revokes from dependent grantees.","WITH GRANT OPTION allows the grantee to further grant the same privilege to others."],code:"-- Grant specific privileges\nGRANT SELECT, INSERT ON employees TO analyst_role;\nGRANT ALL PRIVILEGES ON orders TO admin_role;\n\n-- Grant with cascading ability\nGRANT SELECT ON reports TO manager_role WITH GRANT OPTION;\n\n-- Revoke\nREVOKE INSERT ON employees FROM analyst_role;\nREVOKE ALL ON orders FROM public;\n\n-- Schema-level grants\nGRANT USAGE ON SCHEMA analytics TO data_team;\nGRANT SELECT ON ALL TABLES IN SCHEMA analytics TO data_team;\n\n-- Default privileges for future tables\nALTER DEFAULT PRIVILEGES IN SCHEMA analytics\n    GRANT SELECT ON TABLES TO data_team;"},
+{name:"Roles & Users",theory:["Roles group privileges; users inherit role privileges via role membership.","CREATE ROLE defines a role; GRANT role TO user assigns membership.","Role hierarchy allows layered permissions: basic_role → analyst_role → admin_role."],code:"-- Create roles\nCREATE ROLE readonly;\nCREATE ROLE readwrite;\nCREATE ROLE admin;\n\n-- Assign privileges to roles\nGRANT SELECT ON ALL TABLES IN SCHEMA public TO readonly;\nGRANT SELECT, INSERT, UPDATE, DELETE ON ALL TABLES IN SCHEMA public TO readwrite;\nGRANT ALL PRIVILEGES ON ALL TABLES IN SCHEMA public TO admin;\n\n-- Create users and assign roles\nCREATE USER alice WITH PASSWORD 'secure123';\nCREATE USER bob WITH PASSWORD 'secure456';\n\nGRANT readonly TO alice;\nGRANT readwrite TO bob;\nGRANT admin TO admin_user;\n\n-- Role inheritance\nGRANT readonly TO readwrite;  -- readwrite inherits readonly"},
+{name:"Row-Level Security (RLS)",theory:["RLS restricts which rows a user can see or modify based on policies.","Enable with ALTER TABLE ... ENABLE ROW LEVEL SECURITY; then create policies.","Policies use current_user or session variables to filter rows per user."],code:"-- Enable RLS\nALTER TABLE orders ENABLE ROW LEVEL SECURITY;\n\n-- Policy: users see only their own orders\nCREATE POLICY user_orders ON orders\n    FOR ALL\n    USING (user_id = current_user_id());\n\n-- Policy: managers see their department\nCREATE POLICY dept_orders ON orders\n    FOR SELECT\n    USING (\n        dept_id IN (\n            SELECT dept_id FROM employees\n            WHERE email = current_user\n        )\n    );\n\n-- Admin bypasses RLS\nALTER TABLE orders FORCE ROW LEVEL SECURITY;\nGRANT ALL ON orders TO admin_role;\nCREATE POLICY admin_all ON orders TO admin_role USING (TRUE);"}
+],
+examples:[
+{title:"Complete RBAC Setup",desc:"Implement role-based access control for a multi-tenant app.",code:"-- Create role hierarchy\nCREATE ROLE app_user;\nCREATE ROLE app_manager;\nCREATE ROLE app_admin;\nGRANT app_user TO app_manager;\nGRANT app_manager TO app_admin;\n\n-- Base permissions\nGRANT USAGE ON SCHEMA app TO app_user;\nGRANT SELECT ON ALL TABLES IN SCHEMA app TO app_user;\nGRANT INSERT, UPDATE ON app.orders TO app_user;\n\n-- Manager extras\nGRANT DELETE ON app.orders TO app_manager;\nGRANT SELECT ON app.reports TO app_manager;\n\n-- Admin full access\nGRANT ALL ON ALL TABLES IN SCHEMA app TO app_admin;"}
+],
+practice:[
+{q:"Create a role and grant SELECT on a specific table to that role.",d:"E"},
+{q:"Grant INSERT and UPDATE to a user, then revoke INSERT.",d:"E"},
+{q:"Create a role hierarchy: readonly → readwrite → admin.",d:"M"},
+{q:"Use ALTER DEFAULT PRIVILEGES so new tables auto-grant SELECT to a role.",d:"M"},
+{q:"Implement Row-Level Security so users only see their own rows.",d:"H"},
+{q:"Design a complete permission model for a multi-team application with 3 access levels.",d:"H"}
+]},
+
+];
+
+// SQL syntax highlighting
+function highlightSQL(code) {
+    let html = code
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;');
+    // Comments
+    html = html.replace(/(--.*)/g, '<span style="color:#6b7280">$1</span>');
+    // Strings
+    html = html.replace(/('(?:[^'\\]|\\.)*')/g, '<span style="color:#fbbf24">$1</span>');
+    // Numbers
+    html = html.replace(/\b(\d+\.?\d*)\b/g, '<span style="color:#f472b6">$1</span>');
+    // Keywords
+    const keywords = ['SELECT','FROM','WHERE','INSERT','INTO','VALUES','UPDATE','SET','DELETE','CREATE','ALTER','DROP','TABLE','INDEX','VIEW','SCHEMA','DATABASE','GRANT','REVOKE','BEGIN','COMMIT','ROLLBACK','SAVEPOINT','JOIN','INNER','LEFT','RIGHT','FULL','OUTER','CROSS','ON','AND','OR','NOT','IN','EXISTS','BETWEEN','LIKE','ILIKE','IS','NULL','AS','CASE','WHEN','THEN','ELSE','END','ORDER','BY','GROUP','HAVING','LIMIT','OFFSET','FETCH','FIRST','ROWS','ONLY','UNION','ALL','INTERSECT','EXCEPT','DISTINCT','ASC','DESC','WITH','RECURSIVE','OVER','PARTITION','WINDOW','PRIMARY','KEY','FOREIGN','REFERENCES','UNIQUE','CHECK','DEFAULT','CONSTRAINT','CASCADE','IF','REPLACE','SERIAL','RETURNS','RETURN','DECLARE','FUNCTION','PROCEDURE','TRIGGER','BEFORE','AFTER','FOR','EACH','ROW','EXECUTE','LATERAL','MATERIALIZED','REFRESH','CONCURRENTLY','TRUNCATE','ADD','COLUMN','RENAME','TO','TYPE','USING','DO','RAISE','EXCEPTION','MERGE','MATCHED','CONFLICT','EXCLUDED','ROLE','USER','PRIVILEGES','USAGE','ENABLE','DISABLE','SECURITY','POLICY','FORCE','TRUE','FALSE','INT','INTEGER','BIGINT','SMALLINT','DECIMAL','NUMERIC','FLOAT','DOUBLE','VARCHAR','CHAR','TEXT','BOOLEAN','DATE','TIME','TIMESTAMP','INTERVAL','JSONB','JSON','ARRAY','ENUM','ANY','SOME','COALESCE','NULLIF','CAST','EXTRACT','YEAR','MONTH','DAY','HOUR','MINUTE','SECOND','NOW','CURRENT_DATE','CURRENT_TIMESTAMP','COUNT','SUM','AVG','MIN','MAX','ROUND','CEIL','FLOOR','ABS','MOD','POWER','SQRT','LENGTH','UPPER','LOWER','TRIM','CONCAT','SUBSTRING','POSITION','REPLACE','LPAD','RPAD','SPLIT_PART','TO_CHAR','TO_DATE','TO_TIMESTAMP','DATE_TRUNC','AGE','GENERATE_SERIES','ROW_NUMBER','RANK','DENSE_RANK','NTILE','LAG','LEAD','FIRST_VALUE','LAST_VALUE','GROUPING','SETS','ROLLUP','CUBE','HAVING','TOP','ROWNUM','LEVEL','CONNECT','PRIOR','START'];
+    const kwPattern = new RegExp('\\b(' + keywords.join('|') + ')\\b', 'gi');
+    html = html.replace(kwPattern, '<span style="color:#22d3ee">$1</span>');
+    return html;
+}
+
+
+function getProgress() {
+    try { return JSON.parse(localStorage.getItem(STORAGE_KEY)) || {}; }
+    catch { return {}; }
+}
+function saveProgress(data) {
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
+}
+function getTotalPractice() {
+    return topics.reduce((sum, t) => sum + t.practice.length, 0);
+}
+function getCompletedCount() {
+    const prog = getProgress();
+    return Object.values(prog).filter(v => v).length;
+}
+function updateProgressBar() {
+    const total = getTotalPractice();
+    const done = getCompletedCount();
+    const pct = total > 0 ? (done / total * 100) : 0;
+    document.getElementById('progressFill').style.width = pct + '%';
+    document.getElementById('progressText').textContent = done + ' / ' + total;
+}
+function getTopicProgress(topicId) {
+    const prog = getProgress();
+    const topic = topics.find(t => t.id === topicId);
+    if (!topic) return {done: 0, total: 0};
+    let done = 0;
+    topic.practice.forEach((_, i) => {
+        if (prog[topicId + '_' + i]) done++;
+    });
+    return {done, total: topic.practice.length};
+}
+
+function renderRoadmap() {
+    const container = document.getElementById('roadmapContainer');
+    container.innerHTML = '';
+    topics.forEach(topic => {
+        const prog = getTopicProgress(topic.id);
+        const node = document.createElement('div');
+        node.className = 'node';
+        node.onclick = () => showDetail(topic.id);
+        node.innerHTML = `
+            <div class="node-number" style="border-color:${topic.color};color:${topic.color}">${topic.id}</div>
+            <div class="node-card">
+                <div class="node-title" style="color:${topic.color}">${topic.title}</div>
+                <div class="node-chips">${topic.chips.map(c => '<span class="chip">' + c + '</span>').join('')}</div>
+                <div class="node-progress">${prog.done} / ${prog.total} practice completed</div>
+            </div>
+        `;
+        container.appendChild(node);
+    });
+}
+
+function showDetail(topicId) {
+    currentTopic = topics.find(t => t.id === topicId);
+    if (!currentTopic) return;
+    document.getElementById('roadmapPage').classList.remove('active');
+    document.getElementById('detailPage').classList.add('active');
+    document.getElementById('detailTitle').textContent = currentTopic.title;
+    document.getElementById('detailTitle').style.color = currentTopic.color;
+    document.getElementById('detailSubtitle').textContent = currentTopic.subtopics.map(s => s.name).join(' • ');
+    renderTheory();
+    renderExamples();
+    renderPractice();
+    switchTab('theory');
+    window.scrollTo(0, 0);
+}
+
+function showRoadmap() {
+    document.getElementById('detailPage').classList.remove('active');
+    document.getElementById('roadmapPage').classList.add('active');
+    renderRoadmap();
+    updateProgressBar();
+}
+
+
+function switchTab(tab) {
+    document.querySelectorAll('.tab').forEach((t, i) => {
+        t.classList.toggle('active', ['theory','examples','practice','solutions'][i] === tab);
+    });
+    document.querySelectorAll('.tab-content').forEach((tc, i) => {
+        tc.classList.toggle('active', ['theory','examples','practice','solutions'][i] === tab);
+    });
+    if (tab === 'solutions') renderSolutions();
+}
+
+function renderTheory() {
+    const container = document.getElementById('theoryContent');
+    container.innerHTML = currentTopic.subtopics.map(sub => `
+        <div class="theory-section">
+            <div class="theory-title">${sub.name}</div>
+            ${sub.theory.map(t => '<p class="theory-point">' + t + '</p>').join('')}
+            <pre class="code-block">${highlightSQL(sub.code)}</pre>
+        </div>
+    `).join('');
+}
+
+function renderExamples() {
+    const container = document.getElementById('examplesContent');
+    container.innerHTML = currentTopic.examples.map(ex => `
+        <div class="example-card">
+            <div class="example-title">${ex.title}</div>
+            <p class="example-desc">${ex.desc}</p>
+            <pre class="code-block">${highlightSQL(ex.code)}</pre>
+        </div>
+    `).join('');
+}
+
+function renderPractice() {
+    const container = document.getElementById('practiceContent');
+    const prog = getProgress();
+    container.innerHTML = currentTopic.practice.map((p, i) => {
+        const key = currentTopic.id + '_' + i;
+        const checked = prog[key] ? 'checked' : '';
+        const doneClass = prog[key] ? 'done' : '';
+        const diffClass = p.d === 'E' ? 'easy' : p.d === 'M' ? 'medium' : 'hard';
+        const diffLabel = p.d === 'E' ? 'Easy' : p.d === 'M' ? 'Medium' : 'Hard';
+        return `
+            <div class="practice-item ${doneClass}">
+                <input type="checkbox" ${checked} onchange="togglePractice('${key}', this)">
+                <span class="practice-text">${i+1}. ${p.q}</span>
+                <span class="difficulty ${diffClass}">${diffLabel}</span>
+            </div>
+        `;
+    }).join('');
+}
+
+function togglePractice(key, el) {
+    const prog = getProgress();
+    prog[key] = el.checked;
+    saveProgress(prog);
+    updateProgressBar();
+    el.parentElement.classList.toggle('done', el.checked);
+}
+
+function renderSolutions() {
+    const container = document.getElementById('solutionsContent');
+    if (!currentTopic) return;
+    container.innerHTML = '<div class="theory-section"><div class="theory-title">Solutions Coming Soon</div><p class="theory-point">Practice solving these problems on your own first. Solutions will be added in a future update.</p></div>';
+}
+
+// Initialize
+renderRoadmap();
+updateProgressBar();
+</script>
+</body>
+</html>
