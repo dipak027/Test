@@ -1,0 +1,2347 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>NumPy Learning Roadmap</title>
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{--bg:#080c14;--card:#141d2e;--border:#1e2d45;--text:#dde4f0;--text-dim:#8892a4;--green:#4ade80;--cyan:#22d3ee;--purple:#a78bfa;--gradient:linear-gradient(135deg,#4ade80,#22d3ee,#a78bfa)}
+body{font-family:'Sora',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;overflow-x:hidden}
+code,pre,.code{font-family:'JetBrains Mono',monospace}
+.header{position:sticky;top:0;z-index:1000;background:rgba(8,12,20,0.95);backdrop-filter:blur(12px);border-bottom:1px solid var(--border);padding:12px 24px}
+.header-inner{max-width:1200px;margin:0 auto;display:flex;align-items:center;justify-content:space-between}
+.logo{font-size:1.4rem;font-weight:700;background:var(--gradient);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.progress-container{flex:1;max-width:300px;margin-left:24px}
+.progress-label{font-size:0.7rem;color:var(--text-dim);margin-bottom:4px;text-align:right}
+.progress-bar{height:6px;background:var(--border);border-radius:3px;overflow:hidden}
+.progress-fill{height:100%;background:var(--gradient);border-radius:3px;transition:width 0.5s ease}
+.page{display:none;padding:40px 24px 80px;max-width:900px;margin:0 auto;animation:fadeIn 0.3s ease}
+.page.active{display:block}
+@keyframes fadeIn{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
+.roadmap{position:relative;padding-left:60px}
+.roadmap::before{content:'';position:absolute;left:28px;top:0;bottom:0;width:2px;background:linear-gradient(to bottom,var(--green),var(--cyan),var(--purple));opacity:0.4}
+.node{position:relative;margin-bottom:24px;cursor:pointer;transition:transform 0.2s ease}
+.node:hover{transform:translateX(4px)}
+.node-number{position:absolute;left:-48px;top:16px;width:32px;height:32px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:0.8rem;border:2px solid;background:var(--bg)}
+.node-card{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:20px 24px;transition:border-color 0.2s,box-shadow 0.2s}
+.node:hover .node-card{border-color:var(--cyan);box-shadow:0 4px 20px rgba(34,211,238,0.1)}
+.node-title{font-size:1.1rem;font-weight:600;margin-bottom:8px}
+.node-chips{display:flex;flex-wrap:wrap;gap:6px}
+.chip{font-size:0.65rem;padding:3px 8px;border-radius:4px;background:rgba(255,255,255,0.05);border:1px solid var(--border);color:var(--text-dim)}
+.node-progress{font-size:0.7rem;color:var(--text-dim);margin-top:8px}
+.back-btn{display:inline-flex;align-items:center;gap:6px;padding:8px 16px;background:var(--card);border:1px solid var(--border);border-radius:8px;color:var(--text);cursor:pointer;font-family:'Sora',sans-serif;font-size:0.85rem;margin-bottom:24px;transition:border-color 0.2s}
+.back-btn:hover{border-color:var(--cyan)}
+.detail-header{margin-bottom:24px}
+.detail-title{font-size:1.8rem;font-weight:700;margin-bottom:8px}
+.detail-subtitle{font-size:0.85rem;color:var(--text-dim)}
+.tabs{display:flex;gap:4px;margin-bottom:24px;background:var(--card);border-radius:10px;padding:4px;border:1px solid var(--border)}
+.tab{flex:1;padding:10px 16px;text-align:center;border-radius:8px;cursor:pointer;font-size:0.85rem;font-weight:500;color:var(--text-dim);transition:all 0.2s}
+.tab.active{background:var(--border);color:var(--text)}
+.tab:hover:not(.active){color:var(--text)}
+.tab-content{display:none;animation:fadeIn 0.3s ease}
+.tab-content.active{display:block}
+.theory-section{margin-bottom:24px;background:var(--card);border:1px solid var(--border);border-radius:10px;padding:20px}
+.theory-title{font-size:1rem;font-weight:600;margin-bottom:12px;color:var(--cyan)}
+.theory-point{font-size:0.85rem;color:var(--text-dim);margin-bottom:8px;padding-left:16px;position:relative;line-height:1.6}
+.theory-point::before{content:'>';position:absolute;left:0;color:var(--green)}
+pre.code-block{background:rgba(0,0,0,0.4);border:1px solid var(--border);border-radius:8px;padding:16px;margin-top:12px;overflow-x:auto;font-size:0.8rem;line-height:1.6}
+.example-card{background:var(--card);border:1px solid var(--border);border-radius:10px;padding:20px;margin-bottom:16px}
+.example-title{font-size:0.9rem;font-weight:600;margin-bottom:8px;color:var(--purple)}
+.example-desc{font-size:0.82rem;color:var(--text-dim);margin-bottom:12px}
+.practice-item{display:flex;align-items:flex-start;gap:12px;padding:12px 16px;background:var(--card);border:1px solid var(--border);border-radius:8px;margin-bottom:8px;transition:border-color 0.2s}
+.practice-item:hover{border-color:var(--cyan)}
+.practice-item input[type="checkbox"]{width:18px;height:18px;margin-top:2px;accent-color:var(--green);cursor:pointer}
+.practice-item.done{opacity:0.6;border-color:var(--green)}
+.practice-text{flex:1;font-size:0.82rem;line-height:1.5}
+.difficulty{font-size:0.65rem;padding:2px 8px;border-radius:4px;font-weight:600;white-space:nowrap}
+.difficulty.easy{background:rgba(74,222,128,0.15);color:#4ade80}
+.difficulty.medium{background:rgba(251,191,36,0.15);color:#fbbf24}
+.difficulty.hard{background:rgba(244,114,182,0.15);color:#f472b6}
+.solution-item{background:var(--card);border:1px solid var(--border);border-radius:10px;margin-bottom:12px;overflow:hidden}
+.solution-header{padding:12px 16px;display:flex;align-items:center;justify-content:space-between;cursor:pointer}
+.solution-header:hover{background:rgba(34,211,238,0.05)}
+.solution-num{font-size:0.75rem;color:var(--text-dim);font-family:'JetBrains Mono',monospace;margin-right:10px}
+.solution-q{font-size:0.82rem;flex:1}
+.solution-toggle{padding:4px 12px;border-radius:6px;border:1px solid var(--border);background:var(--card);color:var(--cyan);font-size:0.72rem;cursor:pointer;font-family:'Sora',sans-serif;transition:all 0.2s}
+.solution-toggle:hover{background:rgba(34,211,238,0.1);border-color:var(--cyan)}
+.solution-body{display:none;padding:0 16px 16px;border-top:1px solid var(--border)}
+.solution-body.open{display:block}
+@media(max-width:640px){.roadmap{padding-left:40px}.roadmap::before{left:16px}.node-number{left:-32px;width:26px;height:26px;font-size:0.7rem}.header-inner{flex-wrap:wrap;gap:8px}.progress-container{max-width:100%;margin-left:0}}
+</style>
+</head>
+<body>
+<header class="header">
+<div class="header-inner">
+<div class="logo">NumPy Roadmap</div>
+<div class="progress-container">
+<div class="progress-label"><span id="progressText">0 / 240</span> completed</div>
+<div class="progress-bar"><div class="progress-fill" id="progressFill" style="width:0%"></div></div>
+</div>
+</div>
+</header>
+<div class="page active" id="roadmapPage">
+<div class="roadmap" id="roadmapContainer"></div>
+</div>
+<div class="page" id="detailPage">
+<button class="back-btn" onclick="showRoadmap()">&#8592; Back to Roadmap</button>
+<div class="detail-header">
+<h1 class="detail-title" id="detailTitle"></h1>
+<p class="detail-subtitle" id="detailSubtitle"></p>
+</div>
+<div class="tabs">
+<div class="tab active" onclick="switchTab('theory')">Theory</div>
+<div class="tab" onclick="switchTab('examples')">Examples</div>
+<div class="tab" onclick="switchTab('practice')">Practice</div>
+<div class="tab" onclick="switchTab('solutions')">Solutions</div>
+</div>
+<div class="tab-content active" id="theoryContent"></div>
+<div class="tab-content" id="examplesContent"></div>
+<div class="tab-content" id="practiceContent"></div>
+<div class="tab-content" id="solutionsContent"></div>
+</div>
+<script>
+const topics = [
+{id:1,title:"NumPy Basics",color:"#38bdf8",chips:["ndarray","dtype","shape","ndim","size"],
+subtopics:[
+{name:"ndarray - The Core Object",theory:["ndarray is NumPy's N-dimensional array object, the foundation of all NumPy operations.","Unlike Python lists, ndarrays store homogeneous data in contiguous memory blocks for fast operations.","Create arrays with np.array(), specifying data and optionally dtype for the element type."],code:"import numpy as np\n\n# Creating ndarrays\narr1 = np.array([1, 2, 3, 4, 5])\narr2 = np.array([[1, 2, 3], [4, 5, 6]])\n\nprint(type(arr1))  # <class 'numpy.ndarray'>\nprint(arr1)        # [1 2 3 4 5]\nprint(arr2)        # [[1 2 3]\n                   #  [4 5 6]]"},
+{name:"dtype - Data Types",theory:["dtype defines the type of elements: int32, float64, bool, complex128, etc.","NumPy auto-infers dtype but you can specify explicitly for precision control.","Use arr.astype() to convert between types; be cautious of precision loss."],code:"import numpy as np\n\narr_int = np.array([1, 2, 3], dtype=np.int32)\narr_float = np.array([1.5, 2.7], dtype=np.float64)\narr_bool = np.array([True, False, True])\n\nprint(arr_int.dtype)    # int32\nprint(arr_float.dtype)  # float64\n\n# Type conversion\nconverted = arr_int.astype(np.float64)\nprint(converted)        # [1. 2. 3.]"},
+{name:"shape, ndim, size",theory:["shape returns a tuple of array dimensions (rows, cols, ...).","ndim gives the number of dimensions (axes); size gives total element count.","These properties are crucial for understanding array structure before operations."],code:"import numpy as np\n\narr = np.array([[1, 2, 3, 4],\n                [5, 6, 7, 8],\n                [9, 10, 11, 12]])\n\nprint(arr.shape)   # (3, 4) - 3 rows, 4 columns\nprint(arr.ndim)    # 2 - two dimensions\nprint(arr.size)    # 12 - total elements\nprint(arr.itemsize) # 8 - bytes per element\nprint(arr.nbytes)   # 96 - total bytes"},
+{name:"Array vs Python List",theory:["NumPy arrays are up to 100x faster than Python lists for numerical operations.","Arrays support vectorized operations; lists require explicit loops.","Arrays use fixed types and contiguous memory; lists store pointers to objects."],code:"import numpy as np\nimport time\n\n# Speed comparison\nsize = 1000000\npython_list = list(range(size))\nnumpy_arr = np.arange(size)\n\n# Vectorized operation (fast)\nresult = numpy_arr * 2\n\n# Element-wise without loop\na = np.array([1, 2, 3])\nb = np.array([4, 5, 6])\nprint(a + b)    # [5 7 9]\nprint(a * b)    # [4 10 18]\nprint(a ** 2)   # [1 4 9]"}
+],
+examples:[
+{title:"Array Properties Explorer",desc:"Create arrays of different dimensions and explore their properties.",code:"import numpy as np\n\n# 1D array\narr1d = np.array([10, 20, 30, 40, 50])\nprint(f'1D: shape={arr1d.shape}, ndim={arr1d.ndim}, size={arr1d.size}')\n\n# 2D array\narr2d = np.array([[1,2,3],[4,5,6]])\nprint(f'2D: shape={arr2d.shape}, ndim={arr2d.ndim}, size={arr2d.size}')\n\n# 3D array\narr3d = np.zeros((2, 3, 4))\nprint(f'3D: shape={arr3d.shape}, ndim={arr3d.ndim}, size={arr3d.size}')"},
+{title:"dtype Conversion Chain",desc:"Demonstrate type conversions and their effects on data.",code:"import numpy as np\n\noriginal = np.array([1.7, 2.3, 3.9, 4.1])\nprint(f'Original (float64): {original}')\n\nas_int = original.astype(np.int32)\nprint(f'As int32 (truncated): {as_int}')\n\nas_bool = original.astype(bool)\nprint(f'As bool: {as_bool}')\n\nas_str = original.astype(str)\nprint(f'As string: {as_str}')"},
+{title:"Memory Comparison",desc:"Compare memory usage between Python lists and NumPy arrays.",code:"import numpy as np\nimport sys\n\nn = 1000\npython_list = list(range(n))\nnumpy_arr = np.arange(n, dtype=np.int64)\n\nlist_mem = sys.getsizeof(python_list) + sum(sys.getsizeof(i) for i in python_list)\narr_mem = numpy_arr.nbytes\n\nprint(f'Python list: {list_mem} bytes')\nprint(f'NumPy array: {arr_mem} bytes')\nprint(f'Ratio: {list_mem/arr_mem:.1f}x more for list')"}
+],
+practice:[
+{q:"Import numpy and create a 1D array of integers from 1 to 10. Print its dtype and shape.",d:"E"},
+{q:"Create a 2D array with 3 rows and 4 columns. Print its ndim, shape, and size.",d:"E"},
+{q:"Create an array of floats and convert it to int32 using astype(). Observe truncation.",d:"E"},
+{q:"Print the itemsize and nbytes of an array of 100 float64 elements.",d:"E"},
+{q:"Create a boolean array and check its dtype. Convert it to int (True=1, False=0).",d:"E"},
+{q:"Compare creating a list vs array of 1 million elements - print type and first 5 elements.",d:"E"},
+{q:"Create arrays with dtype int8, int16, int32, int64 and compare their itemsize.",d:"E"},
+{q:"Create a 3D array of shape (2,3,4) and print all its properties (shape, ndim, size, dtype).",d:"M"},
+{q:"Create an array from a nested list and verify the shape matches your expectation.",d:"M"},
+{q:"Demonstrate that modifying a NumPy array element works but changing dtype in-place does not.",d:"M"},
+{q:"Create a complex number array and explore its real and imag attributes.",d:"M"},
+{q:"Show that NumPy arrays are homogeneous by creating an array from mixed types.",d:"M"},
+{q:"Use np.info() or arr.dtype.name to explore detailed type information.",d:"M"},
+{q:"Compare execution time of summing a Python list vs NumPy array (use time module).",d:"M"},
+{q:"Create a structured array with named fields (name, age, score) using custom dtype.",d:"M"},
+{q:"Implement a function that returns all metadata of an array (shape, dtype, strides, flags).",d:"H"},
+{q:"Create arrays with different byte orders (big-endian vs little-endian) and convert between them.",d:"H"},
+{q:"Write a function that determines if two arrays share memory using np.shares_memory().",d:"H"},
+{q:"Explore array strides - create an array and explain what strides mean for memory layout.",d:"H"},
+{q:"Create a memory-mapped array using np.memmap for handling data larger than RAM.",d:"H"}
+]},
+{id:2,title:"Array Creation",color:"#34d399",chips:["zeros","ones","arange","linspace","random"],
+subtopics:[
+{name:"zeros, ones, full, empty",theory:["np.zeros(shape) creates array filled with 0s; np.ones(shape) fills with 1s.","np.full(shape, value) fills with a specific value; np.empty(shape) allocates without initializing.","All accept optional dtype parameter; default is float64."],code:"import numpy as np\n\nz = np.zeros((3, 4))\nprint(z)  # 3x4 matrix of 0.0\n\no = np.ones((2, 3), dtype=np.int32)\nprint(o)  # 2x3 matrix of 1\n\nf = np.full((2, 2), 7.5)\nprint(f)  # [[7.5, 7.5], [7.5, 7.5]]\n\ne = np.empty((2, 3))  # Uninitialized (random values)\nprint(e.shape)  # (2, 3)"},
+{name:"arange and linspace",theory:["np.arange(start, stop, step) is like range() but returns an ndarray with float support.","np.linspace(start, stop, num) creates evenly spaced values including both endpoints.","arange uses step size; linspace uses number of points - choose based on your need."],code:"import numpy as np\n\n# arange - like range but for arrays\na = np.arange(0, 10, 2)\nprint(a)  # [0 2 4 6 8]\n\nb = np.arange(0, 1, 0.2)\nprint(b)  # [0.  0.2 0.4 0.6 0.8]\n\n# linspace - specify number of points\nc = np.linspace(0, 1, 5)\nprint(c)  # [0.   0.25 0.5  0.75 1.  ]\n\nd = np.linspace(0, 2*np.pi, 100)  # 100 points for plotting"},
+{name:"Random Arrays",theory:["np.random.rand() generates uniform [0,1); np.random.randn() generates standard normal.","np.random.randint(low, high, size) generates random integers in [low, high).","Use np.random.seed() or np.random.default_rng() for reproducibility."],code:"import numpy as np\n\n# Uniform random [0, 1)\nrng = np.random.default_rng(42)\nuniform = rng.random((3, 3))\nprint(uniform)\n\n# Normal distribution (mean=0, std=1)\nnormal = rng.standard_normal((2, 4))\nprint(normal)\n\n# Random integers\nintegers = rng.integers(1, 100, size=(3, 3))\nprint(integers)"},
+{name:"eye, identity, diag",theory:["np.eye(n) creates an n×n identity matrix (1s on diagonal, 0s elsewhere).","np.diag(v) creates diagonal matrix from vector, or extracts diagonal from matrix.","np.identity(n) is similar to eye but always returns square matrix."],code:"import numpy as np\n\n# Identity matrix\nI = np.eye(4)\nprint(I)\n\n# Diagonal matrix from array\nd = np.diag([1, 2, 3, 4])\nprint(d)\n\n# Extract diagonal from matrix\nmatrix = np.array([[1,2,3],[4,5,6],[7,8,9]])\nprint(np.diag(matrix))  # [1 5 9]\n\n# Off-diagonal\nprint(np.diag(matrix, k=1))  # [2 6]"},
+{name:"zeros_like, ones_like, copy",theory:["np.zeros_like(arr) creates zero array with same shape and dtype as input.","np.ones_like(arr) and np.full_like(arr, val) similarly preserve shape/dtype.","np.copy(arr) or arr.copy() creates a deep copy; assignment only creates a reference."],code:"import numpy as np\n\noriginal = np.array([[1.5, 2.5], [3.5, 4.5]])\n\nz = np.zeros_like(original)\nprint(z)  # [[0. 0.] [0. 0.]] - same shape & dtype\n\no = np.ones_like(original)\nprint(o)  # [[1. 1.] [1. 1.]]\n\n# Deep copy\ncopy = original.copy()\ncopy[0, 0] = 99\nprint(original[0, 0])  # 1.5 (unchanged)"}
+],
+examples:[
+{title:"Create Grids for Plotting",desc:"Generate coordinate grids using meshgrid and linspace.",code:"import numpy as np\n\nx = np.linspace(-5, 5, 10)\ny = np.linspace(-5, 5, 10)\nX, Y = np.meshgrid(x, y)\nZ = np.sqrt(X**2 + Y**2)\n\nprint(f'X shape: {X.shape}')\nprint(f'Z (distance from origin):\\n{Z[:3,:3].round(2)}')"},
+{title:"Random Dataset Generator",desc:"Generate synthetic data with different distributions.",code:"import numpy as np\n\nrng = np.random.default_rng(42)\n\n# Generate student scores (normal distribution)\nscores = rng.normal(loc=75, scale=10, size=100)\nscores = np.clip(scores, 0, 100).astype(int)\n\nprint(f'Mean: {scores.mean():.1f}')\nprint(f'Std: {scores.std():.1f}')\nprint(f'Min: {scores.min()}, Max: {scores.max()}')"},
+{title:"Structured Array Creation",desc:"Create arrays with multiple named fields.",code:"import numpy as np\n\ndt = np.dtype([('name', 'U10'), ('age', 'i4'), ('score', 'f8')])\nstudents = np.array([\n    ('Alice', 20, 85.5),\n    ('Bob', 22, 92.3),\n    ('Charlie', 21, 78.9)\n], dtype=dt)\n\nprint(students['name'])   # ['Alice' 'Bob' 'Charlie']\nprint(students['score'])  # [85.5 92.3 78.9]\nprint(students[students['score'] > 80])"}
+],
+practice:[
+{q:"Create a 3x3 matrix of zeros and a 2x5 matrix of ones.",d:"E"},
+{q:"Use np.arange to create an array from 0 to 20 with step 3.",d:"E"},
+{q:"Create an array of 50 evenly spaced values between 0 and 2*pi using linspace.",d:"E"},
+{q:"Generate a 4x4 identity matrix using np.eye.",d:"E"},
+{q:"Create a 3x3 array filled with the value 42 using np.full.",d:"E"},
+{q:"Generate a random 5x5 array with values between 0 and 1.",d:"E"},
+{q:"Use np.zeros_like to create a zero array matching a given array's shape.",d:"E"},
+{q:"Create a diagonal matrix from the array [5, 10, 15, 20].",d:"M"},
+{q:"Generate 1000 random numbers from a normal distribution (mean=50, std=15).",d:"M"},
+{q:"Create a 10x10 checkerboard pattern using array creation and slicing.",d:"M"},
+{q:"Use np.meshgrid to create coordinate matrices for a 2D function evaluation.",d:"M"},
+{q:"Create an array of 20 logarithmically spaced values between 1 and 1000 using logspace.",d:"M"},
+{q:"Generate a random 4x4 integer matrix with values between 10 and 99.",d:"M"},
+{q:"Create a Vandermonde matrix using np.vander for polynomial fitting.",d:"M"},
+{q:"Create a block diagonal matrix using multiple smaller matrices.",d:"M"},
+{q:"Write a function that creates a Toeplitz matrix from a given first row and column.",d:"H"},
+{q:"Generate a random correlation matrix (symmetric, positive definite, diag=1).",d:"H"},
+{q:"Create a sparse-like array (95% zeros) efficiently using random indices.",d:"H"},
+{q:"Implement np.fromfunction to create an array where each element is f(i,j).",d:"H"},
+{q:"Create a Hilbert matrix H[i,j] = 1/(i+j+1) and verify it's ill-conditioned.",d:"H"}
+]},
+{id:3,title:"Indexing & Slicing",color:"#a78bfa",chips:["Basic","fancy","boolean","np.where"],
+subtopics:[
+{name:"Basic Indexing",theory:["Access elements with arr[row, col] for 2D; arr[i] for 1D. Negative indices count from end.","Slicing: arr[start:stop:step] returns a view (not a copy) of the original array.","Multi-dimensional slicing: arr[row_slice, col_slice] selects sub-arrays."],code:"import numpy as np\n\narr = np.array([[1,2,3,4],[5,6,7,8],[9,10,11,12]])\n\n# Single element\nprint(arr[0, 0])   # 1\nprint(arr[2, 3])   # 12\nprint(arr[-1, -1]) # 12\n\n# Row and column slicing\nprint(arr[0, :])   # [1 2 3 4] - first row\nprint(arr[:, 1])   # [2 6 10] - second column\nprint(arr[0:2, 1:3]) # [[2,3],[6,7]]"},
+{name:"Fancy Indexing",theory:["Pass an array of indices to select specific elements in any order.","Integer array indexing returns a copy (not a view) unlike basic slicing.","Can use arrays for both row and column indices simultaneously."],code:"import numpy as np\n\narr = np.array([10, 20, 30, 40, 50, 60])\n\n# Index with array\nidx = np.array([0, 2, 4])\nprint(arr[idx])  # [10 30 50]\n\n# 2D fancy indexing\nmatrix = np.arange(12).reshape(3, 4)\nrows = np.array([0, 1, 2])\ncols = np.array([1, 3, 0])\nprint(matrix[rows, cols])  # [1 7 8]\n\n# Select specific rows\nprint(matrix[[0, 2]])  # rows 0 and 2"},
+{name:"Boolean Indexing",theory:["Use a boolean array (mask) to select elements where condition is True.","Comparison operators on arrays create boolean arrays element-wise.","Combine conditions with & (and), | (or), ~ (not); use parentheses around each condition."],code:"import numpy as np\n\narr = np.array([15, 23, 8, 42, 11, 36, 5, 29])\n\n# Boolean mask\nmask = arr > 20\nprint(mask)       # [False True False True False True False True]\nprint(arr[mask])  # [23 42 36 29]\n\n# Combined conditions\nresult = arr[(arr > 10) & (arr < 35)]\nprint(result)  # [15 23 11 29]\n\n# Modify with boolean indexing\narr[arr < 10] = 0\nprint(arr)  # [15 23 0 42 11 36 0 29]"},
+{name:"np.where",theory:["np.where(condition, x, y) returns x where True, y where False - element-wise.","np.where(condition) with one arg returns indices where condition is True (like np.nonzero).","Powerful for conditional array construction without explicit loops."],code:"import numpy as np\n\narr = np.array([1, -2, 3, -4, 5, -6])\n\n# Conditional replacement\nresult = np.where(arr > 0, arr, 0)\nprint(result)  # [1 0 3 0 5 0]\n\n# Find indices\nidx = np.where(arr < 0)\nprint(idx[0])  # [1 3 5]\n\n# Conditional labeling\nscores = np.array([85, 42, 91, 67, 55])\nlabels = np.where(scores >= 60, 'Pass', 'Fail')\nprint(labels)  # ['Pass' 'Fail' 'Pass' 'Pass' 'Fail']"},
+{name:"Advanced Selection",theory:["np.take(arr, indices) selects elements along an axis.","np.choose(indices, choices) constructs array from index-based choice of arrays.","np.select(conditions, choices, default) handles multiple conditions elegantly."],code:"import numpy as np\n\narr = np.arange(10, 60, 10)  # [10 20 30 40 50]\n\n# np.take\nprint(np.take(arr, [0, 2, 4]))  # [10 30 50]\n\n# np.select - multiple conditions\nx = np.array([-2, -1, 0, 1, 2, 3])\nconditions = [x < 0, x == 0, x > 0]\nchoices = [x**2, 0, x*10]\nresult = np.select(conditions, choices)\nprint(result)  # [4 1 0 10 20 30]"}
+],
+examples:[
+{title:"Data Filtering",desc:"Filter a dataset using boolean indexing with multiple conditions.",code:"import numpy as np\n\nrng = np.random.default_rng(42)\ntemps = rng.normal(25, 5, 30).round(1)  # 30 days of temperature\n\nhot_days = temps[temps > 30]\ncold_days = temps[temps < 20]\nnormal_days = temps[(temps >= 20) & (temps <= 30)]\n\nprint(f'Hot days ({len(hot_days)}): {hot_days}')\nprint(f'Cold days ({len(cold_days)}): {cold_days}')\nprint(f'Normal days: {len(normal_days)}')"},
+{title:"Matrix Element Selection",desc:"Select elements from a matrix using fancy and boolean indexing.",code:"import numpy as np\n\nmatrix = np.arange(1, 26).reshape(5, 5)\nprint('Matrix:\\n', matrix)\n\n# Select diagonal\ndiag = matrix[np.arange(5), np.arange(5)]\nprint(f'Diagonal: {diag}')\n\n# Select anti-diagonal\nanti = matrix[np.arange(5), np.arange(4, -1, -1)]\nprint(f'Anti-diagonal: {anti}')\n\n# Select corners\ncorners = matrix[np.ix_([0,-1],[0,-1])]\nprint(f'Corners:\\n{corners}')"},
+{title:"Replacing Values Conditionally",desc:"Use np.where for complex conditional operations.",code:"import numpy as np\n\nscores = np.array([95, 42, 78, 88, 35, 91, 67, 53])\n\n# Assign letter grades\ngrades = np.where(scores >= 90, 'A',\n         np.where(scores >= 80, 'B',\n         np.where(scores >= 70, 'C',\n         np.where(scores >= 60, 'D', 'F'))))\n\nfor s, g in zip(scores, grades):\n    print(f'{s} -> {g}')"}
+],
+practice:[
+{q:"Create a 5x5 array and select the element at row 2, column 3.",d:"E"},
+{q:"Slice the first 3 rows and first 2 columns of a 2D array.",d:"E"},
+{q:"Use negative indexing to get the last element and last row of an array.",d:"E"},
+{q:"Create a boolean mask to select all elements greater than 50 from an array.",d:"E"},
+{q:"Use fancy indexing to select elements at indices [0, 3, 5, 7] from a 1D array.",d:"E"},
+{q:"Select every other row from a matrix using slicing.",d:"E"},
+{q:"Use np.where with one argument to find indices of negative numbers in an array.",d:"E"},
+{q:"Combine two boolean conditions with & to filter an array (e.g., 10 < x < 50).",d:"M"},
+{q:"Use fancy indexing to rearrange rows of a matrix in reverse order.",d:"M"},
+{q:"Replace all negative values in an array with 0 using boolean indexing.",d:"M"},
+{q:"Use np.where(condition, x, y) to clip values below 0 to 0 and above 100 to 100.",d:"M"},
+{q:"Select the diagonal elements of a 5x5 matrix using fancy indexing.",d:"M"},
+{q:"Use np.ix_ to select a submatrix from specific rows and columns.",d:"M"},
+{q:"Extract all rows where the sum of the row exceeds a threshold.",d:"M"},
+{q:"Use np.select with 3 conditions to categorize array elements into groups.",d:"M"},
+{q:"Implement a function that finds all local maxima in a 1D array using slicing comparisons.",d:"H"},
+{q:"Use boolean indexing across multiple arrays simultaneously (parallel filtering).",d:"H"},
+{q:"Implement argmax along an axis manually using np.where and comparison.",d:"H"},
+{q:"Create a function to extract a circular/ring region from a 2D array using boolean masks.",d:"H"},
+{q:"Write a function that selects top-k elements per row in a 2D array using argsort and fancy indexing.",d:"H"}
+]},
+{id:4,title:"Array Operations",color:"#fbbf24",chips:["Arithmetic","broadcasting","ufuncs"],
+subtopics:[
+{name:"Element-wise Arithmetic",theory:["Standard operators (+, -, *, /, **, //, %) work element-wise on arrays.","Operations between arrays require compatible shapes (same shape or broadcastable).","These are much faster than loops because they use optimized C code internally."],code:"import numpy as np\n\na = np.array([1, 2, 3, 4, 5])\nb = np.array([10, 20, 30, 40, 50])\n\nprint(a + b)    # [11 22 33 44 55]\nprint(b - a)    # [ 9 18 27 36 45]\nprint(a * b)    # [ 10  40  90 160 250]\nprint(b / a)    # [10. 10. 10. 10. 10.]\nprint(a ** 2)   # [ 1  4  9 16 25]\nprint(b % 3)    # [1 2 0 1 2]"},
+{name:"Broadcasting Rules",theory:["Broadcasting allows operations on arrays with different shapes by virtually expanding smaller arrays.","Rules: 1) Align shapes from trailing dimensions. 2) Dimensions of size 1 are stretched.","Both arrays must be compatible: each dimension must be equal or one of them must be 1."],code:"import numpy as np\n\n# Scalar broadcast\narr = np.array([[1,2,3],[4,5,6]])\nprint(arr * 10)  # Scalar broadcasts to all elements\n\n# 1D with 2D\nrow = np.array([1, 0, -1])\nprint(arr + row)  # row broadcasts across each row\n\n# Column vector with row vector\ncol = np.array([[1],[2],[3]])\nrow = np.array([10, 20, 30])\nprint(col + row)\n# [[11 21 31]\n#  [12 22 32]\n#  [13 23 33]]"},
+{name:"Universal Functions (ufuncs)",theory:["ufuncs are vectorized functions that operate element-wise on arrays.","Math ufuncs: np.sqrt, np.exp, np.log, np.sin, np.cos, np.abs.","Reduction ufuncs: np.add.reduce (sum), np.multiply.reduce (product)."],code:"import numpy as np\n\narr = np.array([1, 4, 9, 16, 25])\n\nprint(np.sqrt(arr))   # [1. 2. 3. 4. 5.]\nprint(np.exp(arr[:3])) # [2.718 54.598 8103.08]\nprint(np.log(arr))    # [0. 1.386 2.197 2.773 3.219]\n\n# Trigonometric\nangles = np.array([0, np.pi/4, np.pi/2, np.pi])\nprint(np.sin(angles).round(4))  # [0. 0.7071 1. 0.]\nprint(np.cos(angles).round(4))  # [1. 0.7071 0. -1.]"},
+{name:"Comparison Operations",theory:["Comparison operators (<, >, ==, !=, <=, >=) return boolean arrays element-wise.","np.array_equal checks if two arrays have same shape and elements.","np.allclose checks approximate equality with tolerance (useful for floats)."],code:"import numpy as np\n\na = np.array([1, 2, 3, 4, 5])\nb = np.array([1, 3, 2, 4, 6])\n\nprint(a == b)   # [ True False False  True False]\nprint(a > b)    # [False False  True False False]\nprint(a >= 3)   # [False False  True  True  True]\n\n# All/Any\nprint(np.all(a > 0))   # True\nprint(np.any(a > 4))   # True\n\n# Float comparison\nx = np.array([0.1 + 0.2])\nprint(np.allclose(x, [0.3]))  # True"},
+{name:"Aggregation Operations",theory:["Aggregations reduce arrays: sum, mean, std, var, min, max, argmin, argmax.","Specify axis parameter: axis=0 operates along columns, axis=1 along rows.","keepdims=True preserves dimensions for broadcasting compatibility."],code:"import numpy as np\n\nmatrix = np.array([[1,2,3],[4,5,6],[7,8,9]])\n\nprint(np.sum(matrix))          # 45 (all elements)\nprint(np.sum(matrix, axis=0))  # [12 15 18] (column sums)\nprint(np.sum(matrix, axis=1))  # [6 15 24] (row sums)\n\nprint(np.mean(matrix, axis=0)) # [4. 5. 6.]\nprint(np.max(matrix, axis=1))  # [3 6 9]\nprint(np.argmax(matrix, axis=1)) # [2 2 2]"}
+],
+examples:[
+{title:"Normalize Data",desc:"Normalize array values to [0,1] range using vectorized operations.",code:"import numpy as np\n\ndata = np.array([15, 23, 8, 42, 11, 36, 5, 29])\n\n# Min-max normalization\nnormalized = (data - data.min()) / (data.max() - data.min())\nprint(f'Original: {data}')\nprint(f'Normalized: {normalized.round(3)}')\n\n# Z-score normalization\nz_scores = (data - data.mean()) / data.std()\nprint(f'Z-scores: {z_scores.round(3)}')"},
+{title:"Broadcasting in Practice",desc:"Center and scale a dataset using broadcasting.",code:"import numpy as np\n\n# Dataset: 5 samples, 3 features\ndata = np.array([[170, 65, 25],\n                 [180, 80, 30],\n                 [160, 55, 22],\n                 [175, 70, 28],\n                 [165, 60, 35]])\n\n# Center (subtract mean per feature)\nmeans = data.mean(axis=0)  # shape (3,)\ncentered = data - means     # broadcasting!\n\nprint(f'Means: {means}')\nprint(f'Centered:\\n{centered}')"},
+{title:"Element-wise vs Matrix Operations",desc:"Show the difference between * and @ for matrices.",code:"import numpy as np\n\nA = np.array([[1,2],[3,4]])\nB = np.array([[5,6],[7,8]])\n\n# Element-wise multiplication\nprint(f'A * B (element-wise):\\n{A * B}')\n\n# Matrix multiplication\nprint(f'A @ B (matrix product):\\n{A @ B}')\n\n# Dot product of vectors\nv1 = np.array([1, 2, 3])\nv2 = np.array([4, 5, 6])\nprint(f'Dot product: {np.dot(v1, v2)}')  # 32"}
+],
+practice:[
+{q:"Add, subtract, multiply, and divide two 1D arrays element-wise.",d:"E"},
+{q:"Square every element in an array using the ** operator.",d:"E"},
+{q:"Multiply a 3x3 matrix by a scalar value of 5.",d:"E"},
+{q:"Compute the element-wise square root of an array using np.sqrt.",d:"E"},
+{q:"Find the sum, mean, min, and max of a 2D array along axis=0.",d:"E"},
+{q:"Create two arrays and compare them element-wise using >, <, ==.",d:"E"},
+{q:"Use np.abs to get absolute values of an array with negative numbers.",d:"E"},
+{q:"Add a 1D array to each row of a 2D array using broadcasting.",d:"M"},
+{q:"Subtract column means from each column of a matrix (centering).",d:"M"},
+{q:"Use np.sin and np.cos to compute values for angles from 0 to 2*pi.",d:"M"},
+{q:"Implement min-max normalization on a dataset using vectorized operations.",d:"M"},
+{q:"Use np.argmax to find the index of the maximum value along each row.",d:"M"},
+{q:"Compute the outer product of two vectors using broadcasting (col * row).",d:"M"},
+{q:"Use np.allclose to verify floating point calculations (0.1 + 0.2 == 0.3).",d:"M"},
+{q:"Compute row-wise and column-wise cumulative sums using np.cumsum with axis.",d:"M"},
+{q:"Implement softmax function using np.exp and broadcasting (handle overflow).",d:"H"},
+{q:"Write a function that computes pairwise Euclidean distances using broadcasting.",d:"H"},
+{q:"Implement batch matrix multiplication for a stack of matrices.",d:"H"},
+{q:"Use np.einsum to perform complex tensor operations (trace, outer product, etc.).",d:"H"},
+{q:"Implement a vectorized moving average without loops using cumsum trick.",d:"H"}
+]},
+{id:5,title:"Reshaping & Manipulating",color:"#f472b6",chips:["reshape","flatten","transpose","concatenate","split"],
+subtopics:[
+{name:"reshape",theory:["arr.reshape(new_shape) returns a view with a different shape (same data, same memory).","Total elements must match: a (12,) array can reshape to (3,4), (4,3), (2,6), etc.","Use -1 as a placeholder and NumPy infers that dimension automatically."],code:"import numpy as np\n\narr = np.arange(12)\nprint(arr)  # [0 1 2 ... 11]\n\n# Reshape to 2D\nmatrix = arr.reshape(3, 4)\nprint(matrix)\n# [[ 0  1  2  3]\n#  [ 4  5  6  7]\n#  [ 8  9 10 11]]\n\n# Use -1 for auto-inference\nauto = arr.reshape(2, -1)  # (2, 6)\nprint(auto.shape)  # (2, 6)\n\ncol_vec = arr.reshape(-1, 1)  # Column vector\nprint(col_vec.shape)  # (12, 1)"},
+{name:"flatten and ravel",theory:["flatten() always returns a copy of the array collapsed to 1D.","ravel() returns a 1D view when possible (more memory efficient), copy otherwise.","Use flatten() when you need independence; ravel() for read-only or performance."],code:"import numpy as np\n\nmatrix = np.array([[1,2,3],[4,5,6]])\n\n# flatten - always a copy\nflat = matrix.flatten()\nflat[0] = 99\nprint(matrix[0,0])  # 1 (unchanged)\n\n# ravel - view when possible\nraveled = matrix.ravel()\nraveled[0] = 99\nprint(matrix[0,0])  # 99 (changed!)\n\n# Order parameter\nprint(matrix.flatten(order='C'))  # Row-major [1,2,3,4,5,6]\nprint(matrix.flatten(order='F'))  # Col-major [1,4,2,5,3,6]"},
+{name:"transpose and swapaxes",theory:["arr.T or arr.transpose() reverses the order of axes (rows become columns).","For 2D: transpose swaps rows and columns. For nD: reverses all axis order.","np.swapaxes(arr, ax1, ax2) swaps two specific axes."],code:"import numpy as np\n\nmatrix = np.array([[1,2,3],[4,5,6]])\nprint(matrix.shape)    # (2, 3)\nprint(matrix.T.shape)  # (3, 2)\nprint(matrix.T)\n# [[1 4]\n#  [2 5]\n#  [3 6]]\n\n# 3D transpose\narr3d = np.arange(24).reshape(2, 3, 4)\nprint(arr3d.transpose(1, 0, 2).shape)  # (3, 2, 4)\n\n# swapaxes\nprint(np.swapaxes(arr3d, 0, 2).shape)  # (4, 3, 2)"},
+{name:"concatenate and stack",theory:["np.concatenate joins arrays along an existing axis.","np.vstack (vertical) stacks along axis=0; np.hstack (horizontal) along axis=1.","np.stack creates a new axis and stacks arrays along it."],code:"import numpy as np\n\na = np.array([[1,2],[3,4]])\nb = np.array([[5,6],[7,8]])\n\n# Concatenate along axis 0 (vertical)\nv = np.concatenate([a, b], axis=0)\nprint(v.shape)  # (4, 2)\n\n# Concatenate along axis 1 (horizontal)\nh = np.concatenate([a, b], axis=1)\nprint(h.shape)  # (2, 4)\n\n# vstack and hstack shortcuts\nprint(np.vstack([a, b]).shape)  # (4, 2)\nprint(np.hstack([a, b]).shape)  # (2, 4)\n\n# stack - creates new axis\ns = np.stack([a, b], axis=0)\nprint(s.shape)  # (2, 2, 2)"},
+{name:"split and array_split",theory:["np.split(arr, n, axis) splits into n equal parts; raises error if not evenly divisible.","np.array_split handles uneven splits gracefully (extra elements go to first chunks).","np.hsplit and np.vsplit are shortcuts for splitting along axis=1 and axis=0."],code:"import numpy as np\n\narr = np.arange(12).reshape(3, 4)\n\n# Split into equal parts\nparts = np.split(arr, 3, axis=0)  # 3 parts along rows\nprint(len(parts))  # 3\nprint(parts[0])    # [[0 1 2 3]]\n\n# array_split for uneven\nresult = np.array_split(np.arange(10), 3)\nprint([len(r) for r in result])  # [4, 3, 3]\n\n# hsplit\nleft, right = np.hsplit(arr, 2)\nprint(left.shape)   # (3, 2)\nprint(right.shape)  # (3, 2)"}
+],
+examples:[
+{title:"Image-like Array Manipulation",desc:"Reshape and manipulate arrays mimicking image operations.",code:"import numpy as np\n\n# Simulate a 4x4 'image' with 3 color channels\nimg = np.arange(48).reshape(4, 4, 3)\nprint(f'Image shape: {img.shape}')\n\n# Flatten to pixel list\npixels = img.reshape(-1, 3)\nprint(f'Pixel list shape: {pixels.shape}')  # (16, 3)\n\n# Transpose to channel-first format (CHW)\nchw = img.transpose(2, 0, 1)\nprint(f'CHW shape: {chw.shape}')  # (3, 4, 4)"},
+{title:"Building Arrays from Pieces",desc:"Combine multiple arrays into complex structures.",code:"import numpy as np\n\n# Create border array\ntop = np.ones((1, 5))\nbottom = np.ones((1, 5))\nmiddle = np.hstack([np.ones((3,1)), np.zeros((3,3)), np.ones((3,1))])\n\nresult = np.vstack([top, middle, bottom])\nprint(result)\n# [[1. 1. 1. 1. 1.]\n#  [1. 0. 0. 0. 1.]\n#  [1. 0. 0. 0. 1.]\n#  [1. 0. 0. 0. 1.]\n#  [1. 1. 1. 1. 1.]]"},
+{title:"Data Batching",desc:"Split data into batches for processing.",code:"import numpy as np\n\n# Simulate dataset of 100 samples\ndata = np.arange(100).reshape(100, 1)\nbatch_size = 15\n\nbatches = np.array_split(data, len(data) // batch_size + 1)\nprint(f'Number of batches: {len(batches)}')\nfor i, batch in enumerate(batches[:3]):\n    print(f'Batch {i}: shape={batch.shape}, range=[{batch[0,0]}-{batch[-1,0]}]')"}
+],
+practice:[
+{q:"Reshape a 1D array of 20 elements into a 4x5 matrix.",d:"E"},
+{q:"Flatten a 3x4 matrix to 1D using both flatten() and ravel().",d:"E"},
+{q:"Transpose a 2x5 matrix and verify the new shape.",d:"E"},
+{q:"Concatenate two 3x3 matrices vertically and horizontally.",d:"E"},
+{q:"Use reshape(-1, 1) to convert a 1D array into a column vector.",d:"E"},
+{q:"Split a 12-element array into 3 equal parts using np.split.",d:"E"},
+{q:"Use np.newaxis to add a new dimension to a 1D array.",d:"E"},
+{q:"Reshape an array and demonstrate that it shares memory with the original (view).",d:"M"},
+{q:"Use np.stack to stack three 1D arrays into a 2D matrix (column-wise).",d:"M"},
+{q:"Split a 10-element array into uneven parts using np.array_split.",d:"M"},
+{q:"Create a 3D array and transpose specific axes using transpose(1,0,2).",d:"M"},
+{q:"Tile a small pattern array to create a larger repeated pattern using np.tile.",d:"M"},
+{q:"Use np.repeat and np.tile to create different repetition patterns.",d:"M"},
+{q:"Implement a function that reshapes a batch of images from NHWC to NCHW format.",d:"M"},
+{q:"Use np.pad to add a border of zeros around a 2D matrix.",d:"M"},
+{q:"Implement a function that performs block matrix multiplication using reshape and transpose.",d:"H"},
+{q:"Write a function that interleaves two arrays element-by-element using reshape.",d:"H"},
+{q:"Create a sliding window view of a 1D array without copying data.",d:"H"},
+{q:"Implement im2col operation (image to column) for convolution using strides.",d:"H"},
+{q:"Write a function that converts a flat index to multi-dimensional index (np.unravel_index).",d:"H"}
+]},
+{id:6,title:"Mathematical Functions",color:"#22d3ee",chips:["sum","mean","std","cumsum","diff"],
+subtopics:[
+{name:"Basic Reductions (sum, prod)",theory:["np.sum(arr) sums all elements; specify axis for row/column sums.","np.prod(arr) computes product of all elements; useful for combinatorics.","np.nansum and np.nanprod ignore NaN values instead of propagating them."],code:"import numpy as np\n\narr = np.array([[1,2,3],[4,5,6],[7,8,9]])\n\nprint(np.sum(arr))          # 45\nprint(np.sum(arr, axis=0))  # [12 15 18] column sums\nprint(np.sum(arr, axis=1))  # [ 6 15 24] row sums\n\nprint(np.prod(arr[0]))      # 6 (1*2*3)\n\n# Handle NaN\nwith_nan = np.array([1, 2, np.nan, 4])\nprint(np.nansum(with_nan))  # 7.0"},
+{name:"Statistical (mean, std, var)",theory:["np.mean computes arithmetic mean; np.median for the middle value.","np.std computes standard deviation; np.var for variance (std squared).","ddof parameter: ddof=0 for population (default), ddof=1 for sample statistics."],code:"import numpy as np\n\ndata = np.array([23, 45, 12, 67, 34, 89, 56, 11])\n\nprint(f'Mean: {np.mean(data):.2f}')    # 42.12\nprint(f'Median: {np.median(data):.2f}') # 39.50\nprint(f'Std: {np.std(data):.2f}')      # 25.50\nprint(f'Var: {np.var(data):.2f}')      # 650.36\n\n# Sample vs Population\nprint(f'Pop std: {np.std(data, ddof=0):.2f}')\nprint(f'Sample std: {np.std(data, ddof=1):.2f}')"},
+{name:"Cumulative (cumsum, cumprod)",theory:["np.cumsum computes running total; np.cumprod computes running product.","Result has same shape as input; each element is the accumulated value up to that point.","Useful for time series, probability calculations, and running statistics."],code:"import numpy as np\n\narr = np.array([1, 2, 3, 4, 5])\n\nprint(np.cumsum(arr))   # [ 1  3  6 10 15]\nprint(np.cumprod(arr))  # [  1   2   6  24 120]\n\n# 2D cumsum\nmatrix = np.array([[1,2,3],[4,5,6]])\nprint(np.cumsum(matrix, axis=0))  # cumsum along columns\n# [[1 2 3]\n#  [5 7 9]]\n\nprint(np.cumsum(matrix, axis=1))  # cumsum along rows\n# [[ 1  3  6]\n#  [ 4  9 15]]"},
+{name:"Differences (diff, gradient)",theory:["np.diff computes n-th discrete difference: diff[i] = arr[i+1] - arr[i].","np.gradient computes numerical gradient (central differences at interior points).","Useful for finding rate of change, detecting edges, and numerical derivatives."],code:"import numpy as np\n\narr = np.array([1, 3, 6, 10, 15, 21])\n\n# First difference\nprint(np.diff(arr))    # [2 3 4 5 6]\n\n# Second difference\nprint(np.diff(arr, n=2))  # [1 1 1 1]\n\n# Gradient (central differences)\nprint(np.gradient(arr))  # [2. 2.5 3.5 4.5 5.5 6.]\n\n# 2D gradient\nmatrix = np.array([[1,2,4],[4,8,16]])\ngy, gx = np.gradient(matrix)\nprint(f'Gradient X:\\n{gx}')"},
+{name:"Rounding and Clipping",theory:["np.round(arr, decimals) rounds to specified decimal places.","np.floor rounds down; np.ceil rounds up; np.trunc truncates to integer.","np.clip(arr, min, max) constrains values to a range."],code:"import numpy as np\n\narr = np.array([1.23, 4.56, 7.89, -2.34])\n\nprint(np.round(arr, 1))   # [ 1.2  4.6  7.9 -2.3]\nprint(np.floor(arr))      # [ 1.  4.  7. -3.]\nprint(np.ceil(arr))       # [ 2.  5.  8. -2.]\nprint(np.trunc(arr))      # [ 1.  4.  7. -2.]\n\n# Clipping\ndata = np.array([-5, 3, 8, 12, -2, 7])\nprint(np.clip(data, 0, 10))  # [ 0  3  8 10  0  7]"}
+],
+examples:[
+{title:"Running Statistics",desc:"Compute cumulative mean and std over a data stream.",code:"import numpy as np\n\ndata = np.array([10, 15, 12, 18, 14, 20, 16, 22, 19, 25])\n\n# Running mean\ncumulative_mean = np.cumsum(data) / np.arange(1, len(data)+1)\nprint(f'Running mean: {cumulative_mean.round(2)}')\n\n# Running max and min\nrunning_max = np.maximum.accumulate(data)\nrunning_min = np.minimum.accumulate(data)\nprint(f'Running max: {running_max}')\nprint(f'Running min: {running_min}')"},
+{title:"Numerical Differentiation",desc:"Approximate derivatives using numpy functions.",code:"import numpy as np\n\n# Function: f(x) = x^3\nx = np.linspace(0, 5, 100)\ny = x ** 3\n\n# Numerical derivative (should approximate 3x^2)\ndy = np.diff(y) / np.diff(x)\nprint(f'At x=2: numerical={dy[39]:.2f}, exact={3*2**2}')\n\n# Using gradient (more accurate at boundaries)\ndy2 = np.gradient(y, x)\nprint(f'Gradient at x=2: {dy2[40]:.2f}')"},
+{title:"Data Outlier Detection",desc:"Find outliers using z-score and IQR methods.",code:"import numpy as np\n\nrng = np.random.default_rng(42)\ndata = rng.normal(50, 10, 100)\ndata[5] = 150  # Add outlier\ndata[20] = -30  # Add outlier\n\n# Z-score method\nz_scores = np.abs((data - np.mean(data)) / np.std(data))\noutliers_z = data[z_scores > 2]\nprint(f'Z-score outliers: {outliers_z.round(1)}')\n\n# IQR method\nq1, q3 = np.percentile(data, [25, 75])\niqr = q3 - q1\noutliers_iqr = data[(data < q1-1.5*iqr) | (data > q3+1.5*iqr)]\nprint(f'IQR outliers: {outliers_iqr.round(1)}')"}
+],
+practice:[
+{q:"Compute the sum, mean, and product of a 1D array of 10 elements.",d:"E"},
+{q:"Find the minimum and maximum values along each axis of a 3x4 matrix.",d:"E"},
+{q:"Compute the cumulative sum of an array [1,2,3,4,5].",d:"E"},
+{q:"Use np.diff to find differences between consecutive elements.",d:"E"},
+{q:"Round an array of floats to 2 decimal places.",d:"E"},
+{q:"Use np.clip to limit values in an array to range [0, 100].",d:"E"},
+{q:"Compute standard deviation with ddof=0 and ddof=1, explain the difference.",d:"E"},
+{q:"Compute column-wise and row-wise means of a 4x5 matrix.",d:"M"},
+{q:"Use np.nanmean and np.nanstd on an array containing NaN values.",d:"M"},
+{q:"Implement a rolling/moving average using cumsum trick (no loops).",d:"M"},
+{q:"Compute the numerical derivative of sin(x) and compare with cos(x).",d:"M"},
+{q:"Use np.percentile to find Q1, Q2 (median), and Q3 of a dataset.",d:"M"},
+{q:"Compute running maximum and minimum of a time series using np.maximum.accumulate.",d:"M"},
+{q:"Implement z-score normalization and detect outliers (z > 2).",d:"M"},
+{q:"Use np.gradient on a 2D array to compute partial derivatives.",d:"M"},
+{q:"Implement exponential moving average using vectorized NumPy operations.",d:"H"},
+{q:"Write a function that computes all pairwise distances in a point cloud without loops.",d:"H"},
+{q:"Implement numerical integration (trapezoidal rule) using np.cumsum.",d:"H"},
+{q:"Compute the discrete Fourier transform manually using np.exp and broadcasting.",d:"H"},
+{q:"Implement a vectorized Gaussian kernel function for KDE (kernel density estimation).",d:"H"}
+]},
+{id:7,title:"Linear Algebra",color:"#fb923c",chips:["dot","matmul","inverse","det","eigenvalues"],
+subtopics:[
+{name:"Dot Product and Matrix Multiply",theory:["np.dot(a,b) computes dot product for 1D arrays; matrix product for 2D arrays.","The @ operator (or np.matmul) is preferred for matrix multiplication.","For 1D: sum of element-wise products. For 2D: standard matrix multiplication rules apply."],code:"import numpy as np\n\n# Dot product of vectors\nv1 = np.array([1, 2, 3])\nv2 = np.array([4, 5, 6])\nprint(np.dot(v1, v2))  # 32 (1*4 + 2*5 + 3*6)\n\n# Matrix multiplication\nA = np.array([[1,2],[3,4]])\nB = np.array([[5,6],[7,8]])\n\nprint(A @ B)  # [[19 22] [43 50]]\nprint(np.matmul(A, B))  # Same result\n\n# Matrix-vector product\nv = np.array([1, 2])\nprint(A @ v)  # [5 11]"},
+{name:"Inverse and Determinant",theory:["np.linalg.inv(A) computes matrix inverse; A @ inv(A) = Identity.","np.linalg.det(A) computes determinant; det=0 means singular (non-invertible).","Use np.linalg.solve(A, b) instead of inv(A)@b for numerical stability."],code:"import numpy as np\n\nA = np.array([[2, 1], [5, 3]])\n\n# Determinant\ndet = np.linalg.det(A)\nprint(f'det(A) = {det:.1f}')  # 1.0\n\n# Inverse\nA_inv = np.linalg.inv(A)\nprint(f'A_inv:\\n{A_inv}')\n\n# Verify: A @ A_inv = I\nprint(f'A @ A_inv:\\n{(A @ A_inv).round(10)}')\n\n# Solve Ax = b\nb = np.array([4, 11])\nx = np.linalg.solve(A, b)\nprint(f'Solution x = {x}')  # [1. 2.]"},
+{name:"Eigenvalues and Eigenvectors",theory:["np.linalg.eig(A) returns eigenvalues and eigenvectors of a square matrix.","Eigenvalues satisfy Av = lambda*v where v is eigenvector, lambda is eigenvalue.","np.linalg.eigh() is optimized for symmetric/Hermitian matrices."],code:"import numpy as np\n\nA = np.array([[4, -2], [1, 1]])\n\neigenvalues, eigenvectors = np.linalg.eig(A)\nprint(f'Eigenvalues: {eigenvalues}')   # [3. 2.]\nprint(f'Eigenvectors:\\n{eigenvectors}')\n\n# Verify: A @ v = lambda * v\nfor i in range(len(eigenvalues)):\n    v = eigenvectors[:, i]\n    lam = eigenvalues[i]\n    print(f'A@v = {A@v}, lambda*v = {lam*v}')"},
+{name:"Norms and Rank",theory:["np.linalg.norm(v) computes vector/matrix norms (L2 by default).","Common norms: ord=1 (L1/Manhattan), ord=2 (L2/Euclidean), ord=np.inf (max).","np.linalg.matrix_rank(A) determines the rank (number of linearly independent rows/cols)."],code:"import numpy as np\n\nv = np.array([3, 4])\nprint(np.linalg.norm(v))       # 5.0 (Euclidean)\nprint(np.linalg.norm(v, 1))    # 7.0 (Manhattan)\nprint(np.linalg.norm(v, np.inf))  # 4.0 (Max)\n\n# Matrix norms\nA = np.array([[1,2],[3,4]])\nprint(np.linalg.norm(A, 'fro'))  # Frobenius norm\n\n# Rank\nB = np.array([[1,2,3],[2,4,6],[1,1,1]])\nprint(np.linalg.matrix_rank(B))  # 2 (row 2 = 2*row 1)"},
+{name:"SVD and Decompositions",theory:["SVD decomposes A = U @ S @ V^T; useful for dimensionality reduction and pseudoinverse.","np.linalg.svd(A) returns U, sigma (diagonal values), and V^T.","QR decomposition: np.linalg.qr(A); Cholesky: np.linalg.cholesky(A) for positive definite."],code:"import numpy as np\n\nA = np.array([[1,2],[3,4],[5,6]])\n\n# SVD\nU, s, Vt = np.linalg.svd(A, full_matrices=False)\nprint(f'U shape: {U.shape}')   # (3, 2)\nprint(f'Singular values: {s.round(3)}')\nprint(f'Vt shape: {Vt.shape}') # (2, 2)\n\n# Reconstruct\nS = np.diag(s)\nreconstructed = U @ S @ Vt\nprint(f'Reconstruction error: {np.linalg.norm(A - reconstructed):.2e}')"}
+],
+examples:[
+{title:"Solve Linear System",desc:"Solve a system of linear equations Ax = b.",code:"import numpy as np\n\n# System: 2x + y = 5, x + 3y = 10\nA = np.array([[2, 1], [1, 3]])\nb = np.array([5, 10])\n\nx = np.linalg.solve(A, b)\nprint(f'Solution: x={x[0]:.2f}, y={x[1]:.2f}')\n\n# Verify\nprint(f'Check: A@x = {A@x}')  # Should be [5, 10]"},
+{title:"PCA Implementation",desc:"Simple PCA using eigendecomposition.",code:"import numpy as np\n\n# Generate correlated data\nrng = np.random.default_rng(42)\ndata = rng.multivariate_normal([0,0], [[3,1.5],[1.5,1]], size=100)\n\n# Center data\ncentered = data - data.mean(axis=0)\n\n# Covariance matrix\ncov = np.cov(centered.T)\nprint(f'Covariance:\\n{cov.round(3)}')\n\n# Eigendecomposition\neigvals, eigvecs = np.linalg.eigh(cov)\nprint(f'Explained variance: {eigvals/eigvals.sum()*100}')"},
+{title:"Least Squares Fitting",desc:"Fit a line to noisy data using least squares.",code:"import numpy as np\n\n# Generate noisy data: y = 2x + 1 + noise\nrng = np.random.default_rng(42)\nx = np.linspace(0, 10, 50)\ny = 2*x + 1 + rng.normal(0, 1, 50)\n\n# Least squares: solve A.T @ A @ coeffs = A.T @ y\nA = np.column_stack([x, np.ones_like(x)])\ncoeffs = np.linalg.lstsq(A, y, rcond=None)[0]\nprint(f'Fitted line: y = {coeffs[0]:.3f}x + {coeffs[1]:.3f}')\nprint(f'True line: y = 2.000x + 1.000')"}
+],
+practice:[
+{q:"Compute the dot product of two 1D arrays [1,2,3] and [4,5,6].",d:"E"},
+{q:"Multiply two 2x2 matrices using the @ operator.",d:"E"},
+{q:"Compute the determinant of a 3x3 matrix.",d:"E"},
+{q:"Find the inverse of a 2x2 matrix and verify A @ A_inv = I.",d:"E"},
+{q:"Compute the L2 (Euclidean) norm of a vector [3, 4].",d:"E"},
+{q:"Create a 3x3 identity matrix and multiply it with another matrix.",d:"E"},
+{q:"Solve the linear system 3x+2y=7, x+4y=9 using np.linalg.solve.",d:"E"},
+{q:"Compute eigenvalues and eigenvectors of a 2x2 symmetric matrix.",d:"M"},
+{q:"Verify the eigenvalue equation Av = lambda*v for a computed eigenpair.",d:"M"},
+{q:"Compute Frobenius norm and L1 norm of a matrix.",d:"M"},
+{q:"Use SVD to find the rank of a matrix.",d:"M"},
+{q:"Implement matrix power A^n using repeated matrix multiplication.",d:"M"},
+{q:"Solve an overdetermined system using np.linalg.lstsq (least squares).",d:"M"},
+{q:"Compute the condition number of a matrix using np.linalg.cond.",d:"M"},
+{q:"Use QR decomposition to solve a linear system.",d:"M"},
+{q:"Implement PCA on a 2D dataset to find principal components.",d:"H"},
+{q:"Compute the pseudoinverse of a non-square matrix using SVD.",d:"H"},
+{q:"Implement power iteration to find the dominant eigenvalue.",d:"H"},
+{q:"Solve a linear system with LU decomposition (scipy or manual).",d:"H"},
+{q:"Implement Gram-Schmidt orthogonalization on a set of vectors.",d:"H"}
+]},
+{id:8,title:"Statistical Functions",color:"#4ade80",chips:["mean","median","var","percentile","corrcoef"],
+subtopics:[
+{name:"Central Tendency",theory:["np.mean(arr) computes arithmetic mean; np.median gives the middle value.","np.average(arr, weights) computes weighted average when items have different importance.","For skewed data, median is more robust than mean against outliers."],code:"import numpy as np\n\ndata = np.array([12, 15, 18, 22, 25, 28, 100])  # 100 is outlier\n\nprint(f'Mean: {np.mean(data):.2f}')    # 31.43\nprint(f'Median: {np.median(data):.2f}')  # 22.00\n\n# Weighted average\nscores = np.array([85, 90, 78])\nweights = np.array([0.3, 0.5, 0.2])  # exam weights\nprint(f'Weighted avg: {np.average(scores, weights=weights):.1f}')"},
+{name:"Dispersion (var, std)",theory:["np.var computes variance (average squared deviation from mean).","np.std is square root of variance; measures spread in original units.","Use ddof=1 for sample statistics (Bessel's correction) when estimating from a sample."],code:"import numpy as np\n\ndata = np.array([2, 4, 4, 4, 5, 5, 7, 9])\n\nprint(f'Variance (pop): {np.var(data):.4f}')   # 4.0000\nprint(f'Variance (sample): {np.var(data, ddof=1):.4f}')  # 4.5714\nprint(f'Std (pop): {np.std(data):.4f}')        # 2.0000\nprint(f'Std (sample): {np.std(data, ddof=1):.4f}')  # 2.1381\n\n# Range and IQR\nprint(f'Range: {np.ptp(data)}')  # 7 (peak to peak)\nq1, q3 = np.percentile(data, [25, 75])\nprint(f'IQR: {q3 - q1}')"},
+{name:"Percentiles and Quantiles",theory:["np.percentile(arr, q) returns value below which q% of data falls.","np.quantile(arr, q) takes q in [0,1] instead of [0,100].","Quartiles: Q1=25th, Q2=50th (median), Q3=75th percentile."],code:"import numpy as np\n\nscores = np.array([55, 62, 67, 71, 75, 78, 82, 85, 90, 95])\n\n# Percentiles\nprint(f'25th percentile: {np.percentile(scores, 25)}')\nprint(f'50th percentile: {np.percentile(scores, 50)}')\nprint(f'75th percentile: {np.percentile(scores, 75)}')\n\n# Multiple percentiles at once\nqs = np.percentile(scores, [10, 25, 50, 75, 90])\nprint(f'Decile/Quartiles: {qs}')\n\n# Quantile (same but [0,1] scale)\nprint(f'Median: {np.quantile(scores, 0.5)}')"},
+{name:"Correlation and Covariance",theory:["np.corrcoef(x, y) computes Pearson correlation matrix (values in [-1, 1]).","np.cov(x, y) computes covariance matrix; diagonal = variances.","Correlation = covariance / (std_x * std_y); measures linear relationship strength."],code:"import numpy as np\n\n# Height and weight data\nheight = np.array([160, 165, 170, 175, 180, 185])\nweight = np.array([55, 62, 68, 73, 80, 85])\n\n# Correlation\ncorr = np.corrcoef(height, weight)\nprint(f'Correlation matrix:\\n{corr.round(4)}')\nprint(f'Pearson r: {corr[0,1]:.4f}')  # ~0.998\n\n# Covariance\ncov = np.cov(height, weight)\nprint(f'Covariance matrix:\\n{cov.round(2)}')"},
+{name:"Histogram and Binning",theory:["np.histogram(arr, bins) computes frequency counts for value ranges.","Returns (counts, bin_edges); bin_edges has len(counts)+1 elements.","np.digitize(arr, bins) assigns each value to a bin index."],code:"import numpy as np\n\nrng = np.random.default_rng(42)\ndata = rng.normal(50, 10, 1000)\n\n# Histogram\ncounts, edges = np.histogram(data, bins=10)\nprint(f'Bin counts: {counts}')\nprint(f'Bin edges: {edges.round(1)}')\n\n# Custom bins\ncustom_bins = [0, 30, 50, 70, 100]\ncounts2, _ = np.histogram(data, bins=custom_bins)\nprint(f'Custom bins: {counts2}')\n\n# Digitize\nbins = np.array([30, 50, 70, 90])\nindices = np.digitize(data[:5], bins)\nprint(f'Bin indices: {indices}')"}
+],
+examples:[
+{title:"Descriptive Statistics Summary",desc:"Compute a full statistical summary of a dataset.",code:"import numpy as np\n\nrng = np.random.default_rng(42)\ndata = rng.normal(75, 12, 200)\n\nstats = {\n    'Count': len(data),\n    'Mean': np.mean(data),\n    'Median': np.median(data),\n    'Std': np.std(data, ddof=1),\n    'Min': np.min(data),\n    'Max': np.max(data),\n    'Q1': np.percentile(data, 25),\n    'Q3': np.percentile(data, 75)\n}\nfor k, v in stats.items():\n    print(f'{k:>8}: {v:.2f}')"},
+{title:"Correlation Analysis",desc:"Analyze correlations between multiple variables.",code:"import numpy as np\n\nrng = np.random.default_rng(42)\nn = 100\nstudy_hours = rng.uniform(1, 10, n)\nscores = 50 + 5*study_hours + rng.normal(0, 5, n)\nsleep_hours = rng.uniform(4, 9, n)\n\n# Correlation matrix\nall_data = np.column_stack([study_hours, scores, sleep_hours])\ncorr = np.corrcoef(all_data.T)\nlabels = ['Study', 'Score', 'Sleep']\nprint('Correlation Matrix:')\nfor i, l in enumerate(labels):\n    print(f'{l:>6}: {corr[i].round(3)}')"},
+{title:"Grade Distribution Analysis",desc:"Analyze exam scores using percentiles and histograms.",code:"import numpy as np\n\nrng = np.random.default_rng(42)\nscores = np.clip(rng.normal(72, 15, 150), 0, 100).astype(int)\n\n# Grade boundaries using percentiles\ngrades = np.digitize(scores, [60, 70, 80, 90])\ngrade_labels = ['F', 'D', 'C', 'B', 'A']\n\nfor i, label in enumerate(grade_labels):\n    count = np.sum(grades == i)\n    print(f'Grade {label}: {count} students ({count/len(scores)*100:.1f}%)')"}
+],
+practice:[
+{q:"Compute mean, median, and mode (using unique+argmax) of an array.",d:"E"},
+{q:"Calculate the variance and standard deviation of a dataset.",d:"E"},
+{q:"Find the 25th, 50th, and 75th percentiles of an array.",d:"E"},
+{q:"Compute the correlation coefficient between two arrays.",d:"E"},
+{q:"Use np.histogram to create a frequency distribution with 5 bins.",d:"E"},
+{q:"Calculate the weighted average of exam scores with different weights.",d:"E"},
+{q:"Compute the range (max - min) and IQR of a dataset.",d:"E"},
+{q:"Compute covariance matrix of 3 variables and interpret it.",d:"M"},
+{q:"Detect outliers using the IQR method (values beyond 1.5*IQR from quartiles).",d:"M"},
+{q:"Implement a function that returns a complete descriptive statistics summary.",d:"M"},
+{q:"Compare population vs sample variance/std on a small dataset.",d:"M"},
+{q:"Use np.digitize to assign letter grades based on percentile boundaries.",d:"M"},
+{q:"Compute the coefficient of variation (CV = std/mean) for comparing datasets.",d:"M"},
+{q:"Implement a function that computes Spearman rank correlation using argsort.",d:"M"},
+{q:"Create a normalized histogram (density=True) and verify it integrates to 1.",d:"M"},
+{q:"Implement bootstrap confidence interval estimation for the mean.",d:"H"},
+{q:"Compute a rolling correlation between two time series.",d:"H"},
+{q:"Implement kernel density estimation (KDE) using Gaussian kernel.",d:"H"},
+{q:"Write a function that performs hypothesis testing (t-test) using NumPy operations.",d:"H"},
+{q:"Implement Bayesian estimation of mean and variance with conjugate priors.",d:"H"}
+]},
+{id:9,title:"Sorting & Searching",color:"#60a5fa",chips:["sort","argsort","searchsorted","unique"],
+subtopics:[
+{name:"sort and argsort",theory:["np.sort(arr) returns a sorted copy; arr.sort() sorts in-place.","np.argsort(arr) returns indices that would sort the array.","Use axis parameter to sort along rows (axis=1) or columns (axis=0)."],code:"import numpy as np\n\narr = np.array([42, 15, 8, 23, 67, 4])\n\n# Sort (returns copy)\nsorted_arr = np.sort(arr)\nprint(sorted_arr)  # [ 4  8 15 23 42 67]\n\n# Argsort (indices)\nidx = np.argsort(arr)\nprint(idx)         # [5 2 1 3 0 4]\nprint(arr[idx])    # [ 4  8 15 23 42 67]\n\n# Sort 2D along axis\nmatrix = np.array([[3,1,2],[6,4,5]])\nprint(np.sort(matrix, axis=1))  # Sort each row\nprint(np.sort(matrix, axis=0))  # Sort each column"},
+{name:"searchsorted",theory:["np.searchsorted(sorted_arr, values) finds indices where values should be inserted.","Maintains sorted order; useful for binning and lookup operations.","side='left' (default) gives first suitable position; 'right' gives last."],code:"import numpy as np\n\n# Sorted array\nbins = np.array([10, 20, 30, 40, 50])\n\n# Find insertion points\nvalues = np.array([15, 25, 35, 5, 55])\nindices = np.searchsorted(bins, values)\nprint(indices)  # [1 2 3 0 5]\n\n# Left vs right\narr = np.array([1, 2, 2, 2, 3, 4])\nprint(np.searchsorted(arr, 2, side='left'))   # 1\nprint(np.searchsorted(arr, 2, side='right'))  # 4"},
+{name:"unique and set operations",theory:["np.unique(arr) returns sorted unique values; return_counts gives frequencies.","Set operations: np.intersect1d, np.union1d, np.setdiff1d, np.in1d.","return_index and return_inverse give mapping between original and unique arrays."],code:"import numpy as np\n\narr = np.array([3, 1, 4, 1, 5, 9, 2, 6, 5, 3])\n\n# Unique values\nuniq, counts = np.unique(arr, return_counts=True)\nprint(f'Unique: {uniq}')   # [1 2 3 4 5 6 9]\nprint(f'Counts: {counts}')  # [2 1 2 1 2 1 1]\n\n# Set operations\na = np.array([1, 2, 3, 4, 5])\nb = np.array([3, 4, 5, 6, 7])\nprint(np.intersect1d(a, b))  # [3 4 5]\nprint(np.union1d(a, b))      # [1 2 3 4 5 6 7]\nprint(np.setdiff1d(a, b))    # [1 2]"},
+{name:"argmin, argmax, nonzero",theory:["np.argmin/argmax return index of min/max element (flattened or along axis).","np.nonzero returns indices of non-zero elements as tuple of arrays.","np.flatnonzero returns indices in flattened array where elements are non-zero."],code:"import numpy as np\n\narr = np.array([[3, 7, 1], [8, 2, 6], [4, 9, 5]])\n\n# Global argmin/argmax\nprint(np.argmin(arr))  # 2 (flattened index of 1)\nprint(np.argmax(arr))  # 7 (flattened index of 9)\n\n# Along axis\nprint(np.argmax(arr, axis=0))  # [1 2 1] (row of max per col)\nprint(np.argmax(arr, axis=1))  # [1 0 1] (col of max per row)\n\n# Nonzero\nmask = np.array([0, 5, 0, 3, 0, 8])\nprint(np.nonzero(mask))       # (array([1, 3, 5]),)\nprint(np.flatnonzero(mask))   # [1 3 5]"},
+{name:"partition and argpartition",theory:["np.partition(arr, k) partially sorts: k-th element in sorted position, smaller left, larger right.","Much faster than full sort when you only need top-k or bottom-k elements.","np.argpartition returns indices for partial sort."],code:"import numpy as np\n\narr = np.array([42, 15, 8, 67, 23, 4, 89, 31])\n\n# Find 3 smallest (partial sort)\npartitioned = np.partition(arr, 3)\nprint(partitioned[:3])  # 3 smallest (unordered)\nprint(np.sort(partitioned[:3]))  # [4 8 15]\n\n# Top 3 largest using argpartition\ntop3_idx = np.argpartition(arr, -3)[-3:]\nprint(f'Top 3 values: {arr[top3_idx]}')\nprint(f'Top 3 sorted: {np.sort(arr[top3_idx])[::-1]}')"}
+],
+examples:[
+{title:"Rank Data",desc:"Assign ranks to values in an array handling ties.",code:"import numpy as np\n\nscores = np.array([85, 92, 78, 92, 88, 78, 95])\n\n# Simple ranking using argsort\norder = np.argsort(-scores)  # Descending\nranks = np.empty_like(order)\nranks[order] = np.arange(1, len(scores)+1)\nprint(f'Scores: {scores}')\nprint(f'Ranks: {ranks}')"},
+{title:"Top-K Elements",desc:"Find top-k elements efficiently using partition.",code:"import numpy as np\n\nrng = np.random.default_rng(42)\ndata = rng.integers(0, 1000, size=1000)\n\nk = 5\n# Efficient top-k using argpartition\ntop_k_idx = np.argpartition(data, -k)[-k:]\ntop_k_sorted = top_k_idx[np.argsort(data[top_k_idx])[::-1]]\n\nprint(f'Top {k} values: {data[top_k_sorted]}')\nprint(f'At indices: {top_k_sorted}')"},
+{title:"Frequency Analysis",desc:"Analyze value frequencies and find mode.",code:"import numpy as np\n\nrng = np.random.default_rng(42)\ndata = rng.integers(1, 11, size=100)  # Dice rolls\n\nvalues, counts = np.unique(data, return_counts=True)\nmode_idx = np.argmax(counts)\n\nprint('Value | Count | Bar')\nfor v, c in zip(values, counts):\n    bar = '#' * c\n    print(f'  {v:>2}  |  {c:>3}  | {bar}')\nprint(f'\\nMode: {values[mode_idx]} (count={counts[mode_idx]})')"}
+],
+practice:[
+{q:"Sort a 1D array in ascending and descending order.",d:"E"},
+{q:"Use argsort to get the indices that would sort an array.",d:"E"},
+{q:"Find unique values and their counts in an array with duplicates.",d:"E"},
+{q:"Find the index of the maximum value in a 2D array (argmax).",d:"E"},
+{q:"Sort a 2D matrix along rows (axis=1).",d:"E"},
+{q:"Use np.searchsorted to find where a value fits in a sorted array.",d:"E"},
+{q:"Find the intersection of two arrays using np.intersect1d.",d:"E"},
+{q:"Sort an array of strings alphabetically using np.sort.",d:"M"},
+{q:"Use argsort to sort one array based on the order of another.",d:"M"},
+{q:"Find the top-5 elements in a large array using np.partition (not full sort).",d:"M"},
+{q:"Implement rank assignment using argsort (handle ties by averaging).",d:"M"},
+{q:"Use np.unique with return_inverse to encode categorical data as integers.",d:"M"},
+{q:"Find all indices where an array equals a specific value using np.where.",d:"M"},
+{q:"Use np.setdiff1d to find elements in array A that are not in array B.",d:"M"},
+{q:"Sort a structured array by a specific field.",d:"M"},
+{q:"Implement binary search on a sorted array using searchsorted.",d:"H"},
+{q:"Write a function to find k-nearest neighbors using argsort on distances.",d:"H"},
+{q:"Implement a function that returns the n most frequent values in an array.",d:"H"},
+{q:"Use argpartition to implement a partial quicksort (median of medians).",d:"H"},
+{q:"Implement lexicographic sorting of a 2D array (sort by col 0, then col 1).",d:"H"}
+]},
+{id:10,title:"Broadcasting",color:"#f87171",chips:["Rules","dimensions","outer ops","vectorization"],
+subtopics:[
+{name:"Broadcasting Rules Detailed",theory:["Rule 1: Arrays with fewer dims get 1s prepended to their shape.","Rule 2: Arrays with size 1 along a dimension are stretched to match.","Rule 3: If sizes differ and neither is 1, broadcasting fails with ValueError."],code:"import numpy as np\n\n# Shape compatibility examples\n# (3,4) + (4,)   -> (3,4) + (1,4) -> works!\n# (3,4) + (3,1)  -> works! (stretch col)\n# (3,4) + (3,)   -> FAILS! (trailing dims don't match)\n\nA = np.ones((3, 4))\nb = np.array([1, 2, 3, 4])      # (4,)\nprint((A + b).shape)  # (3, 4)\n\nc = np.array([[10],[20],[30]])   # (3, 1)\nprint((A + c).shape)  # (3, 4)\n\n# This would fail:\n# d = np.array([1, 2, 3])  # (3,)\n# A + d  # ValueError!"},
+{name:"Dimension Expansion",theory:["Use np.newaxis (or None) to add dimensions: arr[np.newaxis, :] adds axis 0.","arr[:, np.newaxis] adds axis 1 (makes column vector from 1D array).","np.expand_dims(arr, axis) is equivalent; np.squeeze removes size-1 dimensions."],code:"import numpy as np\n\narr = np.array([1, 2, 3])  # shape (3,)\n\n# Add dimensions\nrow = arr[np.newaxis, :]   # shape (1, 3)\ncol = arr[:, np.newaxis]   # shape (3, 1)\n\nprint(f'Original: {arr.shape}')  # (3,)\nprint(f'Row: {row.shape}')       # (1, 3)\nprint(f'Col: {col.shape}')       # (3, 1)\n\n# Outer product via broadcasting\nouter = col * row  # (3,1) * (1,3) = (3,3)\nprint(f'Outer product:\\n{outer}')"},
+{name:"Outer Operations",theory:["Outer product: col_vector @ row_vector creates a matrix from two vectors.","Any binary operation can be made 'outer' by expanding dimensions appropriately.","np.outer(a, b) is a convenience function for the outer product."],code:"import numpy as np\n\na = np.array([1, 2, 3])\nb = np.array([10, 20, 30, 40])\n\n# Outer product\nouter = np.outer(a, b)\nprint(outer)\n# [[ 10  20  30  40]\n#  [ 20  40  60  80]\n#  [ 30  60  90 120]]\n\n# Outer subtraction (distance-like)\nx = np.array([1, 3, 5, 7])\ndiffs = x[:, np.newaxis] - x[np.newaxis, :]\nprint(f'Pairwise differences:\\n{diffs}')"},
+{name:"Vectorization Patterns",theory:["Replace loops with broadcasting: think in terms of array dimensions.","Common pattern: expand dims to create all pairwise combinations, then reduce.","Vectorized code is typically 10-100x faster than Python loops on arrays."],code:"import numpy as np\n\n# Pairwise Euclidean distance (vectorized)\npoints = np.array([[0,0],[1,1],[2,2],[3,3]])\n\n# Expand to (n,1,d) - (1,n,d) = (n,n,d)\ndiff = points[:, np.newaxis, :] - points[np.newaxis, :, :]\ndist = np.sqrt(np.sum(diff**2, axis=2))\nprint(f'Distance matrix:\\n{dist.round(3)}')\n\n# Vectorized conditional\nx = np.linspace(-5, 5, 11)\ny = np.where(x > 0, x**2, 0)  # ReLU-like\nprint(f'x: {x}')\nprint(f'y: {y}')"},
+{name:"Common Broadcasting Mistakes",theory:["Most common error: trying to add (3,) to (4,) - shapes must align from the right.","Forgetting to make a column vector: (3,) + (3,4) fails; (3,1) + (3,4) works.","Debugging: print shapes before operations to verify compatibility."],code:"import numpy as np\n\n# Common mistake and fix\nmatrix = np.ones((3, 4))\nvec = np.array([1, 2, 3])  # shape (3,)\n\n# This FAILS: matrix + vec (4 != 3 trailing dim)\n# Fix: make it a column vector\nvec_col = vec[:, np.newaxis]  # shape (3, 1)\nresult = matrix + vec_col     # Works! (3,4) + (3,1)\nprint(result)\n\n# Check compatibility\ndef broadcast_shapes(s1, s2):\n    try:\n        return np.broadcast_shapes(s1, s2)\n    except ValueError as e:\n        return f'Incompatible: {e}'\n\nprint(broadcast_shapes((3,4), (4,)))    # (3,4)\nprint(broadcast_shapes((3,4), (3,)))    # Error"}
+],
+examples:[
+{title:"Distance Matrix",desc:"Compute all pairwise distances between points using broadcasting.",code:"import numpy as np\n\n# 5 points in 3D space\nrng = np.random.default_rng(42)\npoints = rng.random((5, 3))\n\n# Pairwise distance using broadcasting\ndiff = points[:, np.newaxis, :] - points[np.newaxis, :, :]\ndist_matrix = np.sqrt(np.sum(diff**2, axis=-1))\n\nprint(f'Points shape: {points.shape}')\nprint(f'Distance matrix shape: {dist_matrix.shape}')\nprint(f'Distances:\\n{dist_matrix.round(3)}')"},
+{title:"Standardize Columns",desc:"Subtract mean and divide by std for each column using broadcasting.",code:"import numpy as np\n\nrng = np.random.default_rng(42)\ndata = rng.random((5, 3)) * np.array([100, 50, 10])\nprint(f'Original:\\n{data.round(2)}')\n\n# Standardize each column\nmeans = data.mean(axis=0)       # shape (3,)\nstds = data.std(axis=0)         # shape (3,)\nstandardized = (data - means) / stds  # broadcasting!\n\nprint(f'\\nStandardized:\\n{standardized.round(3)}')\nprint(f'Column means: {standardized.mean(axis=0).round(10)}')\nprint(f'Column stds: {standardized.std(axis=0).round(10)}')"},
+{title:"Multiplication Table via Broadcasting",desc:"Create a multiplication table using outer product broadcasting.",code:"import numpy as np\n\nn = 10\nrows = np.arange(1, n+1)[:, np.newaxis]  # (10, 1)\ncols = np.arange(1, n+1)[np.newaxis, :]  # (1, 10)\n\ntable = rows * cols  # (10, 10) via broadcasting\n\nprint('Multiplication Table:')\nfor i in range(n):\n    print(' '.join(f'{table[i,j]:4}' for j in range(n)))"}
+],
+practice:[
+{q:"Add a scalar to a 2D array and explain what broadcasting rule applies.",d:"E"},
+{q:"Add a 1D array of shape (4,) to a 2D array of shape (3,4).",d:"E"},
+{q:"Create a column vector and add it to each column of a matrix.",d:"E"},
+{q:"Use np.newaxis to turn a 1D array into a row vector and a column vector.",d:"E"},
+{q:"Compute the outer product of two vectors using broadcasting (not np.outer).",d:"E"},
+{q:"Predict the output shape of (5,1) + (1,4) broadcasting.",d:"E"},
+{q:"Subtract the row mean from each element (center each row) using broadcasting.",d:"E"},
+{q:"Normalize each column of a matrix to [0,1] range using broadcasting.",d:"M"},
+{q:"Compute pairwise absolute differences between all elements of two arrays.",d:"M"},
+{q:"Create a multiplication table (10x10) using broadcasting without loops.",d:"M"},
+{q:"Add a bias vector to every sample in a batch (batch shape: (N, features)).",d:"M"},
+{q:"Use broadcasting to compare each element of array A with each element of array B.",d:"M"},
+{q:"Implement one-hot encoding using broadcasting (compare indices with class labels).",d:"M"},
+{q:"Use np.broadcast_shapes to verify which pairs of shapes are compatible.",d:"M"},
+{q:"Compute all pairwise L1 distances using broadcasting.",d:"M"},
+{q:"Implement pairwise Euclidean distance matrix using only broadcasting (no loops).",d:"H"},
+{q:"Write a vectorized function that applies softmax across rows using broadcasting.",d:"H"},
+{q:"Implement batched matrix-vector multiplication using broadcasting.",d:"H"},
+{q:"Use broadcasting to compute a polynomial (evaluate coefficients at multiple x values).",d:"H"},
+{q:"Implement k-means assignment step using broadcasting (find nearest centroid for each point).",d:"H"}
+]},
+{id:11,title:"Random Module",color:"#c084fc",chips:["seed","normal","uniform","shuffle","choice"],
+subtopics:[
+{name:"Random Number Generation & Seeds",theory:["np.random.default_rng(seed) creates a reproducible random generator (recommended).","Setting a seed ensures the same sequence of random numbers each run.","Legacy API (np.random.seed) still works but new code should use Generator."],code:"import numpy as np\n\n# Modern API (recommended)\nrng = np.random.default_rng(42)\nprint(rng.random(5))  # Same every time with seed 42\n\n# Create different streams\nrng1 = np.random.default_rng(1)\nrng2 = np.random.default_rng(2)\nprint(rng1.random(3))  # Different from rng2\nprint(rng2.random(3))\n\n# Legacy API\nnp.random.seed(42)\nprint(np.random.rand(3))  # Reproducible"},
+{name:"Uniform and Normal Distributions",theory:["rng.random(size) / rng.uniform(low, high, size) generate uniform random numbers.","rng.standard_normal(size) / rng.normal(loc, scale, size) generate Gaussian random numbers.","uniform is flat (equal probability); normal is bell-shaped (most values near mean)."],code:"import numpy as np\n\nrng = np.random.default_rng(42)\n\n# Uniform distribution [0, 1)\nuniform = rng.random((3, 3))\nprint(f'Uniform:\\n{uniform.round(3)}')\n\n# Uniform in range [a, b)\ncustom = rng.uniform(10, 50, size=5)\nprint(f'Uniform [10,50): {custom.round(2)}')\n\n# Normal (Gaussian) distribution\nnormal = rng.normal(loc=100, scale=15, size=1000)\nprint(f'Normal: mean={normal.mean():.1f}, std={normal.std():.1f}')"},
+{name:"Integer and Choice",theory:["rng.integers(low, high, size) generates random integers in [low, high).","rng.choice(arr, size, replace) selects random elements from an array.","Set replace=False for sampling without replacement (like drawing cards)."],code:"import numpy as np\n\nrng = np.random.default_rng(42)\n\n# Random integers\ndice = rng.integers(1, 7, size=10)  # 10 dice rolls\nprint(f'Dice rolls: {dice}')\n\n# Random choice\ncolors = np.array(['red', 'blue', 'green', 'yellow'])\npicked = rng.choice(colors, size=5, replace=True)\nprint(f'Choices: {picked}')\n\n# Without replacement (unique selections)\nhand = rng.choice(52, size=5, replace=False)\nprint(f'Card indices: {hand}')\n\n# Weighted choice\nweights = [0.5, 0.3, 0.15, 0.05]\nweighted = rng.choice(colors, size=10, p=weights)\nprint(f'Weighted: {weighted}')"},
+{name:"Shuffle and Permutation",theory:["rng.shuffle(arr) shuffles array in-place; modifies original array.","rng.permutation(arr) returns a shuffled copy; original stays unchanged.","For permuting indices: rng.permutation(n) returns shuffled [0, 1, ..., n-1]."],code:"import numpy as np\n\nrng = np.random.default_rng(42)\n\n# Shuffle in-place\narr = np.arange(10)\nrng.shuffle(arr)\nprint(f'Shuffled: {arr}')\n\n# Permutation (copy)\noriginal = np.arange(10)\nshuffled = rng.permutation(original)\nprint(f'Original: {original}')  # Unchanged\nprint(f'Permuted: {shuffled}')\n\n# Generate index permutation\nidx = rng.permutation(5)\ndata = np.array(['a', 'b', 'c', 'd', 'e'])\nprint(f'Shuffled data: {data[idx]}')"},
+{name:"Other Distributions",theory:["NumPy provides many distributions: poisson, exponential, binomial, beta, gamma, etc.","Each distribution has specific parameters matching its mathematical definition.","rng.multinomial for multi-class sampling; rng.multivariate_normal for correlated data."],code:"import numpy as np\n\nrng = np.random.default_rng(42)\n\n# Poisson (events per interval)\npoisson = rng.poisson(lam=5, size=10)\nprint(f'Poisson(5): {poisson}')\n\n# Exponential (time between events)\nexpon = rng.exponential(scale=2.0, size=10)\nprint(f'Exp(2): {expon.round(2)}')\n\n# Binomial (n trials, p probability)\nbinom = rng.binomial(n=10, p=0.3, size=10)\nprint(f'Binom(10,0.3): {binom}')\n\n# Multivariate normal\nmean = [0, 0]\ncov = [[1, 0.5], [0.5, 1]]\npoints = rng.multivariate_normal(mean, cov, size=5)\nprint(f'MVN:\\n{points.round(3)}')"}
+],
+examples:[
+{title:"Monte Carlo Pi Estimation",desc:"Estimate pi using random points in a unit square.",code:"import numpy as np\n\nrng = np.random.default_rng(42)\nn = 1000000\n\n# Random points in [0,1] x [0,1]\nx = rng.random(n)\ny = rng.random(n)\n\n# Points inside quarter circle\ninside = np.sum(x**2 + y**2 <= 1)\npi_estimate = 4 * inside / n\n\nprint(f'Estimated pi: {pi_estimate:.6f}')\nprint(f'Actual pi:    {np.pi:.6f}')\nprint(f'Error:        {abs(pi_estimate - np.pi):.6f}')"},
+{title:"Random Walk Simulation",desc:"Simulate multiple random walks simultaneously.",code:"import numpy as np\n\nrng = np.random.default_rng(42)\nn_walks = 5\nn_steps = 100\n\n# Generate steps: +1 or -1\nsteps = rng.choice([-1, 1], size=(n_walks, n_steps))\n\n# Cumulative sum gives position at each step\npositions = np.cumsum(steps, axis=1)\n\nprint(f'Final positions: {positions[:, -1]}')\nprint(f'Max distance: {np.max(np.abs(positions))}')\nprint(f'Avg final position: {positions[:, -1].mean():.2f}')"},
+{title:"Bootstrap Sampling",desc:"Estimate confidence interval using bootstrap resampling.",code:"import numpy as np\n\nrng = np.random.default_rng(42)\n\n# Original sample\ndata = np.array([23, 45, 12, 67, 34, 89, 56, 11, 44, 78])\n\n# Bootstrap: resample with replacement\nn_bootstrap = 10000\nmeans = np.zeros(n_bootstrap)\nfor i in range(n_bootstrap):\n    sample = rng.choice(data, size=len(data), replace=True)\n    means[i] = sample.mean()\n\nci_low, ci_high = np.percentile(means, [2.5, 97.5])\nprint(f'Sample mean: {data.mean():.2f}')\nprint(f'95% CI: [{ci_low:.2f}, {ci_high:.2f}]')"}
+],
+practice:[
+{q:"Set a random seed and generate 10 random floats between 0 and 1.",d:"E"},
+{q:"Generate a 3x3 array of random integers between 1 and 100.",d:"E"},
+{q:"Generate 1000 random numbers from a normal distribution (mean=50, std=10).",d:"E"},
+{q:"Use rng.choice to randomly select 5 elements from an array without replacement.",d:"E"},
+{q:"Shuffle an array of 10 elements in-place using rng.shuffle.",d:"E"},
+{q:"Generate random numbers from a uniform distribution in range [5, 15].",d:"E"},
+{q:"Create a random permutation of integers 0 to 9.",d:"E"},
+{q:"Simulate 1000 dice rolls and count frequency of each outcome.",d:"M"},
+{q:"Generate samples from a Poisson distribution and verify mean equals lambda.",d:"M"},
+{q:"Use weighted random choice to simulate a biased coin (70% heads).",d:"M"},
+{q:"Simulate multiple random walks and plot their cumulative sums.",d:"M"},
+{q:"Generate correlated random variables using multivariate_normal.",d:"M"},
+{q:"Implement reservoir sampling for streaming data using random integers.",d:"M"},
+{q:"Create a random dataset with specific correlation structure.",d:"M"},
+{q:"Use rng.permutation to create a train/test split of a dataset.",d:"M"},
+{q:"Implement Monte Carlo estimation of pi with confidence interval.",d:"H"},
+{q:"Simulate Brownian motion (Wiener process) using cumulative normal steps.",d:"H"},
+{q:"Implement bootstrap hypothesis testing comparing two group means.",d:"H"},
+{q:"Generate random sparse matrices with a specified density.",d:"H"},
+{q:"Implement stratified sampling maintaining class proportions.",d:"H"}
+]},
+{id:12,title:"Performance & Advanced",color:"#2dd4bf",chips:["Vectorization","memory","views vs copies"],
+subtopics:[
+{name:"Vectorization vs Loops",theory:["Vectorized operations use optimized C/Fortran code; loops use slow Python interpreter.","Replace for-loops with array operations for 10-100x speedup.","Think in terms of whole-array operations rather than element-by-element."],code:"import numpy as np\nimport time\n\nn = 1000000\narr = np.random.random(n)\n\n# SLOW: Python loop\nstart = time.time()\nresult_loop = np.empty(n)\nfor i in range(n):\n    result_loop[i] = arr[i] ** 2\nloop_time = time.time() - start\n\n# FAST: Vectorized\nstart = time.time()\nresult_vec = arr ** 2\nvec_time = time.time() - start\n\nprint(f'Loop: {loop_time:.4f}s')\nprint(f'Vectorized: {vec_time:.6f}s')\nprint(f'Speedup: {loop_time/vec_time:.0f}x')"},
+{name:"Views vs Copies",theory:["Slicing creates a view (shares memory); fancy indexing creates a copy.","Views are memory-efficient but modifications affect the original array.","Use arr.copy() when you need an independent copy; arr.base checks if it's a view."],code:"import numpy as np\n\noriginal = np.array([1, 2, 3, 4, 5, 6])\n\n# View (slicing)\nview = original[::2]  # [1, 3, 5]\nview[0] = 99\nprint(original)  # [99, 2, 3, 4, 5, 6] - MODIFIED!\n\n# Copy (fancy indexing)\ncopy = original[[0, 2, 4]]\ncopy[0] = 100\nprint(original)  # [99, 2, 3, 4, 5, 6] - unchanged\n\n# Check if view\nprint(view.base is original)  # True\nprint(copy.base is original)  # False"},
+{name:"Memory Layout (C vs Fortran)",theory:["C order (row-major): rows are contiguous in memory - default in NumPy.","Fortran order (column-major): columns are contiguous in memory.","Operations are fastest when iterating along the contiguous dimension."],code:"import numpy as np\n\n# C order (row-major) - default\nc_arr = np.array([[1,2,3],[4,5,6]], order='C')\nprint(f'C strides: {c_arr.strides}')  # (24, 8)\n\n# Fortran order (column-major)\nf_arr = np.array([[1,2,3],[4,5,6]], order='F')\nprint(f'F strides: {f_arr.strides}')  # (8, 16)\n\n# Check contiguity\nprint(f'C contiguous: {c_arr.flags[\"C_CONTIGUOUS\"]}')\nprint(f'F contiguous: {f_arr.flags[\"F_CONTIGUOUS\"]}')\n\n# Accessing along contiguous dim is faster\nprint(c_arr.flatten(order='C'))  # [1,2,3,4,5,6]\nprint(f_arr.flatten(order='F'))  # [1,4,2,5,3,6]"},
+{name:"np.vectorize and apply_along_axis",theory:["np.vectorize wraps a scalar function to work element-wise - but NOT faster than loops.","It's a convenience, not a performance tool; for speed use true vectorization.","np.apply_along_axis applies a function along a specific axis of an array."],code:"import numpy as np\n\n# np.vectorize (convenience, NOT performance)\ndef custom_func(x):\n    if x > 0: return x ** 2\n    else: return 0\n\nvfunc = np.vectorize(custom_func)\narr = np.array([-3, -1, 0, 2, 4])\nprint(vfunc(arr))  # [0 0 0 4 16]\n\n# Better: use np.where for true vectorization\nresult = np.where(arr > 0, arr**2, 0)\nprint(result)  # [0 0 0 4 16] - same but faster\n\n# apply_along_axis\ndef normalize(row):\n    return (row - row.mean()) / row.std()\n\nmatrix = np.random.random((3, 4))\nnormalized = np.apply_along_axis(normalize, 1, matrix)\nprint(normalized.mean(axis=1).round(10))  # [0, 0, 0]"},
+{name:"Memory-Efficient Techniques",theory:["Use appropriate dtypes: float32 instead of float64 halves memory usage.","In-place operations (+=, *=) avoid creating temporary arrays.","np.add(a, b, out=result) writes directly to pre-allocated output array."],code:"import numpy as np\n\n# dtype optimization\narr64 = np.random.random(1000000)  # float64: 8MB\narr32 = arr64.astype(np.float32)   # float32: 4MB\nprint(f'float64: {arr64.nbytes/1e6:.1f} MB')\nprint(f'float32: {arr32.nbytes/1e6:.1f} MB')\n\n# In-place operations (no extra memory)\na = np.ones(1000000)\na += 5  # In-place, no temporary\na *= 2  # In-place\n\n# Pre-allocated output\nresult = np.empty_like(a)\nnp.multiply(a, 3, out=result)  # Writes to result\nprint(f'Result[:5]: {result[:5]}')"}
+],
+examples:[
+{title:"Vectorization Before & After",desc:"Convert a loop-based solution to vectorized NumPy.",code:"import numpy as np\nimport time\n\nrng = np.random.default_rng(42)\ndata = rng.random(100000)\n\n# Loop version\ndef clip_loop(arr, low, high):\n    result = np.empty_like(arr)\n    for i in range(len(arr)):\n        if arr[i] < low: result[i] = low\n        elif arr[i] > high: result[i] = high\n        else: result[i] = arr[i]\n    return result\n\n# Vectorized version\ndef clip_vec(arr, low, high):\n    return np.clip(arr, low, high)\n\nstart = time.time()\nclip_loop(data, 0.2, 0.8)\nprint(f'Loop: {time.time()-start:.4f}s')\n\nstart = time.time()\nclip_vec(data, 0.2, 0.8)\nprint(f'Vectorized: {time.time()-start:.6f}s')"},
+{title:"Memory Profiling",desc:"Compare memory usage of different approaches.",code:"import numpy as np\n\n# Method 1: Creating temporaries\na = np.random.random(1000000)\nb = np.random.random(1000000)\n\n# This creates multiple temporaries\nresult1 = np.sqrt(a**2 + b**2)  # a**2, b**2, sum, sqrt\n\n# Method 2: In-place operations\nresult2 = np.empty_like(a)\nnp.multiply(a, a, out=result2)\ntemp = np.empty_like(b)\nnp.multiply(b, b, out=temp)\nnp.add(result2, temp, out=result2)\nnp.sqrt(result2, out=result2)\n\nprint(f'Results match: {np.allclose(result1, result2)}')"},
+{title:"Stride Tricks for Sliding Window",desc:"Use strides to create sliding window views without copying.",code:"import numpy as np\nfrom numpy.lib.stride_tricks import sliding_window_view\n\narr = np.arange(10)\n\n# Sliding window of size 4\nwindows = sliding_window_view(arr, 4)\nprint(f'Windows shape: {windows.shape}')  # (7, 4)\nprint(windows)\n\n# Moving average using sliding window\nmoving_avg = windows.mean(axis=1)\nprint(f'Moving average: {moving_avg.round(2)}')\n\n# This is a VIEW - very memory efficient!\nprint(f'Shares memory: {np.shares_memory(arr, windows)}')"}
+],
+practice:[
+{q:"Time a loop vs vectorized version of squaring 1 million elements.",d:"E"},
+{q:"Create a slice of an array, modify it, and show that the original changed (view).",d:"E"},
+{q:"Use .copy() to create an independent copy and verify modifications don't propagate.",d:"E"},
+{q:"Check if an array is a view using the .base attribute.",d:"E"},
+{q:"Create arrays with float64 and float32 and compare their nbytes.",d:"E"},
+{q:"Use in-place operations (+=, *=) and explain why they save memory.",d:"E"},
+{q:"Use np.vectorize on a custom function and apply it to an array.",d:"E"},
+{q:"Replace a Python loop that clips values with np.clip and compare speed.",d:"M"},
+{q:"Use np.where instead of a loop with if-else for conditional operations.",d:"M"},
+{q:"Demonstrate that fancy indexing returns a copy while slicing returns a view.",d:"M"},
+{q:"Use np.add with out= parameter to avoid creating temporary arrays.",d:"M"},
+{q:"Profile memory usage of float64 vs float32 for a large array.",d:"M"},
+{q:"Convert a nested loop distance calculation to broadcasting-based vectorization.",d:"M"},
+{q:"Use sliding_window_view to compute moving average without loops.",d:"M"},
+{q:"Check array contiguity flags and explain C vs Fortran order.",d:"M"},
+{q:"Implement a function that processes a large array in chunks to manage memory.",d:"H"},
+{q:"Use np.einsum as an alternative to multiple operations for better performance.",d:"H"},
+{q:"Implement custom stride tricks to create a matrix of overlapping patches.",d:"H"},
+{q:"Write a memory-efficient function that normalizes a very large dataset in-place.",d:"H"},
+{q:"Compare performance of np.dot, np.matmul, @ and np.einsum for matrix multiplication.",d:"H"}
+]}
+];
+
+const solutionData = {
+1:[
+`import numpy as np
+arr = np.array([1, 2, 3, 4, 5, 6, 7, 8, 9, 10])
+print(f"dtype: {arr.dtype}")
+print(f"shape: {arr.shape}")`,
+`import numpy as np
+arr = np.arange(12).reshape(3, 4)
+print(f"ndim: {arr.ndim}")
+print(f"shape: {arr.shape}")
+print(f"size: {arr.size}")`,
+`import numpy as np
+floats = np.array([1.7, 2.3, 3.9, 4.1])
+ints = floats.astype(np.int32)
+print(f"Floats: {floats}")
+print(f"Ints (truncated): {ints}")`,
+`import numpy as np
+arr = np.zeros(100, dtype=np.float64)
+print(f"itemsize: {arr.itemsize} bytes")
+print(f"nbytes: {arr.nbytes} bytes")`,
+`import numpy as np
+arr = np.array([True, False, True, True, False])
+print(f"dtype: {arr.dtype}")
+as_int = arr.astype(int)
+print(f"As int: {as_int}")`,
+`import numpy as np
+import sys
+python_list = list(range(1000000))
+numpy_arr = np.arange(1000000)
+print(f"List type: {type(python_list)}")
+print(f"Array type: {type(numpy_arr)}")
+print(f"First 5 list: {python_list[:5]}")
+print(f"First 5 array: {numpy_arr[:5]}")`,
+`import numpy as np
+a8 = np.zeros(1, dtype=np.int8)
+a16 = np.zeros(1, dtype=np.int16)
+a32 = np.zeros(1, dtype=np.int32)
+a64 = np.zeros(1, dtype=np.int64)
+print(f"int8: {a8.itemsize} bytes")
+print(f"int16: {a16.itemsize} bytes")
+print(f"int32: {a32.itemsize} bytes")
+print(f"int64: {a64.itemsize} bytes")`,
+`import numpy as np
+arr = np.zeros((2, 3, 4))
+print(f"shape: {arr.shape}")
+print(f"ndim: {arr.ndim}")
+print(f"size: {arr.size}")
+print(f"dtype: {arr.dtype}")`,
+`import numpy as np
+nested = [[1, 2, 3], [4, 5, 6]]
+arr = np.array(nested)
+print(f"Expected: (2, 3)")
+print(f"Actual: {arr.shape}")`,
+`import numpy as np
+arr = np.array([1, 2, 3, 4, 5])
+arr[0] = 99
+print(f"Modified: {arr}")
+# arr.dtype = np.float64  # This changes interpretation, not values
+# Use astype() for proper conversion
+new_arr = arr.astype(np.float64)
+print(f"Converted: {new_arr}")`,
+`import numpy as np
+arr = np.array([1+2j, 3+4j, 5+6j])
+print(f"Array: {arr}")
+print(f"Real: {arr.real}")
+print(f"Imag: {arr.imag}")
+print(f"dtype: {arr.dtype}")`,
+`import numpy as np
+mixed = np.array([1, 2.5, "hello", True])
+print(f"Array: {mixed}")
+print(f"dtype: {mixed.dtype}")  # All converted to string`,
+`import numpy as np
+arr = np.array([1, 2, 3], dtype=np.float64)
+print(f"dtype name: {arr.dtype.name}")
+print(f"dtype char: {arr.dtype.char}")
+print(f"dtype itemsize: {arr.dtype.itemsize}")`,
+`import numpy as np
+import time
+n = 1000000
+lst = list(range(n))
+arr = np.arange(n)
+start = time.time()
+sum(lst)
+list_time = time.time() - start
+start = time.time()
+np.sum(arr)
+arr_time = time.time() - start
+print(f"List sum: {list_time:.4f}s")
+print(f"Array sum: {arr_time:.6f}s")
+print(f"Speedup: {list_time/arr_time:.0f}x")`,
+`import numpy as np
+dt = np.dtype([("name", "U10"), ("age", "i4"), ("score", "f8")])
+students = np.array([("Alice", 20, 85.5), ("Bob", 22, 92.3)], dtype=dt)
+print(f"Names: {students['name']}")
+print(f"Ages: {students['age']}")
+print(f"Scores: {students['score']}")`,
+`import numpy as np
+arr = np.arange(12).reshape(3, 4)
+print(f"shape: {arr.shape}")
+print(f"dtype: {arr.dtype}")
+print(f"strides: {arr.strides}")
+print(f"flags:\\n{arr.flags}")`,
+`import numpy as np
+arr = np.array([1, 2, 3, 4], dtype=">i4")  # Big-endian
+print(f"Big-endian: {arr.dtype.byteorder}")
+arr_le = arr.astype("<i4")  # Little-endian
+print(f"Little-endian: {arr_le.dtype.byteorder}")
+print(f"Values same: {np.array_equal(arr, arr_le)}")`,
+`import numpy as np
+a = np.arange(10)
+b = a[2:5]
+print(f"Shares memory: {np.shares_memory(a, b)}")
+c = a[[0, 1, 2]]
+print(f"Shares memory: {np.shares_memory(a, c)}")`,
+`import numpy as np
+arr = np.arange(12).reshape(3, 4)
+print(f"Shape: {arr.shape}")
+print(f"Strides: {arr.strides}")
+print("Strides = (bytes to next row, bytes to next col)")
+print(f"Each element: {arr.itemsize} bytes")
+print(f"Next row: skip {arr.strides[0]} bytes = {arr.strides[0]//arr.itemsize} elements")`,
+`import numpy as np
+# Create a memory-mapped file
+arr = np.arange(1000)
+fp = np.memmap("/tmp/test.dat", dtype="float64", mode="w+", shape=(1000,))
+fp[:] = arr
+fp.flush()
+# Read back
+fp2 = np.memmap("/tmp/test.dat", dtype="float64", mode="r", shape=(1000,))
+print(f"Memmap shape: {fp2.shape}")
+print(f"First 5: {fp2[:5]}")`
+],
+2:[
+`import numpy as np
+zeros = np.zeros((3, 3))
+ones = np.ones((2, 5))
+print(f"Zeros:\\n{zeros}")
+print(f"Ones:\\n{ones}")`,
+`import numpy as np
+arr = np.arange(0, 21, 3)
+print(f"Array: {arr}")`,
+`import numpy as np
+arr = np.linspace(0, 2*np.pi, 50)
+print(f"Shape: {arr.shape}")
+print(f"First 5: {arr[:5].round(3)}")
+print(f"Last: {arr[-1]:.4f}")`,
+`import numpy as np
+I = np.eye(4)
+print(f"Identity 4x4:\\n{I}")`,
+`import numpy as np
+arr = np.full((3, 3), 42)
+print(f"Full:\\n{arr}")`,
+`import numpy as np
+rng = np.random.default_rng(42)
+arr = rng.random((5, 5))
+print(f"Random 5x5:\\n{arr.round(3)}")`,
+`import numpy as np
+original = np.array([[1.5, 2.5], [3.5, 4.5]])
+zeros = np.zeros_like(original)
+print(f"Original dtype: {original.dtype}")
+print(f"Zeros_like:\\n{zeros}")
+print(f"Same shape: {zeros.shape == original.shape}")`,
+`import numpy as np
+arr = np.diag([5, 10, 15, 20])
+print(f"Diagonal matrix:\\n{arr}")`,
+`import numpy as np
+rng = np.random.default_rng(42)
+data = rng.normal(loc=50, scale=15, size=1000)
+print(f"Mean: {data.mean():.2f}")
+print(f"Std: {data.std():.2f}")
+print(f"Min: {data.min():.2f}, Max: {data.max():.2f}")`,
+`import numpy as np
+board = np.zeros((10, 10), dtype=int)
+board[1::2, ::2] = 1
+board[::2, 1::2] = 1
+print(f"Checkerboard:\\n{board}")`,
+`import numpy as np
+x = np.linspace(-2, 2, 5)
+y = np.linspace(-2, 2, 5)
+X, Y = np.meshgrid(x, y)
+Z = X**2 + Y**2
+print(f"X:\\n{X}")
+print(f"Z (x^2+y^2):\\n{Z}")`,
+`import numpy as np
+arr = np.logspace(0, 3, 20)  # 10^0 to 10^3
+print(f"Logspace: {arr.round(2)}")
+print(f"First: {arr[0]:.1f}, Last: {arr[-1]:.1f}")`,
+`import numpy as np
+rng = np.random.default_rng(42)
+matrix = rng.integers(10, 99, size=(4, 4))
+print(f"Random int matrix:\\n{matrix}")`,
+`import numpy as np
+x = np.array([1, 2, 3, 4, 5])
+V = np.vander(x, increasing=True)
+print(f"Vandermonde:\\n{V}")`,
+`import numpy as np
+from scipy.linalg import block_diag
+A = np.array([[1,2],[3,4]])
+B = np.array([[5,6],[7,8]])
+C = np.array([[9]])
+result = block_diag(A, B, C)
+print(f"Block diagonal:\\n{result}")`,
+`import numpy as np
+def toeplitz(col, row):
+    n = len(col)
+    m = len(row)
+    result = np.zeros((n, m))
+    for i in range(n):
+        for j in range(m):
+            result[i, j] = col[i-j] if i >= j else row[j-i]
+    return result
+c = np.array([1, 2, 3, 4])
+r = np.array([1, 5, 6, 7])
+print(f"Toeplitz:\\n{toeplitz(c, r)}")`,
+`import numpy as np
+rng = np.random.default_rng(42)
+n = 4
+A = rng.random((n, n))
+corr = A @ A.T
+d = np.sqrt(np.diag(corr))
+corr = corr / np.outer(d, d)
+print(f"Correlation matrix:\\n{corr.round(3)}")
+print(f"Diagonal: {np.diag(corr).round(3)}")`,
+`import numpy as np
+rng = np.random.default_rng(42)
+n = 100
+density = 0.05
+arr = np.zeros(n)
+nnz = int(n * density)
+indices = rng.choice(n, size=nnz, replace=False)
+arr[indices] = rng.random(nnz)
+print(f"Non-zeros: {np.count_nonzero(arr)}/{n}")
+print(f"Density: {np.count_nonzero(arr)/n:.2f}")`,
+`import numpy as np
+def f(i, j):
+    return i * 10 + j
+arr = np.fromfunction(f, (4, 5), dtype=int)
+print(f"fromfunction:\\n{arr}")`,
+`import numpy as np
+def hilbert(n):
+    i = np.arange(1, n+1)[:, np.newaxis]
+    j = np.arange(1, n+1)[np.newaxis, :]
+    return 1.0 / (i + j - 1)
+H = hilbert(5)
+print(f"Hilbert 5x5:\\n{H.round(4)}")
+print(f"Condition number: {np.linalg.cond(H):.1f}")`
+],
+3:[
+`import numpy as np
+arr = np.arange(25).reshape(5, 5)
+print(f"Element [2,3]: {arr[2, 3]}")`,
+`import numpy as np
+arr = np.arange(20).reshape(5, 4)
+sub = arr[0:3, 0:2]
+print(f"First 3 rows, 2 cols:\\n{sub}")`,
+`import numpy as np
+arr = np.array([10, 20, 30, 40, 50])
+print(f"Last element: {arr[-1]}")
+matrix = np.arange(12).reshape(3, 4)
+print(f"Last row: {matrix[-1]}")`,
+`import numpy as np
+arr = np.array([10, 30, 55, 70, 25, 80, 45])
+mask = arr > 50
+print(f"Mask: {mask}")
+print(f"Elements > 50: {arr[mask]}")`,
+`import numpy as np
+arr = np.array([100, 200, 300, 400, 500, 600, 700, 800])
+indices = np.array([0, 3, 5, 7])
+print(f"Selected: {arr[indices]}")`,
+`import numpy as np
+matrix = np.arange(20).reshape(5, 4)
+every_other = matrix[::2]
+print(f"Every other row:\\n{every_other}")`,
+`import numpy as np
+arr = np.array([5, -3, 8, -1, 0, -7, 4])
+neg_indices = np.where(arr < 0)
+print(f"Negative indices: {neg_indices[0]}")
+print(f"Negative values: {arr[neg_indices]}")`,
+`import numpy as np
+arr = np.array([5, 15, 25, 35, 45, 55, 65])
+result = arr[(arr > 10) & (arr < 50)]
+print(f"10 < x < 50: {result}")`,
+`import numpy as np
+matrix = np.arange(12).reshape(3, 4)
+reversed_rows = matrix[::-1]
+print(f"Reversed rows:\\n{reversed_rows}")`,
+`import numpy as np
+arr = np.array([5, -3, 8, -1, 0, -7, 4])
+arr[arr < 0] = 0
+print(f"Negatives replaced: {arr}")`,
+`import numpy as np
+arr = np.array([-5, 30, 120, 50, -10, 80])
+clipped = np.where(arr < 0, 0, np.where(arr > 100, 100, arr))
+print(f"Clipped: {clipped}")`,
+`import numpy as np
+matrix = np.arange(25).reshape(5, 5)
+diag = matrix[np.arange(5), np.arange(5)]
+print(f"Diagonal: {diag}")`,
+`import numpy as np
+matrix = np.arange(20).reshape(4, 5)
+rows = [0, 2, 3]
+cols = [1, 3, 4]
+sub = matrix[np.ix_(rows, cols)]
+print(f"Submatrix:\\n{sub}")`,
+`import numpy as np
+matrix = np.arange(20).reshape(4, 5)
+row_sums = matrix.sum(axis=1)
+threshold = 30
+selected = matrix[row_sums > threshold]
+print(f"Rows with sum > {threshold}:\\n{selected}")`,
+`import numpy as np
+arr = np.array([-5, 15, 25, 55, 75, 95])
+conditions = [arr < 20, (arr >= 20) & (arr < 60), arr >= 60]
+choices = ["low", "mid", "high"]
+result = np.select(conditions, choices, default="unknown")
+print(f"Categories: {result}")`,
+`import numpy as np
+arr = np.array([3, 7, 2, 8, 5, 1, 6, 4])
+# Local max: greater than both neighbors
+local_max = (arr[1:-1] > arr[:-2]) & (arr[1:-1] > arr[2:])
+indices = np.where(local_max)[0] + 1
+print(f"Local maxima at indices: {indices}")
+print(f"Values: {arr[indices]}")`,
+`import numpy as np
+a = np.array([10, 20, 30, 40, 50])
+b = np.array([1, 2, 3, 4, 5])
+mask = a > 25
+print(f"a filtered: {a[mask]}")
+print(f"b filtered: {b[mask]}")`,
+`import numpy as np
+arr = np.array([[3, 7, 1], [8, 2, 6], [4, 9, 5]])
+# Manual argmax along axis=1
+max_mask = arr == arr.max(axis=1, keepdims=True)
+row_idx, col_idx = np.where(max_mask)
+print(f"Max per row at cols: {col_idx}")`,
+`import numpy as np
+n = 10
+arr = np.arange(n*n).reshape(n, n)
+center = n // 2
+y, x = np.ogrid[:n, :n]
+ring_mask = ((x-center)**2 + (y-center)**2 >= 4) & ((x-center)**2 + (y-center)**2 <= 16)
+print(f"Ring elements: {arr[ring_mask]}")`,
+`import numpy as np
+matrix = np.random.default_rng(42).integers(0, 100, (5, 8))
+k = 3
+top_k_idx = np.argsort(matrix, axis=1)[:, -k:]
+result = np.take_along_axis(matrix, top_k_idx, axis=1)
+print(f"Top-{k} per row:\\n{result}")`
+],
+4:[
+`import numpy as np
+a = np.array([1, 2, 3, 4, 5])
+b = np.array([10, 20, 30, 40, 50])
+print(f"Add: {a + b}")
+print(f"Sub: {b - a}")
+print(f"Mul: {a * b}")
+print(f"Div: {b / a}")`,
+`import numpy as np
+arr = np.array([1, 2, 3, 4, 5])
+print(f"Squared: {arr ** 2}")`,
+`import numpy as np
+matrix = np.array([[1,2,3],[4,5,6],[7,8,9]])
+print(f"Matrix * 5:\\n{matrix * 5}")`,
+`import numpy as np
+arr = np.array([1, 4, 9, 16, 25, 36])
+print(f"sqrt: {np.sqrt(arr)}")`,
+`import numpy as np
+arr = np.array([[1,2,3],[4,5,6],[7,8,9]])
+print(f"Sum axis=0: {np.sum(arr, axis=0)}")
+print(f"Mean axis=0: {np.mean(arr, axis=0)}")
+print(f"Min axis=0: {np.min(arr, axis=0)}")
+print(f"Max axis=0: {np.max(arr, axis=0)}")`,
+`import numpy as np
+a = np.array([10, 20, 30])
+b = np.array([15, 20, 25])
+print(f"a > b: {a > b}")
+print(f"a < b: {a < b}")
+print(f"a == b: {a == b}")`,
+`import numpy as np
+arr = np.array([-5, 3, -8, 12, -1, 7])
+print(f"Absolute values: {np.abs(arr)}")`,
+`import numpy as np
+matrix = np.array([[1,2,3],[4,5,6],[7,8,9]])
+row_vec = np.array([10, 20, 30])
+result = matrix + row_vec
+print(f"Matrix + row:\\n{result}")`,
+`import numpy as np
+matrix = np.array([[10,20,30],[40,50,60],[70,80,90]])
+col_means = matrix.mean(axis=0)
+centered = matrix - col_means
+print(f"Means: {col_means}")
+print(f"Centered:\\n{centered}")`,
+`import numpy as np
+angles = np.linspace(0, 2*np.pi, 8)
+print(f"sin: {np.sin(angles).round(3)}")
+print(f"cos: {np.cos(angles).round(3)}")`,
+`import numpy as np
+data = np.array([15, 23, 8, 42, 11, 36])
+normalized = (data - data.min()) / (data.max() - data.min())
+print(f"Original: {data}")
+print(f"Normalized: {normalized.round(3)}")`,
+`import numpy as np
+matrix = np.array([[3,7,1],[8,2,6],[4,9,5]])
+print(f"argmax per row: {np.argmax(matrix, axis=1)}")`,
+`import numpy as np
+a = np.array([1, 2, 3])
+b = np.array([4, 5, 6])
+outer = a[:, np.newaxis] * b[np.newaxis, :]
+print(f"Outer product:\\n{outer}")`,
+`import numpy as np
+a = np.array([0.1 + 0.2])
+b = np.array([0.3])
+print(f"a == b: {a == b}")
+print(f"allclose: {np.allclose(a, b)}")`,
+`import numpy as np
+matrix = np.array([[1,2,3],[4,5,6],[7,8,9]])
+print(f"cumsum axis=0:\\n{np.cumsum(matrix, axis=0)}")
+print(f"cumsum axis=1:\\n{np.cumsum(matrix, axis=1)}")`,
+`import numpy as np
+def softmax(x):
+    # Subtract max for numerical stability
+    e_x = np.exp(x - np.max(x, axis=-1, keepdims=True))
+    return e_x / e_x.sum(axis=-1, keepdims=True)
+x = np.array([[1, 2, 3], [1, 1, 1]])
+print(f"Softmax:\\n{softmax(x).round(4)}")`,
+`import numpy as np
+points = np.array([[0,0],[1,1],[2,0],[3,1]])
+diff = points[:, np.newaxis, :] - points[np.newaxis, :, :]
+distances = np.sqrt(np.sum(diff**2, axis=-1))
+print(f"Distance matrix:\\n{distances.round(3)}")`,
+`import numpy as np
+# Stack of 3 matrices (2x2)
+A = np.random.default_rng(42).random((3, 2, 2))
+B = np.random.default_rng(43).random((3, 2, 2))
+result = A @ B  # Batch matmul
+print(f"Batch result shape: {result.shape}")
+print(f"First result:\\n{result[0].round(3)}")`,
+`import numpy as np
+# Trace using einsum
+A = np.array([[1,2,3],[4,5,6],[7,8,9]])
+trace = np.einsum("ii", A)
+print(f"Trace: {trace}")
+# Outer product
+a = np.array([1,2,3])
+b = np.array([4,5])
+outer = np.einsum("i,j->ij", a, b)
+print(f"Outer:\\n{outer}")`,
+`import numpy as np
+arr = np.array([1, 3, 5, 7, 9, 11, 13, 15, 17, 19])
+window = 3
+cumsum = np.cumsum(arr)
+cumsum = np.insert(cumsum, 0, 0)
+moving_avg = (cumsum[window:] - cumsum[:-window]) / window
+print(f"Moving average (window={window}): {moving_avg.round(2)}")`
+],
+5:[
+`import numpy as np
+arr = np.arange(20)
+matrix = arr.reshape(4, 5)
+print(f"Reshaped (4x5):\\n{matrix}")`,
+`import numpy as np
+matrix = np.arange(12).reshape(3, 4)
+flat = matrix.flatten()
+rav = matrix.ravel()
+print(f"flatten: {flat}")
+print(f"ravel: {rav}")`,
+`import numpy as np
+matrix = np.arange(10).reshape(2, 5)
+print(f"Original shape: {matrix.shape}")
+print(f"Transposed shape: {matrix.T.shape}")
+print(f"Transposed:\\n{matrix.T}")`,
+`import numpy as np
+a = np.array([[1,2,3],[4,5,6]])
+b = np.array([[7,8,9],[10,11,12]])
+v = np.concatenate([a, b], axis=0)
+h = np.concatenate([a, b], axis=1)
+print(f"Vertical:\\n{v}")
+print(f"Horizontal:\\n{h}")`,
+`import numpy as np
+arr = np.array([1, 2, 3, 4, 5])
+col = arr.reshape(-1, 1)
+print(f"Column vector shape: {col.shape}")
+print(f"Column vector:\\n{col}")`,
+`import numpy as np
+arr = np.arange(12)
+parts = np.split(arr, 3)
+print(f"Part 1: {parts[0]}")
+print(f"Part 2: {parts[1]}")
+print(f"Part 3: {parts[2]}")`,
+`import numpy as np
+arr = np.array([1, 2, 3, 4, 5])
+expanded = arr[np.newaxis, :]
+print(f"Original shape: {arr.shape}")
+print(f"Expanded shape: {expanded.shape}")
+col = arr[:, np.newaxis]
+print(f"Column shape: {col.shape}")`,
+`import numpy as np
+arr = np.arange(12)
+reshaped = arr.reshape(3, 4)
+reshaped[0, 0] = 99
+print(f"Original arr[0]: {arr[0]}")  # 99 - shared memory!
+print(f"Shares memory: {np.shares_memory(arr, reshaped)}")`,
+`import numpy as np
+a = np.array([1, 2, 3])
+b = np.array([4, 5, 6])
+c = np.array([7, 8, 9])
+stacked = np.stack([a, b, c], axis=1)
+print(f"Column-stacked:\\n{stacked}")`,
+`import numpy as np
+arr = np.arange(10)
+parts = np.array_split(arr, 3)
+for i, p in enumerate(parts):
+    print(f"Part {i}: {p} (size {len(p)})")`,
+`import numpy as np
+arr = np.arange(24).reshape(2, 3, 4)
+transposed = arr.transpose(1, 0, 2)
+print(f"Original: {arr.shape}")
+print(f"Transposed(1,0,2): {transposed.shape}")`,
+`import numpy as np
+pattern = np.array([[1, 0], [0, 1]])
+tiled = np.tile(pattern, (3, 4))
+print(f"Tiled (3x4):\\n{tiled}")`,
+`import numpy as np
+arr = np.array([1, 2, 3])
+repeated = np.repeat(arr, 3)
+tiled = np.tile(arr, 3)
+print(f"repeat: {repeated}")
+print(f"tile: {tiled}")`,
+`import numpy as np
+# NHWC to NCHW (batch, height, width, channels -> batch, channels, height, width)
+batch = np.random.random((2, 4, 4, 3))  # 2 images, 4x4, 3 channels
+nchw = batch.transpose(0, 3, 1, 2)
+print(f"NHWC: {batch.shape}")
+print(f"NCHW: {nchw.shape}")`,
+`import numpy as np
+matrix = np.arange(9).reshape(3, 3)
+padded = np.pad(matrix, pad_width=1, mode="constant", constant_values=0)
+print(f"Padded:\\n{padded}")`,
+`import numpy as np
+# Block matrix multiply using reshape
+A = np.arange(16).reshape(4, 4)
+B = np.arange(16).reshape(4, 4)
+# Split into 2x2 blocks and multiply
+n = 4
+block = 2
+A_blocks = A.reshape(n//block, block, n//block, block).swapaxes(1, 2)
+B_blocks = B.reshape(n//block, block, n//block, block).swapaxes(1, 2)
+print(f"Block shape: {A_blocks.shape}")
+result = A @ B
+print(f"Result:\\n{result}")`,
+`import numpy as np
+a = np.array([1, 2, 3, 4, 5])
+b = np.array([10, 20, 30, 40, 50])
+interleaved = np.empty(a.size + b.size, dtype=a.dtype)
+interleaved[0::2] = a
+interleaved[1::2] = b
+print(f"Interleaved: {interleaved}")`,
+`import numpy as np
+from numpy.lib.stride_tricks import sliding_window_view
+arr = np.arange(10)
+windows = sliding_window_view(arr, 4)
+print(f"Windows:\\n{windows}")
+print(f"Shares memory: {np.shares_memory(arr, windows)}")`,
+`import numpy as np
+# im2col: extract patches from 2D array
+from numpy.lib.stride_tricks import sliding_window_view
+img = np.arange(25).reshape(5, 5)
+patches = sliding_window_view(img, (3, 3))
+print(f"Image: {img.shape}")
+print(f"Patches shape: {patches.shape}")
+cols = patches.reshape(-1, 9)
+print(f"im2col shape: {cols.shape}")`,
+`import numpy as np
+flat_idx = 17
+shape = (4, 5)
+multi_idx = np.unravel_index(flat_idx, shape)
+print(f"Flat index {flat_idx} -> {multi_idx} in shape {shape}")
+# Reverse
+back = np.ravel_multi_index(multi_idx, shape)
+print(f"Back to flat: {back}")`
+],
+6:[
+`import numpy as np
+arr = np.array([2, 5, 8, 3, 7, 1, 9, 4, 6, 10])
+print(f"Sum: {np.sum(arr)}")
+print(f"Mean: {np.mean(arr)}")
+print(f"Product: {np.prod(arr)}")`,
+`import numpy as np
+matrix = np.arange(12).reshape(3, 4)
+print(f"Min axis=0: {np.min(matrix, axis=0)}")
+print(f"Max axis=0: {np.max(matrix, axis=0)}")
+print(f"Min axis=1: {np.min(matrix, axis=1)}")
+print(f"Max axis=1: {np.max(matrix, axis=1)}")`,
+`import numpy as np
+arr = np.array([1, 2, 3, 4, 5])
+print(f"Cumulative sum: {np.cumsum(arr)}")`,
+`import numpy as np
+arr = np.array([2, 5, 9, 14, 20, 27])
+print(f"Differences: {np.diff(arr)}")`,
+`import numpy as np
+arr = np.array([1.236, 4.567, 7.891, 2.345])
+print(f"Rounded: {np.round(arr, 2)}")`,
+`import numpy as np
+arr = np.array([-10, 50, 120, 75, -5, 200])
+clipped = np.clip(arr, 0, 100)
+print(f"Clipped: {clipped}")`,
+`import numpy as np
+data = np.array([10, 20, 30, 40, 50])
+pop_std = np.std(data, ddof=0)
+sample_std = np.std(data, ddof=1)
+print(f"Population std (ddof=0): {pop_std:.4f}")
+print(f"Sample std (ddof=1): {sample_std:.4f}")
+print("ddof=1 uses N-1 denominator (Bessel's correction)")`,
+`import numpy as np
+matrix = np.arange(20).reshape(4, 5)
+print(f"Column means: {np.mean(matrix, axis=0)}")
+print(f"Row means: {np.mean(matrix, axis=1)}")`,
+`import numpy as np
+arr = np.array([1.0, 2.0, np.nan, 4.0, np.nan, 6.0])
+print(f"nanmean: {np.nanmean(arr):.2f}")
+print(f"nanstd: {np.nanstd(arr):.2f}")
+print(f"regular mean: {np.mean(arr)}")  # nan`,
+`import numpy as np
+arr = np.array([10, 15, 12, 18, 14, 20, 16, 22, 19, 25])
+window = 3
+cumsum = np.cumsum(arr)
+cumsum = np.insert(cumsum, 0, 0)
+moving_avg = (cumsum[window:] - cumsum[:-window]) / window
+print(f"Moving avg (window={window}): {moving_avg.round(2)}")`,
+`import numpy as np
+x = np.linspace(0, 2*np.pi, 100)
+y = np.sin(x)
+dy = np.gradient(y, x)
+cos_x = np.cos(x)
+print(f"Max error: {np.max(np.abs(dy - cos_x)):.6f}")`,
+`import numpy as np
+data = np.array([12, 25, 34, 45, 56, 67, 78, 89, 91, 95])
+q1 = np.percentile(data, 25)
+q2 = np.percentile(data, 50)
+q3 = np.percentile(data, 75)
+print(f"Q1: {q1}, Q2: {q2}, Q3: {q3}")`,
+`import numpy as np
+data = np.array([3, 7, 2, 8, 5, 100, 1, 6, 4, 9])
+running_max = np.maximum.accumulate(data)
+running_min = np.minimum.accumulate(data)
+print(f"Running max: {running_max}")
+print(f"Running min: {running_min}")`,
+`import numpy as np
+data = np.random.default_rng(42).normal(50, 10, 100)
+z_scores = (data - np.mean(data)) / np.std(data)
+outliers = data[np.abs(z_scores) > 2]
+print(f"Outliers (|z|>2): {outliers.round(1)}")
+print(f"Count: {len(outliers)}")`,
+`import numpy as np
+matrix = np.arange(12).reshape(3, 4).astype(float)
+gy, gx = np.gradient(matrix)
+print(f"Gradient X:\\n{gx}")
+print(f"Gradient Y:\\n{gy}")`,
+`import numpy as np
+data = np.array([10, 12, 15, 14, 18, 20, 22, 19, 25, 28])
+alpha = 0.3
+ema = np.zeros_like(data, dtype=float)
+ema[0] = data[0]
+for i in range(1, len(data)):
+    ema[i] = alpha * data[i] + (1-alpha) * ema[i-1]
+print(f"EMA: {ema.round(2)}")`,
+`import numpy as np
+points = np.array([[0,0],[1,1],[3,2],[5,1]])
+diff = points[:, np.newaxis, :] - points[np.newaxis, :, :]
+distances = np.sqrt(np.sum(diff**2, axis=-1))
+print(f"Pairwise distances:\\n{distances.round(3)}")`,
+`import numpy as np
+# Trapezoidal rule: integral of sin(x) from 0 to pi = 2
+x = np.linspace(0, np.pi, 1000)
+y = np.sin(x)
+dx = x[1] - x[0]
+integral = np.sum((y[:-1] + y[1:]) / 2) * dx
+print(f"Integral of sin(0 to pi): {integral:.6f}")
+print(f"Exact: 2.000000")`,
+`import numpy as np
+N = 8
+n = np.arange(N)
+k = np.arange(N)
+# DFT matrix
+W = np.exp(-2j * np.pi * np.outer(k, n) / N)
+x = np.array([1, 2, 3, 4, 4, 3, 2, 1], dtype=complex)
+X = W @ x
+X_numpy = np.fft.fft(x)
+print(f"Manual DFT: {np.abs(X).round(3)}")
+print(f"NumPy FFT: {np.abs(X_numpy).round(3)}")
+print(f"Match: {np.allclose(X, X_numpy)}")`,
+`import numpy as np
+def gaussian_kde(data, x_grid, bandwidth=1.0):
+    n = len(data)
+    diff = x_grid[:, np.newaxis] - data[np.newaxis, :]
+    kernels = np.exp(-0.5 * (diff / bandwidth)**2) / (bandwidth * np.sqrt(2*np.pi))
+    return kernels.mean(axis=1)
+data = np.random.default_rng(42).normal(0, 1, 100)
+x = np.linspace(-4, 4, 50)
+density = gaussian_kde(data, x, bandwidth=0.5)
+print(f"KDE peak at: {x[np.argmax(density)]:.2f}")
+print(f"Peak density: {density.max():.4f}")`
+],
+7:[
+`import numpy as np
+a = np.array([1, 2, 3])
+b = np.array([4, 5, 6])
+print(f"Dot product: {np.dot(a, b)}")`,
+`import numpy as np
+A = np.array([[1,2],[3,4]])
+B = np.array([[5,6],[7,8]])
+print(f"A @ B:\\n{A @ B}")`,
+`import numpy as np
+A = np.array([[1,2,3],[4,5,6],[7,8,9]])
+det = np.linalg.det(A)
+print(f"det(A) = {det:.4f}")`,
+`import numpy as np
+A = np.array([[2, 1], [5, 3]])
+A_inv = np.linalg.inv(A)
+print(f"Inverse:\\n{A_inv}")
+print(f"A @ A_inv:\\n{(A @ A_inv).round(10)}")`,
+`import numpy as np
+v = np.array([3, 4])
+norm = np.linalg.norm(v)
+print(f"L2 norm of [3,4]: {norm}")`,
+`import numpy as np
+I = np.eye(3)
+A = np.array([[1,2,3],[4,5,6],[7,8,9]])
+result = I @ A
+print(f"I @ A:\\n{result}")
+print(f"Same as A: {np.array_equal(result, A)}")`,
+`import numpy as np
+A = np.array([[3, 2], [1, 4]])
+b = np.array([7, 9])
+x = np.linalg.solve(A, b)
+print(f"Solution: x={x[0]:.2f}, y={x[1]:.2f}")
+print(f"Verify: {A @ x}")`,
+`import numpy as np
+A = np.array([[4, 2], [2, 3]])
+eigenvalues, eigenvectors = np.linalg.eigh(A)
+print(f"Eigenvalues: {eigenvalues}")
+print(f"Eigenvectors:\\n{eigenvectors}")`,
+`import numpy as np
+A = np.array([[4, 2], [2, 3]])
+eigenvalues, eigenvectors = np.linalg.eigh(A)
+for i in range(len(eigenvalues)):
+    v = eigenvectors[:, i]
+    lam = eigenvalues[i]
+    lhs = A @ v
+    rhs = lam * v
+    print(f"A@v = {lhs.round(6)}, lam*v = {rhs.round(6)}, match: {np.allclose(lhs, rhs)}")`,
+`import numpy as np
+A = np.array([[1,2],[3,4]])
+frob = np.linalg.norm(A, "fro")
+l1 = np.linalg.norm(A, 1)
+print(f"Frobenius norm: {frob:.4f}")
+print(f"L1 norm: {l1:.4f}")`,
+`import numpy as np
+A = np.array([[1,2,3],[4,5,6],[7,8,9]])
+U, s, Vt = np.linalg.svd(A)
+rank = np.sum(s > 1e-10)
+print(f"Singular values: {s.round(4)}")
+print(f"Rank: {rank}")`,
+`import numpy as np
+A = np.array([[2, 1], [1, 3]])
+result = A.copy()
+n = 4
+for _ in range(n-1):
+    result = result @ A
+print(f"A^{n}:\\n{result}")`,
+`import numpy as np
+# Overdetermined: 5 equations, 2 unknowns
+A = np.array([[1,1],[2,1],[3,1],[4,1],[5,1]])
+b = np.array([2.1, 3.9, 6.2, 7.8, 10.1])
+x, residuals, rank, sv = np.linalg.lstsq(A, b, rcond=None)
+print(f"Least squares solution: {x.round(4)}")`,
+`import numpy as np
+A = np.array([[1, 1e-10], [1e-10, 1]])
+cond = np.linalg.cond(A)
+print(f"Condition number: {cond:.4f}")
+# Well-conditioned if close to 1`,
+`import numpy as np
+A = np.array([[12, -51, 4], [6, 167, -68], [-4, 24, -41]])
+Q, R = np.linalg.qr(A)
+print(f"Q:\\n{Q.round(4)}")
+print(f"R:\\n{R.round(4)}")
+# Solve Ax=b using QR: Rx = Q^T b
+b = np.array([1, 2, 3])
+x = np.linalg.solve(R, Q.T @ b)
+print(f"Solution: {x.round(4)}")`,
+`import numpy as np
+rng = np.random.default_rng(42)
+data = rng.multivariate_normal([0,0], [[3,1],[1,2]], size=100)
+centered = data - data.mean(axis=0)
+cov = np.cov(centered.T)
+eigvals, eigvecs = np.linalg.eigh(cov)
+idx = np.argsort(eigvals)[::-1]
+pcs = eigvecs[:, idx]
+print(f"Principal components:\\n{pcs.round(4)}")
+print(f"Variance explained: {eigvals[idx]/eigvals.sum()*100}")`,
+`import numpy as np
+A = np.array([[1,2,3],[4,5,6]])
+U, s, Vt = np.linalg.svd(A, full_matrices=False)
+S_inv = np.diag(1/s)
+A_pinv = Vt.T @ S_inv @ U.T
+print(f"Pseudoinverse:\\n{A_pinv.round(4)}")
+print(f"NumPy pinv:\\n{np.linalg.pinv(A).round(4)}")`,
+`import numpy as np
+A = np.array([[2, 1], [1, 3]])
+v = np.random.default_rng(42).random(2)
+for i in range(20):
+    v = A @ v
+    v = v / np.linalg.norm(v)
+eigenvalue = (A @ v) @ v / (v @ v)
+print(f"Dominant eigenvalue: {eigenvalue:.6f}")
+print(f"NumPy eigenvalues: {np.linalg.eigvalsh(A)}")`,
+`import numpy as np
+from scipy.linalg import lu
+A = np.array([[2, 1, 1], [4, 3, 3], [8, 7, 9]], dtype=float)
+P, L, U = lu(A)
+b = np.array([4, 10, 24], dtype=float)
+# Solve Ly = Pb, then Ux = y
+y = np.linalg.solve(L, P.T @ b)
+x = np.linalg.solve(U, y)
+print(f"LU solution: {x}")
+print(f"Direct: {np.linalg.solve(A, b)}")`,
+`import numpy as np
+def gram_schmidt(V):
+    n = V.shape[0]
+    U = np.zeros_like(V, dtype=float)
+    for i in range(n):
+        U[i] = V[i].copy()
+        for j in range(i):
+            U[i] -= np.dot(U[j], V[i]) / np.dot(U[j], U[j]) * U[j]
+        U[i] /= np.linalg.norm(U[i])
+    return U
+V = np.array([[1,1,0],[1,0,1],[0,1,1]], dtype=float)
+U = gram_schmidt(V)
+print(f"Orthonormal:\\n{U.round(4)}")
+print(f"U@U.T (should be I):\\n{(U@U.T).round(6)}")`
+],
+8:[
+`import numpy as np
+arr = np.array([4, 7, 2, 8, 5, 8, 3, 1])
+print(f"Mean: {np.mean(arr):.2f}")
+print(f"Median: {np.median(arr):.2f}")
+values, counts = np.unique(arr, return_counts=True)
+mode = values[np.argmax(counts)]
+print(f"Mode: {mode}")`,
+`import numpy as np
+data = np.array([10, 20, 30, 40, 50])
+print(f"Variance: {np.var(data):.2f}")
+print(f"Std dev: {np.std(data):.2f}")`,
+`import numpy as np
+data = np.array([15, 20, 35, 40, 50, 55, 60, 70, 75, 80])
+q1 = np.percentile(data, 25)
+q2 = np.percentile(data, 50)
+q3 = np.percentile(data, 75)
+print(f"Q1 (25th): {q1}")
+print(f"Q2 (50th): {q2}")
+print(f"Q3 (75th): {q3}")`,
+`import numpy as np
+x = np.array([1, 2, 3, 4, 5])
+y = np.array([2, 4, 5, 4, 5])
+r = np.corrcoef(x, y)[0, 1]
+print(f"Correlation: {r:.4f}")`,
+`import numpy as np
+data = np.array([1, 2, 2, 3, 3, 3, 4, 4, 5])
+counts, edges = np.histogram(data, bins=5)
+print(f"Counts: {counts}")
+print(f"Edges: {edges.round(2)}")`,
+`import numpy as np
+scores = np.array([85, 90, 78, 92, 88])
+weights = np.array([0.1, 0.3, 0.2, 0.25, 0.15])
+weighted_avg = np.average(scores, weights=weights)
+print(f"Weighted average: {weighted_avg:.2f}")`,
+`import numpy as np
+data = np.array([10, 20, 30, 40, 50, 60, 70, 80, 90])
+data_range = np.ptp(data)  # peak to peak
+q1, q3 = np.percentile(data, [25, 75])
+iqr = q3 - q1
+print(f"Range: {data_range}")
+print(f"IQR: {iqr}")`,
+`import numpy as np
+rng = np.random.default_rng(42)
+x = rng.random(50)
+y = 2*x + rng.random(50)*0.5
+z = rng.random(50)
+data = np.column_stack([x, y, z])
+cov_matrix = np.cov(data.T)
+print(f"Covariance matrix:\\n{cov_matrix.round(4)}")
+print("Diagonal = variances, off-diagonal = covariances")`,
+`import numpy as np
+rng = np.random.default_rng(42)
+data = rng.normal(50, 10, 100)
+data = np.append(data, [150, -20])  # Add outliers
+q1, q3 = np.percentile(data, [25, 75])
+iqr = q3 - q1
+lower = q1 - 1.5 * iqr
+upper = q3 + 1.5 * iqr
+outliers = data[(data < lower) | (data > upper)]
+print(f"Bounds: [{lower:.1f}, {upper:.1f}]")
+print(f"Outliers: {outliers}")`,
+`import numpy as np
+def describe(data):
+    return {
+        "count": len(data),
+        "mean": np.mean(data),
+        "std": np.std(data, ddof=1),
+        "min": np.min(data),
+        "25%": np.percentile(data, 25),
+        "50%": np.percentile(data, 50),
+        "75%": np.percentile(data, 75),
+        "max": np.max(data)
+    }
+data = np.random.default_rng(42).normal(50, 10, 100)
+for k, v in describe(data).items():
+    print(f"{k:>6}: {v:.2f}")`,
+`import numpy as np
+data = np.array([10, 20, 30, 40, 50])
+pop_var = np.var(data, ddof=0)
+samp_var = np.var(data, ddof=1)
+print(f"Population var (N): {pop_var}")
+print(f"Sample var (N-1): {samp_var}")
+print(f"Difference: {samp_var - pop_var:.2f}")`,
+`import numpy as np
+rng = np.random.default_rng(42)
+scores = rng.normal(70, 15, 100).astype(int)
+bins = [0, 60, 70, 80, 90, 101]
+labels = ["F", "D", "C", "B", "A"]
+indices = np.digitize(scores, bins) - 1
+for i, label in enumerate(labels):
+    count = np.sum(indices == i)
+    print(f"{label}: {count}")`,
+`import numpy as np
+data1 = np.array([10, 20, 30, 40, 50])
+data2 = np.array([100, 200, 300, 400, 500])
+cv1 = np.std(data1, ddof=1) / np.mean(data1)
+cv2 = np.std(data2, ddof=1) / np.mean(data2)
+print(f"CV of data1: {cv1:.4f}")
+print(f"CV of data2: {cv2:.4f}")
+print("Same relative variability" if np.isclose(cv1, cv2) else "Different")`,
+`import numpy as np
+def spearman_rank(x, y):
+    rank_x = np.argsort(np.argsort(x)).astype(float)
+    rank_y = np.argsort(np.argsort(y)).astype(float)
+    return np.corrcoef(rank_x, rank_y)[0, 1]
+x = np.array([1, 2, 3, 4, 5])
+y = np.array([5, 6, 7, 8, 7])
+print(f"Spearman correlation: {spearman_rank(x, y):.4f}")`,
+`import numpy as np
+rng = np.random.default_rng(42)
+data = rng.normal(0, 1, 1000)
+counts, edges = np.histogram(data, bins=20, density=True)
+widths = np.diff(edges)
+integral = np.sum(counts * widths)
+print(f"Integral of density: {integral:.6f}")
+print("Should be ~1.0")`,
+`import numpy as np
+rng = np.random.default_rng(42)
+data = np.array([23, 45, 12, 67, 34, 89, 56, 11, 44, 78])
+n_bootstrap = 10000
+means = np.array([rng.choice(data, size=len(data), replace=True).mean() for _ in range(n_bootstrap)])
+ci = np.percentile(means, [2.5, 97.5])
+print(f"Sample mean: {data.mean():.2f}")
+print(f"95% CI: [{ci[0]:.2f}, {ci[1]:.2f}]")`,
+`import numpy as np
+rng = np.random.default_rng(42)
+x = rng.normal(0, 1, 100)
+y = 0.5*x + rng.normal(0, 0.5, 100)
+window = 20
+rolling_corr = np.array([np.corrcoef(x[i:i+window], y[i:i+window])[0,1] for i in range(len(x)-window+1)])
+print(f"Rolling correlation (first 5): {rolling_corr[:5].round(4)}")
+print(f"Mean rolling corr: {rolling_corr.mean():.4f}")`,
+`import numpy as np
+def gaussian_kde(data, x, bw=1.0):
+    diff = x[:, None] - data[None, :]
+    kernels = np.exp(-0.5*(diff/bw)**2) / (bw*np.sqrt(2*np.pi))
+    return kernels.mean(axis=1)
+rng = np.random.default_rng(42)
+data = rng.normal(0, 1, 200)
+x = np.linspace(-4, 4, 100)
+kde = gaussian_kde(data, x, bw=0.4)
+print(f"KDE peak: x={x[np.argmax(kde)]:.2f}, density={kde.max():.4f}")`,
+`import numpy as np
+def t_test(group1, group2):
+    n1, n2 = len(group1), len(group2)
+    mean1, mean2 = group1.mean(), group2.mean()
+    var1, var2 = group1.var(ddof=1), group2.var(ddof=1)
+    se = np.sqrt(var1/n1 + var2/n2)
+    t_stat = (mean1 - mean2) / se
+    df = n1 + n2 - 2
+    return t_stat, df
+rng = np.random.default_rng(42)
+g1 = rng.normal(50, 10, 30)
+g2 = rng.normal(55, 10, 30)
+t, df = t_test(g1, g2)
+print(f"t-statistic: {t:.4f}, df: {df}")`,
+`import numpy as np
+# Bayesian estimation with normal prior
+# Prior: mu ~ N(mu0, sigma0^2)
+# Data: x ~ N(mu, sigma^2)
+mu0, sigma0 = 50, 20  # Prior
+sigma = 10  # Known data std
+rng = np.random.default_rng(42)
+data = rng.normal(60, sigma, 20)
+n = len(data)
+x_bar = data.mean()
+# Posterior
+post_var = 1 / (1/sigma0**2 + n/sigma**2)
+post_mean = post_var * (mu0/sigma0**2 + n*x_bar/sigma**2)
+post_std = np.sqrt(post_var)
+print(f"Prior: N({mu0}, {sigma0}^2)")
+print(f"Data mean: {x_bar:.2f}")
+print(f"Posterior: N({post_mean:.2f}, {post_std:.2f}^2)")`
+],
+9:[
+`import numpy as np
+arr = np.array([42, 15, 8, 67, 23])
+print(f"Ascending: {np.sort(arr)}")
+print(f"Descending: {np.sort(arr)[::-1]}")`,
+`import numpy as np
+arr = np.array([42, 15, 8, 67, 23])
+indices = np.argsort(arr)
+print(f"Argsort indices: {indices}")
+print(f"Sorted via indices: {arr[indices]}")`,
+`import numpy as np
+arr = np.array([3, 1, 4, 1, 5, 9, 2, 6, 5, 3])
+values, counts = np.unique(arr, return_counts=True)
+print(f"Unique: {values}")
+print(f"Counts: {counts}")`,
+`import numpy as np
+matrix = np.array([[3,7,1],[8,2,6],[4,9,5]])
+flat_idx = np.argmax(matrix)
+row, col = np.unravel_index(flat_idx, matrix.shape)
+print(f"Max value: {matrix[row, col]} at [{row},{col}]")`,
+`import numpy as np
+matrix = np.array([[3,1,2],[6,4,5],[9,7,8]])
+sorted_rows = np.sort(matrix, axis=1)
+print(f"Sorted rows:\\n{sorted_rows}")`,
+`import numpy as np
+sorted_arr = np.array([10, 20, 30, 40, 50])
+idx = np.searchsorted(sorted_arr, 25)
+print(f"Insert 25 at index: {idx}")`,
+`import numpy as np
+a = np.array([1, 2, 3, 4, 5])
+b = np.array([3, 4, 5, 6, 7])
+common = np.intersect1d(a, b)
+print(f"Intersection: {common}")`,
+`import numpy as np
+arr = np.array(["banana", "apple", "cherry", "date"])
+sorted_arr = np.sort(arr)
+print(f"Sorted: {sorted_arr}")`,
+`import numpy as np
+names = np.array(["Charlie", "Alice", "Bob"])
+scores = np.array([78, 95, 82])
+order = np.argsort(scores)[::-1]
+print(f"Ranked: {names[order]} with scores {scores[order]}")`,
+`import numpy as np
+arr = np.random.default_rng(42).integers(0, 1000, 1000)
+top5_idx = np.argpartition(arr, -5)[-5:]
+top5 = arr[top5_idx]
+print(f"Top 5: {np.sort(top5)[::-1]}")`,
+`import numpy as np
+scores = np.array([85, 92, 78, 92, 88])
+order = np.argsort(-scores)
+ranks = np.empty_like(order)
+ranks[order] = np.arange(1, len(scores)+1)
+# Average tied ranks
+for val in np.unique(scores):
+    mask = scores == val
+    if mask.sum() > 1:
+        ranks[mask] = ranks[mask].mean()
+print(f"Scores: {scores}")
+print(f"Ranks: {ranks}")`,
+`import numpy as np
+categories = np.array(["cat", "dog", "cat", "bird", "dog", "cat"])
+unique_vals, encoded = np.unique(categories, return_inverse=True)
+print(f"Categories: {unique_vals}")
+print(f"Encoded: {encoded}")`,
+`import numpy as np
+arr = np.array([5, 3, 8, 3, 2, 8, 5, 1])
+target = 3
+indices = np.where(arr == target)[0]
+print(f"Value {target} at indices: {indices}")`,
+`import numpy as np
+a = np.array([1, 2, 3, 4, 5, 6, 7])
+b = np.array([2, 4, 6, 8])
+diff = np.setdiff1d(a, b)
+print(f"In A but not B: {diff}")`,
+`import numpy as np
+dt = np.dtype([("name", "U10"), ("age", "i4"), ("score", "f8")])
+students = np.array([("Alice", 20, 85), ("Bob", 22, 92), ("Charlie", 21, 78)], dtype=dt)
+sorted_by_score = np.sort(students, order="score")
+print(f"Sorted by score: {sorted_by_score['name']}")`,
+`import numpy as np
+sorted_arr = np.array([2, 5, 8, 12, 16, 23, 38, 56, 72, 91])
+target = 23
+idx = np.searchsorted(sorted_arr, target)
+found = idx < len(sorted_arr) and sorted_arr[idx] == target
+print(f"Target {target} found: {found} at index {idx}")`,
+`import numpy as np
+points = np.array([[0,0],[1,1],[3,2],[5,5],[2,3]])
+query = np.array([2, 2])
+distances = np.sqrt(np.sum((points - query)**2, axis=1))
+k = 3
+knn_idx = np.argsort(distances)[:k]
+print(f"Query: {query}")
+print(f"{k}-nearest: {points[knn_idx]}")
+print(f"Distances: {distances[knn_idx].round(3)}")`,
+`import numpy as np
+arr = np.array([3, 1, 4, 1, 5, 9, 2, 6, 5, 3, 5])
+values, counts = np.unique(arr, return_counts=True)
+n = 3
+top_n_idx = np.argsort(counts)[-n:][::-1]
+print(f"Top {n} frequent: {values[top_n_idx]} (counts: {counts[top_n_idx]})")`,
+`import numpy as np
+arr = np.random.default_rng(42).integers(0, 100, 20)
+k = 10  # Find median position
+partitioned = np.partition(arr, k)
+print(f"Element at position {k}: {partitioned[k]}")
+print(f"Verify with sort: {np.sort(arr)[k]}")`,
+`import numpy as np
+data = np.array([[3, 2], [1, 4], [2, 1], [3, 3], [1, 2]])
+# Sort by column 0, then column 1
+idx = np.lexsort((data[:, 1], data[:, 0]))
+sorted_data = data[idx]
+print(f"Lexsorted:\\n{sorted_data}")`
+],
+10:[
+`import numpy as np
+arr = np.array([[1,2],[3,4]])
+result = arr + 10
+print(f"Matrix + scalar:\\n{result}")
+print("Rule: scalar broadcasts to all elements")`,
+`import numpy as np
+matrix = np.ones((3, 4))
+row = np.array([1, 2, 3, 4])
+result = matrix + row
+print(f"Result:\\n{result}")`,
+`import numpy as np
+matrix = np.ones((3, 4))
+col = np.array([[10],[20],[30]])
+result = matrix + col
+print(f"Result:\\n{result}")`,
+`import numpy as np
+arr = np.array([1, 2, 3, 4, 5])
+row_vec = arr[np.newaxis, :]
+col_vec = arr[:, np.newaxis]
+print(f"1D shape: {arr.shape}")
+print(f"Row vector: {row_vec.shape}")
+print(f"Col vector: {col_vec.shape}")`,
+`import numpy as np
+a = np.array([1, 2, 3])
+b = np.array([4, 5, 6])
+outer = a[:, np.newaxis] * b[np.newaxis, :]
+print(f"Outer product:\\n{outer}")`,
+`import numpy as np
+# (5,1) + (1,4) = (5,4)
+a = np.ones((5, 1))
+b = np.ones((1, 4))
+result = a + b
+print(f"Shape: {result.shape}")  # (5, 4)`,
+`import numpy as np
+matrix = np.array([[10,20,30],[40,50,60],[70,80,90]])
+row_means = matrix.mean(axis=1, keepdims=True)
+centered = matrix - row_means
+print(f"Row means: {row_means.flatten()}")
+print(f"Centered:\\n{centered}")`,
+`import numpy as np
+matrix = np.array([[2,8,4],[6,3,9],[1,7,5]])
+col_min = matrix.min(axis=0)
+col_max = matrix.max(axis=0)
+normalized = (matrix - col_min) / (col_max - col_min)
+print(f"Normalized:\\n{normalized.round(3)}")`,
+`import numpy as np
+a = np.array([1, 3, 5])
+b = np.array([2, 4, 6, 8])
+diffs = np.abs(a[:, np.newaxis] - b[np.newaxis, :])
+print(f"Pairwise |differences|:\\n{diffs}")`,
+`import numpy as np
+n = 10
+rows = np.arange(1, n+1)[:, np.newaxis]
+cols = np.arange(1, n+1)[np.newaxis, :]
+table = rows * cols
+print(f"Multiplication table (5x5):\\n{table[:5,:5]}")`,
+`import numpy as np
+batch = np.random.default_rng(42).random((4, 3))
+bias = np.array([0.1, 0.2, 0.3])
+result = batch + bias
+print(f"Batch shape: {batch.shape}")
+print(f"Bias shape: {bias.shape}")
+print(f"Result shape: {result.shape}")`,
+`import numpy as np
+a = np.array([1, 2, 3])
+b = np.array([2, 3, 4, 5])
+comparison = a[:, np.newaxis] == b[np.newaxis, :]
+print(f"Comparison matrix:\\n{comparison}")`,
+`import numpy as np
+classes = np.array([0, 2, 1, 0, 2])
+n_classes = 3
+one_hot = (classes[:, np.newaxis] == np.arange(n_classes)[np.newaxis, :]).astype(int)
+print(f"One-hot:\\n{one_hot}")`,
+`import numpy as np
+shapes = [(3,4), (4,), (3,1), (1,4), (3,), (5,3)]
+pairs = [((3,4),(4,)), ((3,4),(3,1)), ((3,4),(3,))]
+for s1, s2 in pairs:
+    try:
+        result = np.broadcast_shapes(s1, s2)
+        print(f"{s1} + {s2} = {result}")
+    except ValueError as e:
+        print(f"{s1} + {s2} = INCOMPATIBLE")`,
+`import numpy as np
+a = np.array([1, 3, 5, 7])
+b = np.array([2, 4, 6])
+l1_dist = np.abs(a[:, np.newaxis] - b[np.newaxis, :])
+print(f"Pairwise L1 distances:\\n{l1_dist}")`,
+`import numpy as np
+points = np.array([[0,0],[1,1],[3,2],[5,5]])
+diff = points[:, np.newaxis, :] - points[np.newaxis, :, :]
+dist = np.sqrt(np.sum(diff**2, axis=-1))
+print(f"Euclidean distance matrix:\\n{dist.round(3)}")`,
+`import numpy as np
+def softmax(x):
+    e = np.exp(x - x.max(axis=-1, keepdims=True))
+    return e / e.sum(axis=-1, keepdims=True)
+logits = np.array([[1, 2, 3], [1, 1, 1], [3, 1, 0.5]])
+probs = softmax(logits)
+print(f"Softmax:\\n{probs.round(4)}")
+print(f"Row sums: {probs.sum(axis=1)}")`,
+`import numpy as np
+# Batched matrix-vector: (batch, m, n) @ (batch, n) -> (batch, m)
+batch_size = 3
+matrices = np.random.default_rng(42).random((batch_size, 2, 3))
+vectors = np.random.default_rng(43).random((batch_size, 3))
+result = np.einsum("bij,bj->bi", matrices, vectors)
+print(f"Result shape: {result.shape}")
+print(f"Result:\\n{result.round(3)}")`,
+`import numpy as np
+# Evaluate polynomial: coeffs [a0, a1, a2] at multiple x values
+coeffs = np.array([1, -2, 3])  # 1 - 2x + 3x^2
+x = np.array([0, 1, 2, 3, 4])
+powers = np.arange(len(coeffs))[np.newaxis, :]
+x_powers = x[:, np.newaxis] ** powers
+result = (x_powers * coeffs[np.newaxis, :]).sum(axis=1)
+print(f"Polynomial at x={x}: {result}")`,
+`import numpy as np
+# k-means assignment: find nearest centroid
+rng = np.random.default_rng(42)
+points = rng.random((10, 2))
+centroids = rng.random((3, 2))
+# (10,1,2) - (1,3,2) -> (10,3,2)
+diff = points[:, np.newaxis, :] - centroids[np.newaxis, :, :]
+distances = np.sqrt(np.sum(diff**2, axis=-1))
+assignments = np.argmin(distances, axis=1)
+print(f"Assignments: {assignments}")`
+],
+11:[
+`import numpy as np
+rng = np.random.default_rng(42)
+arr = rng.random(10)
+print(f"Random floats: {arr.round(4)}")`,
+`import numpy as np
+rng = np.random.default_rng(42)
+arr = rng.integers(1, 101, size=(3, 3))
+print(f"Random integers:\\n{arr}")`,
+`import numpy as np
+rng = np.random.default_rng(42)
+data = rng.normal(loc=50, scale=10, size=1000)
+print(f"Mean: {data.mean():.2f}")
+print(f"Std: {data.std():.2f}")`,
+`import numpy as np
+rng = np.random.default_rng(42)
+arr = np.array([10, 20, 30, 40, 50, 60, 70, 80])
+selected = rng.choice(arr, size=5, replace=False)
+print(f"Selected: {selected}")`,
+`import numpy as np
+rng = np.random.default_rng(42)
+arr = np.arange(10)
+rng.shuffle(arr)
+print(f"Shuffled: {arr}")`,
+`import numpy as np
+rng = np.random.default_rng(42)
+arr = rng.uniform(5, 15, size=10)
+print(f"Uniform [5,15): {arr.round(3)}")`,
+`import numpy as np
+rng = np.random.default_rng(42)
+perm = rng.permutation(10)
+print(f"Permutation: {perm}")`,
+`import numpy as np
+rng = np.random.default_rng(42)
+rolls = rng.integers(1, 7, size=1000)
+values, counts = np.unique(rolls, return_counts=True)
+for v, c in zip(values, counts):
+    print(f"  {v}: {c} ({c/10:.1f}%)")`,
+`import numpy as np
+rng = np.random.default_rng(42)
+lam = 5
+samples = rng.poisson(lam, size=10000)
+print(f"Lambda: {lam}")
+print(f"Sample mean: {samples.mean():.3f}")
+print(f"Sample var: {samples.var():.3f}")`,
+`import numpy as np
+rng = np.random.default_rng(42)
+n_flips = 10000
+# 70% heads (1), 30% tails (0)
+flips = rng.choice([0, 1], size=n_flips, p=[0.3, 0.7])
+print(f"Heads: {flips.sum()} ({flips.mean()*100:.1f}%)")`,
+`import numpy as np
+rng = np.random.default_rng(42)
+n_walks = 3
+n_steps = 20
+steps = rng.choice([-1, 1], size=(n_walks, n_steps))
+positions = np.cumsum(steps, axis=1)
+for i in range(n_walks):
+    print(f"Walk {i}: {positions[i]}")`,
+`import numpy as np
+rng = np.random.default_rng(42)
+mean = [0, 0]
+cov = [[1, 0.8], [0.8, 1]]
+data = rng.multivariate_normal(mean, cov, size=100)
+actual_corr = np.corrcoef(data.T)[0, 1]
+print(f"Target correlation: 0.8")
+print(f"Actual correlation: {actual_corr:.4f}")`,
+`import numpy as np
+def reservoir_sample(stream, k):
+    rng = np.random.default_rng(42)
+    reservoir = np.zeros(k)
+    for i, item in enumerate(stream):
+        if i < k:
+            reservoir[i] = item
+        else:
+            j = rng.integers(0, i+1)
+            if j < k:
+                reservoir[j] = item
+    return reservoir
+stream = np.arange(100)
+sample = reservoir_sample(stream, 10)
+print(f"Reservoir sample: {sample}")`,
+`import numpy as np
+rng = np.random.default_rng(42)
+# Create data with known correlation
+n = 100
+target_corr = 0.7
+x = rng.normal(0, 1, n)
+y = target_corr * x + np.sqrt(1 - target_corr**2) * rng.normal(0, 1, n)
+actual_corr = np.corrcoef(x, y)[0, 1]
+print(f"Target r: {target_corr}")
+print(f"Actual r: {actual_corr:.4f}")`,
+`import numpy as np
+rng = np.random.default_rng(42)
+data = rng.normal(50, 10, 100)
+n = len(data)
+train_size = int(0.8 * n)
+indices = rng.permutation(n)
+train_idx = indices[:train_size]
+test_idx = indices[train_size:]
+train = data[train_idx]
+test = data[test_idx]
+print(f"Train: {len(train)}, Test: {len(test)}")`,
+`import numpy as np
+rng = np.random.default_rng(42)
+n_samples = 100000
+x = rng.uniform(-1, 1, n_samples)
+y = rng.uniform(-1, 1, n_samples)
+inside = np.sum(x**2 + y**2 <= 1)
+pi_est = 4 * inside / n_samples
+se = np.sqrt(pi_est * (4 - pi_est) / n_samples)
+print(f"Pi estimate: {pi_est:.6f}")
+print(f"95% CI: [{pi_est-1.96*se:.6f}, {pi_est+1.96*se:.6f}]")`,
+`import numpy as np
+rng = np.random.default_rng(42)
+n_steps = 1000
+dt = 0.01
+dW = rng.normal(0, np.sqrt(dt), n_steps)
+W = np.cumsum(dW)
+print(f"Brownian motion at T={n_steps*dt:.1f}: {W[-1]:.4f}")
+print(f"Theoretical std: {np.sqrt(n_steps*dt):.4f}")
+print(f"Actual std range: [{W.min():.3f}, {W.max():.3f}]")`,
+`import numpy as np
+rng = np.random.default_rng(42)
+group1 = rng.normal(50, 10, 30)
+group2 = rng.normal(55, 10, 30)
+observed_diff = group1.mean() - group2.mean()
+combined = np.concatenate([group1, group2])
+n_perm = 10000
+perm_diffs = np.zeros(n_perm)
+for i in range(n_perm):
+    perm = rng.permutation(combined)
+    perm_diffs[i] = perm[:30].mean() - perm[30:].mean()
+p_value = np.mean(np.abs(perm_diffs) >= np.abs(observed_diff))
+print(f"Observed diff: {observed_diff:.3f}")
+print(f"P-value: {p_value:.4f}")`,
+`import numpy as np
+rng = np.random.default_rng(42)
+n = 100
+density = 0.1
+nnz = int(n * n * density)
+rows = rng.integers(0, n, nnz)
+cols = rng.integers(0, n, nnz)
+values = rng.random(nnz)
+sparse = np.zeros((n, n))
+sparse[rows, cols] = values
+actual_density = np.count_nonzero(sparse) / sparse.size
+print(f"Target density: {density}")
+print(f"Actual density: {actual_density:.4f}")`,
+`import numpy as np
+rng = np.random.default_rng(42)
+# Stratified sampling: maintain class proportions
+labels = np.array([0]*40 + [1]*30 + [2]*30)
+data = rng.random(100)
+sample_size = 20
+sample_idx = []
+for cls in np.unique(labels):
+    cls_idx = np.where(labels == cls)[0]
+    prop = len(cls_idx) / len(labels)
+    n_sample = int(np.round(sample_size * prop))
+    selected = rng.choice(cls_idx, size=n_sample, replace=False)
+    sample_idx.extend(selected)
+sample_labels = labels[sample_idx]
+for cls in np.unique(labels):
+    orig_pct = (labels == cls).mean() * 100
+    samp_pct = (sample_labels == cls).mean() * 100
+    print(f"Class {cls}: orig={orig_pct:.0f}%, sample={samp_pct:.0f}%")`
+],
+12:[
+`import numpy as np
+import time
+n = 1000000
+arr = np.random.random(n)
+start = time.time()
+result = np.empty(n)
+for i in range(n):
+    result[i] = arr[i] ** 2
+loop_time = time.time() - start
+start = time.time()
+result2 = arr ** 2
+vec_time = time.time() - start
+print(f"Loop: {loop_time:.4f}s")
+print(f"Vectorized: {vec_time:.6f}s")
+print(f"Speedup: {loop_time/vec_time:.0f}x")`,
+`import numpy as np
+arr = np.array([1, 2, 3, 4, 5, 6, 7, 8])
+view = arr[2:6]
+view[0] = 99
+print(f"Original: {arr}")  # arr[2] is now 99
+print("Slice modified the original!")`,
+`import numpy as np
+arr = np.array([1, 2, 3, 4, 5])
+copy = arr.copy()
+copy[0] = 99
+print(f"Original: {arr}")  # Unchanged
+print(f"Copy: {copy}")`,
+`import numpy as np
+arr = np.array([1, 2, 3, 4, 5])
+view = arr[::2]
+copy = arr[[0, 2, 4]]
+print(f"View base is arr: {view.base is arr}")
+print(f"Copy base is arr: {copy.base is arr}")`,
+`import numpy as np
+arr64 = np.zeros(1000, dtype=np.float64)
+arr32 = np.zeros(1000, dtype=np.float32)
+print(f"float64: {arr64.nbytes} bytes")
+print(f"float32: {arr32.nbytes} bytes")
+print(f"Savings: {arr64.nbytes - arr32.nbytes} bytes")`,
+`import numpy as np
+arr = np.array([1.0, 2.0, 3.0, 4.0, 5.0])
+arr += 10  # In-place, no temporary array created
+arr *= 2   # In-place
+print(f"Result: {arr}")
+print("In-place ops avoid creating temporary arrays")`,
+`import numpy as np
+def my_func(x):
+    if x > 0.5:
+        return x ** 2
+    else:
+        return 0
+vfunc = np.vectorize(my_func)
+arr = np.array([0.2, 0.6, 0.3, 0.8, 0.1])
+result = vfunc(arr)
+print(f"Result: {result}")`,
+`import numpy as np
+import time
+arr = np.random.random(100000)
+start = time.time()
+result1 = np.empty_like(arr)
+for i in range(len(arr)):
+    if arr[i] < 0.2: result1[i] = 0.2
+    elif arr[i] > 0.8: result1[i] = 0.8
+    else: result1[i] = arr[i]
+t1 = time.time() - start
+start = time.time()
+result2 = np.clip(arr, 0.2, 0.8)
+t2 = time.time() - start
+print(f"Loop: {t1:.4f}s")
+print(f"np.clip: {t2:.6f}s")
+print(f"Speedup: {t1/t2:.0f}x")`,
+`import numpy as np
+arr = np.array([-3, 1, -2, 4, -5, 6])
+# Loop version (slow)
+# result = [x**2 if x > 0 else 0 for x in arr]
+# Vectorized version
+result = np.where(arr > 0, arr**2, 0)
+print(f"Result: {result}")`,
+`import numpy as np
+arr = np.arange(10)
+# Slicing = view
+s = arr[2:5]
+print(f"Slice is view: {s.base is arr}")
+# Fancy indexing = copy
+f = arr[[2, 3, 4]]
+print(f"Fancy is copy: {f.base is None or f.base is not arr}")`,
+`import numpy as np
+a = np.random.random(1000000)
+b = np.random.random(1000000)
+result = np.empty_like(a)
+np.add(a, b, out=result)
+print(f"Result[:5]: {result[:5].round(4)}")
+print("Using out= avoids temporary array allocation")`,
+`import numpy as np
+n = 1000000
+arr64 = np.random.random(n)  # float64
+arr32 = arr64.astype(np.float32)
+print(f"float64: {arr64.nbytes / 1e6:.1f} MB")
+print(f"float32: {arr32.nbytes / 1e6:.1f} MB")
+print(f"Savings: {(arr64.nbytes - arr32.nbytes) / 1e6:.1f} MB")`,
+`import numpy as np
+import time
+# Loop: pairwise distance
+points = np.random.default_rng(42).random((500, 2))
+n = len(points)
+start = time.time()
+dist_loop = np.zeros((n, n))
+for i in range(n):
+    for j in range(n):
+        dist_loop[i,j] = np.sqrt(np.sum((points[i]-points[j])**2))
+t1 = time.time() - start
+start = time.time()
+diff = points[:, np.newaxis, :] - points[np.newaxis, :, :]
+dist_vec = np.sqrt(np.sum(diff**2, axis=-1))
+t2 = time.time() - start
+print(f"Loop: {t1:.3f}s")
+print(f"Vectorized: {t2:.5f}s")
+print(f"Same result: {np.allclose(dist_loop, dist_vec)}")`,
+`import numpy as np
+from numpy.lib.stride_tricks import sliding_window_view
+arr = np.arange(20)
+window = 5
+windows = sliding_window_view(arr, window)
+moving_avg = windows.mean(axis=1)
+print(f"Moving average: {moving_avg.round(1)}")`,
+`import numpy as np
+arr = np.arange(12).reshape(3, 4)
+print(f"C contiguous: {arr.flags['C_CONTIGUOUS']}")
+print(f"F contiguous: {arr.flags['F_CONTIGUOUS']}")
+f_arr = np.asfortranarray(arr)
+print(f"\\nFortran order:")
+print(f"C contiguous: {f_arr.flags['C_CONTIGUOUS']}")
+print(f"F contiguous: {f_arr.flags['F_CONTIGUOUS']}")`,
+`import numpy as np
+def process_chunks(arr, chunk_size=10000):
+    results = []
+    for i in range(0, len(arr), chunk_size):
+        chunk = arr[i:i+chunk_size]
+        results.append(chunk.mean())
+    return np.mean(results)
+large_arr = np.random.default_rng(42).random(100000)
+result = process_chunks(large_arr)
+print(f"Chunked mean: {result:.6f}")
+print(f"Direct mean: {large_arr.mean():.6f}")`,
+`import numpy as np
+A = np.random.default_rng(42).random((100, 100))
+B = np.random.default_rng(43).random((100, 100))
+import time
+# einsum
+start = time.time()
+r1 = np.einsum("ij,jk->ik", A, B)
+t1 = time.time() - start
+# trace
+trace = np.einsum("ii", A)
+# batch outer product
+a = np.random.random((10, 3))
+b = np.random.random((10, 3))
+outer = np.einsum("bi,bj->bij", a, b)
+print(f"matmul shape: {r1.shape}")
+print(f"trace: {trace:.4f}")
+print(f"batch outer shape: {outer.shape}")`,
+`import numpy as np
+from numpy.lib.stride_tricks import sliding_window_view
+# 2D sliding window (patches)
+img = np.arange(25).reshape(5, 5)
+patches = sliding_window_view(img, (3, 3))
+print(f"Image shape: {img.shape}")
+print(f"Patches shape: {patches.shape}")
+print(f"First patch:\\n{patches[0, 0]}")`,
+`import numpy as np
+def normalize_inplace(arr):
+    """Normalize large array in-place to save memory."""
+    mean = arr.mean()
+    arr -= mean  # in-place subtraction
+    std = arr.std()
+    arr /= std   # in-place division
+    return arr
+large_arr = np.random.default_rng(42).random(1000000)
+print(f"Before: mean={large_arr.mean():.4f}, std={large_arr.std():.4f}")
+normalize_inplace(large_arr)
+print(f"After: mean={large_arr.mean():.10f}, std={large_arr.std():.10f}")`,
+`import numpy as np
+import time
+A = np.random.default_rng(42).random((200, 200))
+B = np.random.default_rng(43).random((200, 200))
+methods = {
+    "np.dot": lambda: np.dot(A, B),
+    "np.matmul": lambda: np.matmul(A, B),
+    "@ operator": lambda: A @ B,
+    "np.einsum": lambda: np.einsum("ij,jk->ik", A, B)
+}
+for name, func in methods.items():
+    start = time.time()
+    for _ in range(10):
+        func()
+    elapsed = (time.time() - start) / 10
+    print(f"{name:>12}: {elapsed*1000:.3f} ms")`
+]
+};
+
+// State
+let currentTopic = null;
+const STORAGE_KEY = 'numpy_roadmap_progress';
+
+function getProgress() {
+    try { return JSON.parse(localStorage.getItem(STORAGE_KEY)) || {}; }
+    catch { return {}; }
+}
+function saveProgress(data) {
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
+}
+function getTotalPractice() {
+    return topics.reduce((sum, t) => sum + t.practice.length, 0);
+}
+function getCompletedCount() {
+    const prog = getProgress();
+    return Object.values(prog).filter(v => v).length;
+}
+function updateProgressBar() {
+    const total = getTotalPractice();
+    const done = getCompletedCount();
+    const pct = total > 0 ? (done / total * 100) : 0;
+    document.getElementById('progressFill').style.width = pct + '%';
+    document.getElementById('progressText').textContent = done + ' / ' + total;
+}
+function getTopicProgress(topicId) {
+    const prog = getProgress();
+    const topic = topics.find(t => t.id === topicId);
+    if (!topic) return {done: 0, total: 0};
+    let done = 0;
+    topic.practice.forEach((_, i) => {
+        if (prog[topicId + '_' + i]) done++;
+    });
+    return {done, total: topic.practice.length};
+}
+
+// Python/NumPy syntax highlighting
+function highlightPython(code) {
+    let html = code
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;');
+    html = html.replace(/(#.*)/g, '<span style="color:#6b7280">$1</span>');
+    html = html.replace(/("""[\s\S]*?"""|\'\'\'[\s\S]*?\'\'\')/g, '<span style="color:#a78bfa">$1</span>');
+    html = html.replace(/(f?"[^"\\]*(?:\\.[^"\\]*)*")/g, '<span style="color:#a78bfa">$1</span>');
+    html = html.replace(/(f?'[^'\\]*(?:\\.[^'\\]*)*')/g, '<span style="color:#a78bfa">$1</span>');
+    html = html.replace(/\b(\d+\.?\d*)\b/g, '<span style="color:#fbbf24">$1</span>');
+    var keywords = ['def','class','import','from','return','yield','if','elif','else','for','while','break','continue','pass','try','except','finally','raise','with','as','lambda','and','or','not','in','is','True','False','None','async','await','global','del','assert'];
+    keywords.forEach(function(kw) {
+        html = html.replace(new RegExp('\\b(' + kw + ')\\b', 'g'), '<span style="color:#f472b6">$1</span>');
+    });
+    var builtins = ['print','len','range','type','int','float','str','bool','list','dict','set','tuple','input','open','sum','max','min','abs','enumerate','zip','map','filter','sorted','reversed','any','all','isinstance','super','next','iter','hasattr','getattr','setattr','round'];
+    builtins.forEach(function(fn) {
+        html = html.replace(new RegExp('\\b(' + fn + ')\\b(?=\\()', 'g'), '<span style="color:#22d3ee">$1</span>');
+    });
+    return html;
+}
+
+// Render roadmap
+function renderRoadmap() {
+    const container = document.getElementById('roadmapContainer');
+    container.innerHTML = '';
+    topics.forEach(topic => {
+        const prog = getTopicProgress(topic.id);
+        const node = document.createElement('div');
+        node.className = 'node';
+        node.onclick = () => showDetail(topic.id);
+        node.innerHTML = `
+            <div class="node-number" style="border-color:${topic.color};color:${topic.color}">${topic.id}</div>
+            <div class="node-card">
+                <div class="node-title" style="color:${topic.color}">${topic.title}</div>
+                <div class="node-chips">${topic.chips.map(c => '<span class="chip">' + c + '</span>').join('')}</div>
+                <div class="node-progress">${prog.done} / ${prog.total} practice completed</div>
+            </div>
+        `;
+        container.appendChild(node);
+    });
+}
+
+// Show detail page
+function showDetail(topicId) {
+    currentTopic = topics.find(t => t.id === topicId);
+    if (!currentTopic) return;
+    document.getElementById('roadmapPage').classList.remove('active');
+    document.getElementById('detailPage').classList.add('active');
+    document.getElementById('detailTitle').textContent = currentTopic.title;
+    document.getElementById('detailTitle').style.color = currentTopic.color;
+    document.getElementById('detailSubtitle').textContent = currentTopic.subtopics.map(s => s.name).join(' \u2022 ');
+    renderTheory();
+    renderExamples();
+    renderPractice();
+    switchTab('theory');
+    window.scrollTo(0, 0);
+}
+
+function showRoadmap() {
+    document.getElementById('detailPage').classList.remove('active');
+    document.getElementById('roadmapPage').classList.add('active');
+    renderRoadmap();
+    updateProgressBar();
+}
+
+function switchTab(tab) {
+    document.querySelectorAll('.tab').forEach((t, i) => {
+        t.classList.toggle('active', ['theory','examples','practice','solutions'][i] === tab);
+    });
+    document.querySelectorAll('.tab-content').forEach((tc, i) => {
+        tc.classList.toggle('active', ['theory','examples','practice','solutions'][i] === tab);
+    });
+    if (tab === 'solutions') renderSolutions();
+}
+
+function renderTheory() {
+    const container = document.getElementById('theoryContent');
+    container.innerHTML = currentTopic.subtopics.map(sub => `
+        <div class="theory-section">
+            <div class="theory-title">${sub.name}</div>
+            ${sub.theory.map(t => '<p class="theory-point">' + t + '</p>').join('')}
+            <pre class="code-block">${highlightPython(sub.code)}</pre>
+        </div>
+    `).join('');
+}
+
+function renderExamples() {
+    const container = document.getElementById('examplesContent');
+    container.innerHTML = currentTopic.examples.map(ex => `
+        <div class="example-card">
+            <div class="example-title">${ex.title}</div>
+            <p class="example-desc">${ex.desc}</p>
+            <pre class="code-block">${highlightPython(ex.code)}</pre>
+        </div>
+    `).join('');
+}
+
+function renderPractice() {
+    const container = document.getElementById('practiceContent');
+    const prog = getProgress();
+    container.innerHTML = currentTopic.practice.map((p, i) => {
+        const key = currentTopic.id + '_' + i;
+        const checked = prog[key] ? 'checked' : '';
+        const doneClass = prog[key] ? 'done' : '';
+        const diffClass = p.d === 'E' ? 'easy' : p.d === 'M' ? 'medium' : 'hard';
+        const diffLabel = p.d === 'E' ? 'Easy' : p.d === 'M' ? 'Medium' : 'Hard';
+        return `
+            <div class="practice-item ${doneClass}">
+                <input type="checkbox" ${checked} onchange="togglePractice('${key}', this)">
+                <span class="practice-text">${i+1}. ${p.q}</span>
+                <span class="difficulty ${diffClass}">${diffLabel}</span>
+            </div>
+        `;
+    }).join('');
+}
+
+function togglePractice(key, el) {
+    const prog = getProgress();
+    prog[key] = el.checked;
+    saveProgress(prog);
+    updateProgressBar();
+    el.parentElement.classList.toggle('done', el.checked);
+}
+
+function renderSolutions() {
+    var container = document.getElementById('solutionsContent');
+    if (!currentTopic) return;
+    var sols = solutionData[currentTopic.id] || [];
+    var html = '';
+    currentTopic.practice.forEach(function(p, i) {
+        var sol = sols[i] || 'Solution coming soon...';
+        var highlighted = highlightPython(sol);
+        html += '<div class="solution-item">' +
+            '<div class="solution-header" onclick="toggleSolution(' + i + ')">' +
+            '<span class="solution-num">#' + (i+1) + '</span>' +
+            '<span class="solution-q">' + p.q + '</span>' +
+            '<button class="solution-toggle" id="btn_' + i + '">Show Solution</button>' +
+            '</div>' +
+            '<div class="solution-body" id="sol_' + i + '">' +
+            '<pre class="code-block"><code>' + highlighted + '</code></pre>' +
+            '</div></div>';
+    });
+    container.innerHTML = html;
+}
+
+function toggleSolution(i) {
+    var body = document.getElementById('sol_' + i);
+    var btn = document.getElementById('btn_' + i);
+    body.classList.toggle('open');
+    btn.textContent = body.classList.contains('open') ? 'Hide Solution' : 'Show Solution';
+}
+
+// Initialize
+renderRoadmap();
+updateProgressBar();
+</script>
+</body>
+</html>
