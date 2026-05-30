@@ -5326,20 +5326,21 @@ function renderSolutions(topic){
     const container = document.getElementById('solutionsContent');
     if(!topic) return;
     const sols = solutionData[topic.id] || [];
-    let html = '';
-    topic.practice.forEach((p, i) => {
-        const sol = sols[i] || 'Solution coming soon...';
-        html += `<div class="solution-item">
-            <div class="solution-header" onclick="toggleSolution(${i})">
-                <span class="solution-num">#${i+1}</span>
-                <span class="solution-q">${p.q}</span>
-                <button class="solution-toggle" id="btn_${i}">Show Solution</button>
-            </div>
-            <div class="solution-body" id="sol_${i}">
-                <div class="solution-approach">Approach: ${p.approach}</div>
-                <pre class="code-block"><code>${highlightPython(sol)}</code></pre>
-            </div>
-        </div>`;
+    var html = '';
+    topic.practice.forEach(function(p, i) {
+        var sol = sols[i] || 'Solution coming soon...';
+        var highlighted = highlightPython(sol);
+        var approachHtml = p.approach ? '<div class="solution-approach"><strong>Approach:</strong> ' + p.approach + '</div>' : '';
+        html += '<div class="solution-item">' +
+            '<div class="solution-header" onclick="toggleSolution(' + i + ')">' +
+            '<span class="solution-num">#' + (i+1) + '</span>' +
+            '<span class="solution-q">' + p.q + '</span>' +
+            '<button class="solution-toggle" id="btn_' + i + '">Show Solution</button>' +
+            '</div>' +
+            '<div class="solution-body" id="sol_' + i + '">' +
+            approachHtml +
+            '<pre class="code-block"><code>' + highlighted + '</code></pre>' +
+            '</div></div>';
     });
     container.innerHTML = html;
 }
