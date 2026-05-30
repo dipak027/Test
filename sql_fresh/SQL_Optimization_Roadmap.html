@@ -1,0 +1,310 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SQL Optimization Roadmap</title>
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+:root{--bg:#080c14;--card:#141d2e;--border:#1e2d45;--text:#dde4f0;--text-dim:#8892a4;--green:#4ade80;--cyan:#22d3ee;--purple:#a78bfa;--gradient:linear-gradient(135deg,#4ade80,#22d3ee,#a78bfa)}
+body{font-family:'Sora',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;overflow-x:hidden}
+code,pre,.code{font-family:'JetBrains Mono',monospace}
+.header{position:sticky;top:0;z-index:1000;background:rgba(8,12,20,0.95);backdrop-filter:blur(12px);border-bottom:1px solid var(--border);padding:12px 24px}
+.header-inner{max-width:1200px;margin:0 auto;display:flex;align-items:center;justify-content:space-between}
+.logo{font-size:1.4rem;font-weight:700;background:var(--gradient);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.progress-container{flex:1;max-width:300px;margin-left:24px}
+.progress-label{font-size:0.7rem;color:var(--text-dim);margin-bottom:4px;text-align:right}
+.progress-bar{height:6px;background:var(--border);border-radius:3px;overflow:hidden}
+.progress-fill{height:100%;background:var(--gradient);border-radius:3px;transition:width 0.5s ease}
+.page{display:none;padding:40px 24px 80px;max-width:900px;margin:0 auto;animation:fadeIn 0.3s ease}
+.page.active{display:block}
+@keyframes fadeIn{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
+.roadmap{position:relative;padding-left:60px}
+.roadmap::before{content:'';position:absolute;left:28px;top:0;bottom:0;width:2px;background:linear-gradient(to bottom,var(--green),var(--cyan),var(--purple));opacity:0.4}
+.node{position:relative;margin-bottom:24px;cursor:pointer;transition:transform 0.2s ease}
+.node:hover{transform:translateX(4px)}
+.node-number{position:absolute;left:-48px;top:16px;width:32px;height:32px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:0.8rem;border:2px solid;background:var(--bg)}
+.node-card{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:20px 24px;transition:border-color 0.2s,box-shadow 0.2s}
+.node:hover .node-card{border-color:var(--cyan);box-shadow:0 4px 20px rgba(34,211,238,0.1)}
+.node-title{font-size:1.1rem;font-weight:600;margin-bottom:8px}
+.node-chips{display:flex;flex-wrap:wrap;gap:6px}
+.chip{font-size:0.65rem;padding:3px 8px;border-radius:4px;background:rgba(255,255,255,0.05);border:1px solid var(--border);color:var(--text-dim)}
+.node-progress{font-size:0.7rem;color:var(--text-dim);margin-top:8px}
+.back-btn{display:inline-flex;align-items:center;gap:6px;padding:8px 16px;background:var(--card);border:1px solid var(--border);border-radius:8px;color:var(--text);cursor:pointer;font-family:'Sora',sans-serif;font-size:0.85rem;margin-bottom:24px;transition:border-color 0.2s}
+.back-btn:hover{border-color:var(--cyan)}
+.detail-header{margin-bottom:24px}
+.detail-title{font-size:1.8rem;font-weight:700;margin-bottom:8px}
+.detail-subtitle{font-size:0.85rem;color:var(--text-dim)}
+.tabs{display:flex;gap:4px;margin-bottom:24px;background:var(--card);border-radius:10px;padding:4px;border:1px solid var(--border)}
+.tab{flex:1;padding:10px 16px;text-align:center;border-radius:8px;cursor:pointer;font-size:0.85rem;font-weight:500;color:var(--text-dim);transition:all 0.2s}
+.tab.active{background:var(--border);color:var(--text)}
+.tab:hover:not(.active){color:var(--text)}
+.tab-content{display:none;animation:fadeIn 0.3s ease}
+.tab-content.active{display:block}
+.theory-section{margin-bottom:24px;background:var(--card);border:1px solid var(--border);border-radius:10px;padding:20px}
+.theory-title{font-size:1rem;font-weight:600;margin-bottom:12px;color:var(--cyan)}
+.theory-point{font-size:0.85rem;color:var(--text-dim);margin-bottom:8px;padding-left:16px;position:relative;line-height:1.6}
+.theory-point::before{content:'>';position:absolute;left:0;color:var(--green)}
+pre.code-block{background:rgba(0,0,0,0.4);border:1px solid var(--border);border-radius:8px;padding:16px;margin-top:12px;overflow-x:auto;font-size:0.8rem;line-height:1.6}
+.example-card{background:var(--card);border:1px solid var(--border);border-radius:10px;padding:20px;margin-bottom:16px}
+.example-title{font-size:0.9rem;font-weight:600;margin-bottom:8px;color:var(--purple)}
+.example-desc{font-size:0.82rem;color:var(--text-dim);margin-bottom:12px}
+.practice-item{display:flex;align-items:flex-start;gap:12px;padding:12px 16px;background:var(--card);border:1px solid var(--border);border-radius:8px;margin-bottom:8px;transition:border-color 0.2s}
+.practice-item:hover{border-color:var(--cyan)}
+.practice-item input[type="checkbox"]{width:18px;height:18px;margin-top:2px;accent-color:var(--green);cursor:pointer}
+.practice-item.done{opacity:0.6;border-color:var(--green)}
+.practice-text{flex:1;font-size:0.82rem;line-height:1.5}
+.difficulty{font-size:0.65rem;padding:2px 8px;border-radius:4px;font-weight:600;white-space:nowrap}
+.difficulty.easy{background:rgba(74,222,128,0.15);color:#4ade80}
+.difficulty.medium{background:rgba(251,191,36,0.15);color:#fbbf24}
+.difficulty.hard{background:rgba(244,114,182,0.15);color:#f472b6}
+@media(max-width:640px){.roadmap{padding-left:40px}.roadmap::before{left:16px}.node-number{left:-32px;width:26px;height:26px;font-size:0.7rem}.header-inner{flex-wrap:wrap;gap:8px}.progress-container{max-width:100%;margin-left:0}}
+</style>
+</head>
+<body>
+<header class="header">
+<div class="header-inner">
+<div class="logo">SQL Optimization</div>
+<div class="progress-container">
+<div class="progress-label"><span id="progressText">0 / 0</span> completed</div>
+<div class="progress-bar"><div class="progress-fill" id="progressFill" style="width:0%"></div></div>
+</div>
+</div>
+</header>
+<div class="page active" id="roadmapPage"><div class="roadmap" id="roadmapContainer"></div></div>
+<div class="page" id="detailPage">
+<button class="back-btn" onclick="showRoadmap()">&#8592; Back to Roadmap</button>
+<div class="detail-header"><h1 class="detail-title" id="detailTitle"></h1><p class="detail-subtitle" id="detailSubtitle"></p></div>
+<div class="tabs">
+<div class="tab active" onclick="switchTab('theory')">Theory</div>
+<div class="tab" onclick="switchTab('examples')">Examples</div>
+<div class="tab" onclick="switchTab('practice')">Practice</div>
+<div class="tab" onclick="switchTab('solutions')">Solutions</div>
+</div>
+<div class="tab-content active" id="theoryContent"></div>
+<div class="tab-content" id="examplesContent"></div>
+<div class="tab-content" id="practiceContent"></div>
+<div class="tab-content" id="solutionsContent"></div>
+</div>
+<script>
+let currentTopic = null;
+const STORAGE_KEY = 'sql_optimization_progress';
+
+const topics = [
+{id:1,title:"Query Optimizer Fundamentals",color:"#38bdf8",chips:["Cost-Based","Rule-Based","Optimizer","Statistics"],
+subtopics:[
+{name:"How the Optimizer Works",theory:["The query optimizer transforms SQL into an execution plan — it decides HOW to retrieve data.","Cost-based optimizer (CBO) estimates cost of each possible plan based on statistics (row counts, distribution).","Rule-based optimizer (RBO) uses fixed rules/heuristics; mostly obsolete but still found in older Oracle."],code:"-- The optimizer chooses between multiple strategies:\n-- 1. Full table scan vs index scan\n-- 2. Nested loop vs hash vs merge join\n-- 3. Sort early vs sort late\n\n-- Example: same query, different plans depending on data\nSELECT * FROM orders WHERE customer_id = 42;\n-- Small table: full scan is faster\n-- Large table with index on customer_id: index scan wins\n\n-- The optimizer considers:\n-- - Table sizes (row count, page count)\n-- - Index availability and selectivity\n-- - Join order possibilities\n-- - Memory available for sorting/hashing"},
+{name:"Statistics & Cardinality",theory:["Statistics store metadata about data distribution: row count, distinct values, histograms.","Cardinality estimation: optimizer guesses how many rows each operation produces.","Stale statistics lead to bad plans; run ANALYZE/UPDATE STATISTICS regularly."],code:"-- PostgreSQL: update statistics\nANALYZE employees;\nANALYZE VERBOSE employees;  -- with details\n\n-- View statistics (PostgreSQL)\nSELECT attname, n_distinct, most_common_vals, histogram_bounds\nFROM pg_stats\nWHERE tablename = 'employees';\n\n-- SQL Server: update statistics\nUPDATE STATISTICS employees;\n\n-- MySQL: analyze table\nANALYZE TABLE employees;\n\n-- Check table size\nSELECT relname, reltuples::BIGINT AS row_estimate,\n       pg_size_pretty(pg_relation_size(oid)) AS table_size\nFROM pg_class\nWHERE relname = 'employees';"},
+{name:"Query Execution Order",theory:["SQL logical execution order: FROM → WHERE → GROUP BY → HAVING → SELECT → ORDER BY → LIMIT.","Understanding execution order helps predict where to optimize (filter early, reduce rows).","Physical execution may differ from logical order — optimizer can reorder operations."],code:"-- Logical execution order (numbered):\nSELECT dept_id, COUNT(*) AS cnt  -- 5. Project columns\nFROM employees                    -- 1. Access table\nWHERE salary > 50000              -- 2. Filter rows\nGROUP BY dept_id                  -- 3. Group remaining rows\nHAVING COUNT(*) > 5               -- 4. Filter groups\nORDER BY cnt DESC                 -- 6. Sort results\nLIMIT 10;                         -- 7. Limit output\n\n-- Key insight: WHERE filters BEFORE grouping (less data to process)\n-- HAVING filters AFTER grouping (more expensive)\n-- Always prefer WHERE over HAVING when possible"}
+],
+examples:[
+{title:"Forcing Plan Hints",desc:"Override optimizer decisions when you know better.",code:"-- PostgreSQL: disable specific strategies\nSET enable_seqscan = OFF;  -- force index usage\nEXPLAIN SELECT * FROM employees WHERE dept_id = 1;\nSET enable_seqscan = ON;   -- restore\n\n-- MySQL: index hints\nSELECT * FROM orders USE INDEX (idx_customer)\nWHERE customer_id = 42;\n\nSELECT * FROM orders FORCE INDEX (idx_date)\nWHERE order_date > '2024-01-01';\n\n-- SQL Server: query hints\nSELECT * FROM orders\nWHERE customer_id = 42\nOPTION (HASH JOIN);"}
+],
+practice:[
+{q:"Run EXPLAIN on a simple SELECT and identify whether it uses a sequential scan or index scan.",d:"E"},
+{q:"Run ANALYZE on a table and check the estimated row count vs actual row count.",d:"E"},
+{q:"Compare the estimated rows vs actual rows in EXPLAIN ANALYZE output for a filtered query.",d:"M"},
+{q:"Write the same query two ways (one with WHERE, one with HAVING) and compare their plans.",d:"M"},
+{q:"Demonstrate how stale statistics can lead to a suboptimal plan.",d:"M"},
+{q:"Use optimizer hints to force an index scan and compare cost with the default plan.",d:"H"},
+{q:"Find a query where the optimizer's cardinality estimate is significantly wrong and explain why.",d:"H"},
+{q:"Write a query that benefits from reordering joins and show the plan difference.",d:"H"}
+]},
+
+{id:2,title:"Reading Execution Plans",color:"#34d399",chips:["EXPLAIN","EXPLAIN ANALYZE","Seq Scan","Index Scan","Cost"],
+subtopics:[
+{name:"EXPLAIN Basics",theory:["EXPLAIN shows the planned execution strategy WITHOUT running the query.","EXPLAIN ANALYZE actually executes and shows real timings and row counts.","Key metrics: cost (startup..total), rows (estimated), width (avg row bytes)."],code:"-- Basic EXPLAIN\nEXPLAIN SELECT * FROM employees WHERE dept_id = 1;\n\n-- With actual execution stats\nEXPLAIN ANALYZE SELECT * FROM employees WHERE dept_id = 1;\n\n-- Verbose output with all details\nEXPLAIN (ANALYZE, BUFFERS, FORMAT TEXT)\nSELECT e.name, d.dept_name\nFROM employees e\nJOIN departments d ON e.dept_id = d.dept_id\nWHERE e.salary > 70000;\n\n-- JSON format (easier to parse programmatically)\nEXPLAIN (FORMAT JSON)\nSELECT * FROM orders WHERE customer_id = 42;"},
+{name:"Understanding Plan Nodes",theory:["Seq Scan: reads entire table sequentially; fast for small tables or non-selective filters.","Index Scan: uses B-tree to find rows; Index Only Scan if all columns are in the index.","Bitmap Index Scan: builds bitmap of matching pages, then fetches them; good for moderate selectivity."],code:"-- Sequential Scan (full table read)\n-- Happens when: no index, low selectivity, small table\nEXPLAIN SELECT * FROM employees; -- always seq scan\n\n-- Index Scan (B-tree lookup)\n-- Happens when: indexed column, high selectivity\nEXPLAIN SELECT * FROM employees WHERE emp_id = 42;\n\n-- Index Only Scan (no table access needed)\n-- Happens when: all needed columns are in the index\nCREATE INDEX idx_covering ON employees(dept_id, salary);\nEXPLAIN SELECT dept_id, salary FROM employees WHERE dept_id = 1;\n\n-- Bitmap Index Scan (moderate selectivity)\n-- Happens when: multiple rows match but not too many\nEXPLAIN SELECT * FROM employees WHERE dept_id IN (1,2,3);"},
+{name:"Join Strategies in Plans",theory:["Nested Loop: for each outer row, scan inner table; best for small outer + indexed inner.","Hash Join: build hash table on smaller table, probe with larger; best for equality joins.","Merge Join: both inputs sorted, merge together; best when both sides are pre-sorted or indexed."],code:"-- Nested Loop (small outer, indexed inner)\nEXPLAIN ANALYZE\nSELECT e.name, d.dept_name\nFROM departments d             -- small: 10 rows\nJOIN employees e ON e.dept_id = d.dept_id;  -- indexed\n\n-- Hash Join (larger tables, equality join)\nEXPLAIN ANALYZE\nSELECT o.order_id, c.name\nFROM orders o\nJOIN customers c ON o.customer_id = c.customer_id;\n\n-- Merge Join (both sides sorted)\nEXPLAIN ANALYZE\nSELECT a.id, b.id\nFROM table_a a\nJOIN table_b b ON a.sort_key = b.sort_key\nORDER BY a.sort_key;\n\n-- The optimizer picks based on:\n-- - Table sizes, available memory, indexes\n-- - Nested Loop: O(n*m) but fast if m is tiny\n-- - Hash Join: O(n+m) but needs memory for hash table\n-- - Merge Join: O(n+m) but needs sorted input"},
+{name:"Identifying Bottlenecks",theory:["Look for large differences between estimated and actual rows (bad statistics).","High actual time on a single node = bottleneck; check if index is missing.","Sorts and hash operations spilling to disk indicate insufficient work_mem."],code:"-- Look for problems in EXPLAIN ANALYZE output:\nEXPLAIN (ANALYZE, BUFFERS) SELECT ...\n\n-- Red flags to look for:\n-- 1. Seq Scan on large table with WHERE clause → missing index\n-- 2. Rows: estimated=1, actual=100000 → stale statistics\n-- 3. Sort Method: external merge → work_mem too low\n-- 4. Loops: 10000 (nested loop) → consider hash join\n\n-- Check buffer usage\nEXPLAIN (ANALYZE, BUFFERS)\nSELECT * FROM orders WHERE customer_id = 42;\n-- Buffers: shared hit=3 read=50  ← 50 disk reads = slow\n-- Buffers: shared hit=53         ← all from cache = fast\n\n-- Monitor slow queries (PostgreSQL)\nSELECT query, calls, mean_exec_time, rows\nFROM pg_stat_statements\nORDER BY mean_exec_time DESC\nLIMIT 10;"}
+],
+examples:[
+{title:"Before & After Optimization",desc:"Show how adding an index changes the execution plan.",code:"-- Before: no index on customer_id\nEXPLAIN ANALYZE\nSELECT * FROM orders WHERE customer_id = 42;\n-- Seq Scan on orders\n--   Filter: (customer_id = 42)\n--   Rows Removed by Filter: 99990\n--   Planning Time: 0.1ms\n--   Execution Time: 45.2ms\n\n-- Add index\nCREATE INDEX idx_orders_customer ON orders(customer_id);\n\n-- After: index scan\nEXPLAIN ANALYZE\nSELECT * FROM orders WHERE customer_id = 42;\n-- Index Scan using idx_orders_customer on orders\n--   Index Cond: (customer_id = 42)\n--   Planning Time: 0.1ms\n--   Execution Time: 0.3ms  ← 150x faster!"}
+],
+practice:[
+{q:"Run EXPLAIN on a SELECT with WHERE clause and identify the scan type used.",d:"E"},
+{q:"Run EXPLAIN ANALYZE and compare estimated rows vs actual rows.",d:"E"},
+{q:"Identify a Seq Scan on a large table and add an index to convert it to Index Scan.",d:"M"},
+{q:"Find a query using Nested Loop and explain when Hash Join would be better.",d:"M"},
+{q:"Use EXPLAIN (BUFFERS) to identify queries doing excessive disk I/O.",d:"M"},
+{q:"Analyze a multi-join query plan and identify which join is the most expensive.",d:"H"},
+{q:"Find a query with bad cardinality estimates and fix it by updating statistics.",d:"H"},
+{q:"Compare plans for the same query with different work_mem settings.",d:"H"}
+]},
+
+{id:3,title:"Index Design",color:"#a78bfa",chips:["B-tree","Hash","Covering","Partial","Composite"],
+subtopics:[
+{name:"Index Types",theory:["B-tree (default): balanced tree for equality and range queries; supports ORDER BY.","Hash index: O(1) lookup for equality only; not useful for ranges; not crash-safe in older PG.","GIN (Generalized Inverted): for arrays, JSONB, full-text; GiST: for geometric, range, nearest-neighbor."],code:"-- B-tree (default) - most common\nCREATE INDEX idx_salary ON employees(salary);\n-- Supports: =, <, >, <=, >=, BETWEEN, IN, LIKE 'abc%'\n\n-- Hash index (equality only)\nCREATE INDEX idx_email_hash ON employees USING HASH (email);\n-- Only supports: =\n\n-- GIN for JSONB\nCREATE INDEX idx_payload ON events USING GIN (payload);\n-- Supports: @>, ?, ?|, ?&\n\n-- GIN for full-text search\nCREATE INDEX idx_fts ON articles USING GIN (to_tsvector('english', content));\n\n-- GiST for geometric/range\nCREATE INDEX idx_location ON stores USING GIST (location);\n\n-- BRIN (Block Range Index) for sorted data\nCREATE INDEX idx_created ON logs USING BRIN (created_at);"},
+{name:"Composite & Covering Indexes",theory:["Composite index on (a, b, c) supports queries filtering on a, (a,b), or (a,b,c) — leftmost prefix rule.","Column order matters: put most selective or most filtered column first.","Covering index includes all columns needed by query; enables Index Only Scan (no table access)."],code:"-- Composite index\nCREATE INDEX idx_dept_salary ON employees(dept_id, salary DESC);\n\n-- This index helps these queries:\nSELECT * FROM employees WHERE dept_id = 1;                    -- uses index\nSELECT * FROM employees WHERE dept_id = 1 AND salary > 70000; -- uses index\nSELECT * FROM employees WHERE salary > 70000;                 -- CANNOT use index!\n\n-- Covering index (INCLUDE)\nCREATE INDEX idx_covering ON employees(dept_id) INCLUDE (name, salary);\n-- Enables Index Only Scan for:\nSELECT name, salary FROM employees WHERE dept_id = 1;\n\n-- Covering in older PostgreSQL (all columns in index)\nCREATE INDEX idx_cover_old ON employees(dept_id, name, salary);"},
+{name:"Partial & Expression Indexes",theory:["Partial index only indexes rows matching a WHERE condition; smaller and more targeted.","Expression index indexes the result of a function/expression applied to a column.","Both reduce index size and maintenance cost while targeting specific query patterns."],code:"-- Partial index: only active employees\nCREATE INDEX idx_active_emps ON employees(name)\n    WHERE is_active = TRUE;\n-- Only helps: SELECT * FROM employees WHERE is_active = TRUE AND name = 'Alice'\n\n-- Partial index: only recent orders\nCREATE INDEX idx_recent_orders ON orders(customer_id)\n    WHERE order_date > '2024-01-01';\n\n-- Expression index: case-insensitive search\nCREATE INDEX idx_lower_email ON employees(LOWER(email));\n-- Helps: SELECT * FROM employees WHERE LOWER(email) = 'alice@company.com'\n\n-- Expression index: date extraction\nCREATE INDEX idx_order_year ON orders(EXTRACT(YEAR FROM order_date));\n-- Helps: SELECT * FROM orders WHERE EXTRACT(YEAR FROM order_date) = 2024;"},
+{name:"When NOT to Index",theory:["Small tables (< 1000 rows): seq scan is often faster than index overhead.","Low-selectivity columns (e.g., boolean, gender): index scan reads almost all rows anyway.","Heavily written tables: each INSERT/UPDATE/DELETE must also update all indexes."],code:"-- Anti-patterns: unnecessary indexes\n-- 1. Boolean column with 50/50 distribution\nCREATE INDEX idx_bad ON employees(is_active);  -- BAD: low selectivity\n\n-- 2. Duplicate index (already covered by composite)\nCREATE INDEX idx_dept ON employees(dept_id);          -- OK\nCREATE INDEX idx_dept_name ON employees(dept_id, name); -- covers dept_id queries too!\n-- idx_dept is now redundant\n\n-- 3. Index on tiny table\nCREATE INDEX idx_tiny ON status_codes(code);  -- only 5 rows, pointless\n\n-- Check index usage (find unused indexes)\nSELECT indexrelid::regclass AS index_name,\n       idx_scan AS times_used,\n       pg_size_pretty(pg_relation_size(indexrelid)) AS size\nFROM pg_stat_user_indexes\nWHERE idx_scan = 0\nORDER BY pg_relation_size(indexrelid) DESC;"}
+],
+examples:[
+{title:"Index Strategy for E-commerce",desc:"Design indexes for common e-commerce query patterns.",code:"-- Orders table: common queries\n-- 1. Find orders by customer\nCREATE INDEX idx_orders_customer ON orders(customer_id);\n\n-- 2. Recent orders dashboard (sorted by date)\nCREATE INDEX idx_orders_date ON orders(order_date DESC);\n\n-- 3. Status filtering + date sort\nCREATE INDEX idx_orders_status_date ON orders(status, order_date DESC);\n\n-- 4. Covering index for order list page\nCREATE INDEX idx_orders_list ON orders(customer_id, order_date DESC)\n    INCLUDE (status, total_amount);\n\n-- 5. Partial index for pending orders only\nCREATE INDEX idx_pending ON orders(created_at)\n    WHERE status = 'pending';"}
+],
+practice:[
+{q:"Create a B-tree index and verify it's used with EXPLAIN.",d:"E"},
+{q:"Create a composite index on (dept_id, salary) and test which queries use it.",d:"E"},
+{q:"Demonstrate the leftmost prefix rule: show which filters use a composite index and which don't.",d:"M"},
+{q:"Create a partial index for 'active' rows and show it's smaller than a full index.",d:"M"},
+{q:"Create an expression index on LOWER(email) and verify it helps case-insensitive searches.",d:"M"},
+{q:"Create a covering index and confirm it enables Index Only Scan in EXPLAIN.",d:"M"},
+{q:"Find unused indexes in a database and calculate their wasted space.",d:"H"},
+{q:"Design an optimal index set for 5 common query patterns on a single table.",d:"H"},
+{q:"Compare BRIN vs B-tree index performance on a time-series table with millions of rows.",d:"H"},
+{q:"Measure the write performance impact of having 5 vs 1 index on a table with bulk inserts.",d:"H"}
+]},
+
+{id:4,title:"Query Rewriting & SARGability",color:"#fbbf24",chips:["SARGable","Rewrites","Anti-Patterns","Predicates"],
+subtopics:[
+{name:"SARGable Predicates",theory:["SARGable (Search ARGument ABLE): predicates that can use indexes efficiently.","Non-SARGable: wrapping columns in functions, math, or type casts prevents index usage.","Rule: keep the indexed column 'naked' on one side of the comparison."],code:"-- NON-SARGable (cannot use index on salary)\nSELECT * FROM employees WHERE salary + 1000 > 80000;\nSELECT * FROM employees WHERE YEAR(hire_date) = 2024;\nSELECT * FROM employees WHERE UPPER(name) = 'ALICE';\nSELECT * FROM employees WHERE salary * 1.1 > 80000;\n\n-- SARGable rewrites (CAN use index)\nSELECT * FROM employees WHERE salary > 79000;\nSELECT * FROM employees\n    WHERE hire_date >= '2024-01-01' AND hire_date < '2025-01-01';\nSELECT * FROM employees WHERE name = 'Alice'; -- or use expression index\nSELECT * FROM employees WHERE salary > 80000 / 1.1;\n\n-- LIKE SARGability\nSELECT * FROM employees WHERE name LIKE 'Ali%';   -- SARGable (prefix)\nSELECT * FROM employees WHERE name LIKE '%lice';  -- NOT SARGable (leading %)"},
+{name:"Common Anti-Patterns",theory:["SELECT * fetches unnecessary columns; specify only needed columns for covering index benefit.","OR conditions often prevent index usage; rewrite as UNION ALL for better plans.","Implicit type conversions can make predicates non-SARGable (comparing varchar to int)."],code:"-- Anti-pattern 1: SELECT *\nSELECT * FROM employees WHERE dept_id = 1;  -- fetches all columns\n-- Better:\nSELECT name, salary FROM employees WHERE dept_id = 1;  -- covering index possible\n\n-- Anti-pattern 2: OR preventing index use\nSELECT * FROM orders WHERE customer_id = 1 OR product_id = 5;\n-- Better:\nSELECT * FROM orders WHERE customer_id = 1\nUNION ALL\nSELECT * FROM orders WHERE product_id = 5 AND customer_id != 1;\n\n-- Anti-pattern 3: Implicit conversion\nSELECT * FROM orders WHERE order_id = '12345';  -- order_id is INT\n-- Better:\nSELECT * FROM orders WHERE order_id = 12345;\n\n-- Anti-pattern 4: NOT IN with NULLs\nSELECT * FROM employees WHERE dept_id NOT IN (SELECT dept_id FROM excluded);\n-- If subquery returns NULL, NO rows match! Use NOT EXISTS instead:\nSELECT * FROM employees e\nWHERE NOT EXISTS (SELECT 1 FROM excluded x WHERE x.dept_id = e.dept_id);"},
+{name:"Join Optimization",theory:["Put the most selective filter first; optimizer usually handles this but explicit helps complex queries.","Ensure join columns are indexed and have matching types (avoid implicit casts).","Reduce row count before joining: use CTEs or subqueries to filter/aggregate first."],code:"-- Reduce rows before joining\n-- Slow: joins millions of rows, then filters\nSELECT o.*, c.name\nFROM orders o\nJOIN customers c ON o.customer_id = c.customer_id\nWHERE o.order_date > '2024-01-01';\n\n-- Usually same plan, but for complex cases, pre-filter:\nWITH recent_orders AS (\n    SELECT * FROM orders WHERE order_date > '2024-01-01'\n)\nSELECT ro.*, c.name\nFROM recent_orders ro\nJOIN customers c ON ro.customer_id = c.customer_id;\n\n-- Ensure join column types match\n-- Bad: orders.customer_id is INT, customers.id is VARCHAR\n-- This forces a type cast on every row!\n\n-- Avoid joining on expressions when possible\n-- Bad:\nSELECT * FROM a JOIN b ON LOWER(a.code) = LOWER(b.code);\n-- Better: store normalized data or use expression index"}
+],
+examples:[
+{title:"Rewriting for Performance",desc:"Transform slow patterns into optimized versions.",code:"-- Original: function on column (non-SARGable)\nSELECT * FROM logs\nWHERE DATE(created_at) = '2024-03-15';\n\n-- Rewritten: range condition (SARGable)\nSELECT * FROM logs\nWHERE created_at >= '2024-03-15'\n  AND created_at < '2024-03-16';\n\n-- Original: correlated subquery (row-by-row)\nSELECT * FROM employees e\nWHERE salary > (SELECT AVG(salary) FROM employees WHERE dept_id = e.dept_id);\n\n-- Rewritten: single pass with window function\nSELECT * FROM (\n    SELECT *, AVG(salary) OVER (PARTITION BY dept_id) AS dept_avg\n    FROM employees\n) t WHERE salary > dept_avg;"}
+],
+practice:[
+{q:"Identify a non-SARGable WHERE clause and rewrite it to be SARGable.",d:"E"},
+{q:"Rewrite WHERE YEAR(date_col) = 2024 to use a range condition.",d:"E"},
+{q:"Replace SELECT * with specific columns and show the plan improvement.",d:"M"},
+{q:"Rewrite an OR condition as UNION ALL and compare execution plans.",d:"M"},
+{q:"Find a query with implicit type conversion and fix it to use matching types.",d:"M"},
+{q:"Rewrite NOT IN as NOT EXISTS and explain why it's safer with NULLs.",d:"M"},
+{q:"Transform a correlated subquery into a window function approach.",d:"H"},
+{q:"Optimize a query with 5+ JOINs by reducing row counts before joining.",d:"H"}
+]},
+
+{id:5,title:"Partitioning",color:"#f472b6",chips:["Range","List","Hash","Partition Pruning","Maintenance"],
+subtopics:[
+{name:"Partitioning Concepts",theory:["Partitioning splits a large table into smaller physical pieces while appearing as one logical table.","Benefits: faster queries (partition pruning), easier maintenance (drop old partitions), parallel scans.","Types: Range (date ranges), List (explicit values), Hash (even distribution by hash)."],code:"-- Range partitioning by date (PostgreSQL)\nCREATE TABLE orders (\n    order_id    SERIAL,\n    order_date  DATE NOT NULL,\n    customer_id INT,\n    amount      DECIMAL(10,2)\n) PARTITION BY RANGE (order_date);\n\nCREATE TABLE orders_2024_q1 PARTITION OF orders\n    FOR VALUES FROM ('2024-01-01') TO ('2024-04-01');\nCREATE TABLE orders_2024_q2 PARTITION OF orders\n    FOR VALUES FROM ('2024-04-01') TO ('2024-07-01');\nCREATE TABLE orders_2024_q3 PARTITION OF orders\n    FOR VALUES FROM ('2024-07-01') TO ('2024-10-01');\nCREATE TABLE orders_2024_q4 PARTITION OF orders\n    FOR VALUES FROM ('2024-10-01') TO ('2025-01-01');"},
+{name:"List & Hash Partitioning",theory:["List partitioning: each partition holds rows with specific discrete values (region, status).","Hash partitioning: rows distributed evenly by hash of partition key; good for even load.","Choose partition strategy based on query patterns: filter by date → range; filter by region → list."],code:"-- List partitioning by region\nCREATE TABLE customers (\n    customer_id SERIAL,\n    name        VARCHAR(100),\n    region      VARCHAR(20) NOT NULL\n) PARTITION BY LIST (region);\n\nCREATE TABLE customers_us PARTITION OF customers FOR VALUES IN ('US', 'CA');\nCREATE TABLE customers_eu PARTITION OF customers FOR VALUES IN ('UK', 'DE', 'FR');\nCREATE TABLE customers_asia PARTITION OF customers FOR VALUES IN ('JP', 'IN', 'CN');\n\n-- Hash partitioning (even distribution)\nCREATE TABLE events (\n    event_id    BIGSERIAL,\n    user_id     INT NOT NULL,\n    event_type  VARCHAR(50)\n) PARTITION BY HASH (user_id);\n\nCREATE TABLE events_p0 PARTITION OF events FOR VALUES WITH (MODULUS 4, REMAINDER 0);\nCREATE TABLE events_p1 PARTITION OF events FOR VALUES WITH (MODULUS 4, REMAINDER 1);\nCREATE TABLE events_p2 PARTITION OF events FOR VALUES WITH (MODULUS 4, REMAINDER 2);\nCREATE TABLE events_p3 PARTITION OF events FOR VALUES WITH (MODULUS 4, REMAINDER 3);"},
+{name:"Partition Pruning & Maintenance",theory:["Partition pruning: optimizer skips irrelevant partitions based on WHERE conditions.","EXPLAIN shows which partitions are scanned; effective pruning is the main performance benefit.","Maintenance: DROP partition (instant), DETACH partition, auto-create future partitions."],code:"-- Verify partition pruning\nEXPLAIN SELECT * FROM orders WHERE order_date = '2024-05-15';\n-- Should show: only orders_2024_q2 scanned\n\n-- Drop old data instantly (vs DELETE which is slow)\nDROP TABLE orders_2023_q1;  -- instant, no vacuum needed\n-- Or detach for archiving:\nALTER TABLE orders DETACH PARTITION orders_2023_q1;\n\n-- Attach existing table as partition\nALTER TABLE orders ATTACH PARTITION orders_2025_q1\n    FOR VALUES FROM ('2025-01-01') TO ('2025-04-01');\n\n-- Check partition sizes\nSELECT tableoid::regclass AS partition_name,\n       COUNT(*) AS row_count\nFROM orders\nGROUP BY tableoid\nORDER BY partition_name;"}
+],
+examples:[
+{title:"Time-Series Partitioning Strategy",desc:"Design partitioning for a high-volume event log.",code:"-- Create partitioned table\nCREATE TABLE event_log (\n    id          BIGSERIAL,\n    event_time  TIMESTAMP NOT NULL,\n    user_id     INT,\n    event_type  VARCHAR(50),\n    payload     JSONB\n) PARTITION BY RANGE (event_time);\n\n-- Monthly partitions\nCREATE TABLE event_log_2024_01 PARTITION OF event_log\n    FOR VALUES FROM ('2024-01-01') TO ('2024-02-01');\n-- ... repeat for each month\n\n-- Index on each partition (auto-created with partitioned index)\nCREATE INDEX idx_event_user ON event_log(user_id);\nCREATE INDEX idx_event_type ON event_log(event_type, event_time);\n\n-- Queries automatically use pruning:\nSELECT * FROM event_log\nWHERE event_time >= '2024-03-01' AND event_time < '2024-04-01';\n-- Only scans March partition!"}
+],
+practice:[
+{q:"Create a range-partitioned table by date and insert data into multiple partitions.",d:"E"},
+{q:"Use EXPLAIN to verify that partition pruning is working for a date filter.",d:"E"},
+{q:"Create a list-partitioned table by region and query a specific region.",d:"M"},
+{q:"Drop an old partition and explain why it's faster than DELETE.",d:"M"},
+{q:"Create a hash-partitioned table and verify even distribution across partitions.",d:"M"},
+{q:"Design a partition strategy for a 1TB table with 1 billion time-series rows.",d:"H"},
+{q:"Implement automatic partition creation for future months using PL/pgSQL.",d:"H"},
+{q:"Benchmark query performance: partitioned (100M rows) vs non-partitioned with same indexes.",d:"H"}
+]},
+
+{id:6,title:"Locking, Concurrency & MVCC",color:"#22d3ee",chips:["Locks","Deadlocks","MVCC","FOR UPDATE","Isolation"],
+subtopics:[
+{name:"Lock Types & Granularity",theory:["Row-level locks: most granular; shared (read) vs exclusive (write); minimal blocking.","Table-level locks: DDL operations take AccessExclusive; blocks everything on that table.","Advisory locks: application-level locks for custom coordination (pg_advisory_lock)."],code:"-- Explicit row locking\nSELECT * FROM inventory\nWHERE product_id = 42\nFOR UPDATE;  -- exclusive lock on this row\n\n-- FOR UPDATE variants\nSELECT * FROM inventory WHERE product_id = 42\nFOR UPDATE NOWAIT;            -- fail immediately if locked\n\nSELECT * FROM inventory WHERE product_id = 42\nFOR UPDATE SKIP LOCKED;       -- skip locked rows (queue pattern)\n\n-- View current locks (PostgreSQL)\nSELECT l.locktype, l.relation::regclass, l.mode, l.granted,\n       a.query, a.state\nFROM pg_locks l\nJOIN pg_stat_activity a ON l.pid = a.pid\nWHERE l.relation IS NOT NULL;"},
+{name:"MVCC (Multi-Version Concurrency Control)",theory:["MVCC: readers never block writers; each transaction sees a snapshot of data at its start time.","PostgreSQL/Oracle use MVCC: old row versions kept until vacuum; readers see consistent snapshot.","No read locks needed; writes create new row versions; old versions eventually cleaned by VACUUM."],code:"-- MVCC in action: two concurrent transactions\n-- Session 1:\nBEGIN;\nUPDATE accounts SET balance = balance - 100 WHERE id = 1;\n-- Row now has two versions: old (visible to others) and new (only visible here)\n\n-- Session 2 (concurrent):\nSELECT balance FROM accounts WHERE id = 1;\n-- Still sees the OLD balance (consistent snapshot)\n\n-- Session 1:\nCOMMIT;\n-- NOW session 2 sees the new balance (if it starts a new statement)\n\n-- Dead tuples accumulate; VACUUM cleans them\nVACUUM ANALYZE accounts;\n\n-- Check bloat\nSELECT relname, n_dead_tup, n_live_tup,\n       ROUND(100.0 * n_dead_tup / NULLIF(n_live_tup + n_dead_tup, 0), 1) AS dead_pct\nFROM pg_stat_user_tables\nORDER BY n_dead_tup DESC;"},
+{name:"Deadlocks",theory:["Deadlock: two transactions each hold a lock the other needs; DB detects and kills one.","Prevention: always acquire locks in consistent order (e.g., by primary key ASC).","Detection: database periodically checks wait-for graph; rolls back one victim transaction."],code:"-- Deadlock scenario:\n-- Session 1:                    Session 2:\n-- UPDATE accounts SET ..        UPDATE accounts SET ..\n--   WHERE id = 1; (locks 1)       WHERE id = 2; (locks 2)\n-- UPDATE accounts SET ..        UPDATE accounts SET ..\n--   WHERE id = 2; (WAITS)         WHERE id = 1; (WAITS)\n-- DEADLOCK!\n\n-- Prevention: always lock in consistent order\nBEGIN;\n  -- Lock rows in PK order\n  SELECT * FROM accounts WHERE id IN (1, 2)\n  ORDER BY id FOR UPDATE;\n  -- Now safely update both\n  UPDATE accounts SET balance = balance - 100 WHERE id = 1;\n  UPDATE accounts SET balance = balance + 100 WHERE id = 2;\nCOMMIT;\n\n-- Check deadlock logs (PostgreSQL)\n-- postgresql.conf: log_lock_waits = on\n-- log_min_duration_statement = 1000"}
+],
+examples:[
+{title:"Queue Processing with SKIP LOCKED",desc:"Implement a work queue where multiple workers process jobs concurrently.",code:"-- Workers grab jobs without blocking each other\nBEGIN;\n  -- Each worker grabs one unprocessed job\n  WITH next_job AS (\n      SELECT job_id, payload\n      FROM job_queue\n      WHERE status = 'pending'\n      ORDER BY priority, created_at\n      LIMIT 1\n      FOR UPDATE SKIP LOCKED  -- skip jobs locked by other workers\n  )\n  UPDATE job_queue\n  SET status = 'processing', worker_id = pg_backend_pid()\n  FROM next_job\n  WHERE job_queue.job_id = next_job.job_id\n  RETURNING job_queue.*;\nCOMMIT;"}
+],
+practice:[
+{q:"Use SELECT FOR UPDATE to lock a row and observe blocking in a second session.",d:"E"},
+{q:"View current locks using pg_locks and identify which queries hold them.",d:"M"},
+{q:"Demonstrate MVCC: start a long transaction and show that concurrent writes don't block reads.",d:"M"},
+{q:"Create a deadlock scenario intentionally, observe the error, then fix by ordering locks.",d:"M"},
+{q:"Implement a job queue using FOR UPDATE SKIP LOCKED.",d:"H"},
+{q:"Monitor and reduce table bloat caused by heavy UPDATE workload (VACUUM strategy).",d:"H"},
+{q:"Design a locking strategy for a high-concurrency inventory system (prevent overselling).",d:"H"}
+]},
+
+{id:7,title:"Performance Anti-Patterns & Best Practices",color:"#fb923c",chips:["N+1","Bulk Ops","Caching","Monitoring","Vacuuming"],
+subtopics:[
+{name:"Common Performance Anti-Patterns",theory:["N+1 query problem: loop executing one query per row instead of single batch query.","SELECT DISTINCT as a band-aid for duplicate rows caused by bad JOINs — fix the JOIN instead.","Using ORDER BY + LIMIT without supporting index forces full sort before limiting."],code:"-- Anti-pattern: N+1 queries (application code)\n-- BAD: for each dept, query employees separately\n-- Loop: SELECT * FROM employees WHERE dept_id = ?;  (100 queries!)\n\n-- GOOD: single query\nSELECT e.*, d.dept_name\nFROM employees e\nJOIN departments d ON e.dept_id = d.dept_id;\n\n-- Anti-pattern: DISTINCT hiding bad JOIN\nSELECT DISTINCT e.name FROM employees e\nJOIN orders o ON e.emp_id = o.sales_rep_id; -- duplicates from 1:many\n-- Better: use EXISTS\nSELECT e.name FROM employees e\nWHERE EXISTS (SELECT 1 FROM orders o WHERE o.sales_rep_id = e.emp_id);\n\n-- Anti-pattern: expensive sort without index\nSELECT * FROM orders ORDER BY created_at DESC LIMIT 10;\n-- Fix: CREATE INDEX idx_orders_created ON orders(created_at DESC);"},
+{name:"Bulk Operations",theory:["Batch INSERTs (multi-row VALUES) are 10-100x faster than row-by-row inserts.","COPY command is fastest for bulk loading (bypasses SQL parsing); use for ETL.","Disable indexes/triggers during bulk load, then rebuild — dramatically faster for millions of rows."],code:"-- Batch insert (fast)\nINSERT INTO logs (level, message, ts) VALUES\n    ('INFO', 'msg1', NOW()),\n    ('WARN', 'msg2', NOW()),\n    -- ... hundreds of rows\n    ('ERROR', 'msgN', NOW());\n\n-- COPY for maximum speed (PostgreSQL)\nCOPY large_table FROM '/path/to/data.csv'\n    WITH (FORMAT csv, HEADER true, DELIMITER ',');\n\n-- Bulk load strategy for millions of rows:\n-- 1. Drop indexes\nDROP INDEX idx_large_table_date;\n-- 2. Disable triggers\nALTER TABLE large_table DISABLE TRIGGER ALL;\n-- 3. Load data with COPY\nCOPY large_table FROM '/data/export.csv' WITH CSV;\n-- 4. Rebuild indexes\nCREATE INDEX idx_large_table_date ON large_table(created_at);\n-- 5. Re-enable triggers and analyze\nALTER TABLE large_table ENABLE TRIGGER ALL;\nANALYZE large_table;"},
+{name:"Caching & Materialized Views",theory:["Query result cache (MySQL): identical queries return cached results; invalidated on table change.","Materialized views: precomputed results stored physically; fast reads but stale until refreshed.","Connection pooling (PgBouncer): reuse connections; avoid overhead of establishing new ones."],code:"-- Materialized view for expensive aggregation\nCREATE MATERIALIZED VIEW dashboard_stats AS\nSELECT\n    DATE_TRUNC('day', order_date) AS day,\n    COUNT(*) AS orders,\n    SUM(amount) AS revenue,\n    COUNT(DISTINCT customer_id) AS unique_customers\nFROM orders\nWHERE order_date >= CURRENT_DATE - 90\nGROUP BY 1;\n\n-- Refresh (run on schedule)\nREFRESH MATERIALIZED VIEW CONCURRENTLY dashboard_stats;\n\n-- PostgreSQL shared_buffers tuning\n-- postgresql.conf:\n-- shared_buffers = '4GB'        -- 25% of RAM\n-- effective_cache_size = '12GB' -- 75% of RAM\n-- work_mem = '64MB'             -- per-operation memory\n\n-- Check cache hit ratio (should be > 99%)\nSELECT\n    SUM(heap_blks_hit) / NULLIF(SUM(heap_blks_hit + heap_blks_read), 0) AS cache_hit_ratio\nFROM pg_statio_user_tables;"},
+{name:"Monitoring & Maintenance",theory:["pg_stat_statements tracks query performance: calls, total time, mean time per query.","VACUUM reclaims dead tuple space; AUTOVACUUM handles this automatically in PostgreSQL.","Slow query log: identify queries exceeding threshold; focus optimization on top offenders."],code:"-- Enable pg_stat_statements\nCREATE EXTENSION IF NOT EXISTS pg_stat_statements;\n\n-- Top 10 slowest queries\nSELECT query, calls, mean_exec_time::INT AS avg_ms,\n       total_exec_time::INT AS total_ms\nFROM pg_stat_statements\nORDER BY mean_exec_time DESC\nLIMIT 10;\n\n-- Top 10 by total time (most impactful to optimize)\nSELECT query, calls, total_exec_time::INT AS total_ms,\n       ROUND(100.0 * total_exec_time / SUM(total_exec_time) OVER (), 2) AS pct\nFROM pg_stat_statements\nORDER BY total_exec_time DESC\nLIMIT 10;\n\n-- Table maintenance status\nSELECT relname, last_vacuum, last_autovacuum,\n       n_dead_tup, n_live_tup\nFROM pg_stat_user_tables\nORDER BY n_dead_tup DESC\nLIMIT 10;"}
+],
+examples:[
+{title:"Performance Audit Checklist",desc:"Systematic approach to optimizing a slow database.",code:"-- Step 1: Find slowest queries\nSELECT query, calls, mean_exec_time\nFROM pg_stat_statements\nORDER BY total_exec_time DESC LIMIT 5;\n\n-- Step 2: Check missing indexes\nSELECT relname, seq_scan, seq_tup_read, idx_scan\nFROM pg_stat_user_tables\nWHERE seq_scan > 100 AND seq_tup_read > 100000\nORDER BY seq_tup_read DESC;\n\n-- Step 3: Check cache hit ratio\nSELECT relname,\n    heap_blks_hit::FLOAT / NULLIF(heap_blks_hit + heap_blks_read, 0) AS ratio\nFROM pg_statio_user_tables\nORDER BY heap_blks_read DESC LIMIT 10;\n\n-- Step 4: Check for bloat\nSELECT relname, n_dead_tup,\n    pg_size_pretty(pg_total_relation_size(relid)) AS total_size\nFROM pg_stat_user_tables\nWHERE n_dead_tup > 10000\nORDER BY n_dead_tup DESC;"}
+],
+practice:[
+{q:"Identify an N+1 query pattern and rewrite as a single JOIN query.",d:"E"},
+{q:"Compare single-row INSERT loop vs multi-row INSERT performance (measure time).",d:"E"},
+{q:"Create a materialized view for a slow aggregate and show the speed improvement.",d:"M"},
+{q:"Find tables with excessive sequential scans using pg_stat_user_tables.",d:"M"},
+{q:"Check the cache hit ratio and recommend memory configuration changes.",d:"M"},
+{q:"Implement a bulk load strategy: drop indexes → COPY → rebuild indexes → ANALYZE.",d:"M"},
+{q:"Set up pg_stat_statements and identify the top 5 queries to optimize.",d:"H"},
+{q:"Design a monitoring dashboard query set covering: slow queries, bloat, cache ratio, and locks.",d:"H"},
+{q:"Benchmark a complex query before and after all optimizations (index, rewrite, config) and document improvements.",d:"H"}
+]},
+];
+
+
+function highlightSQL(code) {
+    let html = code.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+    html = html.replace(/(--.*)/g, '<span style="color:#6b7280">$1</span>');
+    html = html.replace(/('(?:[^'\\]|\\.)*')/g, '<span style="color:#fbbf24">$1</span>');
+    html = html.replace(/\b(\d+\.?\d*)\b/g, '<span style="color:#f472b6">$1</span>');
+    const keywords = ['SELECT','FROM','WHERE','INSERT','INTO','VALUES','UPDATE','SET','DELETE','CREATE','ALTER','DROP','TABLE','INDEX','VIEW','SCHEMA','DATABASE','GRANT','REVOKE','BEGIN','COMMIT','ROLLBACK','SAVEPOINT','JOIN','INNER','LEFT','RIGHT','FULL','OUTER','CROSS','ON','AND','OR','NOT','IN','EXISTS','BETWEEN','LIKE','ILIKE','IS','NULL','AS','CASE','WHEN','THEN','ELSE','END','ORDER','BY','GROUP','HAVING','LIMIT','OFFSET','FETCH','FIRST','ROWS','ONLY','UNION','ALL','INTERSECT','EXCEPT','DISTINCT','ASC','DESC','WITH','RECURSIVE','OVER','PARTITION','WINDOW','PRIMARY','KEY','FOREIGN','REFERENCES','UNIQUE','CHECK','DEFAULT','CONSTRAINT','CASCADE','IF','REPLACE','SERIAL','RETURNS','RETURN','DECLARE','FUNCTION','PROCEDURE','TRIGGER','BEFORE','AFTER','FOR','EACH','ROW','EXECUTE','LATERAL','MATERIALIZED','REFRESH','CONCURRENTLY','TRUNCATE','ADD','COLUMN','RENAME','TO','TYPE','USING','DO','RAISE','EXCEPTION','MERGE','MATCHED','CONFLICT','EXCLUDED','ROLE','USER','PRIVILEGES','USAGE','ENABLE','DISABLE','SECURITY','POLICY','FORCE','TRUE','FALSE','INT','INTEGER','BIGINT','SMALLINT','DECIMAL','NUMERIC','FLOAT','DOUBLE','VARCHAR','CHAR','TEXT','BOOLEAN','DATE','TIME','TIMESTAMP','INTERVAL','JSONB','JSON','ARRAY','ENUM','ANY','SOME','COALESCE','NULLIF','CAST','EXTRACT','YEAR','MONTH','DAY','NOW','CURRENT_DATE','CURRENT_TIMESTAMP','COUNT','SUM','AVG','MIN','MAX','ROUND','EXPLAIN','ANALYZE','BUFFERS','FORMAT','VERBOSE','VACUUM','COPY','EXTENSION'];
+    const kwPattern = new RegExp('\\b(' + keywords.join('|') + ')\\b', 'gi');
+    html = html.replace(kwPattern, '<span style="color:#22d3ee">$1</span>');
+    return html;
+}
+function getProgress() { try { return JSON.parse(localStorage.getItem(STORAGE_KEY)) || {}; } catch { return {}; } }
+function saveProgress(data) { localStorage.setItem(STORAGE_KEY, JSON.stringify(data)); }
+function getTotalPractice() { return topics.reduce((sum, t) => sum + t.practice.length, 0); }
+function getCompletedCount() { return Object.values(getProgress()).filter(v => v).length; }
+function updateProgressBar() {
+    const total = getTotalPractice(), done = getCompletedCount();
+    document.getElementById('progressFill').style.width = (total>0?done/total*100:0)+'%';
+    document.getElementById('progressText').textContent = done+' / '+total;
+}
+function getTopicProgress(topicId) {
+    const prog = getProgress(), topic = topics.find(t => t.id === topicId);
+    if (!topic) return {done:0,total:0};
+    let done = 0; topic.practice.forEach((_,i) => { if(prog[topicId+'_'+i]) done++; });
+    return {done, total: topic.practice.length};
+}
+function renderRoadmap() {
+    const c = document.getElementById('roadmapContainer'); c.innerHTML = '';
+    topics.forEach(topic => {
+        const prog = getTopicProgress(topic.id), node = document.createElement('div');
+        node.className = 'node'; node.onclick = () => showDetail(topic.id);
+        node.innerHTML = `<div class="node-number" style="border-color:${topic.color};color:${topic.color}">${topic.id}</div><div class="node-card"><div class="node-title" style="color:${topic.color}">${topic.title}</div><div class="node-chips">${topic.chips.map(c=>'<span class="chip">'+c+'</span>').join('')}</div><div class="node-progress">${prog.done} / ${prog.total} practice completed</div></div>`;
+        c.appendChild(node);
+    });
+}
+function showDetail(topicId) {
+    currentTopic = topics.find(t => t.id === topicId); if(!currentTopic) return;
+    document.getElementById('roadmapPage').classList.remove('active');
+    document.getElementById('detailPage').classList.add('active');
+    document.getElementById('detailTitle').textContent = currentTopic.title;
+    document.getElementById('detailTitle').style.color = currentTopic.color;
+    document.getElementById('detailSubtitle').textContent = currentTopic.subtopics.map(s=>s.name).join(' • ');
+    renderTheory(); renderExamples(); renderPractice(); switchTab('theory'); window.scrollTo(0,0);
+}
+function showRoadmap() {
+    document.getElementById('detailPage').classList.remove('active');
+    document.getElementById('roadmapPage').classList.add('active');
+    renderRoadmap(); updateProgressBar();
+}
+function switchTab(tab) {
+    document.querySelectorAll('.tab').forEach((t,i)=>{t.classList.toggle('active',['theory','examples','practice','solutions'][i]===tab);});
+    document.querySelectorAll('.tab-content').forEach((tc,i)=>{tc.classList.toggle('active',['theory','examples','practice','solutions'][i]===tab);});
+    if(tab==='solutions') renderSolutions();
+}
+function renderTheory() { document.getElementById('theoryContent').innerHTML = currentTopic.subtopics.map(sub=>`<div class="theory-section"><div class="theory-title">${sub.name}</div>${sub.theory.map(t=>'<p class="theory-point">'+t+'</p>').join('')}<pre class="code-block">${highlightSQL(sub.code)}</pre></div>`).join(''); }
+function renderExamples() { document.getElementById('examplesContent').innerHTML = currentTopic.examples.map(ex=>`<div class="example-card"><div class="example-title">${ex.title}</div><p class="example-desc">${ex.desc}</p><pre class="code-block">${highlightSQL(ex.code)}</pre></div>`).join(''); }
+function renderPractice() {
+    const prog = getProgress();
+    document.getElementById('practiceContent').innerHTML = currentTopic.practice.map((p,i)=>{
+        const key=currentTopic.id+'_'+i, checked=prog[key]?'checked':'', doneClass=prog[key]?'done':'';
+        const diffClass=p.d==='E'?'easy':p.d==='M'?'medium':'hard', diffLabel=p.d==='E'?'Easy':p.d==='M'?'Medium':'Hard';
+        return `<div class="practice-item ${doneClass}"><input type="checkbox" ${checked} onchange="togglePractice('${key}',this)"><span class="practice-text">${i+1}. ${p.q}</span><span class="difficulty ${diffClass}">${diffLabel}</span></div>`;
+    }).join('');
+}
+function togglePractice(key,el) { const prog=getProgress(); prog[key]=el.checked; saveProgress(prog); updateProgressBar(); el.parentElement.classList.toggle('done',el.checked); }
+function renderSolutions() { document.getElementById('solutionsContent').innerHTML = '<div class="theory-section"><div class="theory-title">Solutions Coming Soon</div><p class="theory-point">Practice solving these problems on your own first. Solutions will be added in a future update.</p></div>'; }
+renderRoadmap(); updateProgressBar();
+</script>
+</body>
+</html>
